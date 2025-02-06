@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap');
+
+body {
+    background: url('/public/background.svg')no-repeat center top/contain;
+}
+
+.btn {
+    @apply uppercase py-1.5 px-5 inline-flex items-center font-medium text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
+}
+
+.btn.light-btn {
+    @apply bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue;
+}
+
+.btn.dark-btn {
+    @apply bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue;
+}
+
+.btn.badge-btn {
+    @apply bg-light-blue text-light-black;
+}
+
+/* border-gray-200 bg-white text-gray-800 hover:bg-gray-50 */
