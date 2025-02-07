@@ -3,7 +3,7 @@ import React from 'react'
 const Footer = () => {
     return (
         <>
-            <nav className="w-full mx-auto sm:flex sm:items-center sm:justify-between pb-10">
+            <nav className="w-full mx-auto sm:flex sm:items-center sm:justify-between pb-10 pt-24">
                 <div className="mx-auto transition-all flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-center text-base text-light-black uppercase">
                     <a className="hover:text-dark-blue focus:outline-none focus:text-dark-blue" href="#" aria-current="page">Home</a>
                     <div className="my-2 md:my-0 md:mx-2">
