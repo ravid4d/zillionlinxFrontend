@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import Login from "./Login";
 // import Sidebar from "./Sidebar";
 
 const Layout = () => {
     const [sidebar, hideSidebar] = useState(false);
-
+    const [openLoginModal, setOpenLoginModal] = useState(false);
 
     return (
         <div className="app-layout">
             <div className="app-content flex flex-wrap w-full">
+                <Login openLoginModal={openLoginModal} />
                 {/* <Sidebar sidebar={sidebar} hideSidebar={hideSidebar} /> */}
                 {/* <div className={`content-area px-5 w-full ${sidebar ? 'hide' : ''}`}> */}
-                <Header sidebar={sidebar} hideSidebar={hideSidebar} />
+                <Header sidebar={sidebar} hideSidebar={hideSidebar} setOpenLoginModal={setOpenLoginModal} />
                 <div className="w-full content-area">
                     <Outlet />
                 </div>

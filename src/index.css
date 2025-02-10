@@ -36,4 +36,20 @@ body {
     border-radius: 10px;
 }
 
+.bookmark-sidebar-wrapper {
+    @apply w-[375px];
+}
+
+.bookmark-content-wrapper {
+    @apply w-[calc(100%-407px)];
+}
+
+.bookmark-sidebar li.active .minus {
+    @apply opacity-100;
+}
+
+.bookmark-sidebar li.active .plus {
+    @apply opacity-0;
+}
+
 /* border-gray-200 bg-white text-gray-800 hover:bg-gray-50 */

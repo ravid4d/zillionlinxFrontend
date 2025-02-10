@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Header = () => {
+const Header = ({ setOpenLoginModal }) => {
+
     return (
         <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full">
+
             <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-end gap-x-1">
                     <a className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16" href="/" aria-label="Brand">
@@ -35,9 +37,9 @@ const Header = () => {
                                 </div>
 
                                 <div className="my-2 md:my-0 md:mx-4"><div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div></div>
-                                <button className="btn dark-btn">Logout</button>
-                                {/* <button className="btn light-btn">Log in</button>
-                                <button className="btn dark-btn">Sign up</button> */}
+                                {/* <button className="btn dark-btn">Logout</button> */}
+                                <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" onClick={() => setOpenLoginModal(true)}>Log in</button>
+                                {/* <button className="btn dark-btn">Sign up</button> */}
                             </div>
 
                             <div className="flex justify-end items-center gap-x-1 ms-2">
