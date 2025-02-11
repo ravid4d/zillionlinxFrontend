@@ -2,6 +2,7 @@
   "name": "zillion",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/zillionfront",
   "dependencies": {
     "@preline/overlay": "^2.5.2",
     "@reduxjs/toolkit": "^2.5.0",
