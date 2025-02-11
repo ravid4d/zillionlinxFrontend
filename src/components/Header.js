@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Header = ({ setOpenLoginModal }) => {
+const Header = ({ setOpenLoginModal, setOpenRegisterModal }) => {
 
     return (
         <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full">
@@ -39,7 +39,7 @@ const Header = ({ setOpenLoginModal }) => {
                                 <div className="my-2 md:my-0 md:mx-4"><div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div></div>
                                 {/* <button className="btn dark-btn">Logout</button> */}
                                 <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" onClick={() => setOpenLoginModal(true)}>Log in</button>
-                                {/* <button className="btn dark-btn">Sign up</button> */}
+                                <button className="btn dark-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" onClick={() => setOpenRegisterModal(true)}>Sign up</button>
                             </div>
 
                             <div className="flex justify-end items-center gap-x-1 ms-2">

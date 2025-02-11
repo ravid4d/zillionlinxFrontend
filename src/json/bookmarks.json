@@ -1,7 +1,21 @@
 [
     {
         "category": "General Reference",
-        "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "subCategory": [
+            {
+                "category": "sub Item 1",
+                "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            },
+            {
+                "category": "sub Item 2",
+                "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            },
+            {
+                "category": "sub Item 3",
+                "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            }
+        ]
     },
     {
         "category": "Work & Productivity",
@@ -9,7 +23,21 @@
     },
     {
         "category": "Learning & Education",
-        "image": "https://images.pexels.com/photos/30122027/pexels-photo-30122027/free-photo-of-photographer-in-yellow-jacket-capturing-fall-nature.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        "image": "https://images.pexels.com/photos/30122027/pexels-photo-30122027/free-photo-of-photographer-in-yellow-jacket-capturing-fall-nature.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "subCategory": [
+            {
+                "category": "sub Item 1",
+                "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            },
+            {
+                "category": "sub Item 2",
+                "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            },
+            {
+                "category": "sub Item 3",
+                "image": "https://images.pexels.com/photos/29719977/pexels-photo-29719977/free-photo-of-woman-walking-dog-in-vibrant-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            }
+        ]
     },
     {
         "category": "Shopping & E-Commerce",
