@@ -5,7 +5,7 @@ import MyBookmarks from './pages/MyBookmarks';
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename='/zillionfront/'>
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />}></Route>
