@@ -4,7 +4,9 @@ import Home from './pages/Home';
 import MyBookmarks from './pages/MyBookmarks';
 
 function App() {
+
     return (
+        // <BrowserRouter basename='/zillionfront/'> "homepage": "/zillionfront",
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Layout />}>

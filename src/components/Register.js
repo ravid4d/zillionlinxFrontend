@@ -11,30 +11,30 @@ const registerUrl = `${process.env.REACT_APP_API_URL}/api/register`;
 const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
     const formik = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            registerEmail: "",
-            registerPassword: "",
-            registerConfirmPassword: "",
-            country: "",
-            userAgreement: false,
+            first_name: "",
+            last_name: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
+            // country: "",
+            // userAgreement: false,
         },
         validationSchema: YUP.object({
-            firstName: YUP.string().min(2, "Firstname must be atleast 2 characters").required("First Name is required"),
-            lastName: YUP.string().min(2, "Lastname must be atleast 2 characters").required("Last Name is required"),
-            registerEmail: YUP.string().email('Invalid email format').required("Email is required"),
-            registerPassword: YUP.string()
+            first_name: YUP.string().min(2, "First Name must be atleast 2 characters").required("First Name is required"),
+            last_name: YUP.string().min(2, "Last Name must be atleast 2 characters").required("Last Name is required"),
+            email: YUP.string().email('Invalid email format').required("Email is required"),
+            password: YUP.string()
                 .min(8, "Password must be at least 8 characters")
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")
                 .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
                 .required("Password is required"),
-            registerConfirmPassword: YUP.string()
-                .oneOf([YUP.ref("registerPassword"), null], "Passwords must match")
+            password_confirmation: YUP.string()
+                .oneOf([YUP.ref("password"), null], "Passwords must match")
                 .required("Confirm Password is required"),
-            country: YUP.string().required("Please select a country"),
-            userAgreement: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
+            // country: YUP.string().required("Please select a country"),
+            // userAgreement: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
         }),
         onSubmit: values => {
             alert(JSON.stringify(values, null, 2));
@@ -44,15 +44,16 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
     });
     const handleRegister = async (values) => {
         // e.preventDefault();
+        console.log(registerUrl, 'hi');
         try {
-            const response = await axios.post(registerUrl, {
-                firstName: values?.firstName,
-                lastName: values?.lastName,
-                registerEmail: values?.registerEmail,
-                registerPassword: values?.registerPassword,
-                registerConfirmPassword: values?.registerConfirmPassword,
-                country: values?.country,
-                userAgreement: values?.userAgreement
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
+                first_name: values?.first_name,
+                last_name: values?.last_name,
+                email: values?.email,
+                password: values?.password,
+                password_confirmation: values?.password_confirmation,
+                // country: values?.country,
+                // userAgreement: values?.userAgreement
             });
             return response.data;
         }
@@ -96,36 +97,36 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                             <div className="max-w-[400px] mx-auto">
                                 <form onSubmit={formik.handleSubmit}>
                                     <div className="mb-5">
-                                        <Textfield id="firstName" name="firstName" fieldValue={formik.values.firstName} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="First Name" type="text" placeholder="" iconPlacement="left" />
-                                        {formik.touched.firstName && formik.errors.firstName ? (
-                                            <div className="text-red-500 text-sm mt-1">{formik.errors.firstName}</div>
+                                        <Textfield id="first_name" name="first_name" fieldValue={formik.values.first_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="First Name" type="text" placeholder="" iconPlacement="left" />
+                                        {formik.touched.first_name && formik.errors.first_name ? (
+                                            <div className="text-red-500 text-sm mt-1">{formik.errors.first_name}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="lastName" name="lastName" fieldValue={formik.values.lastName} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="Last Name" type="text" placeholder="" iconPlacement="left" />
-                                        {formik.touched.lastName && formik.errors.lastName ? (
-                                            <div className="text-red-500 text-sm mt-1">{formik.errors.lastName}</div>
+                                        <Textfield id="last_name" name="last_name" fieldValue={formik.values.last_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="Last Name" type="text" placeholder="" iconPlacement="left" />
+                                        {formik.touched.last_name && formik.errors.last_name ? (
+                                            <div className="text-red-500 text-sm mt-1">{formik.errors.last_name}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerEmail" name="registerEmail" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.registerEmail} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
-                                        {formik.touched.registerEmail && formik.errors.registerEmail ? (
-                                            <div className="text-red-500 text-sm mt-1">{formik.errors.registerEmail}</div>
+                                        <Textfield id="registerEmail" name="email" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        {formik.touched.email && formik.errors.email ? (
+                                            <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerPassword" name="registerPassword" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.registerPassword} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
-                                        {formik.touched.registerPassword && formik.errors.registerPassword ? (
-                                            <div className="text-red-500 text-sm mt-1">{formik.errors.registerPassword}</div>
+                                        <Textfield id="registerPassword" name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        {formik.touched.password && formik.errors.password ? (
+                                            <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerConfirmPassword" name="registerConfirmPassword" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.registerConfirmPassword} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
-                                        {formik.touched.registerConfirmPassword && formik.errors.registerConfirmPassword ? (
-                                            <div className="text-red-500 text-sm mt-1">{formik.errors.registerConfirmPassword}</div>
+                                        <Textfield id="registerConfirmPassword" name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        {formik.touched.password_confirmation && formik.errors.password_confirmation ? (
+                                            <div className="text-red-500 text-sm mt-1">{formik.errors.password_confirmation}</div>
                                         ) : null}
                                     </div>
-                                    <div className="mb-5">
+                                    {/* <div className="mb-5">
                                         <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} />
                                         {formik.touched.country && formik.errors.country ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.country}</div>
@@ -147,7 +148,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                         {formik.touched.userAgreement && formik.errors.userAgreement ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.userAgreement}</div>
                                         ) : null}
-                                    </div>
+                                    </div> */}
                                     <button type="submit" className="btn dark-btn w-full justify-center h-12">sign up</button>
                                     <button type="button" className="mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none">
                                         <svg className="w-4 h-auto" width="46" height="47" viewBox="0 0 46 47" fill="none">
@@ -159,46 +160,6 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                         Sign up with Google
                                     </button>
                                 </form>
-                                {/* <div className="pt-7 pb-2 flex items-center text-xl text-light-black uppercase before:flex-1 before:border-t before:border-light-black before:me-6 after:flex-1 after:border-t after:border-light-black after:ms-6">Or</div>
-                                <div className='text-xl text-light-black text-center'>
-                                    <p className='uppercase'>Sign in with:</p>
-                                    <div className='flex flex-wrap items-center justify-center my-4'>
-                                        <button type="button" className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className='size-6 shrink-0'>
-                                                <g clipPath="url(#clip0_3_191)">
-                                                    <path d="M12 0C5.37264 0 0 5.37264 0 12C0 17.6275 3.87456 22.3498 9.10128 23.6467V15.6672H6.62688V12H9.10128V10.4198C9.10128 6.33552 10.9498 4.4424 14.9597 4.4424C15.72 4.4424 17.0318 4.59168 17.5685 4.74048V8.06448C17.2853 8.03472 16.7933 8.01984 16.1822 8.01984C14.2147 8.01984 13.4544 8.76528 13.4544 10.703V12H17.3741L16.7006 15.6672H13.4544V23.9122C19.3963 23.1946 24.0005 18.1354 24.0005 12C24 5.37264 18.6274 0 12 0Z" fill="#2131E5" />
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="clip0_3_191">
-                                                        <rect width="24" height="24" fill="white" />
-                                                    </clipPath>
-                                                </defs>
-                                            </svg>
-                                        </button>
-                                        <button type="button" className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className='size-6 shrink-0'>
-                                                <path d="M18.3263 1.90391H21.6998L14.3297 10.3274L23 21.7899H16.2112L10.894 14.8379L4.80995 21.7899H1.43443L9.31744 12.78L1 1.90391H7.96111L12.7674 8.25824L18.3263 1.90391ZM17.1423 19.7707H19.0116L6.94539 3.81704H4.93946L17.1423 19.7707Z" fill="#2131E5" />
-                                            </svg>
-                                        </button>
-                                        <button type="button" className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className='size-6 shrink-0'>
-                                                <g clipPath="url(#clip0_55_183)">
-                                                    <path d="M11.9998 9.81815V14.4654H18.4579C18.1743 15.96 17.3233 17.2255 16.047 18.0764L19.9415 21.0982C22.2106 19.0037 23.5197 15.9273 23.5197 12.2728C23.5197 11.4219 23.4433 10.6037 23.3015 9.81828L11.9998 9.81815Z" fill="#2131E5" />
-                                                    <path d="M5.27461 14.284L4.39625 14.9564L1.28711 17.3782C3.26165 21.2945 7.30862 24 11.9995 24C15.2394 24 17.9557 22.9309 19.9412 21.0982L16.0467 18.0764C14.9776 18.7964 13.614 19.2328 11.9995 19.2328C8.87951 19.2328 6.22868 17.1273 5.27952 14.2909L5.27461 14.284Z" fill="#2131E5" />
-                                                    <path d="M1.28718 6.62182C0.469042 8.2363 0 10.0581 0 11.9999C0 13.9417 0.469042 15.7636 1.28718 17.378C1.28718 17.3889 5.27997 14.2799 5.27997 14.2799C5.03998 13.5599 4.89812 12.7963 4.89812 11.9998C4.89812 11.2033 5.03998 10.4397 5.27997 9.71975L1.28718 6.62182Z" fill="#2131E5" />
-                                                    <path d="M11.9997 4.77818C13.767 4.77818 15.3379 5.38907 16.5925 6.56727L20.0288 3.13095C17.9452 1.18917 15.2398 0 11.9997 0C7.30887 0 3.26165 2.69454 1.28711 6.62183L5.27978 9.72001C6.22882 6.88362 8.87976 4.77818 11.9997 4.77818Z" fill="#2131E5" />
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="clip0_55_183">
-                                                        <rect width="24" height="24" fill="white" />
-                                                    </clipPath>
-                                                </defs>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <p className='mb-4'>Don't have an account? <Link to="#" className='hover:text-dark-blue'>Sign up</Link></p>
-                                    <p><Link to="#" className='hover:text-dark-blue'>Forgot your password?</Link></p>
-                                </div> */}
                             </div>
                         </div>
 
