@@ -2,6 +2,7 @@
   "name": "fullstack-eco",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://www.zillionlinx.digital4design.com",
   "dependencies": {
     "@preline/overlay": "^2.5.2",
     "@reduxjs/toolkit": "^2.5.0",
