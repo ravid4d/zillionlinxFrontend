@@ -7,7 +7,8 @@ import * as YUP from "yup";
 
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 
-const Login = ({ openLoginModal, setOpenLoginModal }) => {
+const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpenForgotPasswordModal }) => {
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -57,7 +58,7 @@ const Login = ({ openLoginModal, setOpenLoginModal }) => {
         <div id="hs-slide-down-animation-modal" className={`hs-overlay [--overlay-backdrop:static] ${openLoginModal ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="hs-slide-down-animation-modal-label" data-hs-overlay-keyboard="false">
             <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
                 <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
-                    <div className='max-w-[400px] mx-auto w-full py-20'>
+                    <div className='w-full py-20 px-10'>
                         <div className="flex justify-between items-center">
                             <h3 id="hs-slide-down-animation-modal-label" className="uppercase text-dark-blue text-center w-full text-7xl mb-12">
                                 Login
@@ -72,7 +73,7 @@ const Login = ({ openLoginModal, setOpenLoginModal }) => {
                                 </svg>
                             </button>
                         </div>
-                        <div className="">
+                        <div className="max-w-[400px] mx-auto">
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="mb-5">
                                     <Textfield id="email" name="email" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
@@ -125,8 +126,8 @@ const Login = ({ openLoginModal, setOpenLoginModal }) => {
                                         </svg>
                                     </button>
                                 </div>
-                                <p className='mb-4'>Don't have an account? <Link to="#" className='hover:text-dark-blue'>Sign up</Link></p>
-                                <p><Link to="#" className='hover:text-dark-blue'>Forgot your password?</Link></p>
+                                <p className='mb-4'>Don't have an account? <span className="cursor-pointer hover:text-dark-blue" onClick={() => setOpenRegisterModal(true)}>Sign up</span></p>
+                                <p><span onClick={() => setOpenForgotPasswordModal(true)} className='cursor-pointer hover:text-dark-blue'>Forgot your password?</span></p>
                             </div>
                         </div>
                     </div>
