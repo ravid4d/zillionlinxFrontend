@@ -1,5 +1,5 @@
 {
-  "name": "fullstack-eco",
+  "name": "zillion",
   "version": "0.1.0",
   "private": true,
   "homepage": "http://www.zillionlinx.digital4design.com",
@@ -8,6 +8,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
+    "formik": "^2.4.6",
     "preline": "^2.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -16,7 +17,8 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.9.0",
     "react-toastify": "^11.0.3",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "yup": "^1.6.1"
   },
   "scripts": {
     "start": "react-scripts start",
