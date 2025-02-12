@@ -39,12 +39,30 @@ const MyBookmarks = () => {
     };
     return (
         <div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'>
+            <button type="button" className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-application-sidebar" aria-label="Toggle navigation" data-hs-overlay="#hs-application-sidebar">
+                <span className="sr-only">Toggle Navigation</span>
+                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M15 3v18" /><path d="m8 9 3 3-3 3" /></svg>
+            </button>
             <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
-                <div className='flex flex-wrap space-x-8'>
-                    <div className='bookmark-sidebar-wrapper'>
+                <div className='flex flex-wrap lg:space-x-8'>
+                    {/* <div className='bookmark-sidebar-wrapper'> */}
+                    <div
+                        id="hs-application-sidebar"
+                        className="
+                                bookmark-sidebar-wrapper    
+                                hs-overlay  [--auto-close:lg]
+                                hs-overlay-open:translate-x-0         
+                                -translate-x-full lg:translate-x-0 transition-all duration-300 transform
+                                fixed lg:relative inset-y-0 start-0 z-[60] lg:block
+                            "
+                        role="dialog"
+                        tabIndex="-1"
+                        aria-label="Sidebar">
                         <Searchbar />
                         <Sidebar />
+
                     </div>
+                    {/* </div> */}
                     <div className='bookmark-content-wrapper'>
                         <div className='flex flex-wrap items-center justify-between'>
                             <div className="flex items-center rounded-xl shadow-sm mb-4 relative add-url-to-bookmark w-[350px]">
@@ -58,7 +76,7 @@ const MyBookmarks = () => {
                         <div className='rounded-2xl bg-white p-6 h-[calc(100%-64px)]'>
                             <p className='text-[28px] text-dark-blue capitalize mb-5 pt-6'>Top Links <span className='text-base text-light-black inline-block ml-4'>(Drag and drop thumbnails to position top links or pin to a grid location)</span></p>
                             <div className='rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]'>
-                                <ul className="grid grid-cols-3 gap-7">
+                                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
                                     {items && items?.length > 0 && items?.map((item, index) => (
                                         <li
                                             key={index}
