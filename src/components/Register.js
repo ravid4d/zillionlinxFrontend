@@ -97,19 +97,19 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                             <div className="max-w-[400px] mx-auto">
                                 <form onSubmit={formik.handleSubmit}>
                                     <div className="mb-5">
-                                        <Textfield id="first_name" name="first_name" fieldValue={formik.values.first_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="First Name" type="text" placeholder="" iconPlacement="left" />
+                                        <Textfield id="first_name" name="first_name" icon="title" fieldValue={formik.values.first_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="First Name" type="text" placeholder="" iconPlacement="left" />
                                         {formik.touched.first_name && formik.errors.first_name ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.first_name}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="last_name" name="last_name" fieldValue={formik.values.last_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="Last Name" type="text" placeholder="" iconPlacement="left" />
+                                        <Textfield id="last_name" name="last_name" icon="title" fieldValue={formik.values.last_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="Last Name" type="text" placeholder="" iconPlacement="left" />
                                         {formik.touched.last_name && formik.errors.last_name ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.last_name}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerEmail" name="email" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <Textfield id="registerEmail" name="email" label="Email" type="email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.email && formik.errors.email ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
                                         ) : null}

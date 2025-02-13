@@ -47,7 +47,10 @@ const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpe
         const backdropElement = document.querySelector(`#${backdrop}-backdrop`);
         if (backdropElement) {
             document.body.style.removeProperty("overflow");
-            backdropElement.remove();
+            backdropElement.classList.add("opacity-0");
+            setTimeout(() => {
+                backdropElement.remove();
+            }, 500)
         } else {
             console.warn(`Element #${backdrop}-backdrop not found.`);
         }

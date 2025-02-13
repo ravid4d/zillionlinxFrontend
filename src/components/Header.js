@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Header = ({ setOpenLoginModal, setOpenRegisterModal }) => {
+const Header = ({ setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmarkModal, btnRef }) => {
 
     return (
         <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full">
@@ -93,7 +93,7 @@ const Header = ({ setOpenLoginModal, setOpenRegisterModal }) => {
                                     <Link to="/bookmarks" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
                                         My Bookmarks
                                     </Link>
-                                    <button type="button" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
+                                    <button type="button" onClick={() => { setOpenAddNewBookmarkModal(true); btnRef.current.click(); }} className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
                                         Add New Bookmark
                                     </button>
                                     <button type="button" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
