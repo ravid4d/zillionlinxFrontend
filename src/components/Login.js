@@ -4,43 +4,42 @@ import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from "axios";
 import * as YUP from "yup";
+import { toast } from 'react-toastify';
+import { loginUser } from '../services/authService';
 
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 
-const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpenForgotPasswordModal }) => {
+const Login = ({ setIsLoggedIn, openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpenForgotPasswordModal }) => {
 
     const formik = useFormik({
         initialValues: {
+            type: "email",
             email: "",
             password: ""
         },
         validationSchema: YUP.object({
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
-                .min(8, "Password must be at least 8 characters")
-                .matches(/[a-z]/, "Must include at least one lowercase letter")
-                .matches(/[A-Z]/, "Must include at least one uppercase letter")
-                .matches(/\d/, "Must include at least one number")
-                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
                 .required("Password is required"),
         }),
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
             handleLogin(values);
-            closeModal('hs-slide-down-animation-modal');
         }
     });
     const handleLogin = async (values) => {
         try {
             const response = await axios.post(loginUrl, {
+                type: "email",
                 email: values?.email,
                 password: values?.password,
             });
-
-            return response.data;
+            toast.success(response?.data?.message);
+            loginUser(response?.data?.data?.token);
+            setIsLoggedIn(true);
+            closeModal('hs-slide-down-animation-modal');
         }
         catch (err) {
-            console.error("Login failed:", err.response ? err.response.data : err.message);
+            toast.error(err?.response?.data?.message);
         }
     }
     const closeModal = (backdrop) => {

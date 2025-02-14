@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { logoutUser } from '../services/authService';
+import { toast } from 'react-toastify';
 
-const Header = ({ setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmarkModal, btnRef }) => {
-
+const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmarkModal, btnRef }) => {
+    const handleLogout = () => {
+        logoutUser();
+        setIsLoggedIn(false);
+        toast.success("You have been logged out successfully!");
+    }
     return (
         <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full">
 
@@ -26,33 +32,44 @@ const Header = ({ setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmark
                         <div className="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
 
                             <div className="md:ms-auto mt-2 md:mt-0 flex flex-wrap items-center gap-x-1.5">
-                                <div className="hs-dropdown relative inline-flex items-center space-x-4">
-                                    <Link to="/bookmarks" className='flex flex-wrap items-center group'>
-                                        {/* <span className='text-lg text-light-black mr-3'>Welcome, ZillionLinx Demo</span> */}
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-6 text-dark-blue group-hover:text-navy">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                    </Link>
-                                    <Link to="/quick-access" className='group'>
-                                        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" className='fill-dark-blue group-hover:fill-navy'>
-                                            <g clipPath="url(#clip0_43_71)">
-                                                <path d="M22.1996 22.7022L18.9902 24.5559C17.9116 25.1789 16.7533 25.4905 15.5954 25.4906C14.4373 25.4906 13.2795 25.1791 12.2007 24.5559L4.90004 20.3419C4.5762 20.1548 4.34439 19.8516 4.24714 19.4882C4.14984 19.1248 4.19931 18.7464 4.38633 18.4227C4.81335 17.6824 5.48432 17.1477 6.27555 16.9174C7.082 16.6826 7.93457 16.7893 8.67613 17.2179L10.7413 18.41L4.36434 7.36445C4.08231 6.87537 4.00801 6.30404 4.15492 5.7555C4.30204 5.20635 4.65263 4.74881 5.14201 4.46702C5.63002 4.18473 6.20161 4.11003 6.75071 4.25709C7.29955 4.40405 7.75745 4.75414 8.04014 5.24286L10.9894 10.3527C11.1527 9.85532 11.4874 9.44201 11.9419 9.18039C12.711 8.73636 13.6463 8.8305 14.3081 9.34527C14.4322 8.78338 14.7822 8.27328 15.3181 7.96387C16.1773 7.46926 17.242 7.64425 17.9027 8.32503C18.0527 7.84982 18.3693 7.45443 18.8018 7.20525C19.258 6.94098 19.7921 6.87065 20.3054 7.00781C20.8193 7.14513 21.2481 7.47317 21.5128 7.93147L24.6858 13.4268C26.5574 16.6704 25.4421 20.8313 22.1996 22.7023V22.7022ZM4.066 2.60447C6.10817 1.42584 8.72864 2.12779 9.90773 4.1695C10.1452 4.58032 10.3116 5.0243 10.4023 5.4891C10.4829 5.902 10.8827 6.1715 11.2958 6.09091C11.7087 6.01037 11.9782 5.61036 11.8976 5.19741C11.7746 4.56656 11.5488 3.96414 11.2268 3.40727C9.62792 0.638574 6.07395 -0.313473 3.30429 1.28507C0.535641 2.88397 -0.416456 6.43795 1.18148 9.20644C1.50313 9.76564 1.91202 10.2624 2.39672 10.6832C2.54089 10.8083 2.71868 10.8696 2.8957 10.8696C3.10873 10.8696 3.32069 10.7807 3.47131 10.6072C3.74705 10.2894 3.71302 9.80835 3.39529 9.53261C3.03931 9.22365 2.73873 8.85833 2.50148 8.44594C1.32285 6.40382 2.0248 3.78336 4.066 2.60452V2.60447Z" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_43_71">
-                                                    <rect width="26" height="26" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </Link>
+                                {
+                                    isLoggedIn ?
+                                        <div className="hs-dropdown relative inline-flex items-center space-x-4">
+                                            <Link to="/bookmarks" className='flex flex-wrap items-center group'>
+                                                {/* <span className='text-lg text-light-black mr-3'>Welcome, ZillionLinx Demo</span> */}
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-6 text-dark-blue group-hover:text-navy">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                </svg>
+                                            </Link>
+                                            <Link to="/quick-access" className='group'>
+                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" className='fill-dark-blue group-hover:fill-navy'>
+                                                    <g clipPath="url(#clip0_43_71)">
+                                                        <path d="M22.1996 22.7022L18.9902 24.5559C17.9116 25.1789 16.7533 25.4905 15.5954 25.4906C14.4373 25.4906 13.2795 25.1791 12.2007 24.5559L4.90004 20.3419C4.5762 20.1548 4.34439 19.8516 4.24714 19.4882C4.14984 19.1248 4.19931 18.7464 4.38633 18.4227C4.81335 17.6824 5.48432 17.1477 6.27555 16.9174C7.082 16.6826 7.93457 16.7893 8.67613 17.2179L10.7413 18.41L4.36434 7.36445C4.08231 6.87537 4.00801 6.30404 4.15492 5.7555C4.30204 5.20635 4.65263 4.74881 5.14201 4.46702C5.63002 4.18473 6.20161 4.11003 6.75071 4.25709C7.29955 4.40405 7.75745 4.75414 8.04014 5.24286L10.9894 10.3527C11.1527 9.85532 11.4874 9.44201 11.9419 9.18039C12.711 8.73636 13.6463 8.8305 14.3081 9.34527C14.4322 8.78338 14.7822 8.27328 15.3181 7.96387C16.1773 7.46926 17.242 7.64425 17.9027 8.32503C18.0527 7.84982 18.3693 7.45443 18.8018 7.20525C19.258 6.94098 19.7921 6.87065 20.3054 7.00781C20.8193 7.14513 21.2481 7.47317 21.5128 7.93147L24.6858 13.4268C26.5574 16.6704 25.4421 20.8313 22.1996 22.7023V22.7022ZM4.066 2.60447C6.10817 1.42584 8.72864 2.12779 9.90773 4.1695C10.1452 4.58032 10.3116 5.0243 10.4023 5.4891C10.4829 5.902 10.8827 6.1715 11.2958 6.09091C11.7087 6.01037 11.9782 5.61036 11.8976 5.19741C11.7746 4.56656 11.5488 3.96414 11.2268 3.40727C9.62792 0.638574 6.07395 -0.313473 3.30429 1.28507C0.535641 2.88397 -0.416456 6.43795 1.18148 9.20644C1.50313 9.76564 1.91202 10.2624 2.39672 10.6832C2.54089 10.8083 2.71868 10.8696 2.8957 10.8696C3.10873 10.8696 3.32069 10.7807 3.47131 10.6072C3.74705 10.2894 3.71302 9.80835 3.39529 9.53261C3.03931 9.22365 2.73873 8.85833 2.50148 8.44594C1.32285 6.40382 2.0248 3.78336 4.066 2.60452V2.60447Z" />
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_43_71">
+                                                            <rect width="26" height="26" fill="white" />
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </Link>
 
-                                </div>
-
-                                <div className="my-2 md:my-0 md:mx-4"><div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div></div>
-                                {/* <button className="btn dark-btn">Logout</button> */}
-                                <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" onClick={() => setOpenLoginModal(true)}>Log in</button>
-                                <button className="btn dark-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" onClick={() => setOpenRegisterModal(true)}>Sign up</button>
+                                        </div>
+                                        : null
+                                }
+                                {
+                                    isLoggedIn ?
+                                        <>
+                                            <div className="my-2 md:my-0 md:mx-4"><div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div></div>
+                                            <button className="btn dark-btn" onClick={handleLogout}>Logout</button>
+                                        </>
+                                        :
+                                        <>
+                                            <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" onClick={() => setOpenLoginModal(true)}>Log in</button>
+                                            <button className="btn dark-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" onClick={() => setOpenRegisterModal(true)}>Sign up</button>
+                                        </>
+                                }
                             </div>
 
                             <div className="flex justify-end items-center gap-x-1 ms-2">
@@ -89,17 +106,20 @@ const Header = ({ setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmark
                                         </defs>
                                     </svg>
                                 </button>
-                                <nav className="flex justify-end ml-3">
-                                    <Link to="/bookmarks" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
-                                        My Bookmarks
-                                    </Link>
-                                    <button type="button" onClick={() => { setOpenAddNewBookmarkModal(true); btnRef.current.click(); }} className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
-                                        Add New Bookmark
-                                    </button>
-                                    <button type="button" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
-                                        Import Bookmarks
-                                    </button>
-                                </nav>
+                                {isLoggedIn ?
+                                    <nav className="flex justify-end ml-3">
+                                        <Link to="/bookmarks" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
+                                            My Bookmarks
+                                        </Link>
+                                        <button type="button" onClick={() => { setOpenAddNewBookmarkModal(true); btnRef.current.click(); }} className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
+                                            Add New Bookmark
+                                        </button>
+                                        <button type="button" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
+                                            Import Bookmarks
+                                        </button>
+                                    </nav>
+                                    : null
+                                }
                             </div>
 
                         </div>
@@ -107,7 +127,7 @@ const Header = ({ setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmark
                 </div>
 
             </nav>
-        </header>
+        </header >
 
     )
 }

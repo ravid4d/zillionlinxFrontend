@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Textfield from './Textfield'
 import { Link } from 'react-router-dom'
 import CountryDropdown from './CountryDropdown'
 import { useFormik } from 'formik'
 import * as YUP from "yup";
 import axios from 'axios'
+import { toast } from 'react-toastify';
+
 
 const registerUrl = `${process.env.REACT_APP_API_URL}/api/register`;
 
@@ -37,14 +39,12 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
             // userAgreement: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
         }),
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
             handleRegister(values);
-            closeModal('register');
+
         }
     });
     const handleRegister = async (values) => {
-        // e.preventDefault();
-        console.log(registerUrl, 'hi');
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
                 first_name: values?.first_name,
@@ -55,10 +55,12 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                 // country: values?.country,
                 // userAgreement: values?.userAgreement
             });
-            return response.data;
+            toast.success(response?.data?.message);
+            closeModal('register');
+
         }
         catch (err) {
-            console.error("Login failed:", err.response ? err.response.data : err.message);
+            toast.error(err?.response?.data.data.email[0]);
         }
     }
 
@@ -66,7 +68,10 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
         const backdropElement = document.querySelector(`#${backdrop}-backdrop`);
         if (backdropElement) {
             document.body.style.removeProperty("overflow");
-            backdropElement.remove();
+            backdropElement.classList.add("opacity-0");
+            setTimeout(() => {
+                backdropElement.remove();
+            }, 500)
         } else {
             console.warn(`Element #${backdrop}-backdrop not found.`);
         }
@@ -75,7 +80,6 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
     }
     return (
         <>
-
             <div id="register" className={`hs-overlay [--overlay-backdrop:static] ${openRegisterModal ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="register-label" data-hs-overlay-keyboard="false">
                 <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center" >
                     <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
