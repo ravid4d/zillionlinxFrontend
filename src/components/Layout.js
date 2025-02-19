@@ -8,6 +8,7 @@ import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import { ToastContainer } from "react-toastify";
 import { isUserLoggedIn, loginUser, logoutUser } from "../services/authService";
+import AddCategory from "./AddCategory";
 
 const Layout = () => {
     const [sidebar, hideSidebar] = useState(false);
@@ -15,6 +16,7 @@ const Layout = () => {
     const [openRegisterModal, setOpenRegisterModal] = useState(false);
     const [openForgotPasswordModal, setOpenForgotPasswordModal] = useState(false);
     const [openAddNewBookmarkModal, setOpenAddNewBookmarkModal] = useState(false);
+    const [openAddCategoryModal, setOpenAddCategoryModal] = useState(false);
     const btnRef = useRef(null);
     const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
     useEffect(() => {
@@ -28,8 +30,9 @@ const Layout = () => {
                 <Login setIsLoggedIn={setIsLoggedIn} openLoginModal={openLoginModal} setOpenLoginModal={setOpenLoginModal} setOpenRegisterModal={setOpenRegisterModal} setOpenForgotPasswordModal={setOpenForgotPasswordModal} />
                 <Register openRegisterModal={openRegisterModal} setOpenRegisterModal={setOpenRegisterModal} />
                 <ForgotPassword openForgotPasswordModal={openForgotPasswordModal} setOpenForgotPasswordModal={setOpenForgotPasswordModal} />
+                <AddCategory openAddCategoryModal={openAddCategoryModal} setOpenAddCategoryModal={setOpenAddCategoryModal} />
                 <AddNewBookmark openAddNewBookmarkModal={openAddNewBookmarkModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} btnRef={btnRef} />
-                <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} btnRef={btnRef} sidebar={sidebar} hideSidebar={hideSidebar} setOpenLoginModal={setOpenLoginModal} setOpenRegisterModal={setOpenRegisterModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} />
+                <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} btnRef={btnRef} sidebar={sidebar} hideSidebar={hideSidebar} setOpenLoginModal={setOpenLoginModal} setOpenAddCategoryModal={setOpenAddCategoryModal} setOpenRegisterModal={setOpenRegisterModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} />
                 <div className="w-full content-area">
                     <Outlet />
                 </div>

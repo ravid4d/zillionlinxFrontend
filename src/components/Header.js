@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { logoutUser } from '../services/authService';
 import { toast } from 'react-toastify';
 
-const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmarkModal, btnRef }) => {
+const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmarkModal, setOpenAddCategoryModal, btnRef }) => {
     const handleLogout = () => {
         logoutUser();
         setIsLoggedIn(false);
@@ -67,6 +67,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterM
                                         :
                                         <>
                                             <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" onClick={() => setOpenLoginModal(true)}>Log in</button>
+                                            <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="add-category-modal" data-hs-overlay="#add-category-modal" onClick={() => setOpenAddCategoryModal(true)}>Add Category</button>
                                             <button className="btn dark-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" onClick={() => setOpenRegisterModal(true)}>Sign up</button>
                                         </>
                                 }
