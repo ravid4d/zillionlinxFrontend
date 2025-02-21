@@ -10,6 +10,7 @@ const Sidebar = () => {
 
     useEffect(() => {
         let token = getToken();
+        console.log(token, 'token');
         getCategories(token);
     }, []);
 

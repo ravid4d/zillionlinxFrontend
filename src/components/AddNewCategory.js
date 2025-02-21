@@ -42,19 +42,17 @@ const AddNewCategory = ({  openModal, closeAllModals }) => {
             .notRequired()
         }),
         onSubmit: values => {
-            handleLogin(values);
+            handleAddNewCategory(values);
         }
     });
-    const handleLogin = async (values) => {
+    const handleAddNewCategory = async (values) => {
         try {
             const response = await axios.post(categoryUrl, {
                 title: values?.title,
                 parent_id: values?.parent_id,
             });
             toast.success(response?.data?.message);
-            loginUser(response?.data?.data?.token);
-            // setIsLoggedIn(true);
-            closeModal('add-category-modal');
+            closeModal();
         }
         catch (err) {
             toast.error(err?.response?.data?.message);
