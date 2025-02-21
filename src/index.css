@@ -8,15 +8,15 @@ body {
 }
 
 .btn {
-    @apply uppercase py-1.5 px-5 inline-flex items-center font-medium text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
+    @apply py-1.5 px-5 inline-flex items-center font-medium text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
 }
 
 .btn.light-btn {
-    @apply bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue;
+    @apply uppercase bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue;
 }
 
 .btn.dark-btn {
-    @apply bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue;
+    @apply uppercase bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue;
 }
 
 .btn.badge-btn {
@@ -37,11 +37,11 @@ body {
 }
 
 .bookmark-sidebar-wrapper {
-    @apply w-[375px];
+    @apply w-[375px] p-5 lg:p-0 bg-white lg:bg-transparent;
 }
 
 .bookmark-content-wrapper {
-    @apply w-[calc(100%-407px)];
+    @apply w-full lg:w-[calc(100%-407px)];
 }
 
 .bookmark-sidebar li.active .minus {

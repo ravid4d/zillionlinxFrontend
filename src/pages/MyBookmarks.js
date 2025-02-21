@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import bookmarkData from '../json/bookmarks.json';
 import Searchbar from '../components/Searchbar';
 import GoogleSearchbar from '../components/GoogleSearchbar';
+import AddNewBookmark from '../components/AddNewBookmark';
 
 const MyBookmarks = () => {
+    const btnRef = useRef(null);
+    const [inputValue, setInputValue] = useState("");
     const [items, setItems] = useState([]);
     const [draggedIndex, setDraggedIndex] = useState(null);
+    const [openAddNewBookmarkModal, setOpenAddNewBookmarkModal] = useState(false);
+
     useEffect(() => {
         setItems(bookmarkData);
     }, []);
+
     // When drag starts, store the item's index
     const handleDragStart = (index) => {
         setDraggedIndex(index);
@@ -37,19 +43,52 @@ const MyBookmarks = () => {
         const updatedItems = items.filter((_, i) => i !== index);
         setItems(updatedItems);
     };
+
+    //Open Add New Bookmark Modal
+    const addBookmarkViaUrl = () => {
+        let inputField = document.getElementById("add_url_to_bookmark");
+        inputField.blur();
+        btnRef.current.click();
+        setOpenAddNewBookmarkModal(true);
+        setTimeout(() => {
+            setInputValue("");
+        }, 500);
+    }
+
     return (
         <div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'>
+
+            {/* <AddNewBookmark btnRef={btnRef} openAddNewBookmarkModal={openAddNewBookmarkModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} /> */}
+
+            <button type="button" className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-application-sidebar" aria-label="Toggle navigation" data-hs-overlay="#hs-application-sidebar">
+                <span className="sr-only">Toggle Navigation</span>
+                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M15 3v18" /><path d="m8 9 3 3-3 3" /></svg>
+            </button>
             <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
-                <div className='flex flex-wrap space-x-8'>
-                    <div className='bookmark-sidebar-wrapper'>
+                <div className='flex flex-wrap lg:space-x-8'>
+                    {/* <div className='bookmark-sidebar-wrapper'> */}
+                    <div
+                        id="hs-application-sidebar"
+                        className="
+                                bookmark-sidebar-wrapper    
+                                hs-overlay  [--auto-close:lg]
+                                hs-overlay-open:translate-x-0         
+                                -translate-x-full lg:translate-x-0 transition-all duration-300 transform
+                                fixed lg:relative inset-y-0 start-0 z-[40] lg:block
+                            "
+                        role="dialog"
+                        tabIndex="-1"
+                        aria-label="Sidebar">
                         <Searchbar />
                         <Sidebar />
+
                     </div>
+                    {/* </div> */}
                     <div className='bookmark-content-wrapper'>
                         <div className='flex flex-wrap items-center justify-between'>
                             <div className="flex items-center rounded-xl shadow-sm mb-4 relative add-url-to-bookmark w-[350px]">
-                                <input type="text" placeholder='Add an URL to Your Bookmarks' id="add_url_to_bookmark" name="add_url_to_bookmark" className="h-[48px] py-3 px-4 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" />
-                                <button type="button" className="absolute z-20 right-2 top-1 w-[40px] h-[40px] inline-flex justify-center items-center border border-transparent bg-transparent hover:bg-transparent focus:outline-none focus:bg-transparent disabled:opacity-50 disabled:pointer-events-none">
+                                <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='Add an URL to Your Bookmarks' id="add_url_to_bookmark" name="add_url_to_bookmark" className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" />
+                                <button type="button" onClick={addBookmarkViaUrl} className="absolute z-20 right-2 top-1 w-[40px] h-[40px] inline-flex justify-center items-center border border-transparent bg-transparent hover:bg-transparent focus:outline-none focus:bg-transparent disabled:opacity-50 disabled:pointer-events-none">
                                     <img src="/submit-icon.png" alt="" className='' />
                                 </button>
                             </div>
@@ -58,7 +97,7 @@ const MyBookmarks = () => {
                         <div className='rounded-2xl bg-white p-6 h-[calc(100%-64px)]'>
                             <p className='text-[28px] text-dark-blue capitalize mb-5 pt-6'>Top Links <span className='text-base text-light-black inline-block ml-4'>(Drag and drop thumbnails to position top links or pin to a grid location)</span></p>
                             <div className='rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]'>
-                                <ul className="grid grid-cols-3 gap-7">
+                                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
                                     {items && items?.length > 0 && items?.map((item, index) => (
                                         <li
                                             key={index}
@@ -92,7 +131,7 @@ const MyBookmarks = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

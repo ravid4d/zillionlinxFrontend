@@ -21,11 +21,11 @@ const Home = () => {
                             Online Bookmarks, Online Favorites. Store and organize your Bookmarks in one place. Access your Bookmarks from every computer. Search the Internet and get real answers.
                         </p>
 
-                        <div className="space-x-4">
+                        <div className="space-y-4 md:space-x-4">
                             {
                                 badges && badges?.length > 0 && badges?.map((badge, index) => {
                                     return (
-                                        <button className="btn badge-btn mb-4" key={index}>
+                                        <button className="btn badge-btn" key={index}>
                                             {badge}
                                         </button>
                                     )
