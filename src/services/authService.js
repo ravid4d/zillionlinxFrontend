@@ -14,3 +14,7 @@ export const loginUser = (token) => {
 export const logoutUser = () => {
     localStorage.removeItem(AUTH_KEY);
 };
+
+export const getToken = () => {    
+    return localStorage.getItem(AUTH_KEY);
+};

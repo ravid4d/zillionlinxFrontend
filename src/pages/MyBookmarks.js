@@ -74,7 +74,7 @@ const MyBookmarks = () => {
                                 hs-overlay  [--auto-close:lg]
                                 hs-overlay-open:translate-x-0         
                                 -translate-x-full lg:translate-x-0 transition-all duration-300 transform
-                                fixed lg:relative inset-y-0 start-0 z-[60] lg:block
+                                fixed lg:relative inset-y-0 start-0 z-[40] lg:block
                             "
                         role="dialog"
                         tabIndex="-1"

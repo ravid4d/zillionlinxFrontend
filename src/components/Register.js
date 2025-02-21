@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 const registerUrl = `${process.env.REACT_APP_API_URL}/api/register`;
 
-const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
+const Register = ({ openModal, closeAllModals}) => {
     const formik = useFormik({
         initialValues: {
             first_name: "",
@@ -64,23 +64,13 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
         }
     }
 
-    const closeModal = (backdrop) => {
-        const backdropElement = document.querySelector(`#${backdrop}-backdrop`);
-        if (backdropElement) {
-            document.body.style.removeProperty("overflow");
-            backdropElement.classList.add("opacity-0");
-            setTimeout(() => {
-                backdropElement.remove();
-            }, 500)
-        } else {
-            console.warn(`Element #${backdrop}-backdrop not found.`);
-        }
+    const closeModal = () => {
         formik.resetForm();
-        setOpenRegisterModal(false);
+        closeAllModals();
     }
     return (
         <>
-            <div id="register" className={`hs-overlay [--overlay-backdrop:static] ${openRegisterModal ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="register-label" data-hs-overlay-keyboard="false">
+            <div id="register" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.register ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="register-label" data-hs-overlay-keyboard="false">
                 <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center" >
                     <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
                         <div className='w-full py-20 px-10'>
@@ -89,7 +79,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                     Join ZillioLinX for free now
                                 </h3>
                                 <button type="button"
-                                    onClick={() => closeModal('register')}
+                                    onClick={closeModal}
                                     className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none" aria-label="Close" data-hs-overlay="#register">
                                     <span className="sr-only">Close</span>
                                     <svg className="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -131,12 +121,13 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                         ) : null}
                                     </div>
                                     {/* <div className="mb-5">
-                                        <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} />
-                                        {formik.touched.country && formik.errors.country ? (
+                                        <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
+                                        {/* <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
+                                        {/* {formik.touched.country && formik.errors.country ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.country}</div>
-                                        ) : null}
-                                    </div>
-                                    <div className="relative  mb-5">
+                                        ) : null} */}
+                                    {/* </div> */}
+                                    {/* <div className="relative  mb-5">
                                         <div className="flex items-start">
                                             <div className="flex items-center h-5 mt-0.5">
                                                 <input id="userAgreement" name="userAgreement" type="checkbox"
@@ -169,7 +160,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
 
                     </div>
                 </div>
-            </div >
+            </div>
         </>
     )
 }
