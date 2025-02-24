@@ -6,7 +6,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      'sans': ["Open Sans", "serif"],
+      'sans': ["Actor", "serif"],
       'serif': ["Oswald", 'serif'],
     },
     extend: {
