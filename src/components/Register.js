@@ -26,12 +26,12 @@ const Register = ({ openModal, closeAllModals}) => {
             last_name: YUP.string().min(2, "Last Name must be atleast 2 characters").required("Last Name is required"),
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
-                .min(8, "Password must be at least 8 characters")
-                .matches(/[a-z]/, "Must include at least one lowercase letter")
-                .matches(/[A-Z]/, "Must include at least one uppercase letter")
-                .matches(/\d/, "Must include at least one number")
-                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
-                .required("Password is required"),
+            .min(12, "Password must be at least 12 characters long") // Enforce 12 characters
+            .matches(/[A-Z]/, "Must include at least one uppercase letter") // A-Z
+            .matches(/[a-z]/, "Must include at least one lowercase letter") // a-z
+            .matches(/\d/, "Must include at least one number") // 0-9
+            .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)") // Special character
+            .required("Password is required"),
             password_confirmation: YUP.string()
                 .oneOf([YUP.ref("password"), null], "Passwords must match")
                 .required("Confirm Password is required"),
