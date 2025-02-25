@@ -64,7 +64,6 @@ const Register = ({ openModal, closeAllModals}) => {
             toast.error(err?.response?.data.data.email[0]);
         }
     }
-
     const closeModal = () => {
         formik.resetForm();
         closeAllModals();
