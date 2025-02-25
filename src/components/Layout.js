@@ -6,38 +6,84 @@ import Login from "./Login";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
+import AddNewCategory from "./AddNewCategory";
 import { ToastContainer } from "react-toastify";
-import { isUserLoggedIn} from "../services/authService";
+import { isUserLoggedIn } from "../services/authService";
 
 const Layout = () => {
-    const [sidebar, hideSidebar] = useState(false);
-    const [openLoginModal, setOpenLoginModal] = useState(false);
-    const [openRegisterModal, setOpenRegisterModal] = useState(false);
-    const [openForgotPasswordModal, setOpenForgotPasswordModal] = useState(false);
-    const [openAddNewBookmarkModal, setOpenAddNewBookmarkModal] = useState(false);
-    const btnRef = useRef(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
-    useEffect(() => {
-        setIsLoggedIn(isUserLoggedIn()); // Update state when component mounts
-    }, []);
+  const [sidebar, hideSidebar] = useState(false);
+  const [openModal, setOpenModal] = useState({
+    login: false,
+    register: false,
+    forgot: false,
+    newBookmark: false,
+    newCategory: false,
+  });
 
-    return (
-        <div className="app-layout">
-            <ToastContainer />
-            <div className="app-content flex flex-wrap w-full">
-                <Login setIsLoggedIn={setIsLoggedIn} openLoginModal={openLoginModal} setOpenLoginModal={setOpenLoginModal} setOpenRegisterModal={setOpenRegisterModal} setOpenForgotPasswordModal={setOpenForgotPasswordModal} />
-                <Register openRegisterModal={openRegisterModal} setOpenRegisterModal={setOpenRegisterModal} />
-                <ForgotPassword openForgotPasswordModal={openForgotPasswordModal} setOpenForgotPasswordModal={setOpenForgotPasswordModal} />
-                <AddNewBookmark openAddNewBookmarkModal={openAddNewBookmarkModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} btnRef={btnRef} />
-                <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} btnRef={btnRef} sidebar={sidebar} hideSidebar={hideSidebar} setOpenLoginModal={setOpenLoginModal} setOpenRegisterModal={setOpenRegisterModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} />
-                <div className="w-full content-area">
-                    <Outlet />
-                </div>
-                <Footer />
-            </div>
+  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
+  useEffect(() => {
+    setIsLoggedIn(isUserLoggedIn());
+  }, []);
 
+  const setWhichModalOpen = (modalName) => {
+    setOpenModal({
+      login: false,
+      register: false,
+      forgot: false,
+      newBookmark: false,
+      newCategory: false,
+      [modalName]: true,
+    });
+  };
+  const closeAllModals = () => {
+    setOpenModal({
+      login: false,
+      register: false,
+      forgot: false,
+      newBookmark: false,
+      newCategory: false,
+    });
+  };
+  const getOpenModalName = () => {
+    return Object.keys(openModal).find((key) => openModal[key]) || "";
+  };
+  const isAnyModalOpen = Object.values(openModal).some(value => value);
+
+  return (
+    <div className="app-layout">
+      <div
+        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+          isAnyModalOpen ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+        id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
+      ></div>
+
+      <ToastContainer hideProgressBar={true} autoClose={2000} />
+      <div className="app-content flex flex-wrap w-full">
+        <Login
+          closeAllModals={closeAllModals}
+          openModal={openModal}
+          setWhichModalOpen={setWhichModalOpen}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+        <Register closeAllModals={closeAllModals} openModal={openModal} />
+        <ForgotPassword closeAllModals={closeAllModals} openModal={openModal} />
+        <AddNewBookmark closeAllModals={closeAllModals} openModal={openModal} />
+        <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
+        <Header
+          setWhichModalOpen={setWhichModalOpen}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          sidebar={sidebar}
+          hideSidebar={hideSidebar}
+        />
+        <div className="w-full content-area">
+          <Outlet />
         </div>
-    );
+        <Footer />
+      </div>
+    </div>
+  );
 };
 
 export default Layout;

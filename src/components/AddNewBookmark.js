@@ -6,7 +6,7 @@ import * as YUP from "yup";
 
 const addNewBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/addNewBookmark`;
 
-const AddNewBookmark = ({ openAddNewBookmarkModal, setOpenAddNewBookmarkModal, btnRef }) => {
+const AddNewBookmark = ({  openModal, closeAllModals}) => {
     const formik = useFormik({
         initialValues: {
             title: "",
@@ -37,7 +37,7 @@ const AddNewBookmark = ({ openAddNewBookmarkModal, setOpenAddNewBookmarkModal, b
         onSubmit: values => {
             alert(JSON.stringify(values, null, 2));
             handleAddNewBookmark(values);
-            closeModal('add-new-bookmark-modal');
+            closeModal();
         }
     });
     const handleAddNewBookmark = async (values) => {
@@ -56,27 +56,17 @@ const AddNewBookmark = ({ openAddNewBookmarkModal, setOpenAddNewBookmarkModal, b
             console.error("Login failed:", err.response ? err.response.data : err.message);
         }
     }
-    const closeModal = (backdrop) => {
-        const backdropElement = document.querySelector(`#${backdrop}-backdrop`);
-        if (backdropElement) {
-            document.body.style.removeProperty("overflow");
-            backdropElement.classList.add = "opacity-0"
-            setTimeout(() => {
-                backdropElement.remove();
-            }, 500)
-        } else {
-            console.warn(`Element #${backdrop}-backdrop not found.`);
-        }
+    const closeModal = () => {
         formik.resetForm();
-        setOpenAddNewBookmarkModal(false);
+        closeAllModals();
     }
     return (
         <>
-            <button type="button" ref={btnRef} className="add-new-bookmark-btn hidden py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" aria-haspopup="dialog" aria-expanded="false" aria-controls="add-new-bookmark-modal" data-hs-overlay="#add-new-bookmark-modal">
+            {/* <button type="button" ref={btnRef} className="add-new-bookmark-btn hidden py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" aria-haspopup="dialog" aria-expanded="false" aria-controls="add-new-bookmark-modal" data-hs-overlay="#add-new-bookmark-modal">
                 Open Add New Bookmark
-            </button>
+            </button> */}
 
-            <div id="add-new-bookmark-modal" className={`hs-overlay ${openAddNewBookmarkModal ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="add-new-bookmark-modal-label">
+            <div id="add-new-bookmark-modal" className={`hs-overlay ${openModal?.newBookmark ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="add-new-bookmark-modal-label">
                 <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto">
                     <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
                         <div className='w-full py-20 px-10'>
@@ -85,13 +75,14 @@ const AddNewBookmark = ({ openAddNewBookmarkModal, setOpenAddNewBookmarkModal, b
                                     Add New Bookmark
                                 </h3>
                                 <button type="button"
-                                    className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none" aria-label="Close" data-hs-overlay="#add-new-bookmark-modal">
-                                    <span className="sr-only">Close</span>
-                                    <svg className="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M18 6 6 18"></path>
-                                        <path d="m6 6 12 12"></path>
-                                    </svg>
-                                </button>
+                                onClick={closeModal}
+                                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none" aria-label="Close" data-hs-overlay="#hs-slide-down-animation-modal">
+                                <span className="sr-only">Close</span>
+                                <svg className="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M18 6 6 18"></path>
+                                    <path d="m6 6 12 12"></path>
+                                </svg>
+                            </button>
                             </div>
                             <div className="max-w-[400px] mx-auto">
                                 <form onSubmit={formik.handleSubmit}>

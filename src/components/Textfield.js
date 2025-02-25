@@ -15,6 +15,7 @@ const Textfield = ({ label, type, id, icon = "", name, placeholder = "", iconPla
                     value={fieldValue}
                     onChange={setFieldValue}
                     onBlur={setFieldValueOnBlur}
+                    {...(type === "password" && { autoComplete: "new-password" })}
                 />
                 {
                     type === "email" ?

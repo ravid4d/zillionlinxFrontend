@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Link, useNavigate  } from 'react-router-dom'
 import { logoutUser } from '../services/authService';
 import { toast } from 'react-toastify';
 
-const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterModal, setOpenAddNewBookmarkModal, btnRef }) => {
+const Header = ({ setOpenModal, setWhichModalOpen, isLoggedIn, setIsLoggedIn, setOpenAddNewBookmarkModal, setOpenAddNewCategoryModal, btnRef }) => {
+    const navigate = useNavigate();
     const handleLogout = () => {
         logoutUser();
         setIsLoggedIn(false);
         toast.success("You have been logged out successfully!");
+        navigate("/");
     }
+
+
     return (
-        <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full">
+        <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-40 w-full">
 
             <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-end gap-x-1">
@@ -62,12 +66,17 @@ const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterM
                                     isLoggedIn ?
                                         <>
                                             <div className="my-2 md:my-0 md:mx-4"><div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div></div>
+                                            {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="add-category-modal" data-hs-overlay="#add-category-modal" */}
+                                            <button className="btn light-btn" onClick={() => setWhichModalOpen('newCategory')}>Add New Category</button>
                                             <button className="btn dark-btn" onClick={handleLogout}>Logout</button>
                                         </>
                                         :
                                         <>
-                                            <button className="btn light-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" onClick={() => setOpenLoginModal(true)}>Log in</button>
-                                            <button className="btn dark-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" onClick={() => setOpenRegisterModal(true)}>Sign up</button>
+                                            {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" */}
+                                            {/* <button className="btn light-btn" onClick={() => setOpenLoginModal(true)}>Log in</button> */}
+                                            <button className="btn light-btn" onClick={() => setWhichModalOpen('login')}>Log in</button>
+                                            {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" */}
+                                            <button className="btn dark-btn" onClick={() => setWhichModalOpen('register')}>Sign up</button>
                                         </>
                                 }
                             </div>
@@ -111,7 +120,8 @@ const Header = ({ isLoggedIn, setIsLoggedIn, setOpenLoginModal, setOpenRegisterM
                                         <Link to="/bookmarks" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
                                             My Bookmarks
                                         </Link>
-                                        <button type="button" onClick={() => { setOpenAddNewBookmarkModal(true); btnRef.current.click(); }} className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
+                                        {/* btnRef.current.click(); */}
+                                        <button type="button" onClick={() => { setWhichModalOpen('newBookmark'); }} className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
                                             Add New Bookmark
                                         </button>
                                         <button type="button" className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600">
