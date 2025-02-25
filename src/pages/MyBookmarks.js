@@ -4,6 +4,7 @@ import bookmarkData from '../json/bookmarks.json';
 import Searchbar from '../components/Searchbar';
 import GoogleSearchbar from '../components/GoogleSearchbar';
 import AddNewBookmark from '../components/AddNewBookmark';
+import axios from 'axios';
 
 const MyBookmarks = () => {
     const btnRef = useRef(null);
@@ -11,6 +12,8 @@ const MyBookmarks = () => {
     const [items, setItems] = useState([]);
     const [draggedIndex, setDraggedIndex] = useState(null);
     const [openAddNewBookmarkModal, setOpenAddNewBookmarkModal] = useState(false);
+
+    let getBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmarks?category_id=1&sub_category_id=`
 
     useEffect(() => {
         setItems(bookmarkData);
@@ -54,6 +57,14 @@ const MyBookmarks = () => {
             setInputValue("");
         }, 500);
     }
+
+const getCategoryWiseBookmarks = async () => {
+    let response = await axios.get(getBookmarkUrl, {
+        headers:{
+            // Authorization: `Bearer ${token}`
+        }
+    })
+}
 
     return (
         <div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'>

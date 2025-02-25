@@ -27,6 +27,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
                 .min(8, "Password must be at least 8 characters")
+                .max(12, "Password must not exceed 12 characters")
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")

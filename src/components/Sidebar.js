@@ -26,13 +26,13 @@ const Sidebar = () => {
                                 <li key={index} className={`${isActive ? "active" : ""
                                     } hs-accordion-group hs-accordion last:mb-0 relative`} id={`users-accordion_${index}`}>
                                     <button
-                                        onClick={() => toggleAccordion(`users-accordion_${index}`, hasDropdown)}
+                                      
                                         type="button" className={`rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base text-light-black w-full focus:outline-none ${isActive ? "" : ""
                                             }`}
                                         aria-expanded={isActive}
                                         aria-controls={`users-accordion-collapse-${index}`}>
 
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className='hs-accordion-toggle'>
+                                        <svg   onClick={() => toggleAccordion(`users-accordion_${index}`, hasDropdown)} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className='hs-accordion-toggle'>
                                             <path d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z" stroke="#2131E5" strokeWidth="0.625" strokeMiterlimit="10" strokeLinecap="round" className='circle' />
                                             <path d="M8 4.1875V11.8125" stroke="#2131E5" strokeWidth="0.625" strokeMiterlimit="10" strokeLinecap="round" className='plus' />
                                             <path d="M4.1875 8H11.8125" stroke="#2131E5" strokeWidth="0.625" strokeMiterlimit="10" strokeLinecap="round" className='minus' />

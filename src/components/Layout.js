@@ -7,7 +7,7 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import { ToastContainer } from "react-toastify";
-import { isUserLoggedIn, loginUser, logoutUser } from "../services/authService";
+import { isUserLoggedIn} from "../services/authService";
 
 const Layout = () => {
     const [sidebar, hideSidebar] = useState(false);
