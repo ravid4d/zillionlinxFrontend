@@ -1,104 +1,89 @@
 import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import bookmarkData from "../json/bookmarks.json";
 import Searchbar from "../components/Searchbar";
 import GoogleSearchbar from "../components/GoogleSearchbar";
-import AddNewBookmark from "../components/AddNewBookmark";
 import axios from "axios";
 import { getToken } from "../services/authService";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAllTopLinks, fetchCategoryWiseBookmarks, removeTopLink  } from "../redux/slices/bookmarkSlice";
 
 const MyBookmarks = () => {
-  const btnRef = useRef(null);
-  const [inputValue, setInputValue] = useState("");
-  const [topLinksError, setTopLinksError] = useState("");
-  // const [items, setItems] = useState([]);
-  const [draggedIndex, setDraggedIndex] = useState(null);
-  const [openAddNewBookmarkModal, setOpenAddNewBookmarkModal] = useState(false);
-  const [topLinks, setTopLinks] = useState([]);
-  const [token, setToken] = useState(undefined);
+    const { topLinks, status, error } = useSelector((state) => state.bookmark);
+    const dispatch = useDispatch();
+    const btnRef = useRef(null);
+    const [inputValue, setInputValue] = useState("");
+    const [id, setId] = useState({categoryId:null, subCategoryId:null});
+    const [draggedIndex, setDraggedIndex] = useState(null);
+    const [token, setToken] = useState(undefined);
 
-  const topLinkUrl = `${process.env.REACT_APP_API_URL}/api/top-links`;
+    useEffect(() => {
+        let token = getToken();
+        setToken(token);
+        if (token) {
+            dispatch(fetchAllTopLinks(token));
+        }
+    }, [dispatch]);
 
-  useEffect(() => {
-    // setItems(bookmarkData);
-    let token = getToken();
-    setToken(token);
-    getAllTopLinks(token);
-  }, []);
+    useEffect(()=>{
+        let token = getToken();    
+        if(token && id?.categoryId) {
+            dispatch(fetchCategoryWiseBookmarks({ token, categoryId:id?.categoryId, subCategoryId:id?.subCategoryId }));
+        }
+    },[id?.categoryId, id?.subCategoryId])
 
-  const getAllTopLinks = async (token) => {
-    try {
-      let response = await axios.get(topLinkUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response, "hi dear");
-      setTopLinks(response?.data?.data);
-    } catch (error) {
-      let noRecordFound = error?.response?.data?.data?.length === 0;
-      setTopLinksError(noRecordFound ? error?.response?.data?.message : error);
-      //   console.log(error?.response?.data?.message);
-    }
-  };
+    // When drag starts, store the item's index
+    const handleDragStart = (index) => {
+        setDraggedIndex(index);
+    };
 
-  // When drag starts, store the item's index
-  const handleDragStart = (index) => {
-    setDraggedIndex(index);
-  };
+    // When dragged over another item, reorder the list
+    const handleDragOver = (index) => {
+        if (draggedIndex === null || draggedIndex === index) return;
 
-  // When dragged over another item, reorder the list
-  const handleDragOver = (index) => {
-    if (draggedIndex === null || draggedIndex === index) return;
+        const newTopLinks = [...topLinks];
+        const draggedItem = newTopLinks.splice(draggedIndex, 1)[0]; // Remove dragged item
+        newTopLinks.splice(index, 0, draggedItem); // Insert at new position
 
-    const newTopLinks = [...topLinks];
-    const draggedItem = newTopLinks.splice(draggedIndex, 1)[0]; // Remove dragged item
-    newTopLinks.splice(index, 0, draggedItem); // Insert at new position
+        setDraggedIndex(index); // Update dragged index
+        // setTopLinks(newTopLinks);
+    };
 
-    setDraggedIndex(index); // Update dragged index
-    setTopLinks(newTopLinks);
-  };
+    // Reset dragged item index on drag end
+    const handleDragEnd = () => {
+        setDraggedIndex(null);
+    };
+    
+    // Remove Bookmark
+    const handleRemoveItem = async (topLinkId) => {
+        
+        const token = getToken();
+        const result = await dispatch(removeTopLink({ token, topLinkId }));
+    
+        if (removeTopLink.fulfilled.match(result)) {
+          toast.success(result.payload.message || "Top link removed successfully!");
+        } else {
+          toast.error(result.payload || "Failed to remove top link.");
+        }
+    };
 
-  // Reset dragged item index on drag end
-  const handleDragEnd = () => {
-    setDraggedIndex(null);
-  };
+    //Open Add New Bookmark Modal
+    const addBookmarkViaUrl = () => {
+        let inputField = document.getElementById("add_url_to_bookmark");
+        inputField.blur();
+        btnRef.current.click();
+        // setOpenAddNewBookmarkModal(true);
+        setTimeout(() => {
+        setInputValue("");
+        }, 500);
+    };
 
-  // Remove an item form list
-  const handleRemoveItem = async (topLinkId) => {
-    // console.log(topLinks, 'all data', topLinkId);
-    try {
-      let response = await axios.delete(`${topLinkUrl}/${topLinkId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.success(response?.data?.message);
-    } catch (error) {
-      console.log(error);
-    }
-    const updatedItems = topLinks?.filter(
-      (topLink) => topLink?.id !== topLinkId
-    );
-    setTopLinks(updatedItems);
-  };
+    // if (status === "loading") return <p>Loading...</p>;
+    // if (status === "failed") return <p>Error: {error}</p>;
 
-  //Open Add New Bookmark Modal
-  const addBookmarkViaUrl = () => {
-    let inputField = document.getElementById("add_url_to_bookmark");
-    inputField.blur();
-    btnRef.current.click();
-    setOpenAddNewBookmarkModal(true);
-    setTimeout(() => {
-      setInputValue("");
-    }, 500);
-  };
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* <AddNewBookmark btnRef={btnRef} openAddNewBookmarkModal={openAddNewBookmarkModal} setOpenAddNewBookmarkModal={setOpenAddNewBookmarkModal} /> */}
-
       <button
         type="button"
         className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
@@ -132,18 +117,18 @@ const MyBookmarks = () => {
           <div
             id="hs-application-sidebar"
             className="
-                                bookmark-sidebar-wrapper    
-                                hs-overlay  [--auto-close:lg]
-                                hs-overlay-open:translate-x-0         
-                                -translate-x-full lg:translate-x-0 transition-all duration-300 transform
-                                fixed lg:relative inset-y-0 start-0 z-[40] lg:block
-                            "
+                bookmark-sidebar-wrapper    
+                hs-overlay [--auto-close:lg]
+                hs-overlay-open:translate-x-0         
+                -translate-x-full lg:translate-x-0 transition-all duration-300 transform
+                fixed lg:relative inset-y-0 start-0 z-[40] lg:block
+            "
             role="dialog"
             tabIndex="-1"
             aria-label="Sidebar"
           >
             <Searchbar />
-            <Sidebar />
+            <Sidebar setId={setId} />
           </div>
           {/* </div> */}
           <div className="bookmark-content-wrapper">
@@ -177,9 +162,9 @@ const MyBookmarks = () => {
                 </span>
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
-                {topLinks?.length===0 && topLinksError ? (
+                {topLinks?.length===0 && error   ? (
                   <h2 className="text-[22px] text-red-500 mb-5">
-                    {topLinksError}
+                    {error}
                   </h2>
                 ) : (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
@@ -187,13 +172,13 @@ const MyBookmarks = () => {
                       topLinks?.length > 0 &&
                       topLinks?.map((topLink, index) => (
                         <li
-                          key={topLink?.bookmark?.id}
+                          key={topLink?.id}
                           draggable
                           onDragStart={() =>
-                            handleDragStart(topLink?.bookmark?.id)
+                            handleDragStart(topLink?.id)
                           }
                           onDragOver={() =>
-                            handleDragOver(topLink?.bookmark?.id)
+                            handleDragOver(topLink?.id)
                           }
                           onDragEnd={handleDragEnd}
                           className="relative"
@@ -216,13 +201,13 @@ const MyBookmarks = () => {
                             </span>
                             <Link
                               target="_blank"
-                              to={topLink?.bookmark?.website_url}
+                              to={topLink?.website_url}
                             >
                               <img
                                 src={
                                   process.env.REACT_APP_API_URL +
                                   "/" +
-                                  topLink?.bookmark?.icon_path
+                                  topLink?.icon_path
                                 }
                                 alt=""
                                 className="w-full"
@@ -230,10 +215,10 @@ const MyBookmarks = () => {
                             </Link>
                             <Link
                               target="_blank"
-                              to={topLink?.bookmark?.website_url}
+                              to={topLink?.website_url}
                             >
                               <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
-                                {topLink?.bookmark?.title}
+                                {topLink?.title}
                               </span>
                             </Link>
                           </span>

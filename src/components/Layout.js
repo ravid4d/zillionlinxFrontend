@@ -12,6 +12,7 @@ import { isUserLoggedIn } from "../services/authService";
 
 const Layout = () => {
   const [sidebar, hideSidebar] = useState(false);
+  
   const [openModal, setOpenModal] = useState({
     login: false,
     register: false,
@@ -35,6 +36,7 @@ const Layout = () => {
       [modalName]: true,
     });
   };
+
   const closeAllModals = () => {
     setOpenModal({
       login: false,
@@ -44,6 +46,7 @@ const Layout = () => {
       newCategory: false,
     });
   };
+
   const getOpenModalName = () => {
     return Object.keys(openModal).find((key) => openModal[key]) || "";
   };

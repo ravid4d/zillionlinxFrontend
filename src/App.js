@@ -3,11 +3,15 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import MyBookmarks from './pages/MyBookmarks';
 import PrivateRoute from './components/PrivateRoute';
+import { Provider } from 'react-redux';
+import { store } from "./redux/store";
 
 function App() {
 
     return (
         // <BrowserRouter basename='/zillionfront/'> "homepage": "/zillionfront",
+        <Provider store={store}>
+
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Layout />}>
@@ -16,6 +20,7 @@ function App() {
                 </Route>
             </Routes>
         </BrowserRouter>
+        </Provider>
     );
 }
 
