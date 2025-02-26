@@ -3,35 +3,43 @@ import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
 import GoogleSearchbar from "../components/GoogleSearchbar";
 import axios from "axios";
+import '../index.css';
 import { getToken } from "../services/authService";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllTopLinks, fetchCategoryWiseBookmarks, removeTopLink  } from "../redux/slices/bookmarkSlice";
+import Bookmark from "../components/Bookmark";
 
 const MyBookmarks = () => {
-    const { topLinks, status, error } = useSelector((state) => state.bookmark);
+    const { token } = useSelector((state) => state.auth);
+    const { topLinks, bookmarks, loading, error } = useSelector((state) => state.bookmark);
     const dispatch = useDispatch();
     const btnRef = useRef(null);
     const [inputValue, setInputValue] = useState("");
     const [id, setId] = useState({categoryId:null, subCategoryId:null});
     const [draggedIndex, setDraggedIndex] = useState(null);
-    const [token, setToken] = useState(undefined);
 
     useEffect(() => {
-        let token = getToken();
-        setToken(token);
-        if (token) {
-            dispatch(fetchAllTopLinks(token));
+      const fetchData = async () => {
+      let result = await dispatch(fetchAllTopLinks(token));
+      if (fetchAllTopLinks.fulfilled.match(result)) {
+          //Do not need to show success message using toast while getting data on load
+          // toast.success(result.payload.message || "Categories fetched successfully!")
+        } else {
+          // toast.error(result.payload || "Failed to fetch Top Links!");
         }
-    }, [dispatch]);
+      }
+      if(token) {
+          fetchData();
+      }
+  }, [dispatch, token]);
 
     useEffect(()=>{
-        let token = getToken();    
-        if(token && id?.categoryId) {
-            dispatch(fetchCategoryWiseBookmarks({ token, categoryId:id?.categoryId, subCategoryId:id?.subCategoryId }));
-        }
-    },[id?.categoryId, id?.subCategoryId])
+      if(token && id?.categoryId) {
+        dispatch(fetchCategoryWiseBookmarks({ token, categoryId:id?.categoryId, subCategoryId:id?.subCategoryId }));
+      }
+    },[id?.categoryId, id?.subCategoryId, token])
 
     // When drag starts, store the item's index
     const handleDragStart = (index) => {
@@ -56,10 +64,9 @@ const MyBookmarks = () => {
     };
     
     // Remove Bookmark
-    const handleRemoveItem = async (topLinkId) => {
+    const handleRemoveItem = async ({topLinkId, type}) => {
         
-        const token = getToken();
-        const result = await dispatch(removeTopLink({ token, topLinkId }));
+        const result = await dispatch(removeTopLink({ token, topLinkId, type }));
     
         if (removeTopLink.fulfilled.match(result)) {
           toast.success(result.payload.message || "Top link removed successfully!");
@@ -162,89 +169,53 @@ const MyBookmarks = () => {
                 </span>
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
-                {topLinks?.length===0 && error   ? (
-                  <h2 className="text-[22px] text-red-500 mb-5">
+                {
+                  loading ? 
+                  <span className="loader"></span>
+                  :
+                  topLinks?.length===0 && error ? (
+                    <h2 className="text-[22px] text-red-500 mb-5">
                     {error}
                   </h2>
                 ) : (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
-                    {topLinks &&
-                      topLinks?.length > 0 &&
-                      topLinks?.map((topLink, index) => (
-                        <li
-                          key={topLink?.id}
-                          draggable
-                          onDragStart={() =>
-                            handleDragStart(topLink?.id)
-                          }
-                          onDragOver={() =>
-                            handleDragOver(topLink?.id)
-                          }
-                          onDragEnd={handleDragEnd}
-                          className="relative"
-                          style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
-                        >
-                          <span className="bg-white relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30">
-                            <span className="pin-icon w-6 h-6 rounded-full bg-light-blue flex flex-wrap items-center justify-center cursor-move absolute left-2 top-2">
-                              <svg
-                                width="11"
-                                height="10"
-                                viewBox="0 0 11 10"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M10.0377 3.96597L6.73769 0.665967C6.58769 0.515967 6.36269 0.515967 6.21269 0.665967L5.01269 1.86597C4.82519 2.05347 4.90019 2.27847 5.01269 2.39097L5.27519 2.65347L4.15019 3.77847C3.58769 3.66597 2.0502 3.40347 1.2252 4.22847C1.0752 4.37847 1.0752 4.60347 1.2252 4.75347L3.36269 6.89097L1.0002 9.25347C0.850195 9.40347 0.850195 9.62847 1.0002 9.77847C1.1502 9.92847 1.4127 9.89097 1.5252 9.77847L3.88769 7.41597L6.02519 9.55347C6.25019 9.74097 6.47519 9.66597 6.55019 9.55347C7.37519 8.72847 7.11269 7.19097 7.00019 6.62847L8.12519 5.50347L8.38769 5.76597C8.53769 5.91597 8.76269 5.91597 8.91269 5.76597L10.1127 4.56597C10.1877 4.34097 10.1877 4.11597 10.0377 3.96597Z"
-                                  fill="#2131E5"
-                                />
-                              </svg>
-                            </span>
-                            <Link
-                              target="_blank"
-                              to={topLink?.website_url}
-                            >
-                              <img
-                                src={
-                                  process.env.REACT_APP_API_URL +
-                                  "/" +
-                                  topLink?.icon_path
-                                }
-                                alt=""
-                                className="w-full"
-                              />
-                            </Link>
-                            <Link
-                              target="_blank"
-                              to={topLink?.website_url}
-                            >
-                              <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
-                                {topLink?.title}
-                              </span>
-                            </Link>
-                          </span>
-                          <span
-                            onClick={() => handleRemoveItem(topLink?.id)}
-                            className="cross-icon w-6 h-6 rounded-full bg-dark-blue flex flex-wrap items-center justify-center cursor-pointer absolute -right-2 -top-2 transition-all hover:bg-red-500"
+                    {
+                      !id?.categoryId ?
+                        topLinks &&
+                          topLinks?.length > 0 &&
+                          topLinks?.map((topLink, index) => (
+                            <li
+                            key={topLink?.id}
+                            draggable
+                            onDragStart={() => handleDragStart(topLink?.id)}
+                            onDragOver={() => handleDragOver(topLink?.id)}
+                            onDragEnd={handleDragEnd}
+                            className="relative"
+                            style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="#C0C6FF"
-                              className="size-4"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </span>
-                        </li>
-                      ))}
+                            <Bookmark type="toplink" item={topLink} handleRemoveItem={handleRemoveItem} />
+                            </li>
+                          ))
+                          :
+                          bookmarks &&
+                          bookmarks?.length > 0 &&
+                          bookmarks?.map((bookmark, index) => (
+                            <li
+                            key={bookmark?.id}
+                            draggable
+                            onDragStart={() => handleDragStart(bookmark?.id)}
+                            onDragOver={() => handleDragOver(bookmark?.id)}
+                            onDragEnd={handleDragEnd}
+                            className="relative"
+                            style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
+                          >
+                           <Bookmark type="bookmark" item={bookmark} handleRemoveItem={handleRemoveItem} />
+                           </li>
+                          ))
+                        }
                   </ul>
-                )}
+                )
+              }
               </div>
             </div>
           </div>

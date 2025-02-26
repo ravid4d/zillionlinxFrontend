@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Textfield from './Textfield';
-import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
-import axios from "axios";
 import * as YUP from "yup";
 import { toast } from 'react-toastify';
-import { loginUser } from '../services/authService';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleLogin } from '../redux/slices/authSlice';
 
-const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 
-const Login = ({ openModal, setWhichModalOpen, closeAllModals, setIsLoggedIn }) => {
+const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.auth);
+   
     const formik = useFormik({
         initialValues: {
-            type: "email",
             email: "",
             password: ""
         },
@@ -21,30 +21,20 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals, setIsLoggedIn }) 
             password: YUP.string()
                 .required("Password is required"),
         }),
-        onSubmit: values => {
-            handleLogin(values);
+        onSubmit: async(values) => {
+            const result = await dispatch(handleLogin(values));
+
+            if (handleLogin.fulfilled.match(result)) {
+                toast.success(result.payload.message || "Login successfully!")
+                closeModal();
+              } else {
+                toast.error(result.payload || "Login failed!");
+              }
         }
     });
-    const handleLogin = async (values) => {
-        try {
-            const response = await axios.post(loginUrl, {
-                type: "email",
-                email: values?.email,
-                password: values?.password,
-            });
-            toast.success(response?.data?.message);
-            loginUser(response?.data?.data?.token);
-            setIsLoggedIn(true);
-            closeModal('hs-slide-down-animation-modal');
-        }
-        catch (err) {
-            toast.error(err?.response?.data?.message);
-        }
-    }
     const closeModal = () => {
         formik.resetForm();
         closeAllModals();
-        // setOpenLoginModal(false);
     }
     return (
         <div id="hs-slide-down-animation-modal" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.login ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="hs-slide-down-animation-modal-label" data-hs-overlay-keyboard="false">
@@ -79,7 +69,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals, setIsLoggedIn }) 
                                         <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                     ) : null}
                                 </div>
-                                <button type="submit" className="btn dark-btn w-full justify-center h-12">login</button>
+                                <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>login</button>
                             </form>
                             <div className="pt-7 pb-2 flex items-center text-xl text-light-black uppercase before:flex-1 before:border-t before:border-light-black before:me-6 after:flex-1 after:border-t after:border-light-black after:ms-6">Or</div>
                             <div className='text-xl text-light-black text-center'>
@@ -102,7 +92,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals, setIsLoggedIn }) 
                                             <path d="M18.3263 1.90391H21.6998L14.3297 10.3274L23 21.7899H16.2112L10.894 14.8379L4.80995 21.7899H1.43443L9.31744 12.78L1 1.90391H7.96111L12.7674 8.25824L18.3263 1.90391ZM17.1423 19.7707H19.0116L6.94539 3.81704H4.93946L17.1423 19.7707Z" fill="#2131E5" />
                                         </svg>
                                     </button>
-                                    <button type="button" className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
+                                    <button type="button"  className={`relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none `} aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className='size-6 shrink-0'>
                                             <g clipPath="url(#clip0_55_183)">
                                                 <path d="M11.9998 9.81815V14.4654H18.4579C18.1743 15.96 17.3233 17.2255 16.047 18.0764L19.9415 21.0982C22.2106 19.0037 23.5197 15.9273 23.5197 12.2728C23.5197 11.4219 23.4433 10.6037 23.3015 9.81828L11.9998 9.81815Z" fill="#2131E5" />

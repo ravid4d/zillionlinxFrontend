@@ -2,14 +2,21 @@ import React from 'react'
 import { Link, useNavigate  } from 'react-router-dom'
 import { logoutUser } from '../services/authService';
 import { toast } from 'react-toastify';
+import { logout } from '../redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
-const Header = ({ setOpenModal, setWhichModalOpen, isLoggedIn, setIsLoggedIn, setOpenAddNewBookmarkModal, setOpenAddNewCategoryModal, btnRef }) => {
+const Header = ({ setWhichModalOpen, isLoggedIn}) => {
     const navigate = useNavigate();
-    const handleLogout = () => {
-        logoutUser();
-        setIsLoggedIn(false);
-        toast.success("You have been logged out successfully!");
-        navigate("/");
+    const dispatch = useDispatch();
+    const handleLogout = async() => {
+        try {
+            localStorage.removeItem("token"); // Remove token from local storage
+            dispatch(logout()); // Dispatch a logout action if using Redux
+            toast.success("You have been logged out successfully!");
+            navigate("/"); // Redirect to home or login page
+          } catch (error) {
+            toast.error("Logout failed! Please try again.");
+          }
     }
 
 

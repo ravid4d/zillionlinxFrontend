@@ -2,42 +2,46 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getToken} from "../services/authService";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../redux/slices/categorySlice';
 
-const categoryUrl = `${process.env.REACT_APP_API_URL}/api/categories`;
 const Sidebar = ({setId}) => {
-    const [openAccordion, setOpenAccordion] = useState({});
-    const [categories, setCategories] = useState([]);
+    const dispatch = useDispatch();
 
+    const { token } = useSelector((state) => state.auth);
+    const {categories, loading} = useSelector(state=>state.category);
+
+    const [openAccordion, setOpenAccordion] = useState({});
+    
     useEffect(() => {
-        let token = getToken();
-        getCategories(token);
-    }, []);
+        const fetchData = async () => {
+        let result = await dispatch(fetchCategories(token));
+        if (fetchCategories.fulfilled.match(result)) {
+            //Do not need to show success message using toast while getting data on load
+            // toast.success(result.payload.message || "Categories fetched successfully!")
+          } else {
+            toast.error(result.payload || "Failed to fetch categories!");
+          }
+        }
+        if(token) {
+            fetchData();
+        }
+    }, [dispatch, token]);
 
     const toggleAccordion = (id, hasDropdown) => {
         if (!hasDropdown) return;
         setOpenAccordion((prevId) => (prevId === id ? null : id));
     };    
-    const getCategories = async (token) => {
-        try {
-            const response = await axios.get(categoryUrl, 
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                }
-            );
-            setCategories(response?.data?.data);
-        }
-        catch(error) {
-            toast.error(error);
-        }
-    }
+
     return (
         <div className='rounded-2xl bg-white lg:p-6 min-h-[calc(100vh-130px)] relative h-[calc(100%-64px)]'>
 
             <div className='min-h-4/6 h-[50vh] '>
                 <p className='text-[28px] text-dark-blue capitalize mb-5'>My Bookmarks</p>
-                <ul className='rounded-xl border border-light-blue p-4 min-h-4/6 h-full bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto'>
+                <ul className={`${loading ? '' : ''} rounded-xl border border-light-blue p-4 min-h-4/6 h-full bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}>
+                {
+                    loading && <span className="loader"></span>
+                }
                     {
                         categories && categories?.length > 0 && categories?.map((category, index) => {
                             const hasDropdown = category?.subcategories?.length>0;
