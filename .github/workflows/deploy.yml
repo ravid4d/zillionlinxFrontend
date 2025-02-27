@@ -24,4 +24,4 @@ jobs:
             npm install
             npm run build
             cp -r build/* /var/www/html/zillionlinx-front
-            systemctl restart apache2 || systemctl restart nginx
+            systemctl restart apache2
