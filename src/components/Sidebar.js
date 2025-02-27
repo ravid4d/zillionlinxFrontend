@@ -34,11 +34,11 @@ const Sidebar = ({setId}) => {
     };    
 
     return (
-        <div className='rounded-2xl bg-white lg:p-6 min-h-[calc(100vh-130px)] relative h-[calc(100%-64px)]'>
+        <div className='rounded-2xl bg-white lg:p-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative'>
 
-            <div className='min-h-4/6 h-[50vh] '>
+            <div className='min-h-4/6 h-[calc(100%-150px)] '>
                 <p className='text-[28px] text-dark-blue capitalize mb-5'>My Bookmarks</p>
-                <ul className={`${loading ? '' : ''} rounded-xl border border-light-blue p-4 min-h-4/6 h-full bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}>
+                <ul className={`${loading ? '' : ''} rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}>
                 {
                     loading && <span className="loader"></span>
                 }
