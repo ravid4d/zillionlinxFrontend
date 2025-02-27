@@ -22,6 +22,7 @@ const Header = ({ setWhichModalOpen}) => {
     }
 
 
+
     return (
         <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-40 w-full">
 
@@ -45,6 +46,7 @@ const Header = ({ setWhichModalOpen}) => {
                         <div className="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
 
                             <div className="md:ms-auto mt-2 md:mt-0 flex flex-wrap items-center gap-x-1.5">
+                           
                                 {
                                     isLoggedIn ?
                                         <div className="hs-dropdown relative inline-flex items-center space-x-4">

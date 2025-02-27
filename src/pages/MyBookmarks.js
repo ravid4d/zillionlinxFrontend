@@ -38,7 +38,7 @@ const MyBookmarks = () => {
       if(token && id?.categoryId) {
         dispatch(fetchCategoryWiseBookmarks({ token, categoryId:id?.categoryId, subCategoryId:id?.subCategoryId }));
       }
-    },[id?.categoryId, id?.subCategoryId, token])
+    },[id?.categoryId, id?.subCategoryId, token, dispatch])
 
     // When drag starts, store the item's index
     const handleDragStart = (index) => {
