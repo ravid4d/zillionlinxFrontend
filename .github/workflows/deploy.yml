@@ -18,10 +18,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-           script: |
+          script: |
             cd /var/www/html/zillionlinx-front
             git pull origin master
             npm install
             npm run build
             sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
-            systemctl restart apache2 || systemctl restart nginx
+            sudo systemctl restart apache2 || sudo systemctl restart nginx
