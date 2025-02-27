@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: ["main"]  # Change to main
+    branches: ["master"]
   pull_request:
-    branches: ["main"]  # Change to main
+    branches: ["master"]
 
 jobs:
   deploy:
@@ -18,10 +18,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: |
+           script: |
             cd /var/www/html/zillionlinx-front
-            git pull origin main  # Change master to main
+            git pull origin master
             npm install
             npm run build
-            sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
-            sudo systemctl restart apache2 || sudo systemctl restart nginx
+            cp -r build/* /var/www/html/zillionlinx-front
+            systemctl restart apache2 || systemctl restart nginx
