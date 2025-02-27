@@ -18,15 +18,11 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
   const dispatch = useDispatch();
 
   const [resetKey, setResetKey] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState([]);
 
   const { token } = useSelector((state) => state.auth);
-  const { categories, subCategories, loading, error } = useSelector(
-    (state) => state.category
-  );
+  const { categories, subCategories } = useSelector(state => state.category);
   const { addBookmarkLoading } = useSelector((state) => state.bookmark);
-
-  // const [token, setToken] = useState(undefined);
-  const [selectedCategoryId, setSelectedCategoryId] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {

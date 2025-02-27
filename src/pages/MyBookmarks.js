@@ -2,23 +2,22 @@ import React, { useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
 import GoogleSearchbar from "../components/GoogleSearchbar";
-import axios from "axios";
 import '../index.css';
-import { getToken } from "../services/authService";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllTopLinks, fetchCategoryWiseBookmarks, removeTopLink  } from "../redux/slices/bookmarkSlice";
 import Bookmark from "../components/Bookmark";
 
 const MyBookmarks = () => {
-    const { token } = useSelector((state) => state.auth);
-    const { topLinks, bookmarks, loading, error } = useSelector((state) => state.bookmark);
     const dispatch = useDispatch();
     const btnRef = useRef(null);
+
     const [inputValue, setInputValue] = useState("");
     const [id, setId] = useState({categoryId:null, subCategoryId:null});
     const [draggedIndex, setDraggedIndex] = useState(null);
+
+    const { token } = useSelector((state) => state.auth);
+    const { bookmarks, loading, error } = useSelector((state) => state.bookmark);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -50,9 +49,9 @@ const MyBookmarks = () => {
     const handleDragOver = (index) => {
         if (draggedIndex === null || draggedIndex === index) return;
 
-        const newTopLinks = [...topLinks];
-        const draggedItem = newTopLinks.splice(draggedIndex, 1)[0]; // Remove dragged item
-        newTopLinks.splice(index, 0, draggedItem); // Insert at new position
+        const newBookmarks = [...bookmarks];
+        const draggedItem = newBookmarks.splice(draggedIndex, 1)[0]; // Remove dragged item
+        newBookmarks.splice(index, 0, draggedItem); // Insert at new position
 
         setDraggedIndex(index); // Update dragged index
         // setTopLinks(newTopLinks);
@@ -64,12 +63,12 @@ const MyBookmarks = () => {
     };
     
     // Remove Bookmark
-    const handleRemoveItem = async ({topLinkId, type}) => {
-        
-        const result = await dispatch(removeTopLink({ token, topLinkId, type }));
+    const handleRemoveItem = async (topLinkId) => {
+        const result = await dispatch(removeTopLink({token, topLinkId}));
     
         if (removeTopLink.fulfilled.match(result)) {
           toast.success(result.payload.message || "Top link removed successfully!");
+          await dispatch(fetchAllTopLinks(token));
         } else {
           toast.error(result.payload || "Failed to remove top link.");
         }
@@ -85,9 +84,6 @@ const MyBookmarks = () => {
         setInputValue("");
         }, 500);
     };
-
-    // if (status === "loading") return <p>Loading...</p>;
-    // if (status === "failed") return <p>Error: {error}</p>;
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -173,33 +169,17 @@ const MyBookmarks = () => {
                   loading ? 
                   <span className="loader"></span>
                   :
-                  topLinks?.length===0 && error ? (
+                    bookmarks?.length === 0 && error ? (
                     <h2 className="text-[22px] text-red-500 mb-5">
                     {error}
                   </h2>
-                ) : (
+                ) :
+                 (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
                     {
-                      !id?.categoryId ?
-                        topLinks &&
-                          topLinks?.length > 0 &&
-                          topLinks?.map((topLink, index) => (
-                            <li
-                            key={topLink?.id}
-                            draggable
-                            onDragStart={() => handleDragStart(topLink?.id)}
-                            onDragOver={() => handleDragOver(topLink?.id)}
-                            onDragEnd={handleDragEnd}
-                            className="relative"
-                            style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
-                          >
-                            <Bookmark type="toplink" item={topLink} handleRemoveItem={handleRemoveItem} />
-                            </li>
-                          ))
-                          :
-                          bookmarks &&
-                          bookmarks?.length > 0 &&
-                          bookmarks?.map((bookmark, index) => (
+                          bookmarks?.bookmarks &&
+                          bookmarks?.bookmarks?.length > 0 ?
+                          bookmarks?.bookmarks?.map((bookmark, index) => (
                             <li
                             key={bookmark?.id}
                             draggable
@@ -209,9 +189,10 @@ const MyBookmarks = () => {
                             className="relative"
                             style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
                           >
-                           <Bookmark type="bookmark" item={bookmark} handleRemoveItem={handleRemoveItem} />
+                           <Bookmark item={bookmark} handleRemoveItem={handleRemoveItem} categoryId={id?.categoryId} subCategoryId={id?.subCategoryId} />
                            </li>
                           ))
+                          : <li className="col-span-2 text-[22px] text-red-500 mb-5">{bookmarks?.message}</li>
                         }
                   </ul>
                 )

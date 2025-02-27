@@ -70,7 +70,7 @@ const Layout = () => {
         <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
         <Header
           setWhichModalOpen={setWhichModalOpen}
-          isLoggedIn={isLoggedIn}
+          // isLoggedIn={isLoggedIn}
           // setIsLoggedIn={setIsLoggedIn}
           sidebar={sidebar}
           hideSidebar={hideSidebar}
