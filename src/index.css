@@ -1,55 +1,74 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Actor&display=swap");
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap'); */
 
 body {
-    background: url('/public/background.svg')no-repeat center top/cover;
+  background: url("/public/background.svg") no-repeat center top/cover;
 }
 
 .btn {
-    @apply uppercase py-1.5 px-5 inline-flex items-center font-medium text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
+  @apply py-1.5 px-5 inline-flex items-center font-medium text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
 }
 
 .btn.light-btn {
-    @apply bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue;
+  @apply uppercase bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue;
 }
 
 .btn.dark-btn {
-    @apply bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue;
+  @apply uppercase bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue;
 }
 
 .btn.badge-btn {
-    @apply bg-light-blue text-light-black;
+  @apply bg-light-blue text-light-black;
 }
 
 .custom-scrollbar {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #2131E5;
-    border-radius: 10px;
+  background: #2131e5;
+  border-radius: 10px;
 }
 
 .bookmark-sidebar-wrapper {
-    @apply w-[375px];
+  @apply w-[375px] p-5 lg:p-0 bg-white lg:bg-transparent;
 }
 
 .bookmark-content-wrapper {
-    @apply w-[calc(100%-407px)];
+  @apply w-full lg:w-[calc(100%-407px)];
 }
 
 .bookmark-sidebar li.active .minus {
-    @apply opacity-100;
+  @apply opacity-100;
 }
 
 .bookmark-sidebar li.active .plus {
-    @apply opacity-0;
+  @apply opacity-0;
+}
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #2131e5;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 /* border-gray-200 bg-white text-gray-800 hover:bg-gray-50 */

@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Textfield from './Textfield';
-import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
-import axios from "axios";
 import * as YUP from "yup";
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleLogin } from '../redux/slices/authSlice';
 
-const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 
-const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpenForgotPasswordModal }) => {
-
+const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.auth);
+   
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -17,45 +19,25 @@ const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpe
         validationSchema: YUP.object({
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
-                .min(8, "Password must be at least 8 characters")
-                .matches(/[a-z]/, "Must include at least one lowercase letter")
-                .matches(/[A-Z]/, "Must include at least one uppercase letter")
-                .matches(/\d/, "Must include at least one number")
-                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
                 .required("Password is required"),
         }),
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-            handleLogin(values);
-            closeModal('hs-slide-down-animation-modal');
+        onSubmit: async(values) => {
+            const result = await dispatch(handleLogin(values));
+
+            if (handleLogin.fulfilled.match(result)) {
+                toast.success(result.payload.message || "Login successfully!")
+                closeModal();
+              } else {
+                toast.error(result.payload || "Login failed!");
+              }
         }
     });
-    const handleLogin = async (values) => {
-        try {
-            const response = await axios.post(loginUrl, {
-                email: values?.email,
-                password: values?.password,
-            });
-
-            return response.data;
-        }
-        catch (err) {
-            console.error("Login failed:", err.response ? err.response.data : err.message);
-        }
-    }
-    const closeModal = (backdrop) => {
-        const backdropElement = document.querySelector(`#${backdrop}-backdrop`);
-        if (backdropElement) {
-            document.body.style.removeProperty("overflow");
-            backdropElement.remove();
-        } else {
-            console.warn(`Element #${backdrop}-backdrop not found.`);
-        }
+    const closeModal = () => {
         formik.resetForm();
-        setOpenLoginModal(false);
+        closeAllModals();
     }
     return (
-        <div id="hs-slide-down-animation-modal" className={`hs-overlay [--overlay-backdrop:static] ${openLoginModal ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="hs-slide-down-animation-modal-label" data-hs-overlay-keyboard="false">
+        <div id="hs-slide-down-animation-modal" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.login ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="hs-slide-down-animation-modal-label" data-hs-overlay-keyboard="false">
             <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
                 <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
                     <div className='w-full py-20 px-10'>
@@ -64,7 +46,7 @@ const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpe
                                 Login
                             </h3>
                             <button type="button"
-                                onClick={() => closeModal('hs-slide-down-animation-modal')}
+                                onClick={closeModal}
                                 className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none" aria-label="Close" data-hs-overlay="#hs-slide-down-animation-modal">
                                 <span className="sr-only">Close</span>
                                 <svg className="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -87,7 +69,7 @@ const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpe
                                         <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                     ) : null}
                                 </div>
-                                <button type="submit" className="btn dark-btn w-full justify-center h-12">login</button>
+                                <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>login</button>
                             </form>
                             <div className="pt-7 pb-2 flex items-center text-xl text-light-black uppercase before:flex-1 before:border-t before:border-light-black before:me-6 after:flex-1 after:border-t after:border-light-black after:ms-6">Or</div>
                             <div className='text-xl text-light-black text-center'>
@@ -110,7 +92,7 @@ const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpe
                                             <path d="M18.3263 1.90391H21.6998L14.3297 10.3274L23 21.7899H16.2112L10.894 14.8379L4.80995 21.7899H1.43443L9.31744 12.78L1 1.90391H7.96111L12.7674 8.25824L18.3263 1.90391ZM17.1423 19.7707H19.0116L6.94539 3.81704H4.93946L17.1423 19.7707Z" fill="#2131E5" />
                                         </svg>
                                     </button>
-                                    <button type="button" className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
+                                    <button type="button"  className={`relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none `} aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className='size-6 shrink-0'>
                                             <g clipPath="url(#clip0_55_183)">
                                                 <path d="M11.9998 9.81815V14.4654H18.4579C18.1743 15.96 17.3233 17.2255 16.047 18.0764L19.9415 21.0982C22.2106 19.0037 23.5197 15.9273 23.5197 12.2728C23.5197 11.4219 23.4433 10.6037 23.3015 9.81828L11.9998 9.81815Z" fill="#2131E5" />
@@ -126,8 +108,8 @@ const Login = ({ openLoginModal, setOpenLoginModal, setOpenRegisterModal, setOpe
                                         </svg>
                                     </button>
                                 </div>
-                                <p className='mb-4'>Don't have an account? <span className="cursor-pointer hover:text-dark-blue" onClick={() => setOpenRegisterModal(true)}>Sign up</span></p>
-                                <p><span onClick={() => setOpenForgotPasswordModal(true)} className='cursor-pointer hover:text-dark-blue'>Forgot your password?</span></p>
+                                <p className='mb-4'>Don't have an account? <span className="cursor-pointer hover:text-dark-blue" onClick={() => setWhichModalOpen('register')}>Sign up</span></p>
+                                <p><span onClick={() => setWhichModalOpen('forgot')} className='cursor-pointer hover:text-dark-blue'>Forgot your password?</span></p>
                             </div>
                         </div>
                     </div>

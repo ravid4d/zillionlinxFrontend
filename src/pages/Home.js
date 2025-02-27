@@ -1,12 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import badgeData from '../json/badges.json'
+import { useDispatch, useSelector } from 'react-redux';
+import { removeTopLink } from '../redux/slices/bookmarkSlice';
+import { fetchCategories } from '../redux/slices/categorySlice';
 
 const Home = () => {
-
     const [badges, setBadges] = useState();
+    const [catId, setCatId] = useState([]);
+    const dispatch = useDispatch();
+
+    const { token } = useSelector((state) => state.auth);
+    const { categories } = useSelector((state) => state.category);
+
     useEffect(() => {
         setBadges(badgeData);
     }, [])
+console.log(categories, 'categories')
+    // const rmTopLinks = async() => {
+    //     await dispatch(removeTopLink({token, topLinkId}));
+    // }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await dispatch(fetchCategories(token));
+        }
+        if(token) {
+            fetchData();
+        }
+    }, [dispatch, token]);
 
     return (
         <>
@@ -21,11 +42,11 @@ const Home = () => {
                             Online Bookmarks, Online Favorites. Store and organize your Bookmarks in one place. Access your Bookmarks from every computer. Search the Internet and get real answers.
                         </p>
 
-                        <div className="space-x-4">
+                        <div className="space-y-4 md:space-x-4">
                             {
                                 badges && badges?.length > 0 && badges?.map((badge, index) => {
                                     return (
-                                        <button className="btn badge-btn mb-4" key={index}>
+                                        <button className="btn badge-btn" key={index}>
                                             {badge}
                                         </button>
                                     )

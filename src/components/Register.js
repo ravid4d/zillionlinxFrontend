@@ -1,14 +1,15 @@
 import React from 'react'
 import Textfield from './Textfield'
-import { Link } from 'react-router-dom'
 import CountryDropdown from './CountryDropdown'
 import { useFormik } from 'formik'
 import * as YUP from "yup";
-import axios from 'axios'
+import { toast } from 'react-toastify';
+import { handleRegister } from '../redux/slices/registerSlice'
+import { useDispatch, useSelector } from 'react-redux';
 
-const registerUrl = `${process.env.REACT_APP_API_URL}/api/register`;
-
-const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
+const Register = ({ openModal, closeAllModals}) => {
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.register);
     const formik = useFormik({
         initialValues: {
             first_name: "",
@@ -25,6 +26,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
                 .min(8, "Password must be at least 8 characters")
+                .max(12, "Password must not exceed 12 characters")
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")
@@ -36,47 +38,23 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
             // country: YUP.string().required("Please select a country"),
             // userAgreement: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
         }),
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-            handleRegister(values);
-            closeModal('register');
+        onSubmit: async(values) => {
+            const result = await dispatch(handleRegister(values));
+            if (handleRegister.fulfilled.match(result)) {
+                toast.success(result.payload.message || "Registered successfully!")
+                closeModal();
+              } else {
+                toast.error(result.payload || "Register failed!");
+              }
         }
     });
-    const handleRegister = async (values) => {
-        // e.preventDefault();
-        console.log(registerUrl, 'hi');
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
-                first_name: values?.first_name,
-                last_name: values?.last_name,
-                email: values?.email,
-                password: values?.password,
-                password_confirmation: values?.password_confirmation,
-                // country: values?.country,
-                // userAgreement: values?.userAgreement
-            });
-            return response.data;
-        }
-        catch (err) {
-            console.error("Login failed:", err.response ? err.response.data : err.message);
-        }
-    }
-
-    const closeModal = (backdrop) => {
-        const backdropElement = document.querySelector(`#${backdrop}-backdrop`);
-        if (backdropElement) {
-            document.body.style.removeProperty("overflow");
-            backdropElement.remove();
-        } else {
-            console.warn(`Element #${backdrop}-backdrop not found.`);
-        }
+    const closeModal = () => {
         formik.resetForm();
-        setOpenRegisterModal(false);
+        closeAllModals();
     }
     return (
         <>
-
-            <div id="register" className={`hs-overlay [--overlay-backdrop:static] ${openRegisterModal ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="register-label" data-hs-overlay-keyboard="false">
+            <div id="register" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.register ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="register-label" data-hs-overlay-keyboard="false">
                 <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center" >
                     <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
                         <div className='w-full py-20 px-10'>
@@ -85,7 +63,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                     Join ZillioLinX for free now
                                 </h3>
                                 <button type="button"
-                                    onClick={() => closeModal('register')}
+                                    onClick={closeModal}
                                     className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none" aria-label="Close" data-hs-overlay="#register">
                                     <span className="sr-only">Close</span>
                                     <svg className="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -97,19 +75,19 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                             <div className="max-w-[400px] mx-auto">
                                 <form onSubmit={formik.handleSubmit}>
                                     <div className="mb-5">
-                                        <Textfield id="first_name" name="first_name" fieldValue={formik.values.first_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="First Name" type="text" placeholder="" iconPlacement="left" />
+                                        <Textfield id="first_name" name="first_name" icon="title" fieldValue={formik.values.first_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="First Name" type="text" placeholder="" iconPlacement="left" />
                                         {formik.touched.first_name && formik.errors.first_name ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.first_name}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="last_name" name="last_name" fieldValue={formik.values.last_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="Last Name" type="text" placeholder="" iconPlacement="left" />
+                                        <Textfield id="last_name" name="last_name" icon="title" fieldValue={formik.values.last_name} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} label="Last Name" type="text" placeholder="" iconPlacement="left" />
                                         {formik.touched.last_name && formik.errors.last_name ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.last_name}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerEmail" name="email" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <Textfield id="registerEmail" name="email" label="Email" type="email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.email && formik.errors.email ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
                                         ) : null}
@@ -127,12 +105,13 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                         ) : null}
                                     </div>
                                     {/* <div className="mb-5">
-                                        <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} />
-                                        {formik.touched.country && formik.errors.country ? (
+                                        <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
+                                        {/* <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
+                                        {/* {formik.touched.country && formik.errors.country ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.country}</div>
-                                        ) : null}
-                                    </div>
-                                    <div className="relative  mb-5">
+                                        ) : null} */}
+                                    {/* </div> */}
+                                    {/* <div className="relative  mb-5">
                                         <div className="flex items-start">
                                             <div className="flex items-center h-5 mt-0.5">
                                                 <input id="userAgreement" name="userAgreement" type="checkbox"
@@ -149,7 +128,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.userAgreement}</div>
                                         ) : null}
                                     </div> */}
-                                    <button type="submit" className="btn dark-btn w-full justify-center h-12">sign up</button>
+                                    <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>sign up</button>
                                     <button type="button" className="mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none">
                                         <svg className="w-4 h-auto" width="46" height="47" viewBox="0 0 46 47" fill="none">
                                             <path d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z" fill="#4285F4"></path>
@@ -165,7 +144,7 @@ const Register = ({ openRegisterModal, setOpenRegisterModal }) => {
 
                     </div>
                 </div>
-            </div >
+            </div>
         </>
     )
 }
