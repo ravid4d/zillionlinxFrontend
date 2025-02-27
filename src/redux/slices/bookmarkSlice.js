@@ -1,22 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const topLinkUrl = `${process.env.REACT_APP_API_URL}/api/top-links`;
+const fetchTopLinkUrl = `${process.env.REACT_APP_API_URL}/api/top-links`;
+const topLinkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark`;
 const getBookmarksUrl = `${process.env.REACT_APP_API_URL}/api/bookmarks`;
 const addNewBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-bookmark`;
+const pinBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/`;
+
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
   "bookmark/fetchAllTopLinks",
   async (token, { rejectWithValue }) => {
     try {
-      const response = await axios.get(topLinkUrl, {
+      const response = await axios.get(fetchTopLinkUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data.data;
+      return { bookmarks: response.data.data };
     } catch (error) {
-      // console.log(error);
-      return rejectWithValue(error?.response?.data?.message || "Failed to fetch bookmarks");
+      return rejectWithValue(error?.response?.data?.message || "Failed to fetch Top Links");
     }
   }
 );
@@ -52,7 +54,10 @@ export const fetchCategoryWiseBookmarks = createAsyncThunk(
           },
         }
       );
-      return response?.data?.bookmarks;
+      return {
+        bookmarks:response?.data?.bookmarks,
+        message:response?.data?.message
+      }
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Failed to fetch bookmarks");
     }
@@ -78,66 +83,115 @@ export const addNewBookmark = createAsyncThunk(
           },
         }
       );
-      return { message: response?.data?.message, bookmark: response?.data?.data };
+      return response?.data?.message;
+      // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
     }
   }
 );
 
+export const pinBookmark = createAsyncThunk(
+  "bookmark/pinBookmark",
+  async ({ token, bookmarkId }, { rejectWithValue }) => {
+    try {
+      console.log(token, 'token');
+      const response = await axios.post(
+        `${pinBookmarkUrl}${bookmarkId}/pin`, {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response, 'hola dear');
+      // return response?.data?.message;
+      // return { message: response?.data?.message, bookmark: response?.data?.data };
+    } catch (error) {
+      console.log('hhhhh')
+      return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
+    }
+  }
+);
+
+
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
-    topLinks: [],
-    status: "idle", // "idle" | "loading" | "succeeded" | "failed"
+    bookmarks:[],
+    // topLinks: [],
+    loading: false,
+    addBookmarkLoading:false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
+    //Fetch Top Links
     builder
       .addCase(fetchAllTopLinks.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.topLinks = action.payload;
+        state.loading = false;
+        state.bookmarks = action.payload;
       })
       .addCase(fetchAllTopLinks.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
+        console.log(JSON.stringify(action.payload), 'hi');
         state.error = action.payload;
       })
+
+      //Remove Top Links
       .addCase(removeTopLink.fulfilled, (state, action) => {
-        console.log(state.topLinks,'topLinks');
-        state.topLinks = state?.topLinks?.filter(
-          (topLink) => topLink.id !== action.payload
+        state.bookmarks.bookmarks = state?.bookmarks?.bookmarks?.filter(
+          (bookmark) => bookmark.id !== action.payload
         );
       })
       .addCase(removeTopLink.rejected, (state, action) => {
         state.error = action.payload;
       })
+
+      //Fetch category wise bookmarks
       builder
       .addCase(fetchCategoryWiseBookmarks.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchCategoryWiseBookmarks.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.topLinks = action.payload;
+        state.loading = false;
+        let payload = action.payload?.bookmarks?.length===0?{bookmarks:[], message:action.payload?.message}:action.payload
+        state.bookmarks = payload;
       })
       .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.payload;
       })
+
+      //Add New Bookmarks
       builder
       .addCase(addNewBookmark.pending, (state) => {
-        state.status = "loading";
+        state.addBookmarkLoading = true;
       })
       .addCase(addNewBookmark.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        console.log(action.payload, 'hola dear');
-        state.topLinks.push(action.payload.bookmark);
+        state.addBookmarkLoading = false;
+        // console.log('bb', JSON.stringify(action.payload), 'aa')
+        // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
       })
       .addCase(addNewBookmark.rejected, (state, action) => {
-        state.status = "failed";
+        state.addBookmarkLoading = false;
+        state.error = action.payload;
+      })
+
+      builder
+      .addCase(pinBookmark.pending, (state) => {
+        state.addBookmarkLoading = true;
+      })
+      .addCase(pinBookmark.fulfilled, (state, action) => {
+        state.addBookmarkLoading = false;
+        // console.log('bb', JSON.stringify(action.payload), 'aa')
+        // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
+      })
+      .addCase(pinBookmark.rejected, (state, action) => {
+        state.addBookmarkLoading = false;
         state.error = action.payload;
       });
   }

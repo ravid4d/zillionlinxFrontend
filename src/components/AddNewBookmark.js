@@ -8,25 +8,44 @@ import { toast } from "react-toastify";
 import Dropdown from "../components/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewBookmark, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
-
-const addNewBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-bookmark`;
-const categoryUrl = `${process.env.REACT_APP_API_URL}/api/categories`;
+import {
+  fetchCategories,
+  fetchSubCategories,
+  resetSubCategories,
+} from "../redux/slices/categorySlice";
 
 const AddNewBookmark = ({ openModal, closeAllModals }) => {
-    const dispatch = useDispatch();
-    const { topLinks, status, error } = useSelector((state) => state.bookmark);
+  const dispatch = useDispatch();
 
-  const [token, setToken] = useState(undefined);
-  const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
+  const [resetKey, setResetKey] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState([]);
 
+  const { token } = useSelector((state) => state.auth);
+  const { categories, subCategories } = useSelector(state => state.category);
+  const { addBookmarkLoading } = useSelector((state) => state.bookmark);
 
   useEffect(() => {
-    let token = getToken();
-    setToken(token);
-    getCategories(token);
-  }, []);
+    const fetchData = async () => {
+      let result = await dispatch(fetchCategories(token));
+      if (fetchCategories.fulfilled.match(result)) {
+        //Do not need to show success message using toast while getting data on load
+        // toast.success(result.payload.message || "Categories fetched successfully!")
+      } else {
+        toast.error(result.payload || "Failed to fetch categories!");
+      }
+    };
+    if (token) {
+      fetchData();
+    }
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (token && selectedCategoryId) {
+      dispatch(resetSubCategories());
+      setResetKey((prev) => prev + 1);
+      dispatch(fetchSubCategories({ selectedCategoryId, token }));
+    }
+  }, [dispatch, selectedCategoryId, token]);
 
   const formik = useFormik({
     initialValues: {
@@ -45,13 +64,13 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
       category_id: YUP.number()
         .required("Category Id is required")
         .typeError("Category Id must be a number"),
-      sub_category_id: YUP.number()
-        .typeError("Sub Category Id must be a number"),
+      sub_category_id: YUP.number().typeError(
+        "Sub Category Id must be a number"
+      ),
       add_to: YUP.string().required("Add To is required"),
     }),
     onSubmit: (values) => {
       handleAddNewBookmark(values);
-      closeModal();
     },
   });
 
@@ -60,42 +79,12 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
 
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
-      dispatch(fetchAllTopLinks(token))
+      await dispatch(fetchAllTopLinks(token));
+      closeModal();
     } else {
       toast.error(result.payload || "Failed to add bookmark.");
     }
   };
-
-  const getCategories = async (token) => {
-    try {
-      const response = await axios.get(categoryUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCategories(response?.data?.data);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const getSubCategories = async (selectedCategoryId) => {
-    try {
-      let response = await axios.get(`${categoryUrl}?parent_id=${selectedCategoryId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSubCategories(response?.data?.data);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    if (selectedCategoryId!="") {
-      getSubCategories(selectedCategoryId);
-    }
-  }, [selectedCategoryId]);
-
 
   const closeModal = () => {
     formik.resetForm();
@@ -187,48 +176,57 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
                       </div>
                     ) : null}
                   </div>
-                  <div className="mb-5">
-                    <Dropdown
-                      id="category_id"
-                      name="category_id"
-                      label="Category"
-                      fieldValue={formik.values.category_id}
-                      setFieldValue={(selectedOption) => {
-                        formik.setFieldValue(
-                          "category_id",
-                          selectedOption?.value
-                        );
-                        setSelectedCategoryId(selectedOption?.value);
-                      }}
-                      items={categories}
-                    />
-                    {formik.touched.category_id && formik.errors.category_id ? (
-                      <div className="text-red-500 text-sm mt-1">
-                        {formik.errors.category_id}
+                  {categories ? (
+                    <>
+                      <div className="mb-5">
+                        <Dropdown
+                          id="category_id"
+                          name="category_id"
+                          label="Category"
+                          fieldValue={formik.values.category_id}
+                          setFieldValue={(selectedOption) => {
+                            formik.setFieldValue(
+                              "category_id",
+                              selectedOption?.value
+                            );
+                            setSelectedCategoryId(selectedOption?.value);
+                          }}
+                          items={categories}
+                        />
+                        {formik.touched.category_id &&
+                        formik.errors.category_id ? (
+                          <div className="text-red-500 text-sm mt-1">
+                            {formik.errors.category_id}
+                          </div>
+                        ) : null}
+                        {/* <p>{categories?.length==0&&'Server Issue'}</p> */}
                       </div>
-                    ) : null}
-                  </div>
-                  <div className="mb-5">
-                    <Dropdown
-                      id="sub_category_id"
-                      name="sub_category_id"
-                      label="Sub Category"
-                      fieldValue={formik.values.sub_category_id}
-                      setFieldValue={(selectedOption) =>
-                        formik.setFieldValue(
-                          "sub_category_id",
-                          selectedOption?.value
-                        )
-                      }
-                      items={subCategories}
-                    />
-                    {formik.touched.sub_category_id &&
-                    formik.errors.sub_category_id ? (
-                      <div className="text-red-500 text-sm mt-1">
-                        {formik.errors.sub_category_id}
-                      </div>
-                    ) : null}
-                  </div>
+                    </>
+                  ) : null}
+                  {subCategories ? (
+                    <div className="mb-5">
+                      <Dropdown
+                        key={resetKey}
+                        id="sub_category_id"
+                        name="sub_category_id"
+                        label="Sub Category"
+                        fieldValue={formik.values.sub_category_id}
+                        setFieldValue={(selectedOption) =>
+                          formik.setFieldValue(
+                            "sub_category_id",
+                            selectedOption?.value
+                          )
+                        }
+                        items={subCategories}
+                      />
+                      {formik.touched.sub_category_id &&
+                      formik.errors.sub_category_id ? (
+                        <div className="text-red-500 text-sm mt-1">
+                          {formik.errors.sub_category_id}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"
@@ -280,20 +278,17 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
                       </div>
                     ) : null}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      type="submit"
-                      className="btn dark-btn w-full justify-center h-12"
-                    >
-                      Done
-                    </button>
-                    <button
-                      type="button"
-                      className="btn light-btn w-full justify-center h-12"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <button
+                    type="submit"
+                    disabled={addBookmarkLoading}
+                    className={`btn dark-btn w-full justify-center h-12 ${
+                      addBookmarkLoading
+                        ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                        : ""
+                    }`}
+                  >
+                    Add New Bookmark
+                  </button>
                 </form>
               </div>
             </div>

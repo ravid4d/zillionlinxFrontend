@@ -1,15 +1,24 @@
 import React from 'react'
 import { Link, useNavigate  } from 'react-router-dom'
-import { logoutUser } from '../services/authService';
 import { toast } from 'react-toastify';
+import {logout } from '../redux/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Header = ({ setOpenModal, setWhichModalOpen, isLoggedIn, setIsLoggedIn, setOpenAddNewBookmarkModal, setOpenAddNewCategoryModal, btnRef }) => {
+const Header = ({ setWhichModalOpen}) => {
     const navigate = useNavigate();
-    const handleLogout = () => {
-        logoutUser();
-        setIsLoggedIn(false);
-        toast.success("You have been logged out successfully!");
-        navigate("/");
+    const dispatch = useDispatch();
+
+    const {isLoggedIn} = useSelector(state=>state.auth);
+    
+    const handleLogout = async() => {
+        try {
+            localStorage.removeItem("token"); // Remove token from local storage
+            dispatch(logout()); // Dispatch a logout action if using Redux
+            toast.success("You have been logged out successfully!");
+            navigate("/"); // Redirect to home or login page
+          } catch (error) {
+            toast.error("Logout failed! Please try again.");
+          }
     }
 
 
@@ -18,9 +27,9 @@ const Header = ({ setOpenModal, setWhichModalOpen, isLoggedIn, setIsLoggedIn, se
 
             <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-end gap-x-1">
-                    <a className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16" href="/" aria-label="Brand">
+                    <Link className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16" to='/' aria-label="Brand">
                         <img src="/logo.svg" alt="" className="max-w-full max-h-full block" />
-                    </a>
+                    </Link>
 
                     <button type="button" className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-[12px] rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none" id="hs-header-base-collapse" aria-expanded="false" aria-controls="hs-header-base" aria-label="Toggle navigation" data-hs-collapse="#hs-header-base" >
                         <svg className="hs-collapse-open:hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="6" y2="6" /><line x1="3" x2="21" y1="12" y2="12" /><line x1="3" x2="21" y1="18" y2="18" /></svg>
@@ -75,6 +84,7 @@ const Header = ({ setOpenModal, setWhichModalOpen, isLoggedIn, setIsLoggedIn, se
                                             {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-slide-down-animation-modal" data-hs-overlay="#hs-slide-down-animation-modal" */}
                                             {/* <button className="btn light-btn" onClick={() => setOpenLoginModal(true)}>Log in</button> */}
                                             <button className="btn light-btn" onClick={() => setWhichModalOpen('login')}>Log in</button>
+                                            <button className="btn light-btn" onClick={()=>navigate('/about')}>About</button>
                                             {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="register" data-hs-overlay="#register" */}
                                             <button className="btn dark-btn" onClick={() => setWhichModalOpen('register')}>Sign up</button>
                                         </>

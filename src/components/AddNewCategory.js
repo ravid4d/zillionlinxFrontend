@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import axios from "axios";
 import * as YUP from "yup";
 import { toast } from 'react-toastify';
-import { loginUser } from '../services/authService';
+import { getToken, loginUser } from '../services/authService';
 import Dropdown from './Dropdown';
 
 // const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
@@ -12,8 +12,12 @@ const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
 const AddNewCategory = ({  openModal, closeAllModals }) => {
     const [categories, setCategories] = useState([]);
+    // Below ADMIN categories calling temporary
     useEffect(() => {
-        getCategories();
+        let token = getToken();
+        if(token) {
+            getCategories();
+        }
     }, []);
 
     const getCategories = async () => {
