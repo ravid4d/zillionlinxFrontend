@@ -95,7 +95,6 @@ export const pinBookmark = createAsyncThunk(
   "bookmark/pinBookmark",
   async ({ token, bookmarkId }, { rejectWithValue }) => {
     try {
-      console.log(token, 'token');
       const response = await axios.post(
         `${pinBookmarkUrl}${bookmarkId}/pin`, {},
         {
@@ -104,11 +103,10 @@ export const pinBookmark = createAsyncThunk(
           },
         }
       );
-      console.log(response, 'hola dear');
+      console.log(response, 'response from pin bookmark API.');
       // return response?.data?.message;
       // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
-      console.log('hhhhh')
       return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
     }
   }
@@ -137,7 +135,6 @@ const bookmarkSlice = createSlice({
       })
       .addCase(fetchAllTopLinks.rejected, (state, action) => {
         state.loading = false;
-        console.log(JSON.stringify(action.payload), 'hi');
         state.error = action.payload;
       })
 
@@ -173,7 +170,6 @@ const bookmarkSlice = createSlice({
       })
       .addCase(addNewBookmark.fulfilled, (state, action) => {
         state.addBookmarkLoading = false;
-        // console.log('bb', JSON.stringify(action.payload), 'aa')
         // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
       })
       .addCase(addNewBookmark.rejected, (state, action) => {
@@ -187,7 +183,6 @@ const bookmarkSlice = createSlice({
       })
       .addCase(pinBookmark.fulfilled, (state, action) => {
         state.addBookmarkLoading = false;
-        // console.log('bb', JSON.stringify(action.payload), 'aa')
         // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
       })
       .addCase(pinBookmark.rejected, (state, action) => {

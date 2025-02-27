@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import badgeData from '../json/badges.json'
-import { useDispatch, useSelector } from 'react-redux';
-import { removeTopLink } from '../redux/slices/bookmarkSlice';
-import { fetchCategories } from '../redux/slices/categorySlice';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { removeTopLink } from '../redux/slices/bookmarkSlice';
+// import { fetchCategories } from '../redux/slices/categorySlice';
 
 const Home = () => {
     const [badges, setBadges] = useState();
-    const [catId, setCatId] = useState([]);
-    const dispatch = useDispatch();
+    // const [catId, setCatId] = useState([]);
+    // const dispatch = useDispatch();
 
-    const { token } = useSelector((state) => state.auth);
-    const { categories } = useSelector((state) => state.category);
+    // const { token } = useSelector((state) => state.auth);
+    // const { categories } = useSelector((state) => state.category);
 
     useEffect(() => {
         setBadges(badgeData);
     }, [])
-console.log(categories, 'categories')
+// console.log(categories, 'categories')
     // const rmTopLinks = async() => {
     //     await dispatch(removeTopLink({token, topLinkId}));
     // }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await dispatch(fetchCategories(token));
-        }
-        if(token) {
-            fetchData();
-        }
-    }, [dispatch, token]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         await dispatch(fetchCategories(token));
+    //     }
+    //     if(token) {
+    //         fetchData();
+    //     }
+    // }, [dispatch, token]);
 
     return (
         <>
@@ -63,38 +63,38 @@ console.log(categories, 'categories')
                 <div className="grid lg:grid-rows-2 gap-6 3xl:gap-10 lg:grid-flow-col">
                     <div className='lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-4'>
                         <div className='col-span-3 lg:col-start-2 lg:col-end-6 lg:pe-10 items'>
-                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Large Image" />
+                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Large" />
                         </div>
                     </div>
                     {/* Two Small Images */}
                     <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-6 3xl:gap-10">
                         <div className='lg:col-span-2'>
-                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small Image 1" />
+                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small 1" />
                         </div>
                         <div className='lg:col-span-3'>
-                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small Image 2" />
+                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small 2" />
                         </div>
                     </div>
                 </div>
 
                 {/* Second Column (Single Large Image) */}
                 <div className='lg:row-span-2'>
-                    <img src="/bookmark-center.jpg" className="shadow-home-bookmark border border-dark-blue/30 rounded-xl lg:rounded-[20px] w-full" alt="Middle Large Image" />
+                    <img src="/bookmark-center.jpg" className="shadow-home-bookmark border border-dark-blue/30 rounded-xl lg:rounded-[20px] w-full" alt="Middle Large" />
                 </div>
 
                 <div className="grid lg:grid-rows-2 gap-6 3xl:gap-10 lg:grid-flow-col">
                     {/* Two Small Images */}
                     <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-6 3xl:gap-10 lg:items-end items-center">
                         <div className='lg:col-span-3'>
-                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small Image 2" />
+                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small 2" />
                         </div>
                         <div className='lg:col-span-2'>
-                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small Image 1" />
+                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Small 1" />
                         </div>
                     </div>
                     <div className='lg:row-span-1 grid lg:grid-cols-5 gap-4'>
                         <div className='col-start-1 col-end-5 lg:ps-10'>
-                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Large Image" />
+                            <img src="/bookmark-center.jpg" className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]" alt="Large" />
                         </div>
                     </div>
                 </div>
