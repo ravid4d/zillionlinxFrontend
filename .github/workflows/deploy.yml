@@ -23,5 +23,5 @@ jobs:
             git pull origin master
             npm install
             npm run build
-            cp -r build/* /var/www/html/zillionlinx-front
+            sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
             systemctl restart apache2 || systemctl restart nginx
