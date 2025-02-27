@@ -9,7 +9,6 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
   const dispatch = useDispatch();
   const addToPin = async (bookmarkId) => {
     await dispatch(pinBookmark({bookmarkId, token}));
-    console.log(categoryId, subCategoryId, 'lllllll')
     if(categoryId !== null && subCategoryId !== null) {
       await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
     }
