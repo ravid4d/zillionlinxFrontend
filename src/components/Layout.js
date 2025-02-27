@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -8,10 +8,12 @@ import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import AddNewCategory from "./AddNewCategory";
 import { ToastContainer } from "react-toastify";
-import { isUserLoggedIn } from "../services/authService";
+import { useSelector } from "react-redux";
 
 const Layout = () => {
+  const { isLoggedIn, token, loading, error } = useSelector((state) => state.auth);
   const [sidebar, hideSidebar] = useState(false);
+  
   const [openModal, setOpenModal] = useState({
     login: false,
     register: false,
@@ -19,11 +21,6 @@ const Layout = () => {
     newBookmark: false,
     newCategory: false,
   });
-
-  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
-  useEffect(() => {
-    setIsLoggedIn(isUserLoggedIn());
-  }, []);
 
   const setWhichModalOpen = (modalName) => {
     setOpenModal({
@@ -35,6 +32,7 @@ const Layout = () => {
       [modalName]: true,
     });
   };
+
   const closeAllModals = () => {
     setOpenModal({
       login: false,
@@ -44,6 +42,7 @@ const Layout = () => {
       newCategory: false,
     });
   };
+
   const getOpenModalName = () => {
     return Object.keys(openModal).find((key) => openModal[key]) || "";
   };
@@ -64,7 +63,6 @@ const Layout = () => {
           closeAllModals={closeAllModals}
           openModal={openModal}
           setWhichModalOpen={setWhichModalOpen}
-          setIsLoggedIn={setIsLoggedIn}
         />
         <Register closeAllModals={closeAllModals} openModal={openModal} />
         <ForgotPassword closeAllModals={closeAllModals} openModal={openModal} />
@@ -72,8 +70,8 @@ const Layout = () => {
         <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
         <Header
           setWhichModalOpen={setWhichModalOpen}
-          isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn}
+          // isLoggedIn={isLoggedIn}
+          // setIsLoggedIn={setIsLoggedIn}
           sidebar={sidebar}
           hideSidebar={hideSidebar}
         />

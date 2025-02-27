@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Textfield from './Textfield'
-import { Link } from 'react-router-dom'
 import CountryDropdown from './CountryDropdown'
 import { useFormik } from 'formik'
 import * as YUP from "yup";
-import axios from 'axios'
 import { toast } from 'react-toastify';
-
-
-const registerUrl = `${process.env.REACT_APP_API_URL}/api/register`;
+import { handleRegister } from '../redux/slices/registerSlice'
+import { useDispatch, useSelector } from 'react-redux';
 
 const Register = ({ openModal, closeAllModals}) => {
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.register);
     const formik = useFormik({
         initialValues: {
             first_name: "",
@@ -26,44 +25,29 @@ const Register = ({ openModal, closeAllModals}) => {
             last_name: YUP.string().min(2, "Last Name must be atleast 2 characters").required("Last Name is required"),
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
-            .min(12, "Password must be at least 12 characters long") // Enforce 12 characters
-            .matches(/[A-Z]/, "Must include at least one uppercase letter") // A-Z
-            .matches(/[a-z]/, "Must include at least one lowercase letter") // a-z
-            .matches(/\d/, "Must include at least one number") // 0-9
-            .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)") // Special character
-            .required("Password is required"),
+                .min(8, "Password must be at least 8 characters")
+                .max(16, "Password must not exceed 12 characters")
+                .matches(/[a-z]/, "Must include at least one lowercase letter")
+                .matches(/[A-Z]/, "Must include at least one uppercase letter")
+                .matches(/\d/, "Must include at least one number")
+                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
+                .required("Password is required"),
             password_confirmation: YUP.string()
                 .oneOf([YUP.ref("password"), null], "Passwords must match")
                 .required("Confirm Password is required"),
             // country: YUP.string().required("Please select a country"),
             // userAgreement: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
         }),
-        onSubmit: values => {
-            // alert(JSON.stringify(values, null, 2));
-            handleRegister(values);
-
+        onSubmit: async(values) => {
+            const result = await dispatch(handleRegister(values));
+            if (handleRegister.fulfilled.match(result)) {
+                toast.success(result.payload.message || "Registered successfully!")
+                closeModal();
+              } else {
+                toast.error(result.payload || "Register failed!");
+              }
         }
     });
-    const handleRegister = async (values) => {
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
-                first_name: values?.first_name,
-                last_name: values?.last_name,
-                email: values?.email,
-                password: values?.password,
-                password_confirmation: values?.password_confirmation,
-                // country: values?.country,
-                // userAgreement: values?.userAgreement
-            });
-            toast.success(response?.data?.message);
-            closeModal('register');
-
-        }
-        catch (err) {
-            toast.error(err?.response?.data.data.email[0]);
-        }
-    }
-
     const closeModal = () => {
         formik.resetForm();
         closeAllModals();
@@ -144,7 +128,7 @@ const Register = ({ openModal, closeAllModals}) => {
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.userAgreement}</div>
                                         ) : null}
                                     </div> */}
-                                    <button type="submit" className="btn dark-btn w-full justify-center h-12">sign up</button>
+                                    <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>sign up</button>
                                     <button type="button" className="mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none">
                                         <svg className="w-4 h-auto" width="46" height="47" viewBox="0 0 46 47" fill="none">
                                             <path d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z" fill="#4285F4"></path>
