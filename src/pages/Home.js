@@ -15,7 +15,9 @@ const Home = () => {
     useEffect(() => {
         setBadges(badgeData);
     }, [])
-// console.log(categories, 'categories')
+    
+    // console.log(categories, 'categories')
+
     // const rmTopLinks = async() => {
     //     await dispatch(removeTopLink({token, topLinkId}));
     // }
