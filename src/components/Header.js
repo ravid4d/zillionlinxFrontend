@@ -76,7 +76,7 @@ const Header = ({ setWhichModalOpen}) => {
                                         <>
                                             <div className="my-2 md:my-0 md:mx-4"><div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div></div>
                                             {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="add-category-modal" data-hs-overlay="#add-category-modal" */}
-                                            <button className="btn light-btn" onClick={() => setWhichModalOpen('newCategory')}>Add New Category</button>
+                                            {/* <button className="btn light-btn" onClick={() => setWhichModalOpen('newCategory')}>Add New Category</button> */}
                                             <button className="btn dark-btn" onClick={handleLogout}>Logout</button>
                                         </>
                                         :
