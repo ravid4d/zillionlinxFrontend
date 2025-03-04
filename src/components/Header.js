@@ -21,14 +21,12 @@ const Header = ({ setWhichModalOpen}) => {
           }
     }
 
-
-
     return (
         <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-40 w-full">
 
             <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-end gap-x-1">
-                    <Link className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16" to='/' aria-label="Brand">
+                    <Link className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16" to={isLoggedIn ? '/bookmarks':'/'} aria-label="Brand">
                         <img src="/logo.svg" alt="" className="max-w-full max-h-full block" />
                     </Link>
 
