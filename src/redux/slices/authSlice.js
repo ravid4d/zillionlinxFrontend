@@ -19,8 +19,11 @@ export const handleLogin = createAsyncThunk(
       );
       
       const token = response?.data?.data?.token;
+      console.log(token, 'kk');
       const message = response?.message;
-      localStorage.setItem(TOKEN_KEY, token);
+      if(token !== undefined) {
+        localStorage.setItem(TOKEN_KEY, token);
+      }
       return {token, message};
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Login failed");

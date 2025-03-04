@@ -14,7 +14,7 @@ import {
   resetSubCategories,
 } from "../redux/slices/categorySlice";
 
-const AddNewBookmark = ({ openModal, closeAllModals }) => {
+const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
   const dispatch = useDispatch();
 
   const [resetKey, setResetKey] = useState(0);
@@ -90,6 +90,13 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
     formik.resetForm();
     closeAllModals();
   };
+
+useEffect(()=>{
+  if(urlToBookmark?.url) {
+    formik.setFieldValue('url', urlToBookmark?.url);
+  }
+},[urlToBookmark?.url])
+
   return (
     <>
       <div
@@ -114,7 +121,10 @@ const AddNewBookmark = ({ openModal, closeAllModals }) => {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                  className={`${addBookmarkLoading
+                        ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                        : ""} absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none`}
+                        disabled={addBookmarkLoading}
                   aria-label="Close"
                   data-hs-overlay="#hs-slide-down-animation-modal"
                 >

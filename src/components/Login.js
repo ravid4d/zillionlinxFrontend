@@ -5,10 +5,12 @@ import * as YUP from "yup";
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleLogin } from '../redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
    
     const formik = useFormik({
@@ -27,6 +29,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             if (handleLogin.fulfilled.match(result)) {
                 toast.success(result.payload.message || "Login successfully!")
                 closeModal();
+                navigate('/bookmarks');
               } else {
                 toast.error(result.payload || "Login failed!");
               }
