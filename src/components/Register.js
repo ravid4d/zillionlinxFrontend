@@ -100,7 +100,7 @@ const Register = ({ openModal, closeAllModals}) => {
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <PasswordField id="registerConfirmPassword" setShowPassword={setShowPassword} showPassword={showPassword} name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <PasswordField id="registerConfirmPassword" name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.password_confirmation && formik.errors.password_confirmation ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.password_confirmation}</div>
                                         ) : null}
