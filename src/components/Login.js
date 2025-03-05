@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Textfield from './Textfield';
 import { useFormik } from 'formik';
 import * as YUP from "yup";
@@ -6,12 +6,14 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleLogin } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import PasswordField from './PasswordField';
 
 
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
+    const [showPassword, setShowPassword] = useState(false);
    
     const formik = useFormik({
         initialValues: {
@@ -67,7 +69,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                                     ) : null}
                                 </div>
                                 <div className="mb-5">
-                                    <Textfield id="password" name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                    <PasswordField id="password" setShowPassword={setShowPassword} showPassword={showPassword} name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                     {formik.touched.password && formik.errors.password ? (
                                         <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                     ) : null}

@@ -19,7 +19,6 @@ export const handleLogin = createAsyncThunk(
       );
       
       const token = response?.data?.data?.token;
-      console.log(token, 'kk');
       const message = response?.message;
       if(token !== undefined) {
         localStorage.setItem(TOKEN_KEY, token);

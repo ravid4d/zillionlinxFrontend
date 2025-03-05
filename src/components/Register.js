@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Textfield from './Textfield'
-import CountryDropdown from './CountryDropdown'
 import { useFormik } from 'formik'
 import * as YUP from "yup";
 import { toast } from 'react-toastify';
 import { handleRegister } from '../redux/slices/registerSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import PasswordField from './PasswordField';
 
 const Register = ({ openModal, closeAllModals}) => {
+    const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     const { loading } = useSelector((state) => state.register);
     const formik = useFormik({
@@ -30,7 +31,7 @@ const Register = ({ openModal, closeAllModals}) => {
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")
-                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
+                // .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
                 .required("Password is required"),
             password_confirmation: YUP.string()
                 .oneOf([YUP.ref("password"), null], "Passwords must match")
@@ -93,13 +94,13 @@ const Register = ({ openModal, closeAllModals}) => {
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerPassword" name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <PasswordField id="registerPassword" setShowPassword={setShowPassword} showPassword={showPassword} name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.password && formik.errors.password ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerConfirmPassword" name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <PasswordField id="registerConfirmPassword" setShowPassword={setShowPassword} showPassword={showPassword} name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.password_confirmation && formik.errors.password_confirmation ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.password_confirmation}</div>
                                         ) : null}
