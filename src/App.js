@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import MyBookmarks from './pages/MyBookmarks';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from "./redux/store";
 import About from './pages/About';
 import Dashboard from './pages/admin/Dashboard';
@@ -11,9 +11,10 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import Unauthorized from './components/Unauthorized';
 import NotFound from './components/NotFound';
 import Category from './pages/admin/Category';
+import AdminLogin from './components/admin/AdminLogin';
 
 function App() {
-    const userRole = "admin"; // Fetch from context, state, or API
+    const {userRole} = useSelector(state=>state.auth);
 
     return (
         // <BrowserRouter basename='/zillionfront/'> "homepage": "/zillionfront",
@@ -37,8 +38,9 @@ function App() {
                     </Route>
                 </Route>
 
-                {/* Routes, those admin can access */}
+                <Route path="/admin/login" element={<AdminLogin />}></Route>
                 
+                {/* Routes, those admin can access */}                
                 <Route element={<ProtectedRoute allowedRoles={["admin"]} userRole={userRole} />}>
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Dashboard />}></Route>

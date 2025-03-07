@@ -12,10 +12,8 @@ import PasswordField from './PasswordField';
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading } = useSelector((state) => state.auth);
+    const { loading, userRole } = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
-
-    let userRole = "admin";
    
     const formik = useFormik({
         initialValues: {

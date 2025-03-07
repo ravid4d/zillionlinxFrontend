@@ -8,8 +8,7 @@ import { callTopLinks } from '../redux/slices/bookmarkSlice';
 const Header = ({ setWhichModalOpen}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isLoggedIn } = useSelector((state) => state.auth);
-    let userRole = 'admin';
+    const { isLoggedIn, userRole } = useSelector((state) => state.auth);
     
     const handleLogout = async() => {
         try {
