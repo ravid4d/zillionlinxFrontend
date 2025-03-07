@@ -7,6 +7,7 @@ export const handleRegister = createAsyncThunk(
   "auth/register",
   async (values, { rejectWithValue }) => {
     try {
+      console.log(values, 'values')
       const response = await axios.post(
         registerUrl,
         {
@@ -15,8 +16,8 @@ export const handleRegister = createAsyncThunk(
           email: values?.email,
           password: values?.password,
           password_confirmation: values?.password_confirmation,
-          // country: "",
-          // userAgreement: false,
+          country: values?.country,
+          terms_condition: values?.terms_condition,
         }
       );
       return {

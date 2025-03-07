@@ -118,11 +118,16 @@ const bookmarkSlice = createSlice({
   initialState: {
     bookmarks:[],
     // topLinks: [],
+    isTopLink:true,
     loading: false,
     addBookmarkLoading:false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    callTopLinks:(state)=>{
+      state.isTopLink = true
+    }
+  },
   extraReducers: (builder) => {
     //Fetch Top Links
     builder
@@ -132,6 +137,7 @@ const bookmarkSlice = createSlice({
       .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
         state.loading = false;
         state.bookmarks = action.payload;
+        state.isTopLink = true;
       })
       .addCase(fetchAllTopLinks.rejected, (state, action) => {
         state.loading = false;
@@ -157,6 +163,7 @@ const bookmarkSlice = createSlice({
         state.loading = false;
         let payload = action.payload?.bookmarks?.length===0?{bookmarks:[], message:action.payload?.message}:action.payload
         state.bookmarks = payload;
+        state.isTopLink = false;
       })
       .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
         state.loading = false;
@@ -191,4 +198,5 @@ const bookmarkSlice = createSlice({
       });
   }
 });
+export const {callTopLinks} = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
