@@ -14,6 +14,8 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
+
+    let userRole = "admin";
    
     const formik = useFormik({
         initialValues: {
@@ -31,7 +33,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             if (handleLogin.fulfilled.match(result)) {
                 toast.success(result.payload.message || "Login successfully!")
                 closeModal();
-                navigate('/bookmarks');
+                userRole === "user" ? navigate('/bookmarks') : navigate('/admin');
               } else {
                 toast.error(result.payload || "Login failed!");
               }

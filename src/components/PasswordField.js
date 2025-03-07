@@ -41,7 +41,6 @@ const PasswordField = ({
           type="button"
           onClick={() => {
             setShowPassword(!showPassword);
-            console.log("hello dear");
           }}
           className="absolute inset-y-0 end-0 flex items-center z-20 px-3 cursor-pointer text-gray-400 rounded-e-md focus:outline-none focus:text-blue-600"
         >

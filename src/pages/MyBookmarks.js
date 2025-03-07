@@ -3,7 +3,6 @@ import { useOutletContext } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
 import GoogleSearchbar from "../components/GoogleSearchbar";
-import "../index.css";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -21,7 +20,7 @@ const MyBookmarks = () => {
   const dispatch = useDispatch();
 
   const { token } = useSelector((state) => state.auth);
-  const { bookmarks, loading, error } = useSelector((state) => state.bookmark);
+  const { bookmarks, loading, error, isTopLink } = useSelector((state) => state.bookmark);
   const { categories } = useSelector((state) => state.category);
 
   const [draggedIndex, setDraggedIndex] = useState(null);
@@ -53,9 +52,6 @@ const MyBookmarks = () => {
           subCategoryId: id?.subCategoryId
         })
       );
-      console.log(categories, "hi");
-      // console.log(categories?.filter(category=>category?.subcategories?.id === id?.subCategoryId), 'lllo')
-      // console.log(categories?.find(category=>category?.id === id?.categoryId))
       setSelectedCategory(
         categories?.find((category) => category?.id === id?.categoryId)
       );
@@ -203,13 +199,10 @@ const MyBookmarks = () => {
             </div>
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
               <p className="text-[28px] text-dark-blue capitalize mb-5 pt-6">
-                {id?.categoryId
-                  ? `${selectedCategory?.title} ${
-                      selectedSubCategory?.title
-                        ? `| ${selectedSubCategory?.title}`
-                        : ""
-                    }`
-                  : "Top Links"}
+                  {
+                    isTopLink ? 'Top Links' : 
+                    id?.categoryId ? `${selectedCategory?.title} ${selectedSubCategory?.title ? `| ${selectedSubCategory?.title}` : ""}` : ""
+                  }
                 {!id?.categoryId ? (
                   <span className="text-base text-light-black inline-block ml-4">
                     (Drag and drop thumbnails to position top links or pin to a
