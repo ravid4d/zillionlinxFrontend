@@ -19,9 +19,12 @@ export const handleLogin = createAsyncThunk(
       );
       
       const token = response?.data?.data?.token;
+      const userRole = response?.data?.data?.user?.role;
       const message = response?.message;
-      localStorage.setItem(TOKEN_KEY, token);
-      return {token, message};
+      if(token !== undefined) {
+        localStorage.setItem(TOKEN_KEY, JSON.stringify({token, userRole}));
+      }
+      return {token, message, userRole};
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Login failed");
     }
@@ -31,7 +34,8 @@ export const handleLogin = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token: storedToken,
+    token: storedToken?.token,
+    userRole: storedToken?.userRole,
     isLoggedIn: !!storedToken,
     loading: false,
     error: null,
@@ -39,6 +43,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.token = null;
+      state.userRole = null;
       state.isLoggedIn = false;
       localStorage.removeItem(TOKEN_KEY); 
     },
@@ -53,6 +58,7 @@ const authSlice = createSlice({
     .addCase(handleLogin.fulfilled, (state, action) => {
       state.loading = false;
       state.token = action.payload.token;
+      state.userRole = action.payload.userRole;
       state.isLoggedIn = true;
     })
     .addCase(handleLogin.rejected, (state, action) => {

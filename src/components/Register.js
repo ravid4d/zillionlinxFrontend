@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Textfield from './Textfield'
-import CountryDropdown from './CountryDropdown'
 import { useFormik } from 'formik'
 import * as YUP from "yup";
 import { toast } from 'react-toastify';
 import { handleRegister } from '../redux/slices/registerSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import PasswordField from './PasswordField';
+import CountryDropdown from './CountryDropdown';
 
 const Register = ({ openModal, closeAllModals}) => {
+    const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     const { loading } = useSelector((state) => state.register);
     const formik = useFormik({
@@ -17,8 +19,8 @@ const Register = ({ openModal, closeAllModals}) => {
             email: "",
             password: "",
             password_confirmation: "",
-            // country: "",
-            // userAgreement: false,
+            country: "",
+            terms_condition: false,
         },
         validationSchema: YUP.object({
             first_name: YUP.string().min(2, "First Name must be atleast 2 characters").required("First Name is required"),
@@ -30,13 +32,13 @@ const Register = ({ openModal, closeAllModals}) => {
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")
-                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
+                // .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
                 .required("Password is required"),
             password_confirmation: YUP.string()
                 .oneOf([YUP.ref("password"), null], "Passwords must match")
                 .required("Confirm Password is required"),
-            // country: YUP.string().required("Please select a country"),
-            // userAgreement: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
+            country: YUP.string().required("Please select a country"),
+            terms_condition: YUP.boolean().oneOf([true], "You must accept the terms and conditions")
         }),
         onSubmit: async(values) => {
             const result = await dispatch(handleRegister(values));
@@ -93,41 +95,42 @@ const Register = ({ openModal, closeAllModals}) => {
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerPassword" name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <PasswordField id="registerPassword" setShowPassword={setShowPassword} showPassword={showPassword} name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.password && formik.errors.password ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        <Textfield id="registerConfirmPassword" name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                        <PasswordField id="registerConfirmPassword" name="password_confirmation" label="Confirm Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password_confirmation} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                         {formik.touched.password_confirmation && formik.errors.password_confirmation ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.password_confirmation}</div>
                                         ) : null}
                                     </div>
-                                    {/* <div className="mb-5">
-                                        <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
+                                    <div className="mb-5">
                                         {/* <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
-                                        {/* {formik.touched.country && formik.errors.country ? (
+                                        {formik.values.country}
+                                        <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} />
+                                        {formik.touched.country && formik.errors.country ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.country}</div>
-                                        ) : null} */}
-                                    {/* </div> */}
-                                    {/* <div className="relative  mb-5">
+                                        ) : null}
+                                    </div>
+                                    <div className="relative  mb-5">
                                         <div className="flex items-start">
                                             <div className="flex items-center h-5 mt-0.5">
-                                                <input id="userAgreement" name="userAgreement" type="checkbox"
+                                                <input id="terms_condition" name="terms_condition" type="checkbox"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
-                                                    checked={formik.values.userAgreement}
-                                                    className="bg-light-blue border-mid-blue size-5 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" aria-describedby="userAgreement-description" />
+                                                    checked={formik.values.terms_condition}
+                                                    className="bg-light-blue border-mid-blue size-5 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" aria-describedby="terms_condition-description" />
                                             </div>
-                                            <label htmlFor="userAgreement" className="ms-3">
+                                            <label htmlFor="terms_condition" className="ms-3">
                                                 <span className="block text-md text-light-black">I have read and accept the User Agreement.</span>
                                             </label>
                                         </div>
-                                        {formik.touched.userAgreement && formik.errors.userAgreement ? (
-                                            <div className="text-red-500 text-sm mt-1">{formik.errors.userAgreement}</div>
+                                        {formik.touched.terms_condition && formik.errors.terms_condition ? (
+                                            <div className="text-red-500 text-sm mt-1">{formik.errors.terms_condition}</div>
                                         ) : null}
-                                    </div> */}
+                                    </div>
                                     <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>sign up</button>
                                     <button type="button" className="mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none">
                                         <svg className="w-4 h-auto" width="46" height="47" viewBox="0 0 46 47" fill="none">

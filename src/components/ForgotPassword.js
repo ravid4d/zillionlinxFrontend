@@ -20,7 +20,7 @@ const ForgotPassword = ({closeAllModals, openModal }) => {
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")
-                .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
+                // .matches(/[@$!%*?&]/, "Must include at least one special character (@$!%*?&)")
                 .required("Password is required"),
         }),
         onSubmit: values => {
