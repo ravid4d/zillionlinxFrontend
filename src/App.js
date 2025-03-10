@@ -11,6 +11,7 @@ import NotFound from './components/NotFound';
 import Category from './pages/admin/Category';
 import AdminLogin from './components/admin/AdminLogin';
 import NonProtectedAdminRoutes from './routes/NonProtectedAdminRoutes';
+import User from './pages/admin/User';
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Dashboard />}></Route>
                         <Route path="category" element={<Category />}></Route>
+                        <Route path="user" element={<User />}></Route>
                     </Route>
                 </Route>
 

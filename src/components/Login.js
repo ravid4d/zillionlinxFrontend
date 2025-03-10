@@ -26,7 +26,8 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                 .required("Password is required"),
         }),
         onSubmit: async(values) => {
-            const result = await dispatch(handleLogin({values, navigate})).unwrap();
+            let loginType="user";
+            const result = await dispatch(handleLogin({values, navigate, loginType})).unwrap();
 
             if (handleLogin.fulfilled.match(result)) {
                 toast.success(result.payload.message || "Login successfully!")
