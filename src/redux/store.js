@@ -1,14 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import bookmarkReducer from "./slices/bookmarkSlice";
-import authReducer from "./slices/authSlice";
-import registerReducer from "./slices/registerSlice";
-import categoryReducer from "./slices/categorySlice";
+import { persistStore } from "redux-persist";
+import rootReducer from "./rootReducer";
 
-export const store = configureStore({
-  reducer: {
-    bookmark: bookmarkReducer,
-    auth: authReducer,
-    register:registerReducer,
-    category:categoryReducer,
-  },
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+          serializableCheck: false, // Ignore warnings related to non-serializable values
+      }),
 });
+
+const persistor = persistStore(store);
+
+export { store, persistor };

@@ -1,30 +1,46 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
+const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
-const TOKEN_KEY = "authToken";
-const storedToken = localStorage.getItem(TOKEN_KEY);
+// const TOKEN_KEY = "authToken";
+// const storedToken = localStorage.getItem(TOKEN_KEY);
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async (values, { rejectWithValue }) => {
+  async ({values, navigate, loginType}, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        loginUrl,
+        loginType === "admin" ? loginAdminUrl : loginUrl,
         {
           type: "email",
           email: values?.email,
           password: values?.password,
         }
       );
-      
-      const token = response?.data?.data?.token;
-      const userRole = response?.data?.data?.user?.role;
-      const message = response?.message;
-      if(token !== undefined) {
-        localStorage.setItem(TOKEN_KEY, JSON.stringify({token, userRole}));
+      let token = null;
+      let userRole = undefined;
+      let message = "";
+      let isLoggedIn = false;
+      if(loginType === "admin") {
+        // console.log(response, 'output is')
+        token = response?.data?.token;
+        userRole = response?.data?.user?.role;
+        message = response?.message;
+        isLoggedIn = !!response?.data?.token;
       }
-      return {token, message, userRole};
+      else {
+        token = response?.data?.data?.token;
+        userRole = response?.data?.data?.user?.role;
+        message = response?.message;
+        isLoggedIn = !!response?.data?.data?.token;
+      }
+      if(token !== undefined) {
+        // localStorage.setItem(TOKEN_KEY, JSON.stringify({token, userRole, isLoggedIn}));
+        let navigateTo = loginType === "user" ? "bookmarks" : "admin";
+        navigate(`/${navigateTo}`)
+      }
+      return {token, message, userRole, isLoggedIn};
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Login failed");
     }
@@ -34,9 +50,9 @@ export const handleLogin = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token: storedToken?.token,
-    userRole: storedToken?.userRole,
-    isLoggedIn: !!storedToken,
+    token: null,
+    userRole: null,
+    isLoggedIn: false,
     loading: false,
     error: null,
   },
@@ -45,7 +61,7 @@ const authSlice = createSlice({
       state.token = null;
       state.userRole = null;
       state.isLoggedIn = false;
-      localStorage.removeItem(TOKEN_KEY); 
+      // localStorage.removeItem(TOKEN_KEY); 
     },
   },
   extraReducers: (builder) => {
@@ -57,9 +73,9 @@ const authSlice = createSlice({
     })
     .addCase(handleLogin.fulfilled, (state, action) => {
       state.loading = false;
-      state.token = action.payload.token;
-      state.userRole = action.payload.userRole;
       state.isLoggedIn = true;
+      state.userRole = action.payload.userRole;
+      state.token = action.payload.token;
     })
     .addCase(handleLogin.rejected, (state, action) => {
       state.loading = false;
