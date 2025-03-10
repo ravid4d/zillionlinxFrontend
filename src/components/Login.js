@@ -12,7 +12,7 @@ import PasswordField from './PasswordField';
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, userRole } = useSelector((state) => state.auth);
+    const { loading } = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
    
     const formik = useFormik({
@@ -26,12 +26,13 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                 .required("Password is required"),
         }),
         onSubmit: async(values) => {
-            const result = await dispatch(handleLogin(values));
+            const result = await dispatch(handleLogin({values, navigate})).unwrap();
 
             if (handleLogin.fulfilled.match(result)) {
                 toast.success(result.payload.message || "Login successfully!")
                 closeModal();
-                userRole === "user" ? navigate('/bookmarks') : navigate('/admin');
+                // console.log(userRole, 'userRole'); //It is showing null
+                // userRole === "user" ? navigate('/bookmarks') : navigate('/admin');
               } else {
                 toast.error(result.payload || "Login failed!");
               }
