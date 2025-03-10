@@ -4,6 +4,7 @@ import AdminFooter from './AdminFooter';
 import AdminSidebar from './AdminSidebar';
 import { Outlet } from "react-router-dom";
 const AdminLayout = () => {
+
   return (
     <div className="app-layout">
         {/* <div className="app-content flex flex-wrap w-full">      */}

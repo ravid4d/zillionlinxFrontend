@@ -13,7 +13,6 @@ const PasswordField = ({
   setFieldValue,
   setFieldValueOnBlur
 }) => {
-  console.log(type);
   let newType = type === "password" && showPassword ? "text" : type;
   return (
     <>

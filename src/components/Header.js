@@ -73,7 +73,7 @@ const Header = ({ setWhichModalOpen}) => {
                                     isLoggedIn ?
                                         <>
                                            {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="add-category-modal" data-hs-overlay="#add-category-modal" */}
-                                            <button className="btn light-btn" onClick={() => setWhichModalOpen('newCategory')}>Add New Category</button>
+                                           {/*} <button className="btn light-btn" onClick={() => setWhichModalOpen('newCategory')}>Add New Category</button>*/}
                                             <button className="btn dark-btn" onClick={handleLogout}>Logout</button>
                                             {userRole === "admin" ?
                                                 <Link className="btn dark-btn" to="/admin">Dashboard</Link>
