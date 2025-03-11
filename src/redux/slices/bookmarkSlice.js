@@ -5,6 +5,7 @@ const topLinkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark`;
 const getBookmarksUrl = `${process.env.REACT_APP_API_URL}/api/bookmarks`;
 const addNewBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-bookmark`;
 const pinBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/`;
+const orderBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/reorder`;
 
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
@@ -112,6 +113,28 @@ export const pinBookmark = createAsyncThunk(
   }
 );
 
+export const orderBookmarks = createAsyncThunk(
+  "bookmark/orderBookmarks",
+  async ({ token, order }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        orderBookmarkUrl, {order},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response, 'response from pin bookmark API.');
+      return response;
+      // return response?.data?.message;
+      // return { message: response?.data?.message, bookmark: response?.data?.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
+    }
+  }
+);
+
 
 const bookmarkSlice = createSlice({
   name: "bookmark",
@@ -194,6 +217,18 @@ const bookmarkSlice = createSlice({
       })
       .addCase(pinBookmark.rejected, (state, action) => {
         state.addBookmarkLoading = false;
+        state.error = action.payload;
+      });
+
+      builder
+      .addCase(orderBookmarks.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(orderBookmarks.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(orderBookmarks.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   }

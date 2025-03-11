@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
+  orderBookmarks,
   removeTopLink
 } from "../redux/slices/bookmarkSlice";
 import Bookmark from "../components/Bookmark";
@@ -20,10 +21,12 @@ const MyBookmarks = () => {
   const dispatch = useDispatch();
 
   const { token } = useSelector((state) => state.auth);
-  const { bookmarks, loading, error, isTopLink } = useSelector((state) => state.bookmark);
+  const { bookmarks, loading, error, isTopLink } = useSelector(
+    (state) => state.bookmark
+  );
   const { categories } = useSelector((state) => state.category);
 
-  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [draggedItemId, setDraggedItemId] = useState(null);
   const [id, setId] = useState({ categoryId: null, subCategoryId: null });
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
@@ -68,34 +71,59 @@ const MyBookmarks = () => {
       url: ""
     },
     validationSchema: YUP.object({
-      url: YUP.string().url("Invalid URL format").required("URL is required.")
+      url: YUP.string()
+      .transform((value) => {
+        if (value.startsWith("https://")) {
+          return value.replace("https://", "");
+        }
+        return value;
+      })
+      .test("valid-url", "Invalid URL format", (value) => {
+        return YUP.string().url().isValidSync(`https://${value}`);
+      })
+      .required("URL is required."),
     }),
     onSubmit: (values) => {
-      setUrlToBookmark(values);
+      const formattedUrl = `https://${values.url}`;
+      setUrlToBookmark({ url: formattedUrl });
       addBookmarkViaUrl();
     }
   });
 
   // When drag starts, store the item's index
-  const handleDragStart = (index) => {
-    setDraggedIndex(index);
+  const handleDragStart = (itemId) => {
+    setDraggedItemId(itemId);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault(); // Required to allow dropping
   };
 
   // When dragged over another item, reorder the list
-  const handleDragOver = (index) => {
-    if (draggedIndex === null || draggedIndex === index) return;
+  const handleDrop = (itemId) => {
+    if (draggedItemId === null || draggedItemId === itemId) return;
 
-    const newBookmarks = [...bookmarks];
-    const draggedItem = newBookmarks.splice(draggedIndex, 1)[0]; // Remove dragged item
-    newBookmarks.splice(index, 0, draggedItem); // Insert at new position
-
-    setDraggedIndex(index); // Update dragged index
-    // setTopLinks(newTopLinks);
-  };
-
-  // Reset dragged item index on drag end
-  const handleDragEnd = () => {
-    setDraggedIndex(null);
+    // Ensure bookmarks.bookmarks is an array
+    const newItems = Array.isArray(bookmarks?.bookmarks) ? [...bookmarks.bookmarks] : [];
+  
+    // Find indexes
+    const draggedIndex = newItems.findIndex(item => item.id === draggedItemId);
+    const targetIndex = newItems.findIndex(item => item.id === itemId);
+  
+    if (draggedIndex === -1 || targetIndex === -1) return;
+  
+    // Reorder items
+    const [draggedItem] = newItems.splice(draggedIndex, 1);
+    newItems.splice(targetIndex, 0, draggedItem);
+  
+    setDraggedItemId(null);
+  
+    // Generate the order array for API
+    const order = newItems.map(item => item.id);
+    console.log(order, "New Order Array");
+  
+    dispatch(orderBookmarks({ token, order }));
+    dispatch(fetchAllTopLinks(token));
   };
 
   // Remove Bookmark
@@ -118,6 +146,14 @@ const MyBookmarks = () => {
     setTimeout(() => {
       formik.resetForm();
     }, 500);
+  };
+
+  const handleChange = (e) => {
+    let value = e.target.value;
+    if (value.startsWith("https://")) {
+      value = value.replace("https://", ""); // Remove https://
+    }
+    formik.setFieldValue("url", value);
   };
 
   return (
@@ -151,7 +187,6 @@ const MyBookmarks = () => {
       </button>
       <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
         <div className="flex flex-wrap lg:space-x-8">
-          {/* <div className='bookmark-sidebar-wrapper'> */}
           <div
             id="hs-application-sidebar"
             className="
@@ -168,20 +203,24 @@ const MyBookmarks = () => {
             <Searchbar />
             <Sidebar setId={setId} />
           </div>
-          {/* </div> */}
           <div className="bookmark-content-wrapper">
             <div className="flex flex-wrap items-center justify-between">
               <form onSubmit={formik.handleSubmit}>
                 <div className="flex items-center rounded-xl shadow-sm mb-4 relative add-url-to-bookmark w-[350px]">
-                  <input
-                    type="text"
-                    value={formik.values.url}
-                    onChange={formik.handleChange}
-                    placeholder="Add an URL to Your Bookmarks"
-                    id="url"
-                    name="url"
-                    className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                  />
+                  <div className="relative w-full">
+                    <input
+                      type="text"
+                      value={formik.values.url}
+                      onChange={handleChange}
+                      placeholder="Add an URL to Your Bookmarks"
+                      id="url"
+                      name="url"
+                      className="h-[48px] py-3 pl-[68px] pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                    />
+                    <div className="absolute inset-y-0 start-0 text-gray-600 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
+                     https://
+                    </div>
+                  </div>
                   {formik.touched.url && formik.errors.url ? (
                     <div className="text-red-500 text-sm absolute -top-[20px] left-2">
                       {formik.errors.url}
@@ -199,10 +238,15 @@ const MyBookmarks = () => {
             </div>
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
               <p className="text-[28px] text-dark-blue capitalize mb-5 pt-6">
-                  {
-                    isTopLink ? 'Top Links' : 
-                    id?.categoryId ? `${selectedCategory?.title} ${selectedSubCategory?.title ? `| ${selectedSubCategory?.title}` : ""}` : ""
-                  }
+                {isTopLink
+                  ? "Top Links"
+                  : id?.categoryId
+                  ? `${selectedCategory?.title} ${
+                      selectedSubCategory?.title
+                        ? `| ${selectedSubCategory?.title}`
+                        : ""
+                    }`
+                  : ""}
                 {!id?.categoryId ? (
                   <span className="text-base text-light-black inline-block ml-4">
                     (Drag and drop thumbnails to position top links or pin to a
@@ -224,10 +268,12 @@ const MyBookmarks = () => {
                           key={bookmark?.id}
                           draggable
                           onDragStart={() => handleDragStart(bookmark?.id)}
-                          onDragOver={() => handleDragOver(bookmark?.id)}
-                          onDragEnd={handleDragEnd}
+                          // onDragOver={() => handleDragOver(bookmark?.id)}
+                          onDragOver={handleDragOver}
+                          onDrop={() => handleDrop(bookmark.id)}
+                          // onDragEnd={handleDragEnd}
                           className="relative"
-                          style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
+                          style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
                         >
                           <Bookmark
                             item={bookmark}
