@@ -105,7 +105,7 @@ export const pinBookmark = createAsyncThunk(
         }
       );
       console.log(response, 'response from pin bookmark API.');
-      // return response?.data?.message;
+      return response?.data?.message;
       // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
@@ -125,10 +125,7 @@ export const orderBookmarks = createAsyncThunk(
           },
         }
       );
-      console.log(response, 'response from pin bookmark API.');
-      return response;
-      // return response?.data?.message;
-      // return { message: response?.data?.message, bookmark: response?.data?.data };
+      return response?.data?.message;
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
     }

@@ -72,16 +72,16 @@ const MyBookmarks = () => {
     },
     validationSchema: YUP.object({
       url: YUP.string()
-      .transform((value) => {
-        if (value.startsWith("https://")) {
-          return value.replace("https://", "");
-        }
-        return value;
-      })
-      .test("valid-url", "Invalid URL format", (value) => {
-        return YUP.string().url().isValidSync(`https://${value}`);
-      })
-      .required("URL is required."),
+        .transform((value) => {
+          if (value.startsWith("https://")) {
+            return value.replace("https://", "");
+          }
+          return value;
+        })
+        .test("valid-url", "Invalid URL format", (value) => {
+          return YUP.string().url().isValidSync(`https://${value}`);
+        })
+        .required("URL is required.")
     }),
     onSubmit: (values) => {
       const formattedUrl = `https://${values.url}`;
@@ -100,30 +100,60 @@ const MyBookmarks = () => {
   };
 
   // When dragged over another item, reorder the list
-  const handleDrop = (itemId) => {
+  const handleDrop = async (itemId) => {
     if (draggedItemId === null || draggedItemId === itemId) return;
 
     // Ensure bookmarks.bookmarks is an array
-    const newItems = Array.isArray(bookmarks?.bookmarks) ? [...bookmarks.bookmarks] : [];
-  
+    const newItems = Array.isArray(bookmarks?.bookmarks)
+      ? [...bookmarks.bookmarks]
+      : [];
+
+    // Separate pinned and unpinned bookmarks
+    const pinnedBookmarks = newItems.filter((item) => item.pinned === 1);
+    const unpinnedBookmarks = newItems.filter((item) => item.pinned === 0);
+
+    // Check if dragged item is pinned
+    const draggedItems = newItems.find((item) => item.id === draggedItemId);
+    if (draggedItems?.pinned === 1) {
+      toast.error("Pinned bookmarks cannot be rearranged!");
+      return;
+    }
+
+    // Check if dropping over a pinned item
+    const targetItem = newItems.find((item) => item.id === itemId);
+    if (targetItem?.pinned === 1) {
+      toast.error("You cannot drop over pinned bookmarks!");
+      return;
+    }
+
     // Find indexes
-    const draggedIndex = newItems.findIndex(item => item.id === draggedItemId);
-    const targetIndex = newItems.findIndex(item => item.id === itemId);
-  
+    const draggedIndex = unpinnedBookmarks.findIndex(
+      (item) => item.id === draggedItemId
+    );
+    const targetIndex = unpinnedBookmarks.findIndex(
+      (item) => item.id === itemId
+    );
+
     if (draggedIndex === -1 || targetIndex === -1) return;
-  
+
     // Reorder items
-    const [draggedItem] = newItems.splice(draggedIndex, 1);
-    newItems.splice(targetIndex, 0, draggedItem);
-  
+    const [draggedItem] = unpinnedBookmarks.splice(draggedIndex, 1);
+    unpinnedBookmarks.splice(targetIndex, 0, draggedItem);
+
     setDraggedItemId(null);
-  
+    const updatedBookmarks = [...pinnedBookmarks, ...unpinnedBookmarks];
+
     // Generate the order array for API
-    const order = newItems.map(item => item.id);
-    console.log(order, "New Order Array");
-  
-    dispatch(orderBookmarks({ token, order }));
-    dispatch(fetchAllTopLinks(token));
+    const order = updatedBookmarks.map((item) => item.id);
+    // console.log(order, "New Order Array");
+
+    const result = await dispatch(orderBookmarks({ token, order }));
+    if (orderBookmarks.fulfilled.match(result)) {
+      toast.success(result.payload || "Bookmarks re-arranged successfully!");
+      await dispatch(fetchAllTopLinks(token));
+    } else {
+      toast.error(result.payload || "Failed to re-arrange bookmarks.");
+    }
   };
 
   // Remove Bookmark
@@ -218,7 +248,7 @@ const MyBookmarks = () => {
                       className="h-[48px] py-3 pl-[68px] pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                     />
                     <div className="absolute inset-y-0 start-0 text-gray-600 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                     https://
+                      https://
                     </div>
                   </div>
                   {formik.touched.url && formik.errors.url ? (
@@ -275,6 +305,7 @@ const MyBookmarks = () => {
                           className="relative"
                           style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
                         >
+                          {bookmark?.id}
                           <Bookmark
                             item={bookmark}
                             handleRemoveItem={handleRemoveItem}

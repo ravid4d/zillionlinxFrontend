@@ -2,13 +2,20 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchAllTopLinks, fetchCategoryWiseBookmarks, pinBookmark } from "../redux/slices/bookmarkSlice";
+import { toast } from "react-toastify";
 
 
 const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const addToPin = async (bookmarkId) => {
-    await dispatch(pinBookmark({bookmarkId, token}));
+    const result = await dispatch(pinBookmark({ bookmarkId, token }));
+    if (pinBookmark.fulfilled.match(result)) {
+      toast.success(result.payload || "Bookmark pinned successfully!");
+      await dispatch(fetchAllTopLinks(token));
+    } else {
+      toast.error(result.payload || "Failed to pin bookmark.");
+    }
     if(categoryId !== null && subCategoryId !== null) {
       await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
     }
