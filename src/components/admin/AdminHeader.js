@@ -1,10 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../redux/slices/authSlice";
+import { toast } from "react-toastify";
 
 const AdminHeader = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = async() => {
+    try {
+        // localStorage.removeItem("token"); // Remove token from local storage
+        dispatch(logout()); // Dispatch a logout action if using Redux
+        toast.success("You have been logged out successfully!");
+        navigate("/"); // Redirect to home or login page
+    } catch (error) {
+        toast.error("Logout failed! Please try again.");
+    }
+}
   return (
     <>
-      <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-48 w-full bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-64 dark:bg-neutral-800 dark:border-neutral-700">
+      <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-64 dark:bg-neutral-800 dark:border-neutral-700">
         <nav className="px-4 sm:px-6 flex basis-full items-center w-full mx-auto">
           <div className="me-5 lg:me-0 lg:hidden flex items-center">
             <Link
@@ -320,6 +335,26 @@ const AdminHeader = () => {
                       </svg>
                       Team Account
                     </a>
+                    <button
+                      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                      onClick={handleLogout}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="shrink-0 size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                        />
+                      </svg>
+                      Logout
+                    </button>
                   </div>
                 </div>
               </div>
