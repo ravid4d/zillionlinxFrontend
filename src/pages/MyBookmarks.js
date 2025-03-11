@@ -298,14 +298,11 @@ const MyBookmarks = () => {
                           key={bookmark?.id}
                           draggable
                           onDragStart={() => handleDragStart(bookmark?.id)}
-                          // onDragOver={() => handleDragOver(bookmark?.id)}
                           onDragOver={handleDragOver}
                           onDrop={() => handleDrop(bookmark.id)}
-                          // onDragEnd={handleDragEnd}
                           className="relative"
                           style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
                         >
-                          {bookmark?.id}
                           <Bookmark
                             item={bookmark}
                             handleRemoveItem={handleRemoveItem}
