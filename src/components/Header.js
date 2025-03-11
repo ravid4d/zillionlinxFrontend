@@ -12,7 +12,7 @@ const Header = ({ setWhichModalOpen}) => {
     
     const handleLogout = async() => {
         try {
-            localStorage.removeItem("token"); // Remove token from local storage
+            // localStorage.removeItem("token"); // Remove token from local storage
             dispatch(logout()); // Dispatch a logout action if using Redux
             toast.success("You have been logged out successfully!");
             navigate("/"); // Redirect to home or login page

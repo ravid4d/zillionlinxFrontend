@@ -3,44 +3,31 @@ import axios from "axios";
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
-// const TOKEN_KEY = "authToken";
-// const storedToken = localStorage.getItem(TOKEN_KEY);
-
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async ({values, navigate, loginType}, { rejectWithValue }) => {
+  async ({ values, navigate, loginType }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
         {
           type: "email",
           email: values?.email,
-          password: values?.password,
+          password: values?.password
         }
       );
-      let token = null;
-      let userRole = undefined;
-      let message = "";
-      let isLoggedIn = false;
-      if(loginType === "admin") {
-        // console.log(response, 'output is')
-        token = response?.data?.token;
-        userRole = response?.data?.user?.role;
-        message = response?.message;
-        isLoggedIn = !!response?.data?.token;
-      }
-      else {
-        token = response?.data?.data?.token;
-        userRole = response?.data?.data?.user?.role;
-        message = response?.message;
-        isLoggedIn = !!response?.data?.data?.token;
-      }
-      if(token !== undefined) {
-        // localStorage.setItem(TOKEN_KEY, JSON.stringify({token, userRole, isLoggedIn}));
+      let token = response?.data?.data?.token || null;
+      let userRole = response?.data?.data?.user?.role || undefined;
+      let message = response?.message || "";
+      let isLoggedIn =
+        response?.data?.data?.token !== undefined ||
+        response?.data?.data?.token !== null
+          ? !!response?.data?.data?.token
+          : false;
+      if (token !== undefined) {
         let navigateTo = loginType === "user" ? "bookmarks" : "admin";
-        navigate(`/${navigateTo}`)
+        navigate(`/${navigateTo}`);
       }
-      return {token, message, userRole, isLoggedIn};
+      return { token, message, userRole, isLoggedIn };
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Login failed");
     }
@@ -54,33 +41,32 @@ const authSlice = createSlice({
     userRole: null,
     isLoggedIn: false,
     loading: false,
-    error: null,
+    error: null
   },
   reducers: {
     logout: (state) => {
       state.token = null;
       state.userRole = null;
       state.isLoggedIn = false;
-      // localStorage.removeItem(TOKEN_KEY); 
-    },
+    }
   },
   extraReducers: (builder) => {
     //Fetch Top Links
     builder
-    .addCase(handleLogin.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(handleLogin.fulfilled, (state, action) => {
-      state.loading = false;
-      state.isLoggedIn = true;
-      state.userRole = action.payload.userRole;
-      state.token = action.payload.token;
-    })
-    .addCase(handleLogin.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
+      .addCase(handleLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isLoggedIn = true;
+        state.userRole = action.payload.userRole;
+        state.token = action.payload.token;
+      })
+      .addCase(handleLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   }
 });
 
