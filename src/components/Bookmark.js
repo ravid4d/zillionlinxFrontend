@@ -55,7 +55,7 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
             </svg>
           </label>
         </span>
-        <Link target="_blank" to={item?.website_url}>
+        <Link target="_blank" to={item?.website_url} className="min-h-[208px] block">
           {/* <img
             src={process.env.REACT_APP_API_URL + "/" + item?.icon_path}
             alt=""

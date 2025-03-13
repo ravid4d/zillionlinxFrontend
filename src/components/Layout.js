@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -8,16 +8,48 @@ import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import AddNewCategory from "./AddNewCategory";
 import { ToastContainer } from "react-toastify";
+import GoogleSearchbar from "./GoogleSearchbar";
+import AddNewBookmarkField from "./AddNewBookmarkField";
+import Sidebar from "./Sidebar";
+import Searchbar from "./Searchbar";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
 
 const Layout = () => {
+  const dispatch = useDispatch();
   const [sidebar, hideSidebar] = useState(false);
+  const [id, setId] = useState({ categoryId: null, subCategoryId: null });
+  const { categories } = useSelector((state) => state.category);
+  const { token } = useSelector((state) => state.auth);
+  const [selectedCategory, setSelectedCategory] = useState({});
+  const [selectedSubCategory, setSelectedSubCategory] = useState({});
+
+  useEffect(() => {
+    if (token && id?.categoryId) {
+      dispatch(
+        fetchCategoryWiseBookmarks({
+          token,
+          categoryId: id?.categoryId,
+          subCategoryId: id?.subCategoryId
+        })
+      );
+      setSelectedCategory(
+        categories?.find((category) => category?.id === id?.categoryId)
+      );
+      setSelectedSubCategory(
+        selectedCategory?.subcategories?.find(
+          (subCategory) => subCategory?.id === id?.subCategoryId
+        )
+      );
+    }
+  }, [id?.categoryId, id?.subCategoryId, token, dispatch]);
 
   const [openModal, setOpenModal] = useState({
     login: false,
     register: false,
     forgot: false,
     newBookmark: false,
-    newCategory: false,
+    newCategory: false
   });
 
   const setWhichModalOpen = (modalName) => {
@@ -27,7 +59,7 @@ const Layout = () => {
       forgot: false,
       newBookmark: false,
       newCategory: false,
-      [modalName]: true,
+      [modalName]: true
     });
   };
 
@@ -37,7 +69,7 @@ const Layout = () => {
       register: false,
       forgot: false,
       newBookmark: false,
-      newCategory: false,
+      newCategory: false
     });
   };
 
@@ -45,7 +77,7 @@ const Layout = () => {
     return Object.keys(openModal).find((key) => openModal[key]) || "";
   };
 
-  const isAnyModalOpen = Object.values(openModal).some(value => value);
+  const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
   const [urlToBookmark, setUrlToBookmark] = useState("");
 
@@ -59,7 +91,7 @@ const Layout = () => {
       ></div>
 
       <ToastContainer hideProgressBar={true} autoClose={2000} />
-        <div className="app-content flex flex-wrap w-full">
+      <div className="app-content flex flex-wrap w-full">
         <Login
           closeAllModals={closeAllModals}
           openModal={openModal}
@@ -67,7 +99,11 @@ const Layout = () => {
         />
         <Register closeAllModals={closeAllModals} openModal={openModal} />
         <ForgotPassword closeAllModals={closeAllModals} openModal={openModal} />
-        <AddNewBookmark urlToBookmark={urlToBookmark} closeAllModals={closeAllModals} openModal={openModal} />
+        <AddNewBookmark
+          urlToBookmark={urlToBookmark}
+          closeAllModals={closeAllModals}
+          openModal={openModal}
+        />
         <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
         <Header
           setWhichModalOpen={setWhichModalOpen}
@@ -75,7 +111,16 @@ const Layout = () => {
           hideSidebar={hideSidebar}
         />
         <div className="w-full content-area">
-          <Outlet context={{setUrlToBookmark, setWhichModalOpen}} />
+          <Outlet
+            context={{
+              setUrlToBookmark,
+              setWhichModalOpen,
+              selectedSubCategory,
+              selectedCategory,
+              setId,
+              id
+            }}
+          />
         </div>
         <Footer />
       </div>
