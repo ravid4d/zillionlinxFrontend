@@ -40,9 +40,8 @@ const Sidebar = ({setId}) => {
                 <p className='text-[28px] text-dark-blue capitalize mb-5'>My Bookmarks</p>
                 <ul className={`${loading ? '' : ''} rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}>
                 {
-                    loading && <span className="loader"></span>
-                }
-                    {
+                    loading ? <span className="loader"></span>
+                :
                         categories && categories?.length > 0 && categories?.map((category, index) => {
                             const hasDropdown = category?.subcategories?.length>0;
                             const isActive = openAccordion === `users-accordion_${index}`;

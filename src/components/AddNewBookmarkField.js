@@ -1,8 +1,10 @@
 import { useFormik } from "formik";
 import React from "react";
+import { useLocation } from "react-router-dom";
 import * as YUP from "yup";
 
 const AddNewBookmarkField = ({ setWhichModalOpen, setUrlToBookmark }) => {
+  const location = useLocation();
   const formik = useFormik({
     initialValues: {
       url: ""
@@ -46,7 +48,7 @@ const AddNewBookmarkField = ({ setWhichModalOpen, setUrlToBookmark }) => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit} className="w-1/2">
+    <form onSubmit={formik.handleSubmit} className={`${location.pathname === "/bookmarks" ? "" : "w-1/2"}`}>
       <div className="flex items-center rounded-xl shadow-sm mb-4 relative add-url-to-bookmark w-[350px]">
         <div className="relative w-full">
           <input
