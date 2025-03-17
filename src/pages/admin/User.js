@@ -5,7 +5,6 @@ import {
   handleUsersPagination
 } from "../../redux/slices/userSlice";
 import UserTableData from "./UserTableData";
-import axios from "axios";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -13,12 +12,6 @@ const User = () => {
   const { users, totalUsers, pagination, userLoading, error } = useSelector(
     (state) => state.user
   );
-
-  // const [users, setUsers] = useState([
-  //   { id: 1, name: "John Doe", first_name:"hola", last_name:"bye", country:"india", created_at:"2025-03-11T12:44:06+05:30" },
-  //   { id: 2, name: "Jane Smith", first_name:"hola", last_name:"bye", country:"india", created_at:"2025-03-11T12:44:06+05:30" },
-  //   { id: 3, name: "Alice Johnson", first_name:"hola", last_name:"bye", country:"india", created_at:"2025-03-11T12:44:06+05:30" },
-  // ]);
 
   const [selectedUsers, setSelectedUsers] = useState([]);
 

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
@@ -7,7 +7,7 @@ export const handleLogin = createAsyncThunk(
   "auth/login",
   async ({ values, navigate, loginType }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
         {
           type: "email",
@@ -52,6 +52,7 @@ const authSlice = createSlice({
       state.token = null;
       state.userRole = null;
       state.isLoggedIn = false;
+      localStorage.removeItem("persist:auth"); 
     }
   },
   extraReducers: (builder) => {

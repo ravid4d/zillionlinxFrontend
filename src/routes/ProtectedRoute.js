@@ -1,22 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../redux/slices/authSlice";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-  const { userRole, isLoggedIn, token } = useSelector((state) => state.auth);
-  const { status } = useSelector((state) => state.bookmark);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!token || status === 401) {
-      dispatch(logout());
-      navigate("/");
-    }
-  }, [token, dispatch, navigate, status]);
-
-  if (!isLoggedIn) return <Navigate to="/" />;
+  const { userRole} = useSelector((state) => state.auth);
   if (!allowedRoles.includes(userRole)) return <Navigate to="/unauthorized" />;
 
   return <Outlet />;

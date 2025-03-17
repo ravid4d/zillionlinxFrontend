@@ -202,6 +202,7 @@ const MyBookmarks = () => {
                   </span>
                 ) : null}
               </p>
+              {console.log(bookmarks, 's')}
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
                 {loading ? (
                   <span className="loader"></span>
@@ -209,9 +210,9 @@ const MyBookmarks = () => {
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 ) : (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
-                    {bookmarks?.bookmarks &&
-                    bookmarks?.bookmarks?.length > 0 ? (
-                      bookmarks?.bookmarks?.map((bookmark, index) => (
+                    {bookmarks &&
+                    bookmarks?.length > 0 ? (
+                      bookmarks?.map((bookmark, index) => (
                         <li
                         key={bookmark?.id}
                         draggable

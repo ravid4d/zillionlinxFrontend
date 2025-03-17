@@ -8,32 +8,24 @@ import { useFormik } from "formik";
 import * as YUP from "yup";
 import Dropdown from "../Dropdown";
 import Textfield from "../Textfield";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addNewCategory,
+  getParentCategories
+} from "../../redux/slices/adminSlice";
 
-const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
+// const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
 const AddCategory = () => {
-  const [categories, setCategories] = useState([]);
-  const { token, isLoggedIn } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { parentCategories } = useSelector((state) => state.admin);
+
   useEffect(() => {
     if (token) {
-      getCategories(token);
+      dispatch(getParentCategories(token));
     }
-  }, [token]);
-
-  const getCategories = async () => {
-    try {
-      const response = await axios.get(categoryUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      let parentCategories = response?.data?.data?.filter((category) => category?.parent_id === null);
-      setCategories(parentCategories);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  }, [token, dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -47,27 +39,18 @@ const AddCategory = () => {
         .required("Category Title is required"),
       parent_id: YUP.string().nullable().notRequired()
     }),
-    onSubmit: (values) => {
-      handleAddNewCategory(values);
+    onSubmit: async (values) => {
+      let result = await dispatch(addNewCategory({ values, token }));
+      if (addNewCategory.fulfilled.match(result)) {
+        //Do not need to show success message using toast while getting data on load
+        toast.success(result.payload || "Categories fetched successfully!");
+        formik.resetForm();
+      } else {
+        toast.error(result.payload || "Failed to add new category!");
+      }
     }
   });
-  const handleAddNewCategory = async (values) => {
-    try {
-      const response = await axios.post(categoryUrl, {
-        title: values?.title,
-        parent_id: values?.parent_id
-      },{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
-      });
-      toast.success(response?.data?.message);
-      formik.resetForm();
-    } catch (err) {
-      toast.error(err?.response?.data?.message);
-    }
-  };
- 
+  
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-800 dark:border-neutral-700">
       <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
@@ -111,7 +94,7 @@ const AddCategory = () => {
               setFieldValue={(selectedOption) =>
                 formik.setFieldValue("parent_id", selectedOption?.value)
               }
-              items={categories}
+              items={parentCategories}
             />
             {formik.touched.parent_id && formik.errors.parent_id ? (
               <div className="text-red-500 text-sm mt-1">

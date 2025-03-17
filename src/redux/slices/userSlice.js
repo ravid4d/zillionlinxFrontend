@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 const allUsersUrl = `${process.env.REACT_APP_API_URL}/api/admin/users`;
 
 export const getAllUsers = createAsyncThunk(
@@ -7,7 +8,7 @@ export const getAllUsers = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       let token = getState().auth.token;
-      let response = await axios.get(allUsersUrl, {
+      let response = await axiosInstance.get(allUsersUrl, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -27,7 +28,7 @@ export const handleUsersPagination = createAsyncThunk(
   "users/pagination",
   async ({ url, token }, { rejectWithValue }) => {
     try {
-      let response = await axios.get(url, {
+      let response = await axiosInstance.get(url, {
         headers: {
           Authorization: `Bearer ${token}`
         }

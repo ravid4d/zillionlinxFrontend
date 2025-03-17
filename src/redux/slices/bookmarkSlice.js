@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 const fetchTopLinkUrl = `${process.env.REACT_APP_API_URL}/api/top-links`;
 const topLinkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark`;
 const getBookmarksUrl = `${process.env.REACT_APP_API_URL}/api/bookmarks`;
@@ -13,12 +13,13 @@ export const fetchAllTopLinks = createAsyncThunk(
   "bookmark/fetchAllTopLinks",
   async (token, { rejectWithValue }) => {
     try {
-      const response = await axios.get(fetchTopLinkUrl, {
+      const response = await axiosInstance.get(fetchTopLinkUrl, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      return { bookmarks: response.data.data };
+      console.log(response?.data, 'hiiii')
+      return { bookmarks: response?.data?.data };
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -33,11 +34,12 @@ export const removeTopLink = createAsyncThunk(
   "bookmark/removeTopLink",
   async ({ token, topLinkId }, { rejectWithValue }) => {
     try {
-      await axios.delete(`${topLinkUrl}/${topLinkId}`, {
+      await axiosInstance.delete(`${topLinkUrl}/${topLinkId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      console.log(topLinkId, 'topLinkId');
       return topLinkId; // Return the ID to remove it from state
     } catch (error) {
       return rejectWithValue({
@@ -53,7 +55,7 @@ export const fetchCategoryWiseBookmarks = createAsyncThunk(
   "bookmark/fetchCategoryWiseBookmarks",
   async ({ token, categoryId, subCategoryId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${getBookmarksUrl}?category_id=${categoryId}&sub_category_id=${subCategoryId}`,
         {
           headers: {
@@ -78,7 +80,7 @@ export const addNewBookmark = createAsyncThunk(
   "bookmark/addNewBookmark",
   async ({ values, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         addNewBookmarkUrl,
         {
           title: values?.title,
@@ -108,7 +110,7 @@ export const pinBookmark = createAsyncThunk(
   "bookmark/pinBookmark",
   async ({ token, bookmarkId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${pinBookmarkUrl}${bookmarkId}/pin`,
         {},
         {
@@ -132,7 +134,7 @@ export const orderBookmarks = createAsyncThunk(
   "bookmark/orderBookmarks",
   async ({ token, order }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         orderBookmarkUrl,
         { order },
         {
@@ -155,7 +157,7 @@ export const googleSearch = createAsyncThunk(
   "bookmarks/googleSearch",
   async ({ token, formData }, { rejectWithValue }) => {
     try {
-      let response = await axios.post(googleSearchUrl, formData, {
+      let response = await axiosInstance.post(googleSearchUrl, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data"
@@ -203,6 +205,7 @@ const bookmarkSlice = createSlice({
       })
       .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
         state.loading = false;
+        console.log(state, action.payload, 'hi dearhow are you')
         state.bookmarks = action.payload.bookmarks;
         state.status = action.payload.status;
         state.isTopLink = true;
@@ -215,7 +218,7 @@ const bookmarkSlice = createSlice({
 
       //Remove Top Links
       .addCase(removeTopLink.fulfilled, (state, action) => {
-        state.bookmarks.bookmarks = state?.bookmarks?.bookmarks?.filter(
+        state.bookmarks = state?.bookmarks?.bookmarks?.filter(
           (bookmark) => bookmark.id !== action.payload
         );
       })

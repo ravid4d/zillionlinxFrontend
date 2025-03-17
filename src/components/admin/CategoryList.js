@@ -1,41 +1,33 @@
 import React, { useEffect, useState } from "react";
 import categoryData from "../../json/category.json";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { getAdminCategory } from "../../redux/slices/adminSlice";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
 const CategoryList = ({ classes }) => {
+  const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const [activeId, setActiveId] = useState(undefined);
   const [selectedItems, setSelectedItems] = useState({});
+  const {adminCategories} = useSelector(state=>state.admin);
 
   useEffect(() => {
-    setCategories(categoryData);
-  }, []);
+    if(adminCategories?.length>0) {
+      setCategories(adminCategories);
+    }
+  }, [adminCategories?.length]);
 
   const { token } = useSelector((state) => state.auth);
   useEffect(() => {
     if (token) {
-      getCategories(token);
+      dispatch(getAdminCategory(token));
     }
-  }, [token]);
+  }, [token, dispatch]);
 
-  const getCategories = async () => {
-    try {
-      const response = await axios.get(categoryUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      let allCategories = response?.data?.data?.filter((category) => category);
-      setCategories(allCategories);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const activeTab = (activeId) => {
     setActiveId((prev) => (prev === activeId ? undefined : activeId));
@@ -133,7 +125,6 @@ const CategoryList = ({ classes }) => {
                     Delete Selected
                   </button>
                 </div>
-                {console.log(selectedItems, 'selectedItems')}
               </div>
               <div className="w-full overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 table-auto">

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/categories`;
 
@@ -7,7 +7,7 @@ export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async (token, { rejectWithValue }) => {
     try {
-      const response = await axios.get(categoryUrl, {
+      const response = await axiosInstance.get(categoryUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -26,7 +26,7 @@ export const fetchSubCategories = createAsyncThunk(
   "categories/fetchSubCategories",
   async ({ selectedCategoryId, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${categoryUrl}?parent_id=${selectedCategoryId}`,
         {
           headers: {

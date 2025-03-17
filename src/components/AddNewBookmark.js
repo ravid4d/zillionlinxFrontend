@@ -83,7 +83,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
       closeModal();
     } else {
       console.log(result, 'result');
-      toast.error(result.payload || "Failed to add bookmark.");
+      toast.error(result.payload?.message || "Failed to add bookmark.");
     }
   };
 
