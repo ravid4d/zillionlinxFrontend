@@ -18,7 +18,6 @@ export const fetchAllTopLinks = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response?.data, 'hiiii')
       return { bookmarks: response?.data?.data };
     } catch (error) {
       return rejectWithValue({
@@ -205,7 +204,7 @@ const bookmarkSlice = createSlice({
       })
       .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(state, action.payload, 'hi dearhow are you')
+        console.log(state, action.payload?.bookmarks, 'hi dearhow are you')
         state.bookmarks = action.payload.bookmarks;
         state.status = action.payload.status;
         state.isTopLink = true;
@@ -238,7 +237,7 @@ const bookmarkSlice = createSlice({
           action.payload?.bookmarks?.length === 0
             ? { bookmarks: [], message: action.payload?.message }
             : action.payload;
-        state.bookmarks = payload;
+        state.bookmarks = payload?.bookmarks;
         state.isTopLink = false;
       })
       .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {

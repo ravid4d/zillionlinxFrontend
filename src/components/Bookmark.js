@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchAllTopLinks, fetchCategoryWiseBookmarks, pinBookmark } from "../redux/slices/bookmarkSlice";
@@ -7,7 +7,9 @@ import { toast } from "react-toastify";
 
 const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
   const { token } = useSelector((state) => state.auth);
+  const { isTopLink } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
+
   const addToPin = async (bookmarkId) => {
     const result = await dispatch(pinBookmark({ bookmarkId, token }));
     if (pinBookmark.fulfilled.match(result)) {
@@ -23,8 +25,17 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
       await dispatch(fetchAllTopLinks(token))
     }
   };
+
+  // useEffect(()=>{
+  //   if(isTopLink) {
+  //     console.log('hi')
+  //     dispatch(fetchAllTopLinks(token))
+  //   }
+  // },[isTopLink, dispatch])
+
   return (
     <>
+    {console.log(item, 'ii')}
       <span
         className={`bg-whtie relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30`}
       >
@@ -67,6 +78,7 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
             className="w-full"
           />
         </Link>
+        
         <Link target="_blank" to={item?.website_url}>
           <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
             {item?.title}
