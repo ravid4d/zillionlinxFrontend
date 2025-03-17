@@ -25,7 +25,7 @@ const Header = ({ setWhichModalOpen }) => {
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={() => dispatch(callTopLinks())}
-            className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16"
+            className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16 cursor-pointer"
             to={isLoggedIn ? "/bookmarks" : "/"}
             aria-label="Brand"
           >
