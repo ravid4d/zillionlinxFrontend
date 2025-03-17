@@ -73,6 +73,7 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
           </span>
         </Link>
       </span>
+      {item?.bookmark_id}
       <span
         onClick={() => handleRemoveItem(item?.id)}
         className="cross-icon w-6 h-6 rounded-full bg-dark-blue flex flex-wrap items-center justify-center cursor-pointer absolute -right-2 -top-2 transition-all hover:bg-red-500"

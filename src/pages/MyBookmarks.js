@@ -212,13 +212,13 @@ const MyBookmarks = () => {
                     bookmarks?.bookmarks?.length > 0 ? (
                       bookmarks?.bookmarks?.map((bookmark, index) => (
                         <li
-                          key={bookmark?.id}
-                          draggable
-                          onDragStart={() => handleDragStart(bookmark?.id)}
-                          onDragOver={handleDragOver}
-                          onDrop={() => handleDrop(bookmark.id)}
-                          className="relative"
-                          style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
+                        key={bookmark?.id}
+                        draggable
+                        onDragStart={() => handleDragStart(bookmark?.id)}
+                        onDragOver={handleDragOver}
+                        onDrop={() => handleDrop(bookmark.id)}
+                        className="relative"
+                        style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
                         >
                           <Bookmark
                             item={bookmark}
