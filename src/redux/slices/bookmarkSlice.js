@@ -15,12 +15,15 @@ export const fetchAllTopLinks = createAsyncThunk(
     try {
       const response = await axios.get(fetchTopLinkUrl, {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
       return { bookmarks: response.data.data };
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to fetch Top Links");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to fetch Top Links"
+      });
     }
   }
 );
@@ -32,13 +35,15 @@ export const removeTopLink = createAsyncThunk(
     try {
       await axios.delete(`${topLinkUrl}/${topLinkId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
       return topLinkId; // Return the ID to remove it from state
     } catch (error) {
-      
-      return rejectWithValue(error?.response?.data?.message || "Failed to remove top link");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to remove top link"
+      });
     }
   }
 );
@@ -52,16 +57,19 @@ export const fetchCategoryWiseBookmarks = createAsyncThunk(
         `${getBookmarksUrl}?category_id=${categoryId}&sub_category_id=${subCategoryId}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       return {
-        bookmarks:response?.data?.bookmarks,
-        message:response?.data?.message
-      }
+        bookmarks: response?.data?.bookmarks,
+        message: response?.data?.message
+      };
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to fetch bookmarks");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to fetch bookmarks"
+      });
     }
   }
 );
@@ -77,18 +85,21 @@ export const addNewBookmark = createAsyncThunk(
           url: values?.url,
           category_id: values?.category_id,
           sub_category_id: values?.sub_category_id,
-          add_to: values?.add_to,
+          add_to: values?.add_to
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       return response?.data?.message;
       // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to add bookmark"
+      });
     }
   }
 );
@@ -98,17 +109,21 @@ export const pinBookmark = createAsyncThunk(
   async ({ token, bookmarkId }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${pinBookmarkUrl}${bookmarkId}/pin`, {},
+        `${pinBookmarkUrl}${bookmarkId}/pin`,
+        {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       return response?.data?.message;
       // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to pin bookmark"
+      });
     }
   }
 );
@@ -118,58 +133,66 @@ export const orderBookmarks = createAsyncThunk(
   async ({ token, order }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        orderBookmarkUrl, {order},
+        orderBookmarkUrl,
+        { order },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
       );
       return response?.data?.message;
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to add bookmark"
+      });
     }
   }
 );
 
 export const googleSearch = createAsyncThunk(
   "bookmarks/googleSearch",
-  async({token, formData},{rejectWithValue})=>{
+  async ({ token, formData }, { rejectWithValue }) => {
     try {
       let response = await axios.post(googleSearchUrl, formData, {
-        headers:{
-          Authorization:`Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data"
         }
       });
-      console.log(response?.data?.data, 'data are')
       return response?.data?.data;
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to load bookmarks from google search api.");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to load bookmarks from google search api."
+      });
     }
-  })
+  }
+);
 
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
-    bookmarks:[],
-    isTopLink:true,
+    bookmarks: [],
+    isTopLink: true,
     loading: false,
-    addBookmarkLoading:false,
-    googleLoading:false,
-    googleResults:[],
-    wikkiResults:[],
-    ebayResults:[],
-    youtubeResults:[],
-    youtubeStaticLink:"",
-    wikiStaticLink:"",
-    ebayStaticLink:"",
-    amazonStaticLink:"",
-    error: null,
+    status: "",
+    addBookmarkLoading: false,
+    googleLoading: false,
+    googleResults: [],
+    wikkiResults: [],
+    ebayResults: [],
+    youtubeResults: [],
+    youtubeStaticLink: "",
+    wikiStaticLink: "",
+    ebayStaticLink: "",
+    amazonStaticLink: "",
+    error: null
   },
   reducers: {
-    callTopLinks:(state)=>{
-      state.isTopLink = true
+    callTopLinks: (state) => {
+      state.isTopLink = true;
     }
   },
   extraReducers: (builder) => {
@@ -180,12 +203,14 @@ const bookmarkSlice = createSlice({
       })
       .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
         state.loading = false;
-        state.bookmarks = action.payload;
+        state.bookmarks = action.payload.bookmarks;
+        state.status = action.payload.status;
         state.isTopLink = true;
       })
       .addCase(fetchAllTopLinks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
       })
 
       //Remove Top Links
@@ -195,27 +220,32 @@ const bookmarkSlice = createSlice({
         );
       })
       .addCase(removeTopLink.rejected, (state, action) => {
-        state.error = action.payload;
-      })
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
 
-      //Fetch category wise bookmarks
-      builder
+    //Fetch category wise bookmarks
+    builder
       .addCase(fetchCategoryWiseBookmarks.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchCategoryWiseBookmarks.fulfilled, (state, action) => {
         state.loading = false;
-        let payload = action.payload?.bookmarks?.length===0?{bookmarks:[], message:action.payload?.message}:action.payload
+        let payload =
+          action.payload?.bookmarks?.length === 0
+            ? { bookmarks: [], message: action.payload?.message }
+            : action.payload;
         state.bookmarks = payload;
         state.isTopLink = false;
       })
       .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-      })
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
 
-      //Add New Bookmarks
-      builder
+    //Add New Bookmarks
+    builder
       .addCase(addNewBookmark.pending, (state) => {
         state.addBookmarkLoading = true;
       })
@@ -225,10 +255,11 @@ const bookmarkSlice = createSlice({
       })
       .addCase(addNewBookmark.rejected, (state, action) => {
         state.addBookmarkLoading = false;
-        state.error = action.payload;
-      })
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
 
-      builder
+    builder
       .addCase(pinBookmark.pending, (state) => {
         state.addBookmarkLoading = true;
       })
@@ -238,10 +269,11 @@ const bookmarkSlice = createSlice({
       })
       .addCase(pinBookmark.rejected, (state, action) => {
         state.addBookmarkLoading = false;
-        state.error = action.payload;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
       });
 
-      builder
+    builder
       .addCase(orderBookmarks.pending, (state) => {
         state.loading = true;
       })
@@ -250,10 +282,11 @@ const bookmarkSlice = createSlice({
       })
       .addCase(orderBookmarks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
       });
 
-      builder
+    builder
       .addCase(googleSearch.pending, (state) => {
         state.googleLoading = true;
       })
@@ -272,9 +305,10 @@ const bookmarkSlice = createSlice({
       })
       .addCase(googleSearch.rejected, (state, action) => {
         state.googleLoading = false;
-        state.error = action.payload;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
       });
   }
 });
-export const {callTopLinks} = bookmarkSlice.actions;
+export const { callTopLinks } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;

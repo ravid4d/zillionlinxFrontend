@@ -12,6 +12,7 @@ import GoogleSearchbar from "../components/GoogleSearchbar";
 import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
+import { logout } from "../redux/slices/authSlice";
 
 const MyBookmarks = () => {
   const {
@@ -43,9 +44,9 @@ const MyBookmarks = () => {
         // toast.error(result.payload || "Failed to fetch Top Links!");
       }
     };
-    if (token) {
+    if (token ) {
       fetchData();
-    }
+    }    
   }, [dispatch, token]);
 
   // When drag starts, store the item's index
