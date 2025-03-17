@@ -107,8 +107,6 @@ const Register = ({ openModal, closeAllModals}) => {
                                         ) : null}
                                     </div>
                                     <div className="mb-5">
-                                        {/* <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
-                                        {formik.values.country}
                                         <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} />
                                         {formik.touched.country && formik.errors.country ? (
                                             <div className="text-red-500 text-sm mt-1">{formik.errors.country}</div>

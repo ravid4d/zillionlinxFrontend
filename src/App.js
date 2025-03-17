@@ -12,6 +12,7 @@ import Category from './pages/admin/Category';
 import AdminLogin from './components/admin/AdminLogin';
 import NonProtectedAdminRoutes from './routes/NonProtectedAdminRoutes';
 import User from './pages/admin/User';
+import GoogleCustomSearch from './pages/GoogleCustomSearch';
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                 <Route element={<ProtectedRoute allowedRoles={["user"]}  />}>
                     <Route path="/" element={<Layout />}>
                         <Route path="bookmarks" element={<MyBookmarks />}></Route>
+                        <Route path="result" element={<GoogleCustomSearch />}></Route>
                     </Route>
                 </Route>
 

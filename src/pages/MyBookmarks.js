@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import Searchbar from "../components/Searchbar";
-import GoogleSearchbar from "../components/GoogleSearchbar";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllTopLinks,
-  fetchCategoryWiseBookmarks,
+  orderBookmarks,
   removeTopLink
 } from "../redux/slices/bookmarkSlice";
 import Bookmark from "../components/Bookmark";
-import { useFormik } from "formik";
-import * as YUP from "yup";
+import GoogleSearchbar from "../components/GoogleSearchbar";
+import AddNewBookmarkField from "../components/AddNewBookmarkField";
+import Sidebar from "../components/Sidebar";
+import Searchbar from "../components/Searchbar";
 
 const MyBookmarks = () => {
-  const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();
+  const {
+    setUrlToBookmark,
+    setWhichModalOpen,
+    selectedCategory,
+    selectedSubCategory,
+    id,
+    setId
+  } = useOutletContext();
 
   const dispatch = useDispatch();
+  
 
   const { token } = useSelector((state) => state.auth);
-  const { bookmarks, loading, error, isTopLink } = useSelector((state) => state.bookmark);
-  const { categories } = useSelector((state) => state.category);
+  const { bookmarks, loading, error, isTopLink } = useSelector(
+    (state) => state.bookmark
+  );
 
-  const [draggedIndex, setDraggedIndex] = useState(null);
-  const [id, setId] = useState({ categoryId: null, subCategoryId: null });
-  const [selectedCategory, setSelectedCategory] = useState({});
-  const [selectedSubCategory, setSelectedSubCategory] = useState({});
+  const [draggedItemId, setDraggedItemId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,59 +48,70 @@ const MyBookmarks = () => {
     }
   }, [dispatch, token]);
 
-  useEffect(() => {
-    if (token && id?.categoryId) {
-      dispatch(
-        fetchCategoryWiseBookmarks({
-          token,
-          categoryId: id?.categoryId,
-          subCategoryId: id?.subCategoryId
-        })
-      );
-      setSelectedCategory(
-        categories?.find((category) => category?.id === id?.categoryId)
-      );
-      setSelectedSubCategory(
-        selectedCategory?.subcategories?.find(
-          (subCategory) => subCategory?.id === id?.subCategoryId
-        )
-      );
-    }
-  }, [id?.categoryId, id?.subCategoryId, token, dispatch]);
-
-  const formik = useFormik({
-    initialValues: {
-      url: ""
-    },
-    validationSchema: YUP.object({
-      url: YUP.string().url("Invalid URL format").required("URL is required.")
-    }),
-    onSubmit: (values) => {
-      setUrlToBookmark(values);
-      addBookmarkViaUrl();
-    }
-  });
-
   // When drag starts, store the item's index
-  const handleDragStart = (index) => {
-    setDraggedIndex(index);
+  const handleDragStart = (itemId) => {
+    setDraggedItemId(itemId);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault(); // Required to allow dropping
   };
 
   // When dragged over another item, reorder the list
-  const handleDragOver = (index) => {
-    if (draggedIndex === null || draggedIndex === index) return;
+  const handleDrop = async (itemId) => {
+    if (draggedItemId === null || draggedItemId === itemId) return;
 
-    const newBookmarks = [...bookmarks];
-    const draggedItem = newBookmarks.splice(draggedIndex, 1)[0]; // Remove dragged item
-    newBookmarks.splice(index, 0, draggedItem); // Insert at new position
+    // Ensure bookmarks.bookmarks is an array
+    const newItems = Array.isArray(bookmarks?.bookmarks)
+      ? [...bookmarks.bookmarks]
+      : [];
 
-    setDraggedIndex(index); // Update dragged index
-    // setTopLinks(newTopLinks);
-  };
+    // Separate pinned and unpinned bookmarks
+    const pinnedBookmarks = newItems.filter((item) => item.pinned === 1);
+    const unpinnedBookmarks = newItems.filter((item) => item.pinned === 0);
 
-  // Reset dragged item index on drag end
-  const handleDragEnd = () => {
-    setDraggedIndex(null);
+    // Check if dragged item is pinned
+    const draggedItems = newItems.find((item) => item.id === draggedItemId);
+    if (draggedItems?.pinned === 1) {
+      toast.error("Pinned bookmarks cannot be rearranged!");
+      return;
+    }
+
+    // Check if dropping over a pinned item
+    const targetItem = newItems.find((item) => item.id === itemId);
+    if (targetItem?.pinned === 1) {
+      toast.error("You cannot drop over pinned bookmarks!");
+      return;
+    }
+
+    // Find indexes
+    const draggedIndex = unpinnedBookmarks.findIndex(
+      (item) => item.id === draggedItemId
+    );
+    const targetIndex = unpinnedBookmarks.findIndex(
+      (item) => item.id === itemId
+    );
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // Reorder items
+    const [draggedItem] = unpinnedBookmarks.splice(draggedIndex, 1);
+    unpinnedBookmarks.splice(targetIndex, 0, draggedItem);
+
+    setDraggedItemId(null);
+    const updatedBookmarks = [...pinnedBookmarks, ...unpinnedBookmarks];
+
+    // Generate the order array for API
+    const order = updatedBookmarks.map((item) => item.id);
+    // console.log(order, "New Order Array");
+
+    const result = await dispatch(orderBookmarks({ token, order }));
+    if (orderBookmarks.fulfilled.match(result)) {
+      toast.success(result.payload || "Bookmarks re-arranged successfully!");
+      await dispatch(fetchAllTopLinks(token));
+    } else {
+      toast.error(result.payload || "Failed to re-arrange bookmarks.");
+    }
   };
 
   // Remove Bookmark
@@ -108,16 +124,6 @@ const MyBookmarks = () => {
     } else {
       toast.error(result.payload || "Failed to remove top link.");
     }
-  };
-
-  //Open Add New Bookmark Modal
-  const addBookmarkViaUrl = () => {
-    setWhichModalOpen("newBookmark");
-    let inputField = document.getElementById("url");
-    inputField.blur();
-    setTimeout(() => {
-      formik.resetForm();
-    }, 500);
   };
 
   return (
@@ -151,16 +157,15 @@ const MyBookmarks = () => {
       </button>
       <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
         <div className="flex flex-wrap lg:space-x-8">
-          {/* <div className='bookmark-sidebar-wrapper'> */}
           <div
             id="hs-application-sidebar"
-            className="
+            className={`
                 bookmark-sidebar-wrapper    
                 hs-overlay [--auto-close:lg]
                 hs-overlay-open:translate-x-0         
                 -translate-x-full lg:translate-x-0 transition-all duration-300 transform
                 fixed lg:relative inset-y-0 start-0 z-[40] lg:block
-            "
+            `}
             role="dialog"
             tabIndex="-1"
             aria-label="Sidebar"
@@ -168,41 +173,27 @@ const MyBookmarks = () => {
             <Searchbar />
             <Sidebar setId={setId} />
           </div>
-          {/* </div> */}
+
           <div className="bookmark-content-wrapper">
             <div className="flex flex-wrap items-center justify-between">
-              <form onSubmit={formik.handleSubmit}>
-                <div className="flex items-center rounded-xl shadow-sm mb-4 relative add-url-to-bookmark w-[350px]">
-                  <input
-                    type="text"
-                    value={formik.values.url}
-                    onChange={formik.handleChange}
-                    placeholder="Add an URL to Your Bookmarks"
-                    id="url"
-                    name="url"
-                    className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                  />
-                  {formik.touched.url && formik.errors.url ? (
-                    <div className="text-red-500 text-sm absolute -top-[20px] left-2">
-                      {formik.errors.url}
-                    </div>
-                  ) : null}
-                  <button
-                    type="submit"
-                    className="absolute z-20 right-2 top-1 w-[40px] h-[40px] inline-flex justify-center items-center border border-transparent bg-transparent hover:bg-transparent focus:outline-none focus:bg-transparent disabled:opacity-50 disabled:pointer-events-none"
-                  >
-                    <img src="/submit-icon.png" alt="" className="" />
-                  </button>
-                </div>
-              </form>
+              <AddNewBookmarkField
+                setWhichModalOpen={setWhichModalOpen}
+                setUrlToBookmark={setUrlToBookmark}
+              />
               <GoogleSearchbar />
             </div>
+            {/* /************** */}
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
               <p className="text-[28px] text-dark-blue capitalize mb-5 pt-6">
-                  {
-                    isTopLink ? 'Top Links' : 
-                    id?.categoryId ? `${selectedCategory?.title} ${selectedSubCategory?.title ? `| ${selectedSubCategory?.title}` : ""}` : ""
-                  }
+                {isTopLink
+                  ? "Top Links"
+                  : id?.categoryId
+                  ? `${selectedCategory?.title} ${
+                      selectedSubCategory?.title
+                        ? `| ${selectedSubCategory?.title}`
+                        : ""
+                    }`
+                  : ""}
                 {!id?.categoryId ? (
                   <span className="text-base text-light-black inline-block ml-4">
                     (Drag and drop thumbnails to position top links or pin to a
@@ -221,13 +212,13 @@ const MyBookmarks = () => {
                     bookmarks?.bookmarks?.length > 0 ? (
                       bookmarks?.bookmarks?.map((bookmark, index) => (
                         <li
-                          key={bookmark?.id}
-                          draggable
-                          onDragStart={() => handleDragStart(bookmark?.id)}
-                          onDragOver={() => handleDragOver(bookmark?.id)}
-                          onDragEnd={handleDragEnd}
-                          className="relative"
-                          style={{ opacity: draggedIndex === index ? 0.5 : 1 }}
+                        key={bookmark?.id}
+                        draggable
+                        onDragStart={() => handleDragStart(bookmark?.id)}
+                        onDragOver={handleDragOver}
+                        onDrop={() => handleDrop(bookmark.id)}
+                        className="relative"
+                        style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
                         >
                           <Bookmark
                             item={bookmark}

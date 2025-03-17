@@ -82,6 +82,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
       await dispatch(fetchAllTopLinks(token));
       closeModal();
     } else {
+      console.log(result, 'result');
       toast.error(result.payload || "Failed to add bookmark.");
     }
   };

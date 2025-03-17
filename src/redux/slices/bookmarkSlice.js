@@ -5,6 +5,8 @@ const topLinkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark`;
 const getBookmarksUrl = `${process.env.REACT_APP_API_URL}/api/bookmarks`;
 const addNewBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-bookmark`;
 const pinBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/`;
+const orderBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/reorder`;
+const googleSearchUrl = `${process.env.REACT_APP_API_URL}/api/search`;
 
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
@@ -103,8 +105,7 @@ export const pinBookmark = createAsyncThunk(
           },
         }
       );
-      console.log(response, 'response from pin bookmark API.');
-      // return response?.data?.message;
+      return response?.data?.message;
       // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
@@ -112,15 +113,58 @@ export const pinBookmark = createAsyncThunk(
   }
 );
 
+export const orderBookmarks = createAsyncThunk(
+  "bookmark/orderBookmarks",
+  async ({ token, order }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        orderBookmarkUrl, {order},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data?.message;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || "Failed to add bookmark");
+    }
+  }
+);
+
+export const googleSearch = createAsyncThunk(
+  "bookmarks/googleSearch",
+  async({token, formData},{rejectWithValue})=>{
+    try {
+      let response = await axios.post(googleSearchUrl, formData, {
+        headers:{
+          Authorization:`Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        }
+      });
+      console.log(response?.data?.data, 'data are')
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || "Failed to load bookmarks from google search api.");
+    }
+  })
 
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
     bookmarks:[],
-    // topLinks: [],
     isTopLink:true,
     loading: false,
     addBookmarkLoading:false,
+    googleLoading:false,
+    googleResults:[],
+    wikkiResults:[],
+    ebayResults:[],
+    youtubeResults:[],
+    youtubeStaticLink:"",
+    wikiStaticLink:"",
+    ebayStaticLink:"",
+    amazonStaticLink:"",
     error: null,
   },
   reducers: {
@@ -194,6 +238,40 @@ const bookmarkSlice = createSlice({
       })
       .addCase(pinBookmark.rejected, (state, action) => {
         state.addBookmarkLoading = false;
+        state.error = action.payload;
+      });
+
+      builder
+      .addCase(orderBookmarks.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(orderBookmarks.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(orderBookmarks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+      builder
+      .addCase(googleSearch.pending, (state) => {
+        state.googleLoading = true;
+      })
+      .addCase(googleSearch.fulfilled, (state, action) => {
+        state.googleLoading = false;
+        state.googleResults = action.payload?.google_search_results;
+        state.wikkiResults = action.payload?.wikimedia_search_results;
+        state.ebayResults = action.payload?.ebay_search_results;
+        state.youtubeResults = action.payload?.youtube_search_results;
+        state.amazonResults = action.payload?.amazon_search_results;
+        state.youtubeStaticLink = action.payload?.youtubeStaticLink;
+        state.wikiStaticLink = action.payload?.wikiStaticLink;
+        state.ebayStaticLink = action.payload?.ebayStaticLink;
+        state.amazonStaticLink = action.payload?.amazonStaticLink;
+        state.bookmarks = action.payload?.bookmarks;
+      })
+      .addCase(googleSearch.rejected, (state, action) => {
+        state.googleLoading = false;
         state.error = action.payload;
       });
   }
