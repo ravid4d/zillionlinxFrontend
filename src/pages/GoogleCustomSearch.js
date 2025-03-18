@@ -163,7 +163,7 @@ const GoogleCustomSearch = () => {
                               <span className="loader"></span>
                             ) : (
                               bookmarks &&
-                              bookmarks?.length === 0 &&
+                              bookmarks?.length > 0 &&
                               bookmarks?.map((result, index) => {
                                 return (
                                   <li
@@ -172,13 +172,13 @@ const GoogleCustomSearch = () => {
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
                                         className="min-h-[85px] block"
-                                        to="https://www.lipsum.com/"
+                                        to={result?.website_url}
                                         target="_blank"
                                       >
                                         <img
                                           alt=""
                                           className="w-full"
-                                          src="https://i.pinimg.com/736x/d4/c2/ec/d4c2ec5941d39ad2f5406cbed6f448ea.jpg"
+                                          src={`/${result.icon_path}`}
                                         />
                                       </Link>
                                       <Link
@@ -275,7 +275,7 @@ const GoogleCustomSearch = () => {
                               {youtubeStaticLink !== "" && (
                                 <Link
                                     className="block mb-2 last:mb-0"
-                                    parent="_blank"
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     to={youtubeStaticLink}
                                     //   onClick={() => handleResult("youtube")}

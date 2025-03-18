@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllTopLinks,
+  fetchCategoryWiseBookmarks,
   orderBookmarks,
   removeTopLink
 } from "../redux/slices/bookmarkSlice";
@@ -56,7 +57,6 @@ const MyBookmarks = () => {
   const handleDragOver = (event) => {
     event.preventDefault(); // Required to allow dropping
   };
-
   // When dragged over another item, reorder the list
   const handleDrop = async (itemId) => {
     if (draggedItemId === null || draggedItemId === itemId) return;
@@ -108,7 +108,14 @@ const MyBookmarks = () => {
     const result = await dispatch(orderBookmarks({ token, order }));
     if (orderBookmarks.fulfilled.match(result)) {
       toast.success(result.payload || "Bookmarks re-arranged successfully!");
-      await dispatch(fetchAllTopLinks(token));
+      if(id?.categoryId) {
+        let categoryId = id?.categoryId;
+        let subCategoryId = id?.subCategoryId;
+        await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
+      }
+      else {
+        await dispatch(fetchAllTopLinks(token));
+      }
     } else {
       toast.error(result.payload || "Failed to re-arrange bookmarks.");
     }

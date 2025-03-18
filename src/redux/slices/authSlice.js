@@ -7,7 +7,6 @@ export const handleLogin = createAsyncThunk(
   "auth/login",
   async ({ values, navigate, loginType }, { rejectWithValue }) => {
     try {
-      console.log(loginType, 'loginType')
       const response = await axios.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
         {
@@ -19,7 +18,7 @@ export const handleLogin = createAsyncThunk(
       console.log(response, 'is hoever')
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
-      let message = response?.message || "";
+      let message = response?.data?.message || "";
       let isLoggedIn =
         response?.data?.data?.token !== undefined ||
         response?.data?.data?.token !== null
@@ -61,7 +60,7 @@ const authSlice = createSlice({
       })
       .addCase(handleLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.isLoggedIn = true;
+        state.isLoggedIn = action.payload.isLoggedIn;
         state.userRole = action.payload.userRole;
         state.token = action.payload.token;
       })
