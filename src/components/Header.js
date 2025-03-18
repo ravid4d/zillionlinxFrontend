@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { callTopLinks } from "../redux/slices/bookmarkSlice";
+import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 
 const Header = ({ setWhichModalOpen }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoggedIn, userRole } = useSelector((state) => state.auth);
+  const { isLoggedIn, userRole, token } = useSelector((state) => state.auth);
 
   const handleLogout = async () => {
     try {
@@ -24,7 +24,7 @@ const Header = ({ setWhichModalOpen }) => {
       <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end gap-x-1">
           <div
-            onClick={() => dispatch(callTopLinks())}
+            onClick={() => {dispatch(callTopLinks()); dispatch(fetchAllTopLinks(token))}}
             className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16 cursor-pointer"
             to={isLoggedIn ? "/bookmarks" : "/bookmarks"}
             aria-label="Brand"

@@ -91,7 +91,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
       }
       closeModal();
     } else {
-      toast.error(result.payload || "Failed to add bookmark.");
+      toast.error(result.payload?.message || "Failed to add bookmark.");
     }
   };
 
@@ -113,7 +113,6 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
       !Array.isArray(urlToBookmark)
         ? urlToBookmark?.record
         : urlToBookmark;
-    // console.log(record, 'hi dear');
     if (record) {
       formik.setFieldValue("url", record?.link);
       formik.setFieldValue("title", record?.title);
