@@ -20,6 +20,8 @@ const MyBookmarks = () => {
     setUrlToBookmark,
     setWhichModalOpen,
     selectedCategory,
+    setSelectedCategory,
+    setSelectedSubCategory,
     selectedSubCategory,
     id,
     setId
@@ -31,7 +33,6 @@ const MyBookmarks = () => {
   const { bookmarks, loading, error, isTopLink } = useSelector(
     (state) => state.bookmark
   );
-
   const [draggedItemId, setDraggedItemId] = useState(null);
 
   useEffect(() => {
@@ -127,11 +128,38 @@ const MyBookmarks = () => {
 
     if (removeTopLink.fulfilled.match(result)) {
       toast.success(result.payload.message || "Top link removed successfully!");
-      await dispatch(fetchAllTopLinks(token));
+      if(id?.categoryId!=="") {
+        let categoryId = id?.categoryId;
+        let subCategoryId = id?.subCategoryId;
+        await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
+      }
+      else {
+        await dispatch(fetchAllTopLinks(token));
+      }
     } else {
       toast.error(result.payload || "Failed to remove top link.");
     }
   };
+
+const {bookmark_addto, bookmark_category, bookmark_subcategory} = useSelector(state=>state.bookmark);
+const { categories } = useSelector((state) => state.category);
+console.log(categories, 'bookmark_addto');
+useEffect(()=>{
+  if(bookmark_addto === "top_link") {
+    dispatch(fetchAllTopLinks(token));
+  }
+  else if(bookmark_addto === "bookmark") {
+    // console.log(bookmark_subcategory, 'bookmark_subcategory')
+    // const category = categories.find(cat => cat.id === bookmark_category);
+    // console.log(category, 'gory')
+    let categoryId = bookmark_category;
+    let subCategoryId = bookmark_subcategory;
+    setSelectedCategory(categoryId)
+    setSelectedSubCategory(subCategoryId)
+    setId(prev=>({...prev, categoryId:categoryId, subCategoryId:subCategoryId}));
+    dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
+  }
+},[bookmark_addto, dispatch, bookmark_category, bookmark_subcategory]);
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -191,6 +219,10 @@ const MyBookmarks = () => {
             </div>
             {/* /************** */}
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
+              {/* {id?.categoryId + 'hi there'}
+              {id?.subCategoryId + 'hi there'}
+              {selectedCategory?.title + 'hi there'} */}
+              {/* {selectedSubCategory?.title + 'hi there'} */}
               <p className="text-[28px] text-dark-blue capitalize mb-5 pt-6">
                 {isTopLink
                   ? "Top Links"
@@ -209,11 +241,14 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
-                {loading ? (
-                  <span className="loader"></span>
-                ) : error ? (
+               
+                {bookmarks?.length ===  0 && error !== null && (
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
-                ) : 
+                )}
+                { 
+                 loading ? (
+                  <span className="loader"></span>
+                ):
                 (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
                     {bookmarks &&
@@ -236,11 +271,13 @@ const MyBookmarks = () => {
                           />
                         </li>
                       ))
-                    ) : (
+                    ) 
+                    : (
                       <li className="col-span-2 text-[22px] text-red-500 mb-5">
                         {bookmarks?.message}No Bookmark Found!
                       </li>
-                    )}
+                    )
+                    }
                   </ul>
                 )}
               </div>

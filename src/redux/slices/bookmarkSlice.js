@@ -93,7 +93,8 @@ export const addNewBookmark = createAsyncThunk(
           }
         }
       );
-      return response?.data?.message;
+      // console.log(response, 'add new');
+      return response?.data;
       // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
       return rejectWithValue({
@@ -175,6 +176,10 @@ const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
     bookmarks: [],
+    bookmark_addto:"",
+    bookmark_category:"",
+    bookmark_subcategory:"",
+    bookmark_message:"",
     isTopLink: true,
     loading: false,
     status: "",
@@ -211,6 +216,7 @@ const bookmarkSlice = createSlice({
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
+        state.bookmarks = []
       })
 
       //Remove Top Links
@@ -248,6 +254,10 @@ const bookmarkSlice = createSlice({
       })
       .addCase(addNewBookmark.fulfilled, (state, action) => {
         state.addBookmarkLoading = false;
+        state.bookmark_addto = action.payload.add_to;
+        state.bookmark_category = action.payload.category_id;
+        state.bookmark_subcategory = action.payload.sub_category_id;
+        state.bookmark_message = action.payload.message;
         // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
       })
       .addCase(addNewBookmark.rejected, (state, action) => {

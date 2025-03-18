@@ -103,6 +103,7 @@ const Layout = () => {
           urlToBookmark={urlToBookmark}
           closeAllModals={closeAllModals}
           openModal={openModal}
+          id={id}
         />
         <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
         <Header
@@ -118,6 +119,8 @@ const Layout = () => {
               setWhichModalOpen,
               selectedSubCategory,
               selectedCategory,
+              setSelectedCategory,
+              setSelectedSubCategory,
               setId,
               id
             }}

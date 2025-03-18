@@ -7,16 +7,17 @@ import Dropdown from "../components/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewBookmark,
-  fetchAllTopLinks
+  fetchAllTopLinks,
+  fetchCategoryWiseBookmarks
 } from "../redux/slices/bookmarkSlice";
 import {
   fetchCategories,
   fetchSubCategories,
   resetSubCategories
 } from "../redux/slices/categorySlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 
-const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
+const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -81,12 +82,19 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
   const handleAddNewBookmark = async (values) => {
     const result = await dispatch(addNewBookmark({ values, token }));
 
+    console.log(result, 'hihihih')
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
-      if (location.pathname === "bookmarks") {
+      let categoryId = result?.payload?.category_id;
+      let subCategoryId = result?.payload?.sub_category_id;
+      // console.log(result?.payload?.category_id, 'id is')
+      if (location.pathname === "/bookmarks" && result?.payload?.category_id !== "" && result?.payload?.addto === "bookmark") {
+        await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}))
+      }
+      else if(location.pathname === "/bookmarks" && result?.payload?.category_id !== "" && result?.payload?.addto === "top_link") {
         await dispatch(fetchAllTopLinks(token));
-      } else {
-        // console.log(values, 'values are');         
+      }
+       else if(location.pathname !== "/bookmarks" && result?.payload?.category_id !== "") {
         navigate("/bookmarks");
       }
       closeModal();
