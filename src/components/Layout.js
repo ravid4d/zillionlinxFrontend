@@ -79,7 +79,7 @@ const Layout = () => {
 
   const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
-  const [urlToBookmark, setUrlToBookmark] = useState("");
+  const [urlToBookmark, setUrlToBookmark] = useState(""||{});
 
   return (
     <div className="app-layout">
@@ -89,7 +89,7 @@ const Layout = () => {
         }`}
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>
-
+      
       <ToastContainer hideProgressBar={true} autoClose={2000} />
       <div className="app-content flex flex-wrap w-full">
         <Login

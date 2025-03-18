@@ -26,7 +26,7 @@ const Header = ({ setWhichModalOpen }) => {
           <div
             onClick={() => dispatch(callTopLinks())}
             className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16 cursor-pointer"
-            to={isLoggedIn ? "/bookmarks" : "/"}
+            to={isLoggedIn ? "/bookmarks" : "/bookmarks"}
             aria-label="Brand"
           >
             <img

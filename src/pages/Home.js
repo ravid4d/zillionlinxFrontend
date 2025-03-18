@@ -78,7 +78,7 @@ const Home = () => {
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-4">
             <div className="col-span-3 lg:col-start-2 lg:col-end-6 lg:pe-10 items">
               <img
-                src="/bookmark-center.jpg"
+                src="/l-t-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Large"
               />
@@ -88,14 +88,14 @@ const Home = () => {
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-6 3xl:gap-10">
             <div className="lg:col-span-2">
               <img
-                src="/bookmark-center.jpg"
+                src="/l-c-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 1"
               />
             </div>
             <div className="lg:col-span-3">
               <img
-                src="/bookmark-center.jpg"
+                src="/l-b-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 2"
               />
@@ -106,7 +106,7 @@ const Home = () => {
         {/* Second Column (Single Large Image) */}
         <div className="lg:row-span-2">
           <img
-            src="/bookmark-center.jpg"
+            src="/center-placeholder.jpg"
             className="shadow-home-bookmark border border-dark-blue/30 rounded-xl lg:rounded-[20px] w-full"
             alt="Middle Large"
           />
@@ -117,14 +117,14 @@ const Home = () => {
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-6 3xl:gap-10 lg:items-end items-center">
             <div className="lg:col-span-3">
               <img
-                src="/bookmark-center.jpg"
+                src="/r-t-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 2"
               />
             </div>
             <div className="lg:col-span-2">
               <img
-                src="/bookmark-center.jpg"
+                src="/r-c-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 1"
               />
@@ -133,7 +133,7 @@ const Home = () => {
           <div className="lg:row-span-1 grid lg:grid-cols-5 gap-4">
             <div className="col-start-1 col-end-5 lg:ps-10">
               <img
-                src="/bookmark-center.jpg"
+                src="/r-b-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Large"
               />
