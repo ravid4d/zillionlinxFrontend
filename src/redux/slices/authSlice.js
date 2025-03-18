@@ -27,7 +27,9 @@ export const handleLogin = createAsyncThunk(
         let navigateTo = loginType === "user" ? "bookmarks" : "admin";
         navigate(`/${navigateTo}`);
       }
-      return { token, message, userRole, isLoggedIn };
+      let user = response?.data?.data?.user;
+      // console.log(response?.data?.data?.user, 'user data');
+      return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -45,14 +47,17 @@ const authSlice = createSlice({
     status:"",
     isLoggedIn: false,
     loading: false,
-    error: null
+    error: null,
+    user:null
   },
   reducers: {
     logout: (state) => {
       state.token = null;
       state.userRole = null;
       state.isLoggedIn = false;
-      localStorage.removeItem("persist:auth"); 
+      state.user = null;
+      localStorage.removeItem("token");
+      // localStorage.removeItem("persist:auth"); 
     }
   },
   extraReducers: (builder) => {
@@ -67,6 +72,7 @@ const authSlice = createSlice({
         state.isLoggedIn = action.payload.isLoggedIn;
         state.userRole = action.payload.userRole;
         state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(handleLogin.rejected, (state, action) => {
         state.loading = false;

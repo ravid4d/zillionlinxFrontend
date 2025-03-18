@@ -24,10 +24,11 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       import("./redux/store").then(({ store }) => {
         store.dispatch(logout());
+        window.location.href = "/";
       });
     }
     return Promise.reject(error);
   }
 );
 
-export default axiosInstance;
+export default axiosInstance; 
