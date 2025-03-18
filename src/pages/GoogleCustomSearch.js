@@ -85,7 +85,6 @@ const handleRightClick = (event, record) => {
     };
 
     const handleOptionClick = (option) => {
-      console.log(contextMenu.record)
       contextMenu.record = { ...contextMenu.record, type:option };
       setUrlToBookmark(contextMenu)
       // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type

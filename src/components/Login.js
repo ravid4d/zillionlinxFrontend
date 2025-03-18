@@ -29,7 +29,6 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             let loginType="user";
             try {
                 const result = await dispatch(handleLogin({ values, navigate, loginType })).unwrap();
-                console.log(result, 'teri'); // Debugging log
                 if (result.message) {
                     toast.success(result.message);
                 } else {

@@ -7,7 +7,6 @@ export const handleRegister = createAsyncThunk(
   "auth/register",
   async (values, { rejectWithValue }) => {
     try {
-      console.log(values, 'values')
       const response = await axios.post(
         registerUrl,
         {

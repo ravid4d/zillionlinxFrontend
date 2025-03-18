@@ -51,7 +51,6 @@ const User = () => {
 
   const handlePagination = async (url) => {
     dispatch(handleUsersPagination({ url, token }));
-    // console.log(response, 'hola dear');
   };
 
   return (

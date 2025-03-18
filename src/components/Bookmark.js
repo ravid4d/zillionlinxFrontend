@@ -35,7 +35,6 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
 
   return (
     <>
-    {console.log(item, 'ii')}
       <span
         className={`bg-whtie relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30`}
       >

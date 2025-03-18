@@ -38,7 +38,6 @@ export const removeTopLink = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(topLinkId, 'topLinkId');
       return topLinkId; // Return the ID to remove it from state
     } catch (error) {
       return rejectWithValue({
@@ -204,7 +203,6 @@ const bookmarkSlice = createSlice({
       })
       .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(state, action.payload?.bookmarks, 'hi dearhow are you')
         state.bookmarks = action.payload.bookmarks;
         state.status = action.payload.status;
         state.isTopLink = true;
@@ -233,11 +231,8 @@ const bookmarkSlice = createSlice({
       })
       .addCase(fetchCategoryWiseBookmarks.fulfilled, (state, action) => {
         state.loading = false;
-        let payload =
-          action.payload?.bookmarks?.length === 0
-            ? { bookmarks: [], message: action.payload?.message }
-            : action.payload;
-        state.bookmarks = payload?.bookmarks;
+        state.bookmarks = action.payload?.bookmarks;
+        // state.message =  action.payload?.bookmarks?.length === 0 && action.payload?.message
         state.isTopLink = false;
       })
       .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {

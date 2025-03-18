@@ -55,7 +55,6 @@ export const getAdminCategory = createAsyncThunk(
   "admin/getAdminCategory",
   async (token, { rejectWithValue }) => {
     try {
-        console.log('inside');
       const response = await axiosInstance.get(categoryUrl, {
         headers: {
           Authorization: `Bearer ${token}`

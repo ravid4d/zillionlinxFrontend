@@ -25,8 +25,7 @@ const MyBookmarks = () => {
     setId
   } = useOutletContext();
 
-  const dispatch = useDispatch();
-  
+  const dispatch = useDispatch();  
 
   const { token } = useSelector((state) => state.auth);
   const { bookmarks, loading, error, isTopLink } = useSelector(
@@ -209,13 +208,13 @@ const MyBookmarks = () => {
                   </span>
                 ) : null}
               </p>
-              {console.log(bookmarks, 's')}
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
                 {loading ? (
                   <span className="loader"></span>
-                ) : bookmarks?.length === 0 && error ? (
+                ) : error ? (
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
-                ) : (
+                ) : 
+                (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
                     {bookmarks &&
                     bookmarks?.length > 0 ? (
@@ -239,7 +238,7 @@ const MyBookmarks = () => {
                       ))
                     ) : (
                       <li className="col-span-2 text-[22px] text-red-500 mb-5">
-                        {bookmarks?.message}
+                        {bookmarks?.message}No Bookmark Found!
                       </li>
                     )}
                   </ul>

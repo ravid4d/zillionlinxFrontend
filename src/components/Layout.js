@@ -109,6 +109,7 @@ const Layout = () => {
           setWhichModalOpen={setWhichModalOpen}
           sidebar={sidebar}
           hideSidebar={hideSidebar}
+          id={id}
         />
         <div className="w-full content-area">
           <Outlet

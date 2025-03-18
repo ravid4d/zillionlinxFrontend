@@ -1,12 +1,13 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 
-const Header = ({ setWhichModalOpen }) => {
+const Header = ({ setWhichModalOpen, id }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { isLoggedIn, userRole, token } = useSelector((state) => state.auth);
 
@@ -19,14 +20,27 @@ const Header = ({ setWhichModalOpen }) => {
       toast.error("Logout failed! Please try again.");
     }
   };
+  const redirectTo = () => {
+    if (isLoggedIn && location.pathname === "/bookmarks" && id?.categoryId !== null) {
+      dispatch(callTopLinks());
+      dispatch(fetchAllTopLinks(token));
+    } else if(isLoggedIn && location.pathname !== "/bookmarks") {
+      navigate('/bookmarks');
+    }
+    else {
+      if(!isLoggedIn) {
+        navigate('/')
+      }
+    }
+  };
   return (
     <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-40 w-full">
       <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end gap-x-1">
           <div
-            onClick={() => {dispatch(callTopLinks()); dispatch(fetchAllTopLinks(token))}}
+            onClick={redirectTo}
             className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16 cursor-pointer"
-            to={isLoggedIn ? "/bookmarks" : "/bookmarks"}
+            // to={isLoggedIn ? "/bookmarks" : "/bookmarks"}
             aria-label="Brand"
           >
             <img
