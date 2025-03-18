@@ -90,7 +90,7 @@ const Layout = () => {
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>
       
-      <ToastContainer hideProgressBar={true} autoClose={2000} />
+      <ToastContainer hideProgressBar={true} autoClose={1000} />
       <div className="app-content flex flex-wrap w-full">
         <Login
           closeAllModals={closeAllModals}

@@ -14,7 +14,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const navigate = useNavigate();
     const { loading, error } = useSelector((state) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
-   
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -28,13 +28,16 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
         onSubmit: async(values) => {
             let loginType="user";
             try {
-                const result = await dispatch(handleLogin({ values, navigate, loginType })).unwrap();
-                if (result.message) {
-                    toast.success(result.message);
-                } else {
-                    toast.success("Login successfully!");
-                }
+                const result = await dispatch(handleLogin({ values, loginType })).unwrap();
+                // if (result?.message!=="") {
+                //     toast.success(result?.message);
+                // } else {
+                //     toast.success("Login successfully!");
+                // }
                 closeModal();    
+                // setTimeout(()=>{
+                    navigate('/bookmarks')
+                // },1000)
             } catch (error) {
                 toast.error(error || "Login failed!");
             }

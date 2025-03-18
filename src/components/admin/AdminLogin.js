@@ -26,10 +26,11 @@ const AdminLogin = () => {
         }),
         onSubmit: async(values) => {
             let loginType="admin";
-            const result = await dispatch(handleLogin({values, navigate, loginType}));
+            const result = await dispatch(handleLogin({values, loginType})).unwrap();
             if (handleLogin.fulfilled.match(result)) {
                 formik.resetForm();
                 toast.success(result.payload.message || "Login successfully!")
+                navigate('/admin');
               } else {
                 toast.error(result.payload || "Login failed!");
               }

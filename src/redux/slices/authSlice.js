@@ -5,7 +5,7 @@ const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async ({ values, navigate, loginType }, { rejectWithValue }) => {
+  async ({ values, loginType }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
@@ -23,10 +23,10 @@ export const handleLogin = createAsyncThunk(
         response?.data?.data?.token !== null
           ? !!response?.data?.data?.token
           : false;
-      if (token !== undefined) {
-        let navigateTo = loginType === "user" ? "bookmarks" : "admin";
-        navigate(`/${navigateTo}`);
-      }
+      // if (token !== undefined) {
+      //   let navigateTo = loginType === "user" ? "bookmarks" : "admin";
+      //   navigate(`/${navigateTo}`);
+      // }
       let user = response?.data?.data?.user;
       // console.log(response?.data?.data?.user, 'user data');
       return { token, message, userRole, isLoggedIn, user };
@@ -56,8 +56,8 @@ const authSlice = createSlice({
       state.userRole = null;
       state.isLoggedIn = false;
       state.user = null;
-      localStorage.removeItem("token");
-      // localStorage.removeItem("persist:auth"); 
+      // localStorage.removeItem("token");
+      localStorage.removeItem("persist:auth"); 
     }
   },
   extraReducers: (builder) => {
