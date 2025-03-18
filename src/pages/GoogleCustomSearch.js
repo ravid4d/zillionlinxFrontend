@@ -96,21 +96,6 @@ const handleRightClick = (event, record) => {
     setContextMenu(null);
     setWhichModalOpen("newBookmark");
 };
-//   // Hide menu when clicking elsewhere
-//   const handleClick = () => {
-//     setMenu({ ...menu, visible: false });
-//   };
-//   const handleOptionClick = (option) => {
-//     setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
-//     setShowDetailModal(true); // Show second modal
-//     setContextMenu(null); // Close context menu
-// };
-//   useEffect(() => {
-//     document.addEventListener("click", handleClick);
-//     return () => {
-//       document.removeEventListener("click", handleClick);
-//     };
-//   }, []);
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
