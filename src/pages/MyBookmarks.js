@@ -26,13 +26,19 @@ const MyBookmarks = () => {
     setId
   } = useOutletContext();
 
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
 
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
-  const { bookmarks, loading, error, isTopLink, bookmark_addto, bookmark_category, bookmark_subcategory } = useSelector(
-    (state) => state.bookmark
-  );
+  const {
+    bookmarks,
+    loading,
+    error,
+    isTopLink,
+    bookmark_addto,
+    bookmark_category,
+    bookmark_subcategory
+  } = useSelector((state) => state.bookmark);
   const [draggedItemId, setDraggedItemId] = useState(null);
 
   useEffect(() => {
@@ -45,9 +51,10 @@ const MyBookmarks = () => {
         // toast.error(result.payload || "Failed to fetch Top Links!");
       }
     };
-    if (token && bookmark_addto === "") {
+    // console.log("inside", bookmark_addto);
+    if (token && (bookmark_addto === "top_link" || bookmark_addto === "")) {
       fetchData();
-    }    
+    }
   }, [dispatch, token, bookmark_addto]);
 
   // When drag starts, store the item's index
@@ -60,14 +67,11 @@ const MyBookmarks = () => {
   };
   // When dragged over another item, reorder the list
   const handleDrop = async (itemId) => {
-    console.log(itemId, 'hiiii')
     if (draggedItemId === null || draggedItemId === itemId) return;
 
-    console.log(bookmarks, 'bookmarks')
+    console.log(bookmarks, "bookmarks");
     // Ensure bookmarks.bookmarks is an array
-    const newItems = Array.isArray(bookmarks)
-      ? [...bookmarks]
-      : [];
+    const newItems = Array.isArray(bookmarks) ? [...bookmarks] : [];
 
     // Separate pinned and unpinned bookmarks
     const pinnedBookmarks = newItems.filter((item) => item.pinned === 1);
@@ -111,12 +115,13 @@ const MyBookmarks = () => {
     const result = await dispatch(orderBookmarks({ token, order }));
     if (orderBookmarks.fulfilled.match(result)) {
       toast.success(result.payload || "Bookmarks re-arranged successfully!");
-      if(id?.categoryId) {
+      if (id?.categoryId) {
         let categoryId = id?.categoryId;
         let subCategoryId = id?.subCategoryId;
-        await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
-      }
-      else {
+        await dispatch(
+          fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
+        );
+      } else {
         await dispatch(fetchAllTopLinks(token));
       }
     } else {
@@ -129,12 +134,13 @@ const MyBookmarks = () => {
     const result = await dispatch(removeTopLink({ token, topLinkId }));
     if (removeTopLink.fulfilled.match(result)) {
       toast.success(result.payload.message || "Top link removed successfully!");
-      if(id?.categoryId!==null) {
+      if (id?.categoryId !== null) {
         let categoryId = id?.categoryId;
         let subCategoryId = id?.subCategoryId;
-        await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
-      }
-      else {
+        await dispatch(
+          fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
+        );
+      } else {
         await dispatch(fetchAllTopLinks(token));
       }
     } else {
@@ -142,24 +148,29 @@ const MyBookmarks = () => {
     }
   };
 
+  useEffect(() => {
+    if (bookmark_addto === "top_link") {
+      dispatch(fetchAllTopLinks(token));
+    } else if (bookmark_addto === "bookmark") {
+      let categoryId = bookmark_category;
+      let subCategoryId = bookmark_subcategory?bookmark_subcategory:"";
+      const category = categories.find((cat) => cat.id === bookmark_category);
 
+      const subCategry = category?.subcategories?.find(
+        (subCategory) => bookmark_subcategory ? subCategory?.id === bookmark_subcategory : ""
+      );
+      setSelectedCategory(category);
+      setSelectedSubCategory(subCategry);
 
-useEffect(()=>{
-  if(bookmark_addto === "top_link") {
-    dispatch(fetchAllTopLinks(token));
-  }
-  else if(bookmark_addto === "bookmark") {
-    let categoryId = bookmark_category;
-    let subCategoryId = bookmark_subcategory;
-    const category = categories.find(cat => cat.id === bookmark_category);
-    const subCategry = category?.subcategories?.find((subCategory) => subCategory?.id === bookmark_subcategory);
-    setSelectedCategory(category);
-    setSelectedSubCategory(subCategry);
-
-    setId(prev=>({...prev, categoryId:categoryId, subCategoryId:subCategoryId}));
-    dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
-  }
-},[bookmark_addto]);
+      setId({
+        categoryId: categoryId,
+        subCategoryId: subCategoryId
+      });
+      dispatch(
+        fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
+      );
+    }
+  }, [bookmark_addto]);
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -206,7 +217,7 @@ useEffect(()=>{
             aria-label="Sidebar"
           >
             <Searchbar />
-            <Sidebar setId={setId} />
+            <Sidebar setId={setId} id={id} />
           </div>
 
           <div className="bookmark-content-wrapper">
@@ -236,27 +247,23 @@ useEffect(()=>{
                 ) : null}
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
-               
-                {bookmarks?.length ===  0 && error !== null && (
+                {bookmarks?.length === 0 && error !== null && (
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 )}
-                { 
-                 loading ? (
+                {loading ? (
                   <span className="loader"></span>
-                ):
-                (
+                ) : (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
-                    {bookmarks &&
-                    bookmarks?.length > 0 ? (
+                    {bookmarks && bookmarks?.length > 0 ? (
                       bookmarks?.map((bookmark, index) => (
                         <li
-                        key={bookmark?.id}
-                        draggable
-                        onDragStart={() => handleDragStart(bookmark?.id)}
-                        onDragOver={handleDragOver}
-                        onDrop={() => handleDrop(bookmark.id)}
-                        className="relative"
-                        style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
+                          key={bookmark?.id}
+                          draggable
+                          onDragStart={() => handleDragStart(bookmark?.id)}
+                          onDragOver={handleDragOver}
+                          onDrop={() => handleDrop(bookmark.id)}
+                          className="relative"
+                          style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
                         >
                           <Bookmark
                             item={bookmark}
@@ -267,13 +274,11 @@ useEffect(()=>{
                           />
                         </li>
                       ))
-                    ) 
-                    : (
+                    ) : (
                       <li className="col-span-2 text-[22px] text-red-500 mb-5">
                         {bookmarks?.message}No Bookmark Found!
                       </li>
-                    )
-                    }
+                    )}
                   </ul>
                 )}
               </div>
