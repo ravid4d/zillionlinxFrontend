@@ -30,7 +30,8 @@ const MyBookmarks = () => {
   const dispatch = useDispatch();  
 
   const { token } = useSelector((state) => state.auth);
-  const { bookmarks, loading, error, isTopLink } = useSelector(
+  const { categories } = useSelector((state) => state.category);
+  const { bookmarks, loading, error, isTopLink, bookmark_addto, bookmark_category, bookmark_subcategory } = useSelector(
     (state) => state.bookmark
   );
   const [draggedItemId, setDraggedItemId] = useState(null);
@@ -45,10 +46,10 @@ const MyBookmarks = () => {
         // toast.error(result.payload || "Failed to fetch Top Links!");
       }
     };
-    if (token ) {
+    if (token && bookmark_addto === "") {
       fetchData();
     }    
-  }, [dispatch, token]);
+  }, [dispatch, token, bookmark_addto]);
 
   // When drag starts, store the item's index
   const handleDragStart = (itemId) => {
@@ -141,25 +142,24 @@ const MyBookmarks = () => {
     }
   };
 
-const {bookmark_addto, bookmark_category, bookmark_subcategory} = useSelector(state=>state.bookmark);
-const { categories } = useSelector((state) => state.category);
-console.log(categories, 'bookmark_addto');
+
+
 useEffect(()=>{
   if(bookmark_addto === "top_link") {
     dispatch(fetchAllTopLinks(token));
   }
   else if(bookmark_addto === "bookmark") {
-    // console.log(bookmark_subcategory, 'bookmark_subcategory')
-    // const category = categories.find(cat => cat.id === bookmark_category);
-    // console.log(category, 'gory')
     let categoryId = bookmark_category;
     let subCategoryId = bookmark_subcategory;
-    setSelectedCategory(categoryId)
-    setSelectedSubCategory(subCategoryId)
+    const category = categories.find(cat => cat.id === bookmark_category);
+    const subCategry = category?.subcategories?.find((subCategory) => subCategory?.id === bookmark_subcategory);
+    setSelectedCategory(category);
+    setSelectedSubCategory(subCategry);
+
     setId(prev=>({...prev, categoryId:categoryId, subCategoryId:subCategoryId}));
     dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
   }
-},[bookmark_addto, dispatch, bookmark_category, bookmark_subcategory]);
+},[bookmark_addto]);
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -81,21 +81,27 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
 
   const handleAddNewBookmark = async (values) => {
     const result = await dispatch(addNewBookmark({ values, token }));
-
-    console.log(result, 'hihihih')
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
       let categoryId = result?.payload?.category_id;
       let subCategoryId = result?.payload?.sub_category_id;
-      // console.log(result?.payload?.category_id, 'id is')
-      if (location.pathname === "/bookmarks" && result?.payload?.category_id !== "" && result?.payload?.addto === "bookmark") {
-        await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}))
+
+      if(location?.pathname === "/bookmarks") {
+        if(result?.payload?.addto === "bookmark") {
+          await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}))
+        }
+        if(result?.payload?.addto === "top_link") {
+          await dispatch(fetchAllTopLinks(token));
+        }
       }
-      else if(location.pathname === "/bookmarks" && result?.payload?.category_id !== "" && result?.payload?.addto === "top_link") {
-        await dispatch(fetchAllTopLinks(token));
-      }
-       else if(location.pathname !== "/bookmarks" && result?.payload?.category_id !== "") {
-        navigate("/bookmarks");
+      else {
+        navigate("/bookmarks", {
+          state: {
+              categoryId: result?.payload?.category_id,
+              subCategoryId: result?.payload?.sub_category_id,
+              addTo: result?.payload?.addto
+          }
+      });
       }
       closeModal();
     } else {

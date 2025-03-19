@@ -209,6 +209,7 @@ const handleRightClick = (event, record) => {
                               bookmarks?.map((result, index) => {
                                 return (
                                   <li key={index} className="relative">
+                                    {/* {result.icon_path} */}
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
                                         className="min-h-[85px] block"
