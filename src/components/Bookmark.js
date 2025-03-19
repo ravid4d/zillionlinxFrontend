@@ -42,7 +42,7 @@ const Bookmark = ({
         className={`bg-whtie relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30`}
       >
         <span
-          className={`pin-icon w-6 h-6 rounded-full ${
+          className={`pin-icon w-6 h-6 rounded-full z-30 ${
             item?.pinned ? "bg-dark-blue" : "bg-light-blue"
           } flex flex-wrap items-center justify-center cursor-pointer absolute left-2 top-2`}
         >
@@ -75,9 +75,11 @@ const Bookmark = ({
         <Link
           target="_blank"
           to={item?.website_url}
-          className="min-h-[208px] block"
+          className="relative w-full block"
         >
-          <img src={item?.icon_path} alt="" className="w-full" />
+          <div className="w-full aspect-[16/9]">
+          <img src={item?.icon_path} alt="" className="w-full h-full object-cover rounded-lg" />
+          </div>
         </Link>
 
         <Link target="_blank" to={item?.website_url}>

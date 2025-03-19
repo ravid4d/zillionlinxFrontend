@@ -253,7 +253,8 @@ const MyBookmarks = () => {
                 {loading ? (
                   <span className="loader"></span>
                 ) : (
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
+                  // <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-7">
                     {bookmarks && bookmarks?.length > 0 ? (
                       bookmarks?.map((bookmark, index) => (
                         <li
