@@ -5,7 +5,7 @@ import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 
-const Header = ({ setWhichModalOpen, id }) => {
+const Header = ({ setWhichModalOpen, id, setId }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -21,7 +21,8 @@ const Header = ({ setWhichModalOpen, id }) => {
     }
   };
   const redirectTo = () => {
-    if (isLoggedIn && location.pathname === "/bookmarks" && id?.categoryId !== null) {
+    if (isLoggedIn && location.pathname === "/bookmarks") {
+      setId({categoryId:null, subCategoryId:null});
       dispatch(callTopLinks());
       dispatch(fetchAllTopLinks(token));
     } else if(isLoggedIn && location.pathname !== "/bookmarks") {

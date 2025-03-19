@@ -111,6 +111,7 @@ const Layout = () => {
           sidebar={sidebar}
           hideSidebar={hideSidebar}
           id={id}
+          setId={setId}
         />
         <div className="w-full content-area">
           <Outlet

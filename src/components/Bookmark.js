@@ -1,37 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchAllTopLinks, fetchCategoryWiseBookmarks, pinBookmark } from "../redux/slices/bookmarkSlice";
+import {  disabledTopLinks, fetchAllTopLinks, fetchCategoryWiseBookmarks, pinBookmark } from "../redux/slices/bookmarkSlice";
 import { toast } from "react-toastify";
 
 
-const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
+const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId, setId }) => {
   const { token } = useSelector((state) => state.auth);
-  const { isTopLink } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
 
   const addToPin = async (bookmarkId) => {
     const result = await dispatch(pinBookmark({ bookmarkId, token }));
     if (pinBookmark.fulfilled.match(result)) {
       toast.success(result.payload || "Bookmark pinned successfully!");
-      await dispatch(fetchAllTopLinks(token));
     } else {
       toast.error(result.payload || "Failed to pin bookmark.");
     }
     if(categoryId !== null && subCategoryId !== null) {
+      dispatch(disabledTopLinks());
       await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
     }
     else {
       await dispatch(fetchAllTopLinks(token))
     }
   };
-
-  // useEffect(()=>{
-  //   if(isTopLink) {
-  //     console.log('hi')
-  //     dispatch(fetchAllTopLinks(token))
-  //   }
-  // },[isTopLink, dispatch])
 
   return (
     <>
@@ -66,11 +58,7 @@ const Bookmark = ({ item, handleRemoveItem, categoryId, subCategoryId }) => {
           </label>
         </span>
         <Link target="_blank" to={item?.website_url} className="min-h-[208px] block">
-          {/* <img
-            src={process.env.REACT_APP_API_URL + "/" + item?.icon_path}
-            alt=""
-            className="w-full"
-          /> */}
+        {item?.id}
           <img
             src={item?.icon_path}
             alt=""

@@ -13,7 +13,6 @@ import GoogleSearchbar from "../components/GoogleSearchbar";
 import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
-import { logout } from "../redux/slices/authSlice";
 
 const MyBookmarks = () => {
   const {
@@ -61,11 +60,13 @@ const MyBookmarks = () => {
   };
   // When dragged over another item, reorder the list
   const handleDrop = async (itemId) => {
+    console.log(itemId, 'hiiii')
     if (draggedItemId === null || draggedItemId === itemId) return;
 
+    console.log(bookmarks, 'bookmarks')
     // Ensure bookmarks.bookmarks is an array
-    const newItems = Array.isArray(bookmarks?.bookmarks)
-      ? [...bookmarks.bookmarks]
+    const newItems = Array.isArray(bookmarks)
+      ? [...bookmarks]
       : [];
 
     // Separate pinned and unpinned bookmarks
@@ -126,10 +127,9 @@ const MyBookmarks = () => {
   // Remove Bookmark
   const handleRemoveItem = async (topLinkId) => {
     const result = await dispatch(removeTopLink({ token, topLinkId }));
-
     if (removeTopLink.fulfilled.match(result)) {
       toast.success(result.payload.message || "Top link removed successfully!");
-      if(id?.categoryId!=="") {
+      if(id?.categoryId!==null) {
         let categoryId = id?.categoryId;
         let subCategoryId = id?.subCategoryId;
         await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}));
@@ -217,12 +217,7 @@ useEffect(()=>{
               />
               <GoogleSearchbar />
             </div>
-            {/* /************** */}
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
-              {/* {id?.categoryId + 'hi there'}
-              {id?.subCategoryId + 'hi there'}
-              {selectedCategory?.title + 'hi there'} */}
-              {/* {selectedSubCategory?.title + 'hi there'} */}
               <p className="text-[28px] text-dark-blue capitalize mb-5 pt-6">
                 {isTopLink
                   ? "Top Links"
@@ -268,6 +263,7 @@ useEffect(()=>{
                             handleRemoveItem={handleRemoveItem}
                             categoryId={id?.categoryId}
                             subCategoryId={id?.subCategoryId}
+                            setId={setId}
                           />
                         </li>
                       ))

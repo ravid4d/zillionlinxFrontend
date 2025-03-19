@@ -198,6 +198,9 @@ const bookmarkSlice = createSlice({
   reducers: {
     callTopLinks: (state) => {
       state.isTopLink = true;
+    },
+    disabledTopLinks:(state)=>{
+      state.isTopLink = false;
     }
   },
   extraReducers: (builder) => {
@@ -317,5 +320,5 @@ const bookmarkSlice = createSlice({
       });
   }
 });
-export const { callTopLinks } = bookmarkSlice.actions;
+export const { callTopLinks, disabledTopLinks } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
