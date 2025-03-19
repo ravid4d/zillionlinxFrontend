@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  callTopLinks,
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
   orderBookmarks,
@@ -43,6 +44,7 @@ const MyBookmarks = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(callTopLinks());
       let result = await dispatch(fetchAllTopLinks(token));
       if (fetchAllTopLinks.fulfilled.match(result)) {
         //Do not need to show success message using toast while getting data on load
@@ -276,9 +278,10 @@ const MyBookmarks = () => {
                         </li>
                       ))
                     ) : (
-                      <li className="col-span-2 text-[22px] text-red-500 mb-5">
-                        {bookmarks?.message}No Bookmark Found!
-                      </li>
+                      <></>
+                      // <li className="col-span-2 text-[22px] text-red-500 mb-5">
+                      //   {bookmarks?.message}No Bookmark Found!
+                      // </li>
                     )}
                   </ul>
                 )}
