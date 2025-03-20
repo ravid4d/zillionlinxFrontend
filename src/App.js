@@ -3,6 +3,8 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import MyBookmarks from './pages/MyBookmarks';
 import About from './pages/About';
+import UserAgreement from './pages/UserAgreement';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Dashboard from './pages/admin/Dashboard';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -24,6 +26,8 @@ function App() {
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/user-agreement" element={<UserAgreement />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Route>
 
                 {/* Unauthorized Page - Rendered Independently */}
