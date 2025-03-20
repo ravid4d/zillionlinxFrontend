@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -28,7 +28,11 @@ const MyBookmarks = () => {
   } = useOutletContext();
 
   const dispatch = useDispatch();
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const loginMessage = location?.state?.loginMessage
+    ? location?.state?.loginMessage
+    : "";
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
   const {
@@ -40,20 +44,21 @@ const MyBookmarks = () => {
     bookmark_category,
     bookmark_subcategory
   } = useSelector((state) => state.bookmark);
+
   const [draggedItemId, setDraggedItemId] = useState(null);
+
+  useEffect(() => {
+    if (loginMessage) {
+      toast.success(loginMessage);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [loginMessage]);
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch(callTopLinks());
-      let result = await dispatch(fetchAllTopLinks(token));
-      if (fetchAllTopLinks.fulfilled.match(result)) {
-        //Do not need to show success message using toast while getting data on load
-        // toast.success(result.payload.message || "Categories fetched successfully!")
-      } else {
-        // toast.error(result.payload || "Failed to fetch Top Links!");
-      }
+      await dispatch(fetchAllTopLinks(token));
     };
-    // console.log("inside", bookmark_addto);
     if (token && (bookmark_addto === "top_link" || bookmark_addto === "")) {
       fetchData();
     }
@@ -65,8 +70,9 @@ const MyBookmarks = () => {
   };
 
   const handleDragOver = (event) => {
-    event.preventDefault(); // Required to allow dropping
+    event.preventDefault();
   };
+
   // When dragged over another item, reorder the list
   const handleDrop = async (itemId) => {
     if (draggedItemId === null || draggedItemId === itemId) return;
@@ -112,7 +118,6 @@ const MyBookmarks = () => {
 
     // Generate the order array for API
     const order = updatedBookmarks.map((item) => item.id);
-    // console.log(order, "New Order Array");
 
     const result = await dispatch(orderBookmarks({ token, order }));
     if (orderBookmarks.fulfilled.match(result)) {
@@ -155,11 +160,11 @@ const MyBookmarks = () => {
       dispatch(fetchAllTopLinks(token));
     } else if (bookmark_addto === "bookmark") {
       let categoryId = bookmark_category;
-      let subCategoryId = bookmark_subcategory?bookmark_subcategory:"";
+      let subCategoryId = bookmark_subcategory ? bookmark_subcategory : "";
       const category = categories.find((cat) => cat.id === bookmark_category);
 
-      const subCategry = category?.subcategories?.find(
-        (subCategory) => bookmark_subcategory ? subCategory?.id === bookmark_subcategory : ""
+      const subCategry = category?.subcategories?.find((subCategory) =>
+        bookmark_subcategory ? subCategory?.id === bookmark_subcategory : ""
       );
       setSelectedCategory(category);
       setSelectedSubCategory(subCategry);
@@ -176,43 +181,16 @@ const MyBookmarks = () => {
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      <button
-        type="button"
-        className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
-        aria-haspopup="dialog"
-        aria-expanded="false"
-        aria-controls="hs-application-sidebar"
-        aria-label="Toggle navigation"
-        data-hs-overlay="#hs-application-sidebar"
-      >
-        <span className="sr-only">Toggle Navigation</span>
-        <svg
-          className="shrink-0 size-4"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect width="18" height="18" x="3" y="3" rx="2" />
-          <path d="M15 3v18" />
-          <path d="m8 9 3 3-3 3" />
-        </svg>
-      </button>
       <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
-        <div className="flex flex-wrap lg:space-x-8">
+        <div className="flex flex-wrap xl:space-x-8">
           <div
             id="hs-application-sidebar"
             className={`
                 bookmark-sidebar-wrapper    
-                hs-overlay [--auto-close:lg]
+                hs-overlay [--auto-close:xl]
                 hs-overlay-open:translate-x-0         
-                -translate-x-full lg:translate-x-0 transition-all duration-300 transform
-                fixed lg:relative inset-y-0 start-0 z-[40] lg:block
+                -translate-x-full xl:translate-x-0 transition-all duration-300 transform
+                fixed xl:relative inset-y-0 start-0 z-[40] xl:block
             `}
             role="dialog"
             tabIndex="-1"
@@ -224,10 +202,39 @@ const MyBookmarks = () => {
 
           <div className="bookmark-content-wrapper">
             <div className="flex flex-wrap items-center justify-between">
-              <AddNewBookmarkField
-                setWhichModalOpen={setWhichModalOpen}
-                setUrlToBookmark={setUrlToBookmark}
-              />
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  className="mb-4 size-8 xl:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  aria-controls="hs-application-sidebar"
+                  aria-label="Toggle navigation"
+                  data-hs-overlay="#hs-application-sidebar"
+                >
+                  <span className="sr-only">Toggle Navigation</span>
+                  <svg
+                    className="shrink-0 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M15 3v18" />
+                    <path d="m8 9 3 3-3 3" />
+                  </svg>
+                </button>
+                <AddNewBookmarkField
+                  setWhichModalOpen={setWhichModalOpen}
+                  setUrlToBookmark={setUrlToBookmark}
+                />
+              </div>
               <GoogleSearchbar />
             </div>
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
@@ -249,13 +256,11 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
-                {bookmarks?.length === 0 && error !== null && (
-                  <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
-                )}
                 {loading ? (
                   <span className="loader"></span>
+                ) : bookmarks?.length === 0 && error !== null ? (
+                  <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 ) : (
-                  // <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-7">
                   <ul className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-7">
                     {bookmarks && bookmarks?.length > 0 ? (
                       bookmarks?.map((bookmark, index) => (
@@ -279,9 +284,6 @@ const MyBookmarks = () => {
                       ))
                     ) : (
                       <></>
-                      // <li className="col-span-2 text-[22px] text-red-500 mb-5">
-                      //   {bookmarks?.message}No Bookmark Found!
-                      // </li>
                     )}
                   </ul>
                 )}

@@ -14,23 +14,23 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
   const handleLogout = async () => {
     try {
       await dispatch(logout());
-      toast.success("You have been logged out successfully!");
-      navigate("/");
+      navigate("/", {
+        state: { loginMessage: "You have been logged out successfully!" }
+      });
     } catch (error) {
       toast.error("Logout failed! Please try again.");
     }
   };
   const redirectTo = () => {
     if (isLoggedIn && location.pathname === "/bookmarks") {
-      setId({categoryId:null, subCategoryId:null});
+      setId({ categoryId: null, subCategoryId: null });
       dispatch(callTopLinks());
       dispatch(fetchAllTopLinks(token));
-    } else if(isLoggedIn && location.pathname !== "/bookmarks") {
-      navigate('/bookmarks');
-    }
-    else {
-      if(!isLoggedIn) {
-        navigate('/')
+    } else if (isLoggedIn && location.pathname !== "/bookmarks") {
+      navigate("/bookmarks");
+    } else {
+      if (!isLoggedIn) {
+        navigate("/");
       }
     }
   };
@@ -40,8 +40,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={redirectTo}
-            className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16 cursor-pointer"
-            // to={isLoggedIn ? "/bookmarks" : "/bookmarks"}
+            className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-14 xl:h-16 cursor-pointer"
             aria-label="Brand"
           >
             <img
@@ -151,18 +150,31 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                         </svg>
                       </Link>
                     </div>
-                    <div className="my-2 md:my-0 md:mx-4">
+                    <div className="my-2 md:my-0 mx-2 2xl:mx-4">
                       <div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div>
                     </div>
                   </>
                 ) : null}
                 {isLoggedIn ? (
                   <>
-                    {/* aria-haspopup="dialog" aria-expanded="false" aria-controls="add-category-modal" data-hs-overlay="#add-category-modal" */}
-                    {/*} <button className="btn light-btn" onClick={() => setWhichModalOpen('newCategory')}>Add New Category</button>*/}
-                    <button className="btn dark-btn" onClick={handleLogout}>
+                    <button className="btn dark-btn !hidden 2xl:!inline-flex" onClick={handleLogout}>
                       Logout
                     </button>
+                      <svg
+                       onClick={handleLogout}
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="size-6 shrink-0 stroke-dark-blue group-hover:fill-navy block 2xl:hidden"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                        />
+                      </svg>
                     {userRole === "admin" ? (
                       <Link className="btn dark-btn" to="/admin">
                         Dashboard
@@ -298,7 +310,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                   <nav className="flex justify-end ml-3">
                     <Link
                       to="/bookmarks"
-                      className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+                      className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       My Bookmarks
                     </Link>
@@ -308,13 +320,13 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                       onClick={() => {
                         setWhichModalOpen("newBookmark");
                       }}
-                      className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+                      className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       Add New Bookmark
                     </button>
                     <button
                       type="button"
-                      className="px-6 py-5 text-tabs text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+                      className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       Import Bookmarks
                     </button>
