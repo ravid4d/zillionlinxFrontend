@@ -1,14 +1,28 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import Select, { components } from "react-select";
-const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items }) => {
-  
+const Dropdown = ({ id,endpoint, name, label, fieldValue, setFieldValue, items }) => {
+  let itemData = items;
+  // const getCountryList = async() => {
+  //   let response = await axios.get(endpoint);
+  //   itemData = response?.data?.countries;
+  // }
+
+    // if(Array.isArray(items) && items.length===0) {
+    //   getCountryList();
+    // }
+    // else {
+    //   itemData = items;
+    // }
+
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
-    ...items.map(item => ({
+    ...itemData.map(item => ({
       value: item.id,
       label: item.title,
     }))
   ];
+  // console.log(formattedOptions, 'formattedOptions')
 
   const CustomMenuList = (props) => {
     return (

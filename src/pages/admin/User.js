@@ -5,6 +5,7 @@ import {
   handleUsersPagination
 } from "../../redux/slices/userSlice";
 import UserTableData from "./UserTableData";
+import UpdateUser from "../../components/admin/UpdateUser";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,8 @@ const User = () => {
   );
 
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [userToEdit, setUserToEdit] = useState({});
+  const [userToEditModal, setUserToEditModal] = useState(false);
 
   //Select / Unselect all the users
   const handleSelectAllUsers = () => {
@@ -53,6 +56,13 @@ const User = () => {
     dispatch(handleUsersPagination({ url, token }));
   };
 
+  // Open User Edit Modal
+  useEffect(()=>{
+    if(typeof userToEdit === "object" && userToEdit !== null && !Array.isArray(userToEdit) && Object.keys(userToEdit).length > 0) {
+      setUserToEditModal(true);
+    }
+  },[userToEdit])
+
   return (
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -84,75 +94,79 @@ const User = () => {
           </div>
           )} */}
           {users && users?.length > 0 ? (
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-              <thead className="bg-gray-50 dark:bg-neutral-800">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <label
-                      htmlFor="hs-at-with-checkboxes-main"
-                      className="flex"
+            <>
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                <thead className="bg-gray-50 dark:bg-neutral-800">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <label
+                        htmlFor="hs-at-with-checkboxes-main"
+                        className="flex"
+                      >
+                        <input
+                          type="checkbox"
+                          onChange={handleSelectAllUsers}
+                          checked={
+                            selectedUsers.length === users.length &&
+                            users.length > 0
+                          }
+                          className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                          id="hs-at-with-checkboxes-main"
+                        />
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          ID
+                        </span>
+                      </label>
+                    </th>
+
+                    <th
+                      scope="col"
+                      className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
                     >
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAllUsers}
-                        checked={
-                          selectedUsers.length === users.length &&
-                          users.length > 0
-                        }
-                        className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                        id="hs-at-with-checkboxes-main"
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Name
+                        </span>
+                      </div>
+                    </th>
+
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Country
+                        </span>
+                      </div>
+                    </th>
+
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Created
+                        </span>
+                      </div>
+                    </th>
+
+                    <th scope="col" className="px-6 py-3 text-end"></th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
+                  {users?.map((user) => {
+                    return (
+                      <UserTableData
+                        user={user}
+                        key={user?.id}
+                        selectedUsers={selectedUsers}
+                        handleSelectOneUser={handleSelectOneUser}
+                        deleteSingleUser={deleteSingleUser}
+                        setUserToEdit={setUserToEdit}
                       />
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        ID
-                      </span>
-                    </label>
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Name
-                      </span>
-                    </div>
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Country
-                      </span>
-                    </div>
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Created
-                      </span>
-                    </div>
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-end"></th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                {users?.map((user) => {
-                  return (
-                    <UserTableData
-                      user={user}
-                      key={user?.id}
-                      selectedUsers={selectedUsers}
-                      handleSelectOneUser={handleSelectOneUser}
-                      deleteSingleUser={deleteSingleUser}
-                    />
-                  );
-                })}
-              </tbody>
-            </table>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <UpdateUser userToEditModal={userToEditModal} setUserToEditModal={setUserToEditModal} />
+            </>
           ) : null}
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
             <div>
