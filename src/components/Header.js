@@ -35,12 +35,12 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
     }
   };
   return (
-    <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-40 w-full">
-      <nav className="relative max-w-screen-2xl w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8">
+    <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-40 w-full">
+      <nav className="relative max-w-screen-2xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={redirectTo}
-            className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-14 xl:h-16 cursor-pointer"
+            className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 max-w-72 h-14 xl:h-16 cursor-pointer"
             aria-label="Brand"
           >
             <img
@@ -50,7 +50,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
             />
           </div>
 
-          <button
+          {/* <button
             type="button"
             className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-[12px] rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
             id="hs-header-base-collapse"
@@ -91,20 +91,20 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
               <path d="m6 6 12 12" />
             </svg>
             <span className="sr-only">Toggle navigation</span>
-          </button>
+          </button> */}
         </div>
 
         <div
           id="hs-header-base"
-          className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block "
+          className="overflow-hidden transition-all duration-300 basis-full grow block "
           aria-labelledby="hs-header-base-collapse"
         >
           <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
-            <div className="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
-              <div className="md:ms-auto mt-2 md:mt-0 flex flex-wrap items-center gap-x-1.5">
+            <div className="py-2 md:py-0 flex flex-row items-center gap-0.5 md:gap-1">
+              <div className="ms-auto flex flex-wrap items-center gap-x-1.5">
                 {isLoggedIn && userRole === "user" ? (
                   <>
-                    <div className="hs-dropdown relative inline-flex items-center space-x-4">
+                    <div className="hs-dropdown relative inline-flex items-center space-x-2 sm:space-x-4">
                       <Link
                         to="/bookmarks"
                         className="flex flex-wrap items-center group"
@@ -116,7 +116,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                           viewBox="0 0 24 24"
                           strokeWidth={2}
                           stroke="currentColor"
-                          className="size-6 text-dark-blue group-hover:text-navy"
+                          className="size-4 sm:size-6 text-dark-blue group-hover:text-navy"
                         >
                           <path
                             strokeLinecap="round"
@@ -137,7 +137,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                           viewBox="0 0 26 26"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
-                          className="fill-dark-blue group-hover:fill-navy"
+                          className="fill-dark-blue group-hover:fill-navy size-4 sm:size-6"
                         >
                           <g clipPath="url(#clip0_43_71)">
                             <path d="M22.1996 22.7022L18.9902 24.5559C17.9116 25.1789 16.7533 25.4905 15.5954 25.4906C14.4373 25.4906 13.2795 25.1791 12.2007 24.5559L4.90004 20.3419C4.5762 20.1548 4.34439 19.8516 4.24714 19.4882C4.14984 19.1248 4.19931 18.7464 4.38633 18.4227C4.81335 17.6824 5.48432 17.1477 6.27555 16.9174C7.082 16.6826 7.93457 16.7893 8.67613 17.2179L10.7413 18.41L4.36434 7.36445C4.08231 6.87537 4.00801 6.30404 4.15492 5.7555C4.30204 5.20635 4.65263 4.74881 5.14201 4.46702C5.63002 4.18473 6.20161 4.11003 6.75071 4.25709C7.29955 4.40405 7.75745 4.75414 8.04014 5.24286L10.9894 10.3527C11.1527 9.85532 11.4874 9.44201 11.9419 9.18039C12.711 8.73636 13.6463 8.8305 14.3081 9.34527C14.4322 8.78338 14.7822 8.27328 15.3181 7.96387C16.1773 7.46926 17.242 7.64425 17.9027 8.32503C18.0527 7.84982 18.3693 7.45443 18.8018 7.20525C19.258 6.94098 19.7921 6.87065 20.3054 7.00781C20.8193 7.14513 21.2481 7.47317 21.5128 7.93147L24.6858 13.4268C26.5574 16.6704 25.4421 20.8313 22.1996 22.7023V22.7022ZM4.066 2.60447C6.10817 1.42584 8.72864 2.12779 9.90773 4.1695C10.1452 4.58032 10.3116 5.0243 10.4023 5.4891C10.4829 5.902 10.8827 6.1715 11.2958 6.09091C11.7087 6.01037 11.9782 5.61036 11.8976 5.19741C11.7746 4.56656 11.5488 3.96414 11.2268 3.40727C9.62792 0.638574 6.07395 -0.313473 3.30429 1.28507C0.535641 2.88397 -0.416456 6.43795 1.18148 9.20644C1.50313 9.76564 1.91202 10.2624 2.39672 10.6832C2.54089 10.8083 2.71868 10.8696 2.8957 10.8696C3.10873 10.8696 3.32069 10.7807 3.47131 10.6072C3.74705 10.2894 3.71302 9.80835 3.39529 9.53261C3.03931 9.22365 2.73873 8.85833 2.50148 8.44594C1.32285 6.40382 2.0248 3.78336 4.066 2.60452V2.60447Z" />
@@ -150,31 +150,34 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                         </svg>
                       </Link>
                     </div>
-                    <div className="my-2 md:my-0 mx-2 2xl:mx-4">
-                      <div className="w-full h-px md:w-px md:h-4 bg-mid-blue dark:bg-neutral-700"></div>
+                    <div className="mx-1 sm:mx-4">
+                      <div className="w-px h-4 bg-mid-blue"></div>
                     </div>
                   </>
                 ) : null}
                 {isLoggedIn ? (
                   <>
-                    <button className="btn dark-btn !hidden 2xl:!inline-flex" onClick={handleLogout}>
+                    <button
+                      className="btn dark-btn !hidden 2xl:!inline-flex"
+                      onClick={handleLogout}
+                    >
                       Logout
                     </button>
-                      <svg
-                       onClick={handleLogout}
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="size-6 shrink-0 stroke-dark-blue group-hover:fill-navy block 2xl:hidden"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-                        />
-                      </svg>
+                    <svg
+                      onClick={handleLogout}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="size-4 sm:size-6 shrink-0 stroke-dark-blue group-hover:fill-navy block 2xl:hidden"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                      />
+                    </svg>
                     {userRole === "admin" ? (
                       <Link className="btn dark-btn" to="/admin">
                         Dashboard
@@ -205,12 +208,12 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                 )}
               </div>
 
-              <div className="flex justify-end items-center gap-x-1 ms-2">
+              <div className="flex justify-end items-center gap-x-2 ms-2">
                 {userRole === "user" ? (
                   <>
                     <button
                       type="button"
-                      className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                      className="relative size-4 sm:size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                       aria-haspopup="dialog"
                       aria-expanded="false"
                       aria-controls="hs-header-base-offcanvas"
@@ -223,7 +226,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="size-6 shrink-0"
+                        className="size-4 sm:size-6 shrink-0"
                       >
                         <g clipPath="url(#clip0_3_191)">
                           <path
@@ -241,7 +244,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
 
                     <button
                       type="button"
-                      className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                      className="relative size-4 sm:size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                       aria-haspopup="dialog"
                       aria-expanded="false"
                       aria-controls="hs-header-base-offcanvas"
@@ -254,7 +257,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="size-6 shrink-0"
+                        className="size-4 sm:size-6 shrink-0"
                       >
                         <path
                           d="M18.3263 1.90391H21.6998L14.3297 10.3274L23 21.7899H16.2112L10.894 14.8379L4.80995 21.7899H1.43443L9.31744 12.78L1 1.90391H7.96111L12.7674 8.25824L18.3263 1.90391ZM17.1423 19.7707H19.0116L6.94539 3.81704H4.93946L17.1423 19.7707Z"
@@ -264,7 +267,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                     </button>
                     <button
                       type="button"
-                      className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                      className="relative size-4 sm:size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                       aria-haspopup="dialog"
                       aria-expanded="false"
                       aria-controls="hs-header-base-offcanvas"
@@ -277,7 +280,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="size-6 shrink-0"
+                        className="size-4 sm:size-6 shrink-0"
                       >
                         <g clipPath="url(#clip0_55_183)">
                           <path
@@ -307,7 +310,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                   </>
                 ) : null}
                 {isLoggedIn && userRole === "user" ? (
-                  <nav className="flex justify-end ml-3">
+                  <nav className="justify-end ml-3 hidden xl:flex flex-wrap">
                     <Link
                       to="/bookmarks"
                       className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
@@ -337,6 +340,34 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
           </div>
         </div>
       </nav>
+      {isLoggedIn && userRole === "user" ? (
+        <div className="px-4 sm:px-6 lg:px-8 xl:hidden">
+          <nav className="pt-4 bg-navy sm:bg-transparent rounded-tl-[20px] rounded-tr-[20px] flex flex-wrap sm:justify-end xl:hidden">
+            <Link
+              to="/bookmarks"
+              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+            >
+              My Bookmarks
+            </Link>
+            {/* btnRef.current.click(); */}
+            <button
+              type="button"
+              onClick={() => {
+                setWhichModalOpen("newBookmark");
+              }}
+              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+            >
+              Add New Bookmark
+            </button>
+            <button
+              type="button"
+              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+            >
+              Import Bookmarks
+            </button>
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 };

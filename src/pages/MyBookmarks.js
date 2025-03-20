@@ -181,7 +181,7 @@ const MyBookmarks = () => {
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
+      <div className="bg-navy rounded-bl-[20px] rounded-br-[20px] p-8">
         <div className="flex flex-wrap xl:space-x-8">
           <div
             id="hs-application-sidebar"
@@ -238,7 +238,7 @@ const MyBookmarks = () => {
               <GoogleSearchbar />
             </div>
             <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
-              <p className="text-[28px] text-dark-blue capitalize mb-5 pt-6">
+              <p className="text-[28px] text-dark-blue capitalize mb-5">
                 {isTopLink
                   ? "Top Links"
                   : id?.categoryId
@@ -261,7 +261,7 @@ const MyBookmarks = () => {
                 ) : bookmarks?.length === 0 && error !== null ? (
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 ) : (
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-7">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
                     {bookmarks && bookmarks?.length > 0 ? (
                       bookmarks?.map((bookmark, index) => (
                         <li
