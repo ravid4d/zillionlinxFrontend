@@ -29,7 +29,7 @@ export const getParentCategories = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   "admin/deleteUser",
   async ({ ids, token }, { rejectWithValue }) => {
-    try {  alert(ids);
+    try {  
       const response = await axiosInstance.delete(deleteuserUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
