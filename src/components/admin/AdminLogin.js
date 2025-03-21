@@ -26,10 +26,11 @@ const AdminLogin = () => {
         }),
         onSubmit: async(values) => {
             let loginType="admin";
-            const result = await dispatch(handleLogin({values, navigate, loginType}));
+            const result = await dispatch(handleLogin({values, loginType})).unwrap();
             if (handleLogin.fulfilled.match(result)) {
                 formik.resetForm();
                 toast.success(result.payload.message || "Login successfully!")
+                navigate('/admin');
               } else {
                 toast.error(result.payload || "Login failed!");
               }
@@ -37,7 +38,7 @@ const AdminLogin = () => {
     });
   return (
         <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
-             <ToastContainer hideProgressBar={true} autoClose={2000} />
+             {/* <ToastContainer hideProgressBar={true} autoClose={2000} /> */}
             <div className='w-full py-20 px-10'>
                 <div className="flex justify-between items-center">
                     <h3 id="hs-slide-down-animation-modal-label" className="uppercase text-dark-blue text-center w-full text-7xl mb-12">

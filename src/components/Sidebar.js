@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { getToken} from "../services/authService";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../redux/slices/categorySlice';
 
-const Sidebar = ({setId}) => {
+const Sidebar = ({setId, id}) => {
     const dispatch = useDispatch();
 
     const { token } = useSelector((state) => state.auth);
     const {categories, loading} = useSelector(state=>state.category);
+    const {bookmark_addto} = useSelector((state) => state.bookmark);
 
     const [openAccordion, setOpenAccordion] = useState({});
     
@@ -33,8 +32,16 @@ const Sidebar = ({setId}) => {
         setOpenAccordion((prevId) => (prevId === id ? null : id));
     };    
 
+    useEffect(() => {
+        if (id?.categoryId !== "" && bookmark_addto === "bookmark") {
+            const selectedCategory = categories.find(category => category.id === id.categoryId);
+            const hasDropdown = selectedCategory?.subcategories?.length > 0;
+            toggleAccordion(`users-accordion_${id?.categoryId}`, hasDropdown);
+        }
+    }, [id?.categoryId, bookmark_addto]);
+
     return (
-        <div className='rounded-2xl bg-white lg:p-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative'>
+        <div className='rounded-2xl bg-white xl:p-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative'>
 
             <div className='min-h-4/6 h-[calc(100%-150px)] '>
                 <p className='text-[28px] text-dark-blue capitalize mb-5'>My Bookmarks</p>
@@ -42,19 +49,19 @@ const Sidebar = ({setId}) => {
                 {
                     loading ? <span className="loader"></span>
                 :
-                        categories && categories?.length > 0 && categories?.map((category, index) => {
+                        categories && categories?.length > 0 && categories?.map(category => {
                             const hasDropdown = category?.subcategories?.length>0;
-                            const isActive = openAccordion === `users-accordion_${index}`;
+                            const isActive = openAccordion === `users-accordion_${category?.id}`;
                             return (
-                                <li key={index} className={`${isActive ? "active" : ""
-                                    } hs-accordion-group hs-accordion last:mb-0 relative`} id={`users-accordion_${index}`}>
+                                <li key={category?.id} className={`${isActive ? "active" : ""
+                                    } hs-accordion-group hs-accordion last:mb-0 relative`} id={`users-accordion_${category?.id}`}>
                                     <button
                                       
-                                       onClick={()=>{setId({categoryId:category?.id, subCategoryId:""}); toggleAccordion(`users-accordion_${index}`, hasDropdown)}}
+                                       onClick={()=>{setId({categoryId:category?.id, subCategoryId:""}); toggleAccordion(`users-accordion_${category?.id}`, hasDropdown)}}
                                         type="button" className={`rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base text-light-black w-full focus:outline-none ${isActive ? "" : ""
                                             }`}
                                         aria-expanded={isActive}
-                                        aria-controls={`users-accordion-collapse-${index}`}>
+                                        aria-controls={`users-accordion-collapse-${category?.id}`}>
 
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className='hs-accordion-toggle'>
                                             <path d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z" stroke="#2131E5" strokeWidth="0.625" strokeMiterlimit="10" strokeLinecap="round" className='circle' />
@@ -66,8 +73,8 @@ const Sidebar = ({setId}) => {
                                     </button>
                                     {
                                         hasDropdown &&
-                                        <div id={`users-accordion-collapse-${index}`} className={`hs-accordion-content w-full overflow-hidden transition-[height] duration-300 ${isActive ? "block" : "hidden"
-                                            }`} role="region" aria-labelledby={`users-accordion_${index}`}>
+                                        <div id={`users-accordion-collapse-${category?.id}`} className={`hs-accordion-content w-full overflow-hidden transition-[height] duration-300 ${isActive ? "block" : "hidden"
+                                            }`} role="region" aria-labelledby={`users-accordion_${category?.id}`}>
                                             <ul className="pt-1 ps-7 space-y-1">
                                                 {
                                                     category?.subcategories?.map((subCat, subIndex) => {
@@ -95,7 +102,7 @@ const Sidebar = ({setId}) => {
                     }
                 </ul>
             </div>
-            <div className='bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 lg:bottom-8 lg:left-6 lg:right-6 mx-auto'>
+            <div className='bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto'>
                 <div className='absolute left-2 top-2 w-[85px]'>
                     <img src="/search-bookmark-icon.png" alt="" className="w-full" />
                 </div>

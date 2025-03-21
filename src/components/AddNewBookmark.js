@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from "react";
 import Textfield from "./Textfield";
 import { useFormik } from "formik";
-import axios from "axios";
 import * as YUP from "yup";
-import { getToken } from "../services/authService";
 import { toast } from "react-toastify";
 import Dropdown from "../components/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewBookmark, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import {
+  addNewBookmark,
+  fetchAllTopLinks,
+  fetchCategoryWiseBookmarks
+} from "../redux/slices/bookmarkSlice";
 import {
   fetchCategories,
   fetchSubCategories,
-  resetSubCategories,
+  resetSubCategories
 } from "../redux/slices/categorySlice";
+import { useLocation, useNavigate} from "react-router-dom";
 
-const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
+const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [resetKey, setResetKey] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState([]);
 
   const { token } = useSelector((state) => state.auth);
-  const { categories, subCategories } = useSelector(state => state.category);
+  const { categories, subCategories } = useSelector((state) => state.category);
   const { addBookmarkLoading } = useSelector((state) => state.bookmark);
 
   useEffect(() => {
@@ -53,13 +58,13 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
       url: "",
       category_id: "",
       sub_category_id: "",
-      add_to: "",
+      add_to: ""
     },
     validationSchema: YUP.object({
       title: YUP.string()
         .required("Title is required")
-        .min(3, "Must be at least 3 characters")
-        .max(50, "Cannot exceed 50 characters"),
+        .min(3, "Must be at least 3 characters"),
+      // .max(50, "Cannot exceed 50 characters"),
       url: YUP.string().url("Invalid URL format").required("URL is required"),
       category_id: YUP.number()
         .required("Category Id is required")
@@ -67,23 +72,40 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
       sub_category_id: YUP.number().typeError(
         "Sub Category Id must be a number"
       ),
-      add_to: YUP.string().required("Add To is required"),
+      add_to: YUP.string().required("Add To is required")
     }),
     onSubmit: (values) => {
       handleAddNewBookmark(values);
-    },
+    }
   });
 
   const handleAddNewBookmark = async (values) => {
     const result = await dispatch(addNewBookmark({ values, token }));
-
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
-      await dispatch(fetchAllTopLinks(token));
+      let categoryId = result?.payload?.category_id;
+      let subCategoryId = result?.payload?.sub_category_id;
+
+      if(location?.pathname === "/bookmarks") {
+        if(result?.payload?.addto === "bookmark") {
+          await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}))
+        }
+        if(result?.payload?.addto === "top_link") {
+          await dispatch(fetchAllTopLinks(token));
+        }
+      }
+      else {
+        navigate("/bookmarks", {
+          state: {
+              categoryId: result?.payload?.category_id,
+              subCategoryId: result?.payload?.sub_category_id,
+              addTo: result?.payload?.addto
+          }
+      });
+      }
       closeModal();
     } else {
-      console.log(result, 'result');
-      toast.error(result.payload || "Failed to add bookmark.");
+      toast.error(result.payload?.message || "Failed to add bookmark.");
     }
   };
 
@@ -92,14 +114,29 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals }) => {
     closeAllModals();
   };
 
-useEffect(()=>{
-  if(urlToBookmark?.url) {
-    formik.setFieldValue('url', urlToBookmark?.url);
-  }
-},[urlToBookmark?.url])
+  useEffect(()=>{
+    if(urlToBookmark?.link) {
+      formik.setFieldValue('url', urlToBookmark?.link);
+    }
+  },[urlToBookmark?.link]);
+
+  useEffect(() => {
+    let record =
+      typeof urlToBookmark === "object" &&
+      urlToBookmark !== null &&
+      !Array.isArray(urlToBookmark)
+        ? urlToBookmark?.record
+        : urlToBookmark;
+    if (record) {
+      formik.setFieldValue("url", record?.link);
+      formik.setFieldValue("title", record?.title);
+      formik.setFieldValue("add_to", record?.type);
+    }
+  }, [urlToBookmark?.record?.title]);
 
   return (
     <>
+      {/* {urlToBookmark?.link} */}
       <div
         id="add-new-bookmark-modal"
         className={`hs-overlay ${
@@ -122,10 +159,12 @@ useEffect(()=>{
                 <button
                   type="button"
                   onClick={closeModal}
-                  className={`${addBookmarkLoading
-                        ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
-                        : ""} absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none`}
-                        disabled={addBookmarkLoading}
+                  className={`${
+                    addBookmarkLoading
+                      ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                      : ""
+                  } absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none`}
+                  disabled={addBookmarkLoading}
                   aria-label="Close"
                   data-hs-overlay="#hs-slide-down-animation-modal"
                 >

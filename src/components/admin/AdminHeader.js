@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 const AdminHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [toggleProfileDropdown, setToggleProfileDropdown] = useState(false);
+const {user} = useSelector(state=>state.auth);
   const handleLogout = async() => {
     try {
         // localStorage.removeItem("token"); // Remove token from local storage
@@ -221,9 +224,7 @@ const AdminHeader = () => {
                   id="hs-dropdown-account"
                   type="button"
                   className="size-9 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none dark:text-white"
-                  aria-haspopup="menu"
-                  aria-expanded="false"
-                  aria-label="Dropdown"
+                  onClick={()=>setToggleProfileDropdown(!toggleProfileDropdown)}
                 >
                   <img
                     className="shrink-0 size-9 rounded-full"
@@ -233,17 +234,18 @@ const AdminHeader = () => {
                 </button>
 
                 <div
-                  className="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="hs-dropdown-account"
+                  className={`${toggleProfileDropdown?'hs-dropdown-open:opacity-100 block':'opacity-0 hidden'} absolute right-0 top-full hs-dropdown-menu transition-[opacity,margin] duration min-w-60 bg-white shadow-md rounded-lg mt-2 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full`}
                 >
                   <div className="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
                     <p className="text-sm text-gray-500 dark:text-neutral-500">
-                      Signed in as
+                      Signed in as : <span className="capitalize">{user?.role}</span>
                     </p>
-                    <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">
-                      james@site.com
+                    <p className="grid grid-cols-2 text-sm font-medium text-gray-800 dark:text-neutral-200">
+                      <span className="col-span-2">
+                      <span className="me-1">{user?.first_name}</span>
+                      <span className="">{user?.last_name}</span>
+                      </span>
+                      {/* <span className="col-span-2">{user?.email}</span> */}
                     </p>
                   </div>
                   <div className="p-1.5 space-y-0.5">
@@ -336,7 +338,7 @@ const AdminHeader = () => {
                       Team Account
                     </a>
                     <button
-                      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                      className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                       onClick={handleLogout}
                     >
                       <svg

@@ -79,7 +79,7 @@ const Layout = () => {
 
   const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
-  const [urlToBookmark, setUrlToBookmark] = useState("");
+  const [urlToBookmark, setUrlToBookmark] = useState(""||{});
 
   return (
     <div className="app-layout">
@@ -89,8 +89,8 @@ const Layout = () => {
         }`}
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>
-
-      <ToastContainer hideProgressBar={true} autoClose={2000} />
+      
+      <ToastContainer hideProgressBar={true} autoClose={1000} />
       <div className="app-content flex flex-wrap w-full">
         <Login
           closeAllModals={closeAllModals}
@@ -103,12 +103,15 @@ const Layout = () => {
           urlToBookmark={urlToBookmark}
           closeAllModals={closeAllModals}
           openModal={openModal}
+          id={id}
         />
         <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
         <Header
           setWhichModalOpen={setWhichModalOpen}
           sidebar={sidebar}
           hideSidebar={hideSidebar}
+          id={id}
+          setId={setId}
         />
         <div className="w-full content-area">
           <Outlet
@@ -117,6 +120,8 @@ const Layout = () => {
               setWhichModalOpen,
               selectedSubCategory,
               selectedCategory,
+              setSelectedCategory,
+              setSelectedSubCategory,
               setId,
               id
             }}

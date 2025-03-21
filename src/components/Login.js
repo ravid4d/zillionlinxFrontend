@@ -12,9 +12,11 @@ import PasswordField from './PasswordField';
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading } = useSelector((state) => state.auth);
+    
     const [showPassword, setShowPassword] = useState(false);
-   
+
+    const { loading } = useSelector((state) => state.auth);
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -27,16 +29,14 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
         }),
         onSubmit: async(values) => {
             let loginType="user";
-            const result = await dispatch(handleLogin({values, navigate, loginType})).unwrap();
-
-            if (handleLogin.fulfilled.match(result)) {
-                toast.success(result.payload.message || "Login successfully!")
-                closeModal();
-                // console.log(userRole, 'userRole'); //It is showing null
-                // userRole === "user" ? navigate('/bookmarks') : navigate('/admin');
-              } else {
-                toast.error(result.payload || "Login failed!");
-              }
+            try {
+                const result = await dispatch(handleLogin({ values, loginType })).unwrap();
+                closeModal();    
+                //Pass state to show login successfull toast in mybookmarks page.
+                navigate('/bookmarks', {state:{loginMessage:result?.message}})
+            } catch (error) {
+                toast.error(error?.message || "Login failed!");
+            }
         }
     });
     const closeModal = () => {
@@ -48,13 +48,15 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
                 <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
                     <div className='w-full py-20 px-10'>
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center flex-col">
+                        {/* <div className='w-full text-red-600'>{error}</div> */}
                             <h3 id="hs-slide-down-animation-modal-label" className="uppercase text-dark-blue text-center w-full text-7xl mb-12">
                                 Login
                             </h3>
                             <button type="button"
                                 onClick={closeModal}
-                                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none" aria-label="Close" data-hs-overlay="#hs-slide-down-animation-modal">
+                                disabled={loading&&'disabled'}
+                                className={`${loading?'disabled:opacity-50 disabled:pointer-events-none':'hover:bg-light-blue hover:text-dark-blue'} absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue" aria-label="Close" data-hs-overlay="#hs-slide-down-animation-modal`}>
                                 <span className="sr-only">Close</span>
                                 <svg className="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M18 6 6 18"></path>

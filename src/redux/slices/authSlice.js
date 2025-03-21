@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async ({ values, navigate, loginType }, { rejectWithValue }) => {
+  async ({ values, loginType }, { rejectWithValue }) => {
     try {
-      console.log(loginType, 'loginType')
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
         {
           type: "email",
@@ -16,22 +15,19 @@ export const handleLogin = createAsyncThunk(
           password: values?.password
         }
       );
-      console.log(response, 'is hoever')
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
-      let message = response?.message || "";
+      let message = response?.data?.message || "";
       let isLoggedIn =
         response?.data?.data?.token !== undefined ||
-        response?.data?.data?.token !== null
-          ? !!response?.data?.data?.token
-          : false;
-      if (token !== undefined) {
-        let navigateTo = loginType === "user" ? "bookmarks" : "admin";
-        navigate(`/${navigateTo}`);
-      }
-      return { token, message, userRole, isLoggedIn };
+        response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
+      let user = response?.data?.data?.user;
+      return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Login failed");
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Login failed",
+      });
     }
   }
 );
@@ -41,15 +37,19 @@ const authSlice = createSlice({
   initialState: {
     token: null,
     userRole: null,
+    status:"",
     isLoggedIn: false,
     loading: false,
-    error: null
+    error: null,
+    user:null
   },
   reducers: {
     logout: (state) => {
       state.token = null;
       state.userRole = null;
       state.isLoggedIn = false;
+      state.user = null;
+      localStorage.removeItem("persist:auth"); 
     }
   },
   extraReducers: (builder) => {
@@ -61,13 +61,15 @@ const authSlice = createSlice({
       })
       .addCase(handleLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.isLoggedIn = true;
+        state.isLoggedIn = action.payload.isLoggedIn;
         state.userRole = action.payload.userRole;
         state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(handleLogin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
       });
   }
 });

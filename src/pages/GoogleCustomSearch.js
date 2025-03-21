@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import GoogleSearchbar from "../components/GoogleSearchbar";
-import { Link, Navigate, useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  useLocation,
+  useNavigate,
+  useOutletContext
+} from "react-router-dom";
 import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import { useDispatch, useSelector } from "react-redux";
 import { googleSearch } from "../redux/slices/bookmarkSlice";
+import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
 
 const GoogleCustomSearch = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();
   const { token } = useSelector((state) => state.auth);
   const [noContent, setNoContent] = useState(false);
   const [mainContent, setMainContent] = useState([]);
+  const [contextMenu, setContextMenu] = useState(null); 
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+
   const {
     googleResults,
     wikkiResults,
@@ -52,17 +63,39 @@ const GoogleCustomSearch = () => {
     }
   }, [googleResults]);
 
-//   const handleResult = (whichResult) => {
-//     whichResult === "youtube"
-//       ? setMainContent(youtubeResults)
-//       : whichResult === "google"
-//       ? setMainContent(googleResults)
-//       : whichResult === "ebay"
-//       ? setMainContent(ebayResults)
-//       : whichResult === "wikki"
-//       ? setMainContent(wikkiResults)
-//       : setNoContent([]);
-//   };
+  //   const handleResult = (whichResult) => {
+  //     whichResult === "youtube"
+  //       ? setMainContent(youtubeResults)
+  //       : whichResult === "google"
+  //       ? setMainContent(googleResults)
+  //       : whichResult === "ebay"
+  //       ? setMainContent(ebayResults)
+  //       : whichResult === "wikki"
+  //       ? setMainContent(wikkiResults)
+  //       : setNoContent([]);
+  //   };
+
+const handleRightClick = (event, record) => {
+        event.preventDefault(); // Prevent default browser context menu
+        setContextMenu({
+            x: event.clientX,
+            y: event.clientY,
+            record: record, // Save clicked record
+        });
+    };
+
+    const handleOptionClick = (option) => {
+      contextMenu.record = { ...contextMenu.record, type:option };
+      setUrlToBookmark(contextMenu)
+      // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
+      setWhichModalOpen("newBookmark"); // Show second modal
+      setContextMenu(null); // Close context menu
+  };
+
+  const closeModals = () => {
+    setContextMenu(null);
+    setWhichModalOpen("newBookmark");
+};
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,7 +130,9 @@ const GoogleCustomSearch = () => {
         <div className="flex flex-wrap lg:space-x-8">
           <div className="bookmark-content-wrappers w-full">
             <div className="flex flex-wrap items-center justify-between">
-                <div className="bg-white rounded-xl p-3 mb-4">Hint: Right Click on any URL / Title below to Bookmark that Link</div>
+              <div className="bg-white rounded-xl p-3 mb-4">
+                Hint: Right Click on any URL / Title below to Bookmark that Link
+              </div>
               {/* <AddNewBookmarkField
                 setWhichModalOpen={setWhichModalOpen}
                 setUrlToBookmark={setUrlToBookmark}
@@ -126,27 +161,34 @@ const GoogleCustomSearch = () => {
                           mainContent?.length > 0 &&
                           mainContent?.map((result, index) => {
                             return (
-                              <Link
-                                key={index}
-                                to={result?.link}
-                                className="block mb-4 last:mb-0"
-                                target="_blank"
-                              >
-                                {
-                                    result?.thumbnail ?
-                                    <img src={result?.thumbnail} alt={result?.title} />
-                                    :null
-                                }
-                                <div className="text-dark-blue text-xl font-medium text-ellipsis overflow-hidden text-nowrap">
-                                  {result?.title}
-                                </div>
-                                <p className="text-base text-light-black">
-                                  {result?.snippet}
-                                </p>
-                              </Link>
+                              <React.Fragment key={index}>
+                                <Link
+                                  // key={index}
+                                  to={result?.link}
+                                  className={`block mb-4 last:mb-0 google_result google_result_${index}`}
+                                  target="_blank"
+                                  onContextMenu={(e) => handleRightClick(e, result)}
+                                >
+                                  {result?.thumbnail ? (
+                                    <img
+                                      src={result?.thumbnail}
+                                      alt={result?.title}
+                                    />
+                                  ) : null}
+                                  <div className="text-dark-blue text-xl font-medium text-ellipsis overflow-hidden text-nowrap">
+                                    {result?.title}
+                                  </div>
+                                  <p className="text-base text-light-black">
+                                    {result?.snippet}
+                                  </p>
+                                </Link>
+                              </React.Fragment>
                             );
                           })
                         )}
+                        {contextMenu && 
+                          <BookmarkGoogleResultContext contextMenu={contextMenu} handleOptionClick={handleOptionClick} />
+                        }
                       </div>
                     </div>
                     <div className={`w-1/4 rounded-2xl ps-6`}>
@@ -158,37 +200,39 @@ const GoogleCustomSearch = () => {
                           className="mx-auto block mb-2"
                         />
                         <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-screen">
-                          <ul className="grid">
+                          <ul className="grid grid-cols-1 gap-4">
                             {googleLoading ? (
                               <span className="loader"></span>
                             ) : (
                               bookmarks &&
-                              bookmarks?.length === 0 &&
+                              bookmarks?.length > 0 &&
                               bookmarks?.map((result, index) => {
                                 return (
-                                  <li
-                                    className="relative"
-                                  >
+                                  <li key={index} className="relative">
+                                    {/* {result.icon_path} */}
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
                                         className="min-h-[85px] block"
-                                        to="https://www.lipsum.com/"
+                                        to={result?.website_url}
                                         target="_blank"
+                                        rel="noopener noreferrer"
                                       >
                                         <img
                                           alt=""
                                           className="w-full"
-                                          src="https://i.pinimg.com/736x/d4/c2/ec/d4c2ec5941d39ad2f5406cbed6f448ea.jpg"
+                                          src={`${process.env.REACT_APP_API_URL}/storage/${result.icon_path}`}
                                         />
                                       </Link>
                                       <Link
-                                        to="https://www.lipsum.com/"
+                                        to={result?.website_url}
                                         target="_blank"
+                                        rel="noopener noreferrer"
                                       >
-                                        <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">aaa</span>
+                                        <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
+                                          {result?.title}
+                                        </span>
                                       </Link>
                                     </span>
-                                   
                                   </li>
                                 );
                               })
@@ -226,11 +270,11 @@ const GoogleCustomSearch = () => {
                               )} */}
                               {wikiStaticLink !== "" && (
                                 <Link
-                                    className="block mb-2 last:mb-0 w-full"
-                                    to={wikiStaticLink}
-                                    target="_blank"
-                                     rel="noopener noreferrer"
-                                //   onClick={() => handleResult("wikki")}
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={wikiStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  //   onClick={() => handleResult("wikki")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
@@ -244,11 +288,11 @@ const GoogleCustomSearch = () => {
                               )}
                               {ebayStaticLink !== "" && (
                                 <Link
-                                    className="block mb-2 last:mb-0 w-full"
-                                    to={ebayStaticLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                //   onClick={() => handleResult("ebay")}
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={ebayStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  //   onClick={() => handleResult("ebay")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
@@ -261,7 +305,12 @@ const GoogleCustomSearch = () => {
                                 </Link>
                               )}
                               {amazonStaticLink !== "" && (
-                                <Link target="_blank" to={amazonStaticLink} rel="noopener noreferrer" className="block mb-2 last:mb-0 w-full">
+                                <Link
+                                  target="_blank"
+                                  to={amazonStaticLink}
+                                  rel="noopener noreferrer"
+                                  className="block mb-2 last:mb-0 w-full"
+                                >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
                                       src="/amazon.svg"
@@ -274,11 +323,11 @@ const GoogleCustomSearch = () => {
                               )}
                               {youtubeStaticLink !== "" && (
                                 <Link
-                                    className="block mb-2 last:mb-0"
-                                    parent="_blank"
-                                    rel="noopener noreferrer"
-                                    to={youtubeStaticLink}
-                                    //   onClick={() => handleResult("youtube")}
+                                  className="block mb-2 last:mb-0"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  to={youtubeStaticLink}
+                                  //   onClick={() => handleResult("youtube")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img

@@ -31,7 +31,7 @@ const GoogleSearchbar = () => {
         },
       });
     return (
-        <form onSubmit={googleFormik.handleSubmit} className={`flex items-center rounded-xl shadow-sm mb-4 relative pl-32 bg-white border border-gray-200 ${location.pathname === "/bookmarks" ? "w-[calc(100%-375px)]" : "w-1/2"} `}>
+        <form onSubmit={googleFormik.handleSubmit} className={`flex items-center rounded-xl shadow-sm mb-4 relative pl-32 bg-white border border-gray-200 ${location.pathname === "/bookmarks" ? "max-w-full xl:w-[calc(100%-375px)]" : "w-1/2"} `}>
             <span className="absolute left-3 top-0 bottom-0 my-auto flex items-center">
                 <img src="/google-searchbar-icon.svg" alt="" />
             </span>
