@@ -4,6 +4,7 @@ import {
   getAllUsers,
   handleUsersPagination
 } from "../../redux/slices/userSlice";
+import { deleteUser } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
 
 const User = () => {
@@ -31,19 +32,41 @@ const User = () => {
     );
   };
 
-  //Delete individual user
-  const deleteSingleUser = (userId) => {
-    //We will handle api to delete users from database and update the users state in slice
-    // setUsers(users.filter((user) => user.id !== userId));
-    setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+  //Delete single user
+  const deleteSingleUser = (ids) => {
+    if (selectedUsers.length === 0) {
+      alert("No users selected!");
+      return;
+    }
+
+    dispatch(deleteUser({ ids: selectedUsers, token }))
+      .unwrap()
+      .then(() => {
+        console.log("Users deleted successfully");
+        setSelectedUsers([]); // Clear selected users
+      })
+      .catch((err) => {
+        console.error("Error deleting users:", err);
+      });
   };
 
   //Delete selected users.
   const handleDeleteSelected = () => {
-    //We will handle api to delete users from database and update the users state in slice
-    // setUsers(users.filter((user) => !selectedUsers.includes(user.id)));
-    setSelectedUsers([]);
+    if (selectedUsers.length === 0) {
+      alert("No users selected!");
+      return;
+    }
+    dispatch(deleteUser({ ids: selectedUsers, token }))
+      .unwrap()
+      .then(() => {
+        console.log("Users deleted successfully");
+        setSelectedUsers([]); // Clear selected users after successful deletion
+      })
+      .catch((err) => {
+        console.error("Error deleting users:", err);
+      });
   };
+  
 
   useEffect(() => {
     dispatch(getAllUsers());
