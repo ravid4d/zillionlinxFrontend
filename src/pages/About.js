@@ -12,7 +12,7 @@ const googleLogin = async() => {
     }
 }
   return (
-    <button className="btn dark-btn" onClick={googleLogin}>Login with google kartik12</button>
+    <button className="btn dark-btn" onClick={googleLogin}>Login with google kartik</button>
   )
 }
 
