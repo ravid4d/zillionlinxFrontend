@@ -1,4 +1,4 @@
-name: Deploy React App
+name: Deploy
 
 on:
   push:
@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
@@ -20,32 +19,9 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            set -x  # Enable debugging
-            cd /var/www/html/zillionlinx-front || { echo "Failed to navigate to project directory"; exit 1; }
-
-            echo "Checking current branch..."
-            git branch
-
-            echo "Fetching latest changes..."
-            git fetch origin master
-            
-            echo "Pulling latest changes..."
-            git pull origin master || { echo "Git pull failed"; exit 1; }
-
-            echo "Checking current commit..."
-            git rev-parse HEAD
-
-            echo "Installing dependencies..."
-            npm install || { echo "Failed to install dependencies"; exit 1; }
-
-            echo "Building the project..."
-            npm run build || { echo "Build failed"; exit 1; }
-
-            echo "Updating frontend files..."
-            sudo rm -rf /var/www/html/zillionlinx-front/build
-            sudo mv build /var/www/html/zillionlinx-front/
-
-            echo "Restarting Apache..."
-            sudo systemctl restart apache2 || { echo "Failed to restart Apache"; exit 1; }
-
-            echo "Deployment completed successfully!"
+            cd /var/www/html/zillionlinx-front
+            git pull origin master
+            npm install
+            npm run build
+            sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
+            sudo systemctl restart apache2 
