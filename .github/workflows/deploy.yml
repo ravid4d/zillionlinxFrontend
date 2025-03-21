@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
@@ -19,6 +20,28 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            cd /var/www/html/zillionlinx-front
-            git pull origin master
-            sudo systemctl restart apache2 
+            set -x  # Enable debugging
+            cd /var/www/html/zillionlinx-front || { echo "Failed to navigate to project directory"; exit 1; }
+            
+            echo "Current Git Branch:"
+            git branch
+            
+            echo "Fetching latest changes..."
+            git fetch origin master
+            
+            echo "Checking current commit before pulling..."
+            git rev-parse HEAD
+            
+            echo "Pulling latest changes..."
+            git pull origin master || { echo "Git pull failed"; exit 1; }
+            
+            echo "Checking current commit after pulling..."
+            git rev-parse HEAD
+            
+            echo "Checking file changes..."
+            git status
+            
+            echo "Restarting Apache..."
+            sudo systemctl restart apache2 || { echo "Failed to restart Apache"; exit 1; }
+            
+            echo "Deployment completed successfully!"
