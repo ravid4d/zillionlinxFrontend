@@ -26,14 +26,15 @@ const AdminLogin = () => {
         }),
         onSubmit: async(values) => {
             let loginType="admin";
-            const result = await dispatch(handleLogin({values, loginType})).unwrap();
-            if (handleLogin.fulfilled.match(result)) {
+            try {
+                const result = await dispatch(handleLogin({ values, loginType })).unwrap();
                 formik.resetForm();
-                toast.success(result.payload.message || "Login successfully!")
+                toast.success(result.message || "Login successfully!");
                 navigate('/admin');
-              } else {
-                toast.error(result.payload || "Login failed!");
-              }
+            } catch (error) {
+                console.error("Login Error:", error);
+                toast.error(error.message || "Login failed!");
+            }
         }
     });
   return (
