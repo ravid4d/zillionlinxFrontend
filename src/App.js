@@ -13,6 +13,7 @@ import AdminLogin from './components/admin/AdminLogin';
 import NonProtectedAdminRoutes from './routes/NonProtectedAdminRoutes';
 import User from './pages/admin/User';
 import GoogleCustomSearch from './pages/GoogleCustomSearch';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     return (

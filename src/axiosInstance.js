@@ -21,7 +21,9 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const apiPath = error.config?.url;
+
+    if (error.response?.status === 401 && !apiPath?.includes("/login") ) {
       import("./redux/store").then(({ store }) => {
         store.dispatch(logout());
         window.location.href = "/";
