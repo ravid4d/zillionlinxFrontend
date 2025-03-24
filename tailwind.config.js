@@ -11,6 +11,10 @@ module.exports = {
       'serif': ["Oswald", 'serif'],
     },
     extend: {
+      screens: {
+        '2xl': '1366px',
+        '3xl': '1536px',
+      },
       boxShadow: {
         'dashboard': '0 4px 24px 2px rgba(20,25,38,.05)',
         'sidebar': '0 0 24px 2px rgba(20,25,38,.05)',

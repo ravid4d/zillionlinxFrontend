@@ -7,13 +7,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { handleLogin } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import PasswordField from './PasswordField';
-
+// import CryptoJS from "crypto-js";
 
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error } = useSelector((state) => state.auth);
+    
     const [showPassword, setShowPassword] = useState(false);
+    
+    const { loading } = useSelector((state) => state.auth);
+
+    // const encryptPassword = (password) => {
+    //     return CryptoJS.AES.encrypt(password, process.env.REACT_APP_SECRET_CODE).toString();
+    // }; 
 
     const formik = useFormik({
         initialValues: {
@@ -27,19 +33,15 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
         }),
         onSubmit: async(values) => {
             let loginType="user";
+            // const encryptedPassword = encryptPassword(values?.password);
+            // values.password=encryptedPassword;
             try {
                 const result = await dispatch(handleLogin({ values, loginType })).unwrap();
-                // if (result?.message!=="") {
-                //     toast.success(result?.message);
-                // } else {
-                //     toast.success("Login successfully!");
-                // }
                 closeModal();    
-                // setTimeout(()=>{
-                    navigate('/bookmarks')
-                // },1000)
+                //Pass state to show login successfull toast in mybookmarks page.
+                navigate('/bookmarks', {state:{loginMessage:result?.message}})
             } catch (error) {
-                toast.error(error || "Login failed!");
+                toast.error(error?.message || "Login failed!");
             }
         }
     });
@@ -53,7 +55,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                 <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
                     <div className='w-full py-20 px-10'>
                         <div className="flex justify-between items-center flex-col">
-                        <div className='w-full text-red-600'>{error}</div>
+                        {/* <div className='w-full text-red-600'>{error}</div> */}
                             <h3 id="hs-slide-down-animation-modal-label" className="uppercase text-dark-blue text-center w-full text-7xl mb-12">
                                 Login
                             </h3>

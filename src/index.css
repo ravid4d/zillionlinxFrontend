@@ -39,11 +39,11 @@ body {
 }
 
 .bookmark-sidebar-wrapper {
-  @apply w-[375px] p-5 lg:p-0 bg-white lg:bg-transparent;
+  @apply w-[300px] xl:w-[375px] p-5 xl:p-0 bg-white xl:bg-transparent;
 }
 
 .bookmark-content-wrapper {
-  @apply w-full lg:w-[calc(100%-407px)];
+  @apply w-full xl:w-[calc(100%-332px)] xl:w-[calc(100%-407px)];
 }
 
 .bookmark-sidebar li.active .minus {

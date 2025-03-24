@@ -366,7 +366,10 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         : ""
                     }`}
                   >
-                    Add New Bookmark
+                    {
+                      addBookmarkLoading?<span className="loader"></span>:"Add New Bookmark"
+                    }
+                    
                   </button>
                 </form>
               </div>
