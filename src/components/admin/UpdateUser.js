@@ -13,7 +13,6 @@ import { getAllUsers, updateUser } from "../../redux/slices/userSlice";
 // import preline from "preline/plugin";
 
 const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }) => {
-  // console.log(userToEdit, 'userToEdit')
   const dispatch = useDispatch();
   const[countries, setCountry] = useState([]);
   const {token} = useSelector(state=>state.auth);

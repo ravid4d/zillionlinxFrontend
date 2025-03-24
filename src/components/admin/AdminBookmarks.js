@@ -8,7 +8,6 @@ const AdminBookmarks = () => {
     const dispatch = useDispatch();
     const { token } = useSelector((state) => state.auth);
     const { adminBookmarks, totalBookmarks, pagination } = useSelector((state) => state.admin);
-  
     useEffect(() => {
       dispatch(fetchAllBookmarks(token));
     }, [dispatch, token]);
@@ -130,7 +129,7 @@ const AdminBookmarks = () => {
               </thead>
 
               <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                {adminBookmarks?.map((bookmark) => {
+                {adminBookmarks && adminBookmarks?.length>0 && adminBookmarks?.map((bookmark) => {
                   return (
                     <BookmarkTableData
                       bookmark={bookmark}
@@ -154,7 +153,7 @@ const AdminBookmarks = () => {
 
           {/* Counter Pagination */}
           <div className="inline-flex gap-x-2">
-            {pagination.map((pageNumber, index) => {
+            {pagination && pagination?.length>0&&pagination.map((pageNumber, index) => {
               return (
                 <button
                   key={index}

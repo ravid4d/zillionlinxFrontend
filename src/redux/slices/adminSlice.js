@@ -219,7 +219,7 @@ const adminSlice = createSlice({
       })
       .addCase(fetchAllBookmarks.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminBookmarks = action.payload.data?.data;
+        state.adminBookmarks = action.payload.bookmarks;
         state.totalBookmarks = action.payload.data?.total;
         state.pagination = action.payload.data?.links;
       })
