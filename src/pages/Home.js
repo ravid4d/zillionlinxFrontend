@@ -28,32 +28,32 @@ const Home = () => {
     }
   }, [loginMessage]);
 
-  //   useEffect(() => {
-  //     if (bookmarks?.bookmarks && bookmarks?.bookmarks?.length > 0) {
-  //       const rmTopLinks = async () => {
-  //         bookmarks?.bookmarks &&
-  //           bookmarks?.bookmarks?.length > 0 &&
-  //           bookmarks?.bookmarks?.map((bookmark) => {
-  //             let topLinkId = bookmark?.id;
-  //             dispatch(removeTopLink({ token, topLinkId }));
-  //             return false;
-  //           });
-  //       };
-  //       rmTopLinks();
-  //     }
-  //     if (categories && categories?.length > 0) {
-  //       const rmBookmarks = async () => {
-  //         categories &&
-  //           categories?.length > 0 &&
-  //           categories?.map((category) => {
-  //             let topLinkId = category?.id;
-  //             dispatch(removeTopLink({ token, topLinkId }));
-  //             return false;
-  //           });
-  //       };
-  //       rmBookmarks();
-  //     }
-  //   }, [categories, bookmarks, dispatch, token]);
+    // useEffect(() => {
+    //   if (bookmarks && bookmarks?.length > 0) {
+    //     const rmTopLinks = async () => {
+    //       bookmarks &&
+    //         bookmarks?.length > 0 &&
+    //         bookmarks?.map((bookmark) => {
+    //           let topLinkId = bookmark?.id;
+    //           dispatch(removeTopLink({ token, topLinkId }));
+    //           return false;
+    //         });
+    //     };
+    //     rmTopLinks();
+    //   }
+    //   if (categories && categories?.length > 0) {
+    //     const rmBookmarks = async () => {
+    //       categories &&
+    //         categories?.length > 0 &&
+    //         categories?.map((category) => {
+    //           let topLinkId = category?.id;
+    //           dispatch(removeTopLink({ token, topLinkId }));
+    //           return false;
+    //         });
+    //     };
+    //     rmBookmarks();
+    //   }
+    // }, [categories, bookmarks, dispatch, token]);
 
   return (
     <>

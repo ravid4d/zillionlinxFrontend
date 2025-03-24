@@ -8,53 +8,67 @@ import { toast } from "react-toastify";
 import Textfield from "../Textfield";
 import CountryDropdown from "../CountryDropdown";
 import Dropdown from "../Dropdown";
+import axios from "axios";
+import { getAllUsers, updateUser } from "../../redux/slices/userSlice";
 // import preline from "preline/plugin";
 
-const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
+const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }) => {
+  // console.log(userToEdit, 'userToEdit')
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const[countries, setCountry] = useState([]);
+  const {token} = useSelector(state=>state.auth);
 
+  useEffect(()=>{
+    const getCountryList = async() => {
+      let response = await axios.get("https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code");
+      setCountry(response?.data?.countries);
+    }
+    getCountryList()
+  }, []);
+
+  
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      country: ""
+      first_name: userToEdit?.first_name || "",
+      last_name: userToEdit?.last_name || "",
+      email: userToEdit?.email || "",
+      country: userToEdit?.country || "",
     },
     validationSchema: YUP.object({
       first_name: YUP.string()
-        .min(2, "First Name must be atleast 2 characters")
-        .required("First Name is required"),
+      .min(2, "First Name must be atleast 2 characters")
+      .required("First Name is required"),
       last_name: YUP.string()
         .min(2, "Last Name must be atleast 2 characters")
         .required("Last Name is required"),
-      email: YUP.string()
+        email: YUP.string()
         .email("Invalid email format")
         .required("Email is required"),
-      country: YUP.string().required("Please select a country")
-    }),
-    onSubmit: async (values) => {
-      // const result = await dispatch(handleRegister(values));
-      // if (handleRegister.fulfilled.match(result)) {
-      //     toast.success(result.payload.message || "Registered successfully!")
-      //     closeModal();
-      //   } else {
-      //     toast.error(result.payload || "Register failed!");
-      //   }
-    }
-  });
-  // const closeModal = () => {
-  //     formik.resetForm();
-  // }
+        country: YUP.string().required("Please select a country")
+      }),
+      onSubmit: async (values) => {
+        let userId = userToEdit?.id;
+        const result = await dispatch(updateUser({token, values, userId}));
+        if (updateUser.fulfilled.match(result)) {
+          toast.success(result.payload.message || "User Updated successfully!")
+          formik.resetForm();
+          setUserToEditModal(false);
+          dispatch(getAllUsers());
+        } else {
+          toast.error(result.payload || "User Updation failed!");
+        }
+      }
+    });
   return (
     <div
-      id="register"
+      id="updateUser"
       className={`hs-overlay [--overlay-backdrop:static] ${
         userToEditModal ? "open opened" : "hidden"
       } size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`}
       role="dialog"
       tabIndex="-1"
-      aria-labelledby="register-label"
+      aria-labelledby="updateUser-label"
       data-hs-overlay-keyboard="false"
     >
       <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
@@ -62,7 +76,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
           <div className="w-full py-20 px-10">
             <div className="flex justify-between items-center">
               <h3
-                id="register-label"
+                id="updateUser-label"
                 className="uppercase text-dark-blue text-center w-full text-7xl mb-12"
               >
                 Edit User
@@ -72,7 +86,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
                 onClick={() => setUserToEditModal(false)}
                 className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
                 aria-label="Close"
-                data-hs-overlay="#register"
+                data-hs-overlay="#updateUser"
               >
                 <span className="sr-only">Close</span>
                 <svg
@@ -99,7 +113,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
                     id="first_name"
                     name="first_name"
                     icon="title"
-                    fieldValue={formik.values.first_name}
+                    fieldValue={formik.values.first_name?formik.values?.first_name:userToEdit?.first_name}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
                     label="First Name"
@@ -118,7 +132,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
                     id="last_name"
                     name="last_name"
                     icon="title"
-                    fieldValue={formik.values.last_name}
+                    fieldValue={formik.values.last_name?formik.values?.last_name:userToEdit?.last_name}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
                     label="Last Name"
@@ -139,7 +153,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
                     label="Email"
                     type="email"
                     iconPlacement="left"
-                    fieldValue={formik.values.email}
+                    fieldValue={formik.values.email?formik.values?.email:userToEdit?.email}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
                   />
@@ -149,26 +163,26 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading }) => {
                     </div>
                   ) : null}
                 </div>
-                <div className="mb-5">
+                {
+                  countries?.length>0&&
+                  <div className="mb-5">
                   <Dropdown
                     id="country"
                     name="country"
                     label="Country"
-                    endpoint="https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
-                    fieldValue={formik.values.country}
+                    fieldValue={formik.values.country?formik.values.country:userToEdit?.country}
                     setFieldValue={(selectedOption) => {
-                      formik.setFieldValue("country", selectedOption?.value);
-                      // setSelectedCategoryId(selectedOption?.value);
+                      formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:userToEdit);
                     }}
-                    items={[]}
-                  />
-                  {/* <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}
+                    items={countries}
+                    />
                   {formik.touched.country && formik.errors.country ? (
                     <div className="text-red-500 text-sm mt-1">
                       {formik.errors.country}
                     </div>
                   ) : null}
                 </div>
+                }
                 <button
                   disabled={loading}
                   type="submit"
