@@ -4,8 +4,10 @@ import {
   getAllUsers,
   handleUsersPagination
 } from "../../redux/slices/userSlice";
+import { deleteUser } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
 import UpdateUser from "../../components/admin/UpdateUser";
+import { toast } from "react-toastify";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -34,19 +36,138 @@ const User = () => {
     );
   };
 
-  //Delete individual user
-  const deleteSingleUser = (userId) => {
-    //We will handle api to delete users from database and update the users state in slice
-    // setUsers(users.filter((user) => user.id !== userId));
-    setSelectedUsers(selectedUsers.filter((id) => id !== userId));
-  };
+  //Delete single user
+  const deleteSingleUser = (ids) => {
+    if (!ids || ids.length === 0) {
+      toast.warning("No users selected!");
+      return;
+    }
+  
+    const confirmDelete = () => {
+      dispatch(deleteUser({ ids, token }))
+        .unwrap()
+        .then(() => {
+          toast.success("User deleted successfully!");
+          setSelectedUsers([]); // Clear selection
+          dispatch(getAllUsers()); 
+        })
+        .catch((err) => {
+          toast.error("Error deleting user: " + err.message);
+        });
+    };
+  
+    // Show confirmation toast with Yes/No buttons
+    toast.info(
+      <div>
+        <p>Are you sure you want to delete?</p>
+        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+          <button
+            style={{
+              background: "#d9534f",
+              color: "white",
+              border: "none",
+              padding: "5px 10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => {
+              confirmDelete();
+              toast.dismiss(); // Close toast
+            }}
+          >
+            Yes
+          </button>
+          <button
+            style={{
+              background: "#5bc0de",
+              color: "white",
+              border: "none",
+              padding: "5px 10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => toast.dismiss()}
+          >
+            No
+          </button>
+        </div>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: false, // Prevent auto-closing
+        closeOnClick: false,
+        draggable: false,
+        closeButton: false, // Hide default close button
+      }
+    );
+  };  
 
   //Delete selected users.
   const handleDeleteSelected = () => {
-    //We will handle api to delete users from database and update the users state in slice
-    // setUsers(users.filter((user) => !selectedUsers.includes(user.id)));
-    setSelectedUsers([]);
+    if (selectedUsers.length === 0) {
+      toast.warning("No users selected!", { position: "top-center" });
+      return;
+    }
+  
+    const confirmDelete = () => {
+      dispatch(deleteUser({ ids: selectedUsers, token }))
+        .unwrap()
+        .then(() => {
+          toast.success("Users deleted successfully!", { position: "top-center" });
+          setSelectedUsers([]); // Clear selection after deletion
+          dispatch(getAllUsers()); 
+        })
+        .catch((err) => {
+          toast.error("Error deleting users: " + err.message, { position: "top-center" });
+        });
+    };
+  
+    // Show confirmation toast with Yes/No buttons
+    toast.info(
+      <div>
+        <p>Are you sure you want to delete users?</p>
+        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+          <button
+            style={{
+              background: "#d9534f",
+              color: "white",
+              border: "none",
+              padding: "5px 10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => {
+              confirmDelete();
+              toast.dismiss(); // Close toast
+            }}
+          >
+            Yes
+          </button>
+          <button
+            style={{
+              background: "#5bc0de",
+              color: "white",
+              border: "none",
+              padding: "5px 10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => toast.dismiss()}
+          >
+            No
+          </button>
+        </div>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: false, // Don't auto-close
+        closeOnClick: false,
+        draggable: false,
+        closeButton: false, // Hide default close button
+      }
+    );
   };
+  
 
   useEffect(() => {
     dispatch(getAllUsers());
