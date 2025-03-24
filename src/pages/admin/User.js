@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 const User = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { users, totalUsers, pagination, userLoading, error } = useSelector(
+  const { users, totalUsers, pagination } = useSelector(
     (state) => state.user
   );
 
@@ -304,17 +304,20 @@ const User = () => {
 
             {/* Counter Pagination */}
             <div className="inline-flex gap-x-2">
-              {pagination?.slice(1, -1).map((pageNumber, index) => {
+              {pagination.map((pageNumber, index) => {
                 return (
                   <button
                     key={index}
                     type="button"
+                    disabled={pageNumber?.url === null}
                     onClick={() => handlePagination(pageNumber?.url)}
                     className={`${
                       pageNumber?.active ? "bg-gray-100" : "bg-white"
                     } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
                   >
-                    {pageNumber?.label}
+                    {
+                    index===0 ? '<' : index === pagination?.length-1 ? '>' : pageNumber?.label
+                  }
                   </button>
                 );
               })}
