@@ -261,6 +261,7 @@ const MyBookmarks = () => {
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 ) : (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
+                    {console.log(bookmarks, 'data are')}
                     {bookmarks && bookmarks?.length > 0 ? (
                       bookmarks?.map((bookmark, index) => (
                         <li
