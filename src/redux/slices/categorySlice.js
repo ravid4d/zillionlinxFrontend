@@ -34,7 +34,12 @@ export const fetchSubCategories = createAsyncThunk(
           },
         }
       );
-      return response?.data?.data; 
+      const subcategories = response.data.data
+      const updatedSubcategories = [
+        ...subcategories,
+        { id: 0, title: "Other", slug: "other", parent_id: null }
+      ];
+      return updatedSubcategories;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
