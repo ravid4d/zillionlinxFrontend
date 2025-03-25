@@ -4,6 +4,7 @@ import axiosInstance from "../../axiosInstance";
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 const deleteuserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/delete`;
 const fetchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/getAllBookmarks`;
+const updateCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/update-categories`;
 
 export const getParentCategories = createAsyncThunk(
   "admin/getParentCategories",
@@ -78,6 +79,34 @@ export const addNewCategory = createAsyncThunk(
   }
 );
 
+export const updateCategory = createAsyncThunk(
+  "admin/update-categories",
+  async ({id, values, token }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `${updateCategoryUrl}/${id}`,
+        {
+          title: values?.title,
+          parent_id: values?.parent_id,
+          slug: values?.slug
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response?.data?.message;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Something went wrong!",
+        isDuplicateEntry: error?.response?.data?.message?.includes("SQLSTATE[23000]") || false, // ✅ Detect Duplicate Entry
+      });
+    }
+  }
+);
+
 export const getAdminCategory = createAsyncThunk(
   "admin/getAdminCategory",
   async (token, { rejectWithValue }) => {
@@ -144,7 +173,9 @@ const adminSlice = createSlice({
   initialState: {
     status: "",
     loading: false,
+    categoryLoading: false,
     error: null,
+    editingCategory: null,
     totalBookmarks: undefined,
     pagination: [],
     users: [],
@@ -152,7 +183,11 @@ const adminSlice = createSlice({
     adminCategories:[],
     adminBookmarks:[],
   },
-  reducers: {},
+  reducers: {
+    setEditingCategory:(state, action)=>{
+      state.editingCategory = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     //Fetch Top Links
     builder
@@ -172,14 +207,28 @@ const adminSlice = createSlice({
 
     builder
       .addCase(addNewCategory.pending, (state) => {
-        state.loading = true;
+        state.categoryLoading = true;
         state.error = null;
       })
       .addCase(addNewCategory.fulfilled, (state, action) => {
-        state.loading = false;
+        state.categoryLoading = false;
       })
       .addCase(addNewCategory.rejected, (state, action) => {
-        state.loading = false;
+        state.categoryLoading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+
+      builder
+      .addCase(updateCategory.pending, (state) => {
+        state.categoryLoading = true;
+        state.error = null;
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        state.categoryLoading = false;
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
+        state.categoryLoading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
@@ -248,4 +297,5 @@ const adminSlice = createSlice({
 
 });
 
+export const { setEditingCategory } = adminSlice.actions;
 export default adminSlice.reducer;
