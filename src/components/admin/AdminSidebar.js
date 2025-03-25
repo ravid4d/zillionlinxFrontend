@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 const AdminSidebar = () => {
   const location = useLocation();
 
-  const isActive = (path) => {console.log(location.pathname, path); return location.pathname === path};
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div

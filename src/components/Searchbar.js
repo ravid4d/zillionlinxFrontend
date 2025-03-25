@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchBookmarks } from "../redux/slices/bookmarkSlice";
+import { disabledTopLinks, searchBookmarks } from "../redux/slices/bookmarkSlice";
 
-const Searchbar = () => {
+const Searchbar = ({setSearchResults}) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const [title, setTitle] = useState("");
@@ -12,6 +12,8 @@ const Searchbar = () => {
         let formData = new FormData();
         formData.append("title", title);
       dispatch(searchBookmarks({ token, formData }));
+      setSearchResults(true);
+      dispatch(disabledTopLinks());
     }
   };
 

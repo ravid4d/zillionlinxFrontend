@@ -108,7 +108,7 @@ export const fetchAllBookmarks = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
-      return response?.data;
+      return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -219,7 +219,7 @@ const adminSlice = createSlice({
       })
       .addCase(fetchAllBookmarks.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminBookmarks = action.payload.bookmarks;
+        state.adminBookmarks = action.payload.data;
         state.totalBookmarks = action.payload.data?.total;
         state.pagination = action.payload.data?.links;
       })

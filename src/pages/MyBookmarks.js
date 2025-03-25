@@ -46,6 +46,7 @@ const MyBookmarks = () => {
   } = useSelector((state) => state.bookmark);
 
   const [draggedItemId, setDraggedItemId] = useState(null);
+  const [searchResults, setSearchResults] = useState(false);
 
   useEffect(() => {
     if (loginMessage) {
@@ -195,7 +196,7 @@ const MyBookmarks = () => {
             tabIndex="-1"
             aria-label="Sidebar"
           >
-            <Searchbar />
+            <Searchbar setSearchResults={setSearchResults} />
             <Sidebar setId={setId} id={id} />
           </div>
 
@@ -246,8 +247,8 @@ const MyBookmarks = () => {
                         ? `| ${selectedSubCategory?.title}`
                         : ""
                     }`
-                  : ""}
-                {!id?.categoryId ? (
+                  : searchResults ? 'Search Results' : ""}
+                {!id?.categoryId && !searchResults ? (
                   <span className="text-base text-light-black inline-block ml-4">
                     (Drag and drop thumbnails to position top links or pin to a
                     grid location)
