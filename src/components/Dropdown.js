@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Select, { components } from "react-select";
-const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items }) => {
+const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder }) => {
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
     ...items.map(item => ({
@@ -106,7 +106,7 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items }) => {
         name={name}
         value={formattedOptions.find((option) => option.value === fieldValue)}
         onChange={(selectedOption) => setFieldValue(selectedOption)}
-        placeholder="Search Parent Category"
+        placeholder={placeholder?placeholder:"Search Parent Category"}
         styles={customStyles}
         options={formattedOptions}
         isSearchable={true}

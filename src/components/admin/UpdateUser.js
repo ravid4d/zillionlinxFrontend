@@ -169,6 +169,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     id="country"
                     name="country"
                     label="Country"
+                    placeholder="Select an option"
                     fieldValue={formik.values.country?formik.values.country:userToEdit?.country}
                     setFieldValue={(selectedOption) => {
                       formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:userToEdit);
