@@ -98,7 +98,7 @@ const handleRightClick = (event, record) => {
 };
 
   return (
-    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2">
+    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <button
         type="button"
         className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
@@ -126,9 +126,9 @@ const handleRightClick = (event, record) => {
           <path d="m8 9 3 3-3 3" />
         </svg>
       </button>
-      <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
-        <div className="flex flex-wrap lg:space-x-8">
-          <div className="bookmark-content-wrappers w-full">
+      <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8 h-full">
+        <div className="flex flex-wrap lg:space-x-8 h-full">
+          <div className="bookmark-content-wrappers w-full h-full">
             <div className="flex flex-wrap items-center justify-between">
               <div className="bg-white rounded-xl p-3 mb-4">
                 Hint: Right Click on any URL / Title below to Bookmark that Link
@@ -139,7 +139,7 @@ const handleRightClick = (event, record) => {
               /> */}
               <GoogleSearchbar />
             </div>
-            <div className="rounded-2xl py-6 h-[calc(100%-64px)] flex flex-wrap">
+            <div className="rounded-2xl h-[calc(100%-64px)] flex flex-wrap">
               {noContent ? (
                 <div className="text-center w-full p-6 bg-white rounded-xl">
                   <h1 className="text-2xl font-bold">No Content Found</h1>
@@ -147,13 +147,13 @@ const handleRightClick = (event, record) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white w-3/4 rounded-xl border border-light-blue p-6 flex flex-wrap ">
-                    <div className="w-3/4">
+                  <div className="bg-white w-3/4 rounded-xl border border-light-blue p-6 flex flex-wrap h-full">
+                    <div className="w-3/4 h-full">
                       <div className="flex flex-wrap items-center space-x-5 mb-2">
                         <img src="/google.svg" alt="" width="160" />
                         <p>Google Custom Search</p>
                       </div>
-                      <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-screen">
+                      <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)]">
                         {googleLoading ? (
                           <span className="loader"></span>
                         ) : (
@@ -191,15 +191,15 @@ const handleRightClick = (event, record) => {
                         }
                       </div>
                     </div>
-                    <div className={`w-1/4 rounded-2xl ps-6`}>
-                      <div className="bg-white">
+                    <div className={`w-1/4 rounded-2xl ps-6 h-full`}>
+                      <div className="bg-white h-full">
                         <img
                           src="/member-rank.svg"
                           alt=""
                           width="160"
                           className="mx-auto block mb-2"
                         />
-                        <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-screen">
+                        <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
                           <ul className="grid grid-cols-1 gap-4">
                             {googleLoading ? (
                               <span className="loader"></span>
@@ -209,7 +209,6 @@ const handleRightClick = (event, record) => {
                               bookmarks?.map((result, index) => {
                                 return (
                                   <li key={index} className="relative">
-                                    {/* {result.icon_path} */}
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
                                         className="min-h-[85px] block"
@@ -242,7 +241,7 @@ const handleRightClick = (event, record) => {
                       </div>
                     </div>
                   </div>
-                  <div className={`w-1/4 rounded-2xl ps-6`}>
+                  <div className={`w-1/4 rounded-2xl ps-6 h-full`}>
                     <div className="bg-white rounded-xl p-6 h-full">
                       <div className="bg-white rounded-xl border border-light-blue h-full p-4">
                         <p className="text-[28px] text-dark-blue capitalize mb-5">
@@ -253,28 +252,12 @@ const handleRightClick = (event, record) => {
                             <span className="loader"></span>
                           ) : (
                             <>
-                              {/* {googleResults && googleResults?.length > 0 && (
-                                <button
-                                  className="block mb-2 last:mb-0 w-full"
-                                  onClick={() => handleResult("google")}
-                                >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
-                                    <img
-                                      src="/google.svg"
-                                      alt=""
-                                      width="187"
-                                      className="mx-auto max-w-full"
-                                    />
-                                  </figure>
-                                </button>
-                              )} */}
                               {wikiStaticLink !== "" && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={wikiStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  //   onClick={() => handleResult("wikki")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
@@ -292,7 +275,6 @@ const handleRightClick = (event, record) => {
                                   to={ebayStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  //   onClick={() => handleResult("ebay")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
@@ -327,7 +309,6 @@ const handleRightClick = (event, record) => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   to={youtubeStaticLink}
-                                  //   onClick={() => handleResult("youtube")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
