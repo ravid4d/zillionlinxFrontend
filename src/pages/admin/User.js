@@ -221,6 +221,7 @@ const User = () => {
                   {users?.map((user) => {
                     return (
                       <UserTableData
+                      showEditOrDelete={true}
                         user={user}
                         key={user?.id}
                         selectedUsers={selectedUsers}

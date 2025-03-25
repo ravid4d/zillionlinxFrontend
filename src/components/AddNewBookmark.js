@@ -287,6 +287,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       ) : null}
                     </div>
                   ) : null}
+                  {formik.values.sub_category_id}
                   {formik.values.sub_category_id === 0 ? (
                     <div className="mb-5">
                       <Textfield
