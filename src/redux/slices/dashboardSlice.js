@@ -1,0 +1,64 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../axiosInstance";
+
+const dashboardUrl = `${process.env.REACT_APP_API_URL}/api/admin/dashboard`;
+
+// Async thunk to fetch dashboard data
+export const getDashboardData = createAsyncThunk(
+  "admin/getDashboardData",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token || localStorage.getItem("token");
+
+      if (!token) {
+        return rejectWithValue({ status: 401, message: "Unauthorized: No token found" });
+      }
+
+      const response = await axiosInstance.post(
+        dashboardUrl,
+        {}, 
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+   
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status || 500,
+        message: error?.response?.data?.message || "Failed to fetch dashboard data",
+      });
+    }
+  }
+);
+
+// Redux slice
+const dashboardSlice = createSlice({
+  name: "admin",
+  initialState: {
+    dashboardData: null,
+    loading: false,
+    error: null,
+    status: "",
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getDashboardData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getDashboardData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.dashboardData = action.payload;
+        state.status = "success";
+      })
+      .addCase(getDashboardData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "An error occurred";
+        state.status = action.payload?.status || 500;
+      });
+  },
+});
+
+export default dashboardSlice.reducer;

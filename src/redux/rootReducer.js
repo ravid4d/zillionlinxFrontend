@@ -7,7 +7,7 @@ import registerReducer from "./slices/registerSlice";
 import categoryReducer from "./slices/categorySlice";
 import userReducer from "./slices/userSlice";
 import adminReducer from "./slices/adminSlice";
-
+import dashboardReducer from "./slices/dashboardSlice";
 // Define persist configuration for the auth reducer
 const authPersistConfig = {
     key: "auth",
@@ -22,7 +22,8 @@ const rootReducer = combineReducers({
     register: registerReducer,
     category: categoryReducer,
     user: userReducer,
-    admin: adminReducer
+    admin: adminReducer,
+    dashboard: dashboardReducer
 });
 
 export default rootReducer;

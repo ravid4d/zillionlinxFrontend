@@ -24,6 +24,7 @@
     "react-select": "^5.10.0",
     "react-toastify": "^11.0.3",
     "redux-persist": "^6.0.0",
+    "sweetalert2": "^11.17.2",
     "web-vitals": "^4.2.4",
     "webpack": "^5.98.0",
     "yup": "^1.6.1"
