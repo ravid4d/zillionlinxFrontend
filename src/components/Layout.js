@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import Login from "./Login";
@@ -16,6 +16,7 @@ import { fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
 
 const Layout = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [sidebar, hideSidebar] = useState(false);
   const [id, setId] = useState({ categoryId: null, subCategoryId: null });
   const { categories } = useSelector((state) => state.category);
@@ -111,7 +112,7 @@ const Layout = () => {
           id={id}
           setId={setId}
         />
-        <div className="w-full content-area">
+        <div className={`w-full content-area ${(location?.pathname!=="" || location?.pathname!=="/") && location?.pathname.slice(1)}`}>
           <Outlet
             context={{
               setUrlToBookmark,

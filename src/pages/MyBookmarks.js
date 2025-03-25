@@ -181,7 +181,7 @@ const MyBookmarks = () => {
 
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
-      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-8 h-full">
+      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
             id="hs-application-sidebar"
@@ -202,9 +202,9 @@ const MyBookmarks = () => {
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            <div className="flex flex-wrap items-center justify-between">
+            <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
               <div className="flex flex-wrap items-center gap-2">
-                <button
+                {/* <button
                   type="button"
                   className="mb-4 size-8 xl:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
                   aria-haspopup="dialog"
@@ -230,7 +230,7 @@ const MyBookmarks = () => {
                     <path d="M15 3v18" />
                     <path d="m8 9 3 3-3 3" />
                   </svg>
-                </button>
+                </button> */}
                 <AddNewBookmarkField
                   setWhichModalOpen={setWhichModalOpen}
                   setUrlToBookmark={setUrlToBookmark}
@@ -238,10 +238,10 @@ const MyBookmarks = () => {
               </div>
               <GoogleSearchbar />
             </div>
-            <div className="rounded-2xl bg-white p-6 h-[calc(100%-66px)]">
-              <p className="text-[28px] text-dark-blue capitalize mb-5">
+            <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
+              <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
                 {isTopLink
-                  ? "Top Links"
+                  ? <span>Top Links</span>
                   : id?.categoryId
                   ? `${selectedCategory?.title} ${
                       selectedSubCategory?.title
@@ -250,7 +250,7 @@ const MyBookmarks = () => {
                     }`
                   : searchResults ? 'Search Results' : ""}
                 {!id?.categoryId && !searchResults ? (
-                  <span className="text-base text-light-black inline-block ml-4">
+                  <span className="text-base text-light-black inline-block">
                     (Drag and drop thumbnails to position top links or pin to a
                     grid location)
                   </span>
