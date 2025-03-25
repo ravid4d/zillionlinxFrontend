@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import axiosInstance from "../../axiosInstance";
 const allUsersUrl = `${process.env.REACT_APP_API_URL}/api/admin/users`;
 const updateUserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/update/`;
@@ -14,6 +13,7 @@ export const getAllUsers = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
+   
       return response?.data;
     } catch (error) {
       return rejectWithValue({

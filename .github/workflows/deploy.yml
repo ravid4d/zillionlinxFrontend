@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy to Server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.6  # Using a stable version
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -20,7 +20,6 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           script: |
             cd /var/www/html/zillionlinx-front
-            git pull origin master
-            npm run build
-            sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
-            sudo systemctl restart apache2 
+            git pull origin main
+            # sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
+            sudo systemctl restart apache2

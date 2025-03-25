@@ -24,6 +24,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
 
   const [resetKey, setResetKey] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState([]);
+  const [showNewSubCategory, setShowNewSubCategory] = useState(false);
 
   const { token } = useSelector((state) => state.auth);
   const { categories, subCategories } = useSelector((state) => state.category);
@@ -73,17 +74,17 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       sub_category_id: YUP.number().typeError(
         "Sub Category Id must be a number"
       ),
-      sub_category_name: YUP.string().when("sub_category_id", (sub_category_id, schema) => {
-        return Number(sub_category_id) === 0
-          ? schema.required("New Sub Category Name is required")
-          : schema.notRequired();
+      sub_category_name: YUP.string().when("sub_category_id", {
+        is: () => showNewSubCategory,
+        then: (schema) => schema.required("New Sub Category Name is required"),
+        otherwise: (schema) => schema.notRequired(),
       }),
       add_to: YUP.string().required("Add To is required")
     }),
     onSubmit: (values) => { 
       const updatedValues = {
         ...values,
-        ...(values.sub_category_id === 0 ? {} : { sub_category_name: "" }), // Remove sub_category_name if not needed
+        ...(showNewSubCategory ? {} : { sub_category_name: "" }), // Remove sub_category_name if not needed
       };
       handleAddNewBookmark(updatedValues);
     }
@@ -114,6 +115,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       });
       }
       closeModal();
+      setShowNewSubCategory(false)
     } else {
       toast.error(result.payload?.message || "Failed to add bookmark.");
     }
@@ -263,7 +265,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       </div>
                     </>
                   ) : null}
-                  {subCategories ? (
+                  {!showNewSubCategory && (
                     <div className="mb-5">
                       <Dropdown
                         key={resetKey}
@@ -286,9 +288,29 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         </div>
                       ) : null}
                     </div>
-                  ) : null}
-                  {formik.values.sub_category_id === 0 ? (
-                    <div className="mb-5">
+                  )}
+                  
+                  <div className="mb-5">
+                    <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>
+                     <span className="capitalize"> + New Sub Category</span>
+                    </button>
+                  </div>
+
+                  {showNewSubCategory && (
+                    <div className="mb-5 relative">
+                      <div className="flex justify-end items-center">
+                        <button type="button"
+                          class="absolute top-0 size-6 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                          aria-label="Close" data-hs-overlay="#hs-slide-down-animation-modal" aria-expanded="false" onClick={()=>setShowNewSubCategory(false)}>
+                          <span class="sr-only">Close</span>
+                          <svg class="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M18 6 6 18"></path>
+                            <path d="m6 6 12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
                       <Textfield
                         id="sub_category_name"
                         name="sub_category_name"
@@ -305,7 +327,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         </div>
                       ) : null}
                     </div>
-                  ): null}
+                  )} 
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"

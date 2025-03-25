@@ -2,6 +2,7 @@ import moment from "moment/moment";
 import React from "react";
 
 const UserTableData = ({
+  showEditOrDelete,
   user,
   selectedUsers,
   handleSelectOneUser,
@@ -12,18 +13,25 @@ const UserTableData = ({
     <tr>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
+        
           <label htmlFor={`hs-at-with-checkboxes-${user.id}`} className="flex">
+          {showEditOrDelete&&
+          <>
             <input
               type="checkbox"
               className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
               id={`hs-at-with-checkboxes-${user.id}`}
-              checked={selectedUsers.includes(user.id)}
+              checked={selectedUsers?.includes(user.id)}
               onChange={() => handleSelectOneUser(user.id)}
             />
+             </>
+            }
             <span className="block text-sm text-gray-500 dark:text-neutral-500">
               {user?.id}
             </span>
+           
           </label>
+
         </div>
       </td>
       <td className="size-px whitespace-nowrap">
@@ -54,6 +62,7 @@ const UserTableData = ({
           </span>
         </div>
       </td>
+      {showEditOrDelete&&
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-1.5">
           <button
@@ -105,6 +114,7 @@ const UserTableData = ({
           </button>
         </div>
       </td>
+     }
     </tr>
   );
 };
