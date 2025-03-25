@@ -20,7 +20,7 @@ const Layout = () => {
   const [sidebar, hideSidebar] = useState(false);
   const [id, setId] = useState({ categoryId: null, subCategoryId: null });
   const { categories } = useSelector((state) => state.category);
-  const { token } = useSelector((state) => state.auth);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
 
@@ -112,7 +112,7 @@ const Layout = () => {
           id={id}
           setId={setId}
         />
-        <div className={`w-full content-area ${(location?.pathname!=="" || location?.pathname!=="/") && location?.pathname.slice(1)}`}>
+        <div className={`w-full content-area ${isLoggedIn?'user-loggedin':''} ${(location?.pathname!=="" || location?.pathname!=="/") && location?.pathname.slice(1)}`}>
           <Outlet
             context={{
               setUrlToBookmark,

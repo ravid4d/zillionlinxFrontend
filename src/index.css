@@ -38,10 +38,10 @@ body {
   border-radius: 10px;
 }
 
-.content-area:not(.result) {
+.content-area.user-loggedin:not(.result) {
   @apply md:h-[calc(100vh-128px)] xl:h-[calc(100vh-68px)] md:max-h-[1024px]
 }
-.content-area.result {
+.content-area.user-loggedin.result {
   @apply lg:h-[calc(100vh-128px)] xl:h-[calc(100vh-68px)] lg:max-h-[1024px]
 }
 
