@@ -34,7 +34,8 @@ export const fetchSubCategories = createAsyncThunk(
           },
         }
       );
-      return response?.data?.data; 
+      const subcategories = response?.data?.data || []; 
+      return subcategories;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,

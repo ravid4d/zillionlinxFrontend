@@ -15,12 +15,15 @@ import AdminLogin from './components/admin/AdminLogin';
 import NonProtectedAdminRoutes from './routes/NonProtectedAdminRoutes';
 import User from './pages/admin/User';
 import GoogleCustomSearch from './pages/GoogleCustomSearch';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AdminBookmarks from './components/admin/AdminBookmarks';
 
 function App() {
     return (
         // <BrowserRouter basename='/zillionfront/'> "homepage": "/zillionfront",       
-       
-        <BrowserRouter future={{ v7_relativeSplatPath: true }}>
+        <>
+        <ToastContainer hideProgressBar={true} autoClose={2000} />
             <Routes>
                 {/* Routes, those both users and admin can access */}
                 <Route path="/" element={<Layout />}>
@@ -50,12 +53,14 @@ function App() {
                         <Route index element={<Dashboard />} />
                         <Route path="category" element={<Category />} />
                         <Route path="user" element={<User />} />
+                        <Route path="admin-bookmarks" element={<AdminBookmarks />} />
                     </Route>
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
             </Routes>
-        </BrowserRouter>
+        </>
+        // </BrowserRouter>
     );
 }
 

@@ -6,19 +6,25 @@ import {
 } from "../../redux/slices/userSlice";
 import { deleteUser } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
+import UpdateUser from "../../components/admin/UpdateUser";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 
 const User = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { users, totalUsers, pagination, userLoading, error } = useSelector(
+  const { users, totalUsers, pagination } = useSelector(
     (state) => state.user
   );
 
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [userToEdit, setUserToEdit] = useState({});
+  const [userToEditModal, setUserToEditModal] = useState(false);
 
   //Select / Unselect all the users
   const handleSelectAllUsers = () => {
-    selectedUsers?.length === users?.length
+    selectedUsers?.length === users?.length 
       ? setSelectedUsers([])
       : setSelectedUsers(users?.map((user) => user?.id));
   };
@@ -34,37 +40,78 @@ const User = () => {
 
   //Delete single user
   const deleteSingleUser = (ids) => {
-    if (selectedUsers.length === 0) {
-      alert("No users selected!");
+    if (!ids || ids.length === 0) {
+      toast.warning("No users selected!");
       return;
     }
-
-    dispatch(deleteUser({ ids: selectedUsers, token }))
-      .unwrap()
-      .then(() => {
-        console.log("Users deleted successfully");
-        setSelectedUsers([]); // Clear selected users
-      })
-      .catch((err) => {
-        console.error("Error deleting users:", err);
-      });
-  };
+  
+    const confirmDelete = () => {
+      dispatch(deleteUser({ ids, token }))
+        .unwrap()
+        .then(() => {
+          toast.success("User deleted successfully!");
+          setSelectedUsers([]); // Clear selection
+          dispatch(getAllUsers()); 
+        })
+        .catch((err) => {
+          toast.error("Error deleting user: " + err.message);
+        });
+    };
+  
+    // Show confirmation toast with Yes/No buttons
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      }
+    });
+  };  
 
   //Delete selected users.
   const handleDeleteSelected = () => {
     if (selectedUsers.length === 0) {
-      alert("No users selected!");
+      toast.warning("No users selected!", { position: "top-center" });
       return;
     }
-    dispatch(deleteUser({ ids: selectedUsers, token }))
-      .unwrap()
-      .then(() => {
-        console.log("Users deleted successfully");
-        setSelectedUsers([]); // Clear selected users after successful deletion
-      })
-      .catch((err) => {
-        console.error("Error deleting users:", err);
-      });
+  
+    const confirmDelete = () => {
+      dispatch(deleteUser({ ids: selectedUsers, token }))
+        .unwrap()
+        .then(() => {
+          toast.success("Users deleted successfully!", { position: "top-center" });
+          setSelectedUsers([]); // Clear selection after deletion
+          dispatch(getAllUsers()); 
+        })
+        .catch((err) => {
+          toast.error("Error deleting users: " + err.message, { position: "top-center" });
+        });
+    };
+  
+    // Show confirmation toast with Yes/No buttons
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete these users?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Users have been removed.", "success");
+      }
+    });
   };
   
 
@@ -75,6 +122,13 @@ const User = () => {
   const handlePagination = async (url) => {
     dispatch(handleUsersPagination({ url, token }));
   };
+
+  // Open User Edit Modal
+  useEffect(()=>{
+    if(typeof userToEdit === "object" && userToEdit !== null && !Array.isArray(userToEdit) && Object.keys(userToEdit).length > 0) {
+      setUserToEditModal(true);
+    }
+  },[userToEdit])
 
   return (
     <div className="w-full lg:ps-64">
@@ -107,75 +161,83 @@ const User = () => {
           </div>
           )} */}
           {users && users?.length > 0 ? (
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-              <thead className="bg-gray-50 dark:bg-neutral-800">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <label
-                      htmlFor="hs-at-with-checkboxes-main"
-                      className="flex"
+            <>
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                <thead className="bg-gray-50 dark:bg-neutral-800">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <label
+                        htmlFor="hs-at-with-checkboxes-main"
+                        className="flex"
+                      >
+                        <input
+                          type="checkbox"
+                          onChange={handleSelectAllUsers}
+                          checked={
+                            selectedUsers.length === users.length &&
+                            users.length > 0
+                          }
+                          className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                          id="hs-at-with-checkboxes-main"
+                        />
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          ID
+                        </span>
+                      </label>
+                    </th>
+
+                    <th
+                      scope="col"
+                      className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
                     >
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAllUsers}
-                        checked={
-                          selectedUsers.length === users.length &&
-                          users.length > 0
-                        }
-                        className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                        id="hs-at-with-checkboxes-main"
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Name
+                        </span>
+                      </div>
+                    </th>
+
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Country
+                        </span>
+                      </div>
+                    </th>
+
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Created
+                        </span>
+                      </div>
+                    </th>
+
+                    <th scope="col" className="px-6 py-3 text-end"></th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
+                  {users?.map((user) => {
+                    return (
+                      <UserTableData
+                      showEditOrDelete={true}
+                        user={user}
+                        key={user?.id}
+                        selectedUsers={selectedUsers}
+                        handleSelectOneUser={handleSelectOneUser}
+                        deleteSingleUser={deleteSingleUser}
+                        setUserToEdit={setUserToEdit}
                       />
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        ID
-                      </span>
-                    </label>
-                  </th>
-
-                  <th
-                    scope="col"
-                    className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Name
-                      </span>
-                    </div>
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Country
-                      </span>
-                    </div>
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Created
-                      </span>
-                    </div>
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-end"></th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                {users?.map((user) => {
-                  return (
-                    <UserTableData
-                      user={user}
-                      key={user?.id}
-                      selectedUsers={selectedUsers}
-                      handleSelectOneUser={handleSelectOneUser}
-                      deleteSingleUser={deleteSingleUser}
-                    />
-                  );
-                })}
-              </tbody>
-            </table>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {
+              userToEditModal &&
+              <UpdateUser userToEditModal={userToEditModal} setUserToEditModal={setUserToEditModal} userToEdit={userToEdit} />
+              }
+            </>
           ) : null}
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
             <div>
@@ -189,17 +251,20 @@ const User = () => {
 
             {/* Counter Pagination */}
             <div className="inline-flex gap-x-2">
-              {pagination?.slice(1, -1).map((pageNumber, index) => {
+              {pagination.map((pageNumber, index) => {
                 return (
                   <button
                     key={index}
                     type="button"
+                    disabled={pageNumber?.url === null}
                     onClick={() => handlePagination(pageNumber?.url)}
                     className={`${
                       pageNumber?.active ? "bg-gray-100" : "bg-white"
                     } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
                   >
-                    {pageNumber?.label}
+                    {
+                    index===0 ? '<' : index === pagination?.length-1 ? '>' : pageNumber?.label
+                  }
                   </button>
                 );
               })}
