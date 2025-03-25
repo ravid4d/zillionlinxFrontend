@@ -7,15 +7,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { handleLogin } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import PasswordField from './PasswordField';
-
+// import CryptoJS from "crypto-js";
 
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
     const [showPassword, setShowPassword] = useState(false);
-
+    
     const { loading } = useSelector((state) => state.auth);
+
+    // const encryptPassword = (password) => {
+    //     return CryptoJS.AES.encrypt(password, process.env.REACT_APP_SECRET_CODE).toString();
+    // }; 
 
     const formik = useFormik({
         initialValues: {
@@ -29,6 +33,8 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
         }),
         onSubmit: async(values) => {
             let loginType="user";
+            // const encryptedPassword = encryptPassword(values?.password);
+            // values.password=encryptedPassword;
             try {
                 const result = await dispatch(handleLogin({ values, loginType })).unwrap();
                 closeModal();    

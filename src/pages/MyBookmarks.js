@@ -77,7 +77,6 @@ const MyBookmarks = () => {
   const handleDrop = async (itemId) => {
     if (draggedItemId === null || draggedItemId === itemId) return;
 
-    console.log(bookmarks, "bookmarks");
     // Ensure bookmarks.bookmarks is an array
     const newItems = Array.isArray(bookmarks) ? [...bookmarks] : [];
 

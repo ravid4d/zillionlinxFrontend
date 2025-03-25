@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 const AdminSidebar = () => {
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {console.log(location.pathname, path); return location.pathname === path};
 
   return (
     <div
@@ -83,7 +83,7 @@ const AdminSidebar = () => {
                 <Link
                   to="category"
                   className={`${
-                    isActive("category") ? "bg-gray-100" : ""
+                    isActive("/admin/category") ? "bg-gray-100" : ""
                   } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
                 >
                   <svg
@@ -105,9 +105,9 @@ const AdminSidebar = () => {
               </li>
               <li>
                 <Link
-                  to="bookmark"
+                  to="admin-bookmarks"
                   className={`${
-                    isActive("bookmark") ? "bg-gray-100" : ""
+                    isActive("/admin/admin-bookmarks") ? "bg-gray-100" : ""
                   } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
                 >
                   <svg
@@ -131,7 +131,7 @@ const AdminSidebar = () => {
                 <Link
                   to="user"
                   className={`${
-                    isActive("/user") ? "bg-gray-100" : ""
+                    isActive("/admin/user") ? "bg-gray-100" : ""
                   } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
                 >
                   <svg

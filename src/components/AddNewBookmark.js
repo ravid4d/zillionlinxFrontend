@@ -58,6 +58,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       url: "",
       category_id: "",
       sub_category_id: "",
+      sub_category_name: "",
       add_to: ""
     },
     validationSchema: YUP.object({
@@ -72,10 +73,19 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       sub_category_id: YUP.number().typeError(
         "Sub Category Id must be a number"
       ),
+      sub_category_name: YUP.string().when("sub_category_id", (sub_category_id, schema) => {
+        return Number(sub_category_id) === 0
+          ? schema.required("New Sub Category Name is required")
+          : schema.notRequired();
+      }),
       add_to: YUP.string().required("Add To is required")
     }),
-    onSubmit: (values) => {
-      handleAddNewBookmark(values);
+    onSubmit: (values) => { 
+      const updatedValues = {
+        ...values,
+        ...(values.sub_category_id === 0 ? {} : { sub_category_name: "" }), // Remove sub_category_name if not needed
+      };
+      handleAddNewBookmark(updatedValues);
     }
   });
 
@@ -277,6 +287,26 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       ) : null}
                     </div>
                   ) : null}
+                  {formik.values.sub_category_id}
+                  {formik.values.sub_category_id === 0 ? (
+                    <div className="mb-5">
+                      <Textfield
+                        id="sub_category_name"
+                        name="sub_category_name"
+                        label="New Sub Category"
+                        type="text"
+                        placeholder="New Sub Category"
+                        fieldValue={formik.values.sub_category_name}
+                        setFieldValue={formik.handleChange}
+                        setFieldValueOnBlur={formik.handleBlur}
+                      />
+                      {formik.touched.url && formik.errors?.sub_category_name ? (
+                        <div className="text-red-500 text-sm mt-1">
+                          {formik.errors.sub_category_name}
+                        </div>
+                      ) : null}
+                    </div>
+                  ): null}
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"
@@ -337,7 +367,10 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         : ""
                     }`}
                   >
-                    Add New Bookmark
+                    {
+                      addBookmarkLoading?<span className="loader"></span>:"Add New Bookmark"
+                    }
+                    
                   </button>
                 </form>
               </div>

@@ -3,6 +3,7 @@ import axiosInstance from "../../axiosInstance";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 const deleteuserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/delete`;
+const fetchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/getAllBookmarks`;
 
 export const getParentCategories = createAsyncThunk(
   "admin/getParentCategories",
@@ -29,7 +30,7 @@ export const getParentCategories = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   "admin/deleteUser",
   async ({ ids, token }, { rejectWithValue }) => {
-    try {  alert(ids);
+    try {  
       const response = await axiosInstance.delete(deleteuserUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -50,7 +51,6 @@ export const deleteUser = createAsyncThunk(
     }
   }
 );
-
 
 export const addNewCategory = createAsyncThunk(
   "admin/addNewCategory",
@@ -98,15 +98,59 @@ export const getAdminCategory = createAsyncThunk(
   }
 );
 
+// Fetch All Top Links
+export const fetchAllBookmarks = createAsyncThunk(
+  "admin/fetchAllBookmarks",
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(fetchBookmarkUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to fetch Top Links"
+      });
+    }
+  }
+);
+
+export const handleBookmarksPagination = createAsyncThunk(
+  "admin/pagination",
+  async ({ url, token }, { rejectWithValue }) => {
+    try {
+      let response = await axiosInstance.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While getting the users via pagination."
+      });
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
     status: "",
     loading: false,
     error: null,
+    totalBookmarks: undefined,
+    pagination: [],
     users: [],
     parentCategories: [],
-    adminCategories:[]
+    adminCategories:[],
+    adminBookmarks:[],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -125,6 +169,7 @@ const adminSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
     builder
       .addCase(addNewCategory.pending, (state) => {
         state.loading = true;
@@ -165,6 +210,39 @@ const adminSlice = createSlice({
       .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
+      });
+      
+      builder
+      .addCase(fetchAllBookmarks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllBookmarks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminBookmarks = action.payload.bookmarks;
+        state.totalBookmarks = action.payload.data?.total;
+        state.pagination = action.payload.data?.links;
+      })
+      .addCase(fetchAllBookmarks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+      builder
+      .addCase(handleBookmarksPagination.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleBookmarksPagination.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminBookmarks = action.payload.data?.data;
+        state.totalBookmarks = action.payload.data?.total;
+        state.pagination = action.payload.data?.links;
+      })
+      .addCase(handleBookmarksPagination.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
       });
   }
 

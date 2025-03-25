@@ -104,7 +104,7 @@ const CategoryList = ({ classes }) => {
     toast.success("Selected categories/subcategories deleted.");
   };
 
-  return (
+  return (  
     <div className={classes}>
       <div className="flex flex-col">
         <div className="overflow-x-auto">

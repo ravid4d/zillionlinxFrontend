@@ -7,7 +7,6 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import AddNewCategory from "./AddNewCategory";
-import { ToastContainer } from "react-toastify";
 import GoogleSearchbar from "./GoogleSearchbar";
 import AddNewBookmarkField from "./AddNewBookmarkField";
 import Sidebar from "./Sidebar";
@@ -90,7 +89,6 @@ const Layout = () => {
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>
       
-      <ToastContainer hideProgressBar={true} autoClose={1000} />
       <div className="app-content flex flex-wrap w-full">
         <Login
           closeAllModals={closeAllModals}
