@@ -20,15 +20,8 @@ export const handleLogin = createAsyncThunk(
       let message = response?.data?.message || "";
       let isLoggedIn =
         response?.data?.data?.token !== undefined ||
-        response?.data?.data?.token !== null
-          ? !!response?.data?.data?.token
-          : false;
-      // if (token !== undefined) {
-      //   let navigateTo = loginType === "user" ? "bookmarks" : "admin";
-      //   navigate(`/${navigateTo}`);
-      // }
+        response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
       let user = response?.data?.data?.user;
-      // console.log(response?.data?.data?.user, 'user data');
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
       return rejectWithValue({
@@ -56,7 +49,6 @@ const authSlice = createSlice({
       state.userRole = null;
       state.isLoggedIn = false;
       state.user = null;
-      // localStorage.removeItem("token");
       localStorage.removeItem("persist:auth"); 
     }
   },

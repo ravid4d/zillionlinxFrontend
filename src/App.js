@@ -3,6 +3,8 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import MyBookmarks from './pages/MyBookmarks';
 import About from './pages/About';
+import UserAgreement from './pages/UserAgreement';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Dashboard from './pages/admin/Dashboard';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -15,6 +17,7 @@ import User from './pages/admin/User';
 import GoogleCustomSearch from './pages/GoogleCustomSearch';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminBookmarks from './components/admin/AdminBookmarks';
 
 function App() {
     return (
@@ -26,6 +29,8 @@ function App() {
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/user-agreement" element={<UserAgreement />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Route>
 
                 {/* Unauthorized Page - Rendered Independently */}
@@ -48,6 +53,7 @@ function App() {
                         <Route index element={<Dashboard />} />
                         <Route path="category" element={<Category />} />
                         <Route path="user" element={<User />} />
+                        <Route path="admin-bookmarks" element={<AdminBookmarks />} />
                     </Route>
                 </Route>
 

@@ -41,7 +41,7 @@ const Sidebar = ({setId, id}) => {
     }, [id?.categoryId, bookmark_addto]);
 
     return (
-        <div className='rounded-2xl bg-white lg:p-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative'>
+        <div className='rounded-2xl bg-white xl:p-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative'>
 
             <div className='min-h-4/6 h-[calc(100%-150px)] '>
                 <p className='text-[28px] text-dark-blue capitalize mb-5'>My Bookmarks</p>
@@ -102,7 +102,7 @@ const Sidebar = ({setId, id}) => {
                     }
                 </ul>
             </div>
-            <div className='bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 lg:bottom-8 lg:left-6 lg:right-6 mx-auto'>
+            <div className='bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto'>
                 <div className='absolute left-2 top-2 w-[85px]'>
                     <img src="/search-bookmark-icon.png" alt="" className="w-full" />
                 </div>

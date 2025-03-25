@@ -1,12 +1,12 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import Select, { components } from "react-select";
 const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items }) => {
-  
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
     ...items.map(item => ({
-      value: item.id,
-      label: item.title,
+      value: item?.id ? item?.id : item?.value,
+      label: item?.title ? item?.title : item?.label,
     }))
   ];
 

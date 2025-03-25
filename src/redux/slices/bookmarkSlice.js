@@ -85,7 +85,8 @@ export const addNewBookmark = createAsyncThunk(
           url: values?.url,
           category_id: values?.category_id,
           sub_category_id: values?.sub_category_id,
-          add_to: values?.add_to
+          add_to: values?.add_to,
+          sub_category_name: values?.sub_category_name
         },
         {
           headers: {
@@ -243,6 +244,7 @@ const bookmarkSlice = createSlice({
       state.bookmarks = action.payload?.bookmarks;
       // state.message =  action.payload?.bookmarks?.length === 0 && action.payload?.message
       state.isTopLink = false;
+      state.error = action.payload.message;
     })
     .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
       state.loading = false;
@@ -265,7 +267,7 @@ const bookmarkSlice = createSlice({
     })
     .addCase(addNewBookmark.rejected, (state, action) => {
       state.addBookmarkLoading = false;
-      state.error = action.payload.message;
+      state.bookmarkError = action.payload.message;
       state.status = action.payload.status;
     });
     

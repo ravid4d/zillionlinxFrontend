@@ -12,6 +12,7 @@ const Register = ({ openModal, closeAllModals}) => {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     const { loading } = useSelector((state) => state.register);
+    
     const formik = useFormik({
         initialValues: {
             first_name: "",
