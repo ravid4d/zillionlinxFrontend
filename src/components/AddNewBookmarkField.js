@@ -48,7 +48,7 @@ const AddNewBookmarkField = ({ setWhichModalOpen, setUrlToBookmark }) => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit} className={`${location.pathname === "/bookmarks" ? "" : "w-1/2"}`}>
+    <form onSubmit={formik.handleSubmit} className={`${location.pathname === "/bookmarks" ? "w-full" : "w-1/2"}`}>
       <div className="flex items-center rounded-xl shadow-sm mb-4 relative add-url-to-bookmark xl:w-[350px] max-w-full">
         <div className="relative w-full">
           <input

@@ -8,6 +8,8 @@ import { deleteUser } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
 import UpdateUser from "../../components/admin/UpdateUser";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ const User = () => {
 
   //Select / Unselect all the users
   const handleSelectAllUsers = () => {
-    selectedUsers?.length === users?.length
+    selectedUsers?.length === users?.length 
       ? setSelectedUsers([])
       : setSelectedUsers(users?.map((user) => user?.id));
   };
@@ -57,49 +59,21 @@ const User = () => {
     };
   
     // Show confirmation toast with Yes/No buttons
-    toast.info(
-      <div>
-        <p>Are you sure you want to delete?</p>
-        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-          <button
-            style={{
-              background: "#d9534f",
-              color: "white",
-              border: "none",
-              padding: "5px 10px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => {
-              confirmDelete();
-              toast.dismiss(); // Close toast
-            }}
-          >
-            Yes
-          </button>
-          <button
-            style={{
-              background: "#5bc0de",
-              color: "white",
-              border: "none",
-              padding: "5px 10px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => toast.dismiss()}
-          >
-            No
-          </button>
-        </div>
-      </div>,
-      {
-        position: "top-center",
-        autoClose: false, // Prevent auto-closing
-        closeOnClick: false,
-        draggable: false,
-        closeButton: false, // Hide default close button
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
       }
-    );
+    });
   };  
 
   //Delete selected users.
@@ -123,49 +97,21 @@ const User = () => {
     };
   
     // Show confirmation toast with Yes/No buttons
-    toast.info(
-      <div>
-        <p>Are you sure you want to delete users?</p>
-        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-          <button
-            style={{
-              background: "#d9534f",
-              color: "white",
-              border: "none",
-              padding: "5px 10px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => {
-              confirmDelete();
-              toast.dismiss(); // Close toast
-            }}
-          >
-            Yes
-          </button>
-          <button
-            style={{
-              background: "#5bc0de",
-              color: "white",
-              border: "none",
-              padding: "5px 10px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => toast.dismiss()}
-          >
-            No
-          </button>
-        </div>
-      </div>,
-      {
-        position: "top-center",
-        autoClose: false, // Don't auto-close
-        closeOnClick: false,
-        draggable: false,
-        closeButton: false, // Hide default close button
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete these users?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Users have been removed.", "success");
       }
-    );
+    });
   };
   
 
@@ -275,6 +221,7 @@ const User = () => {
                   {users?.map((user) => {
                     return (
                       <UserTableData
+                      showEditOrDelete={true}
                         user={user}
                         key={user?.id}
                         selectedUsers={selectedUsers}

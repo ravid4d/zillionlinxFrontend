@@ -35,8 +35,8 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
     }
   };
   return (
-    <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-40 w-full">
-      <nav className="relative max-w-screen-2xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+    <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-[38] w-full">
+      <nav className="relative max-w-screen-3xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={redirectTo}
@@ -49,7 +49,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
               className="max-w-full max-h-full block"
             />
           </div>
-
+       
           {/* <button
             type="button"
             className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-[12px] rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
@@ -102,6 +102,33 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
           <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
             <div className="py-2 md:py-0 flex flex-row items-center gap-0.5 md:gap-1">
               <div className="ms-auto flex flex-wrap items-center gap-x-1.5">
+              <button
+                  type="button" 
+                  className="relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden flex justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  aria-controls="hs-application-sidebar"
+                  aria-label="Toggle navigation"
+                  data-hs-overlay="#hs-application-sidebar"
+                >
+                  <span className="sr-only">Toggle Navigation</span>
+                  <svg
+                    className="size-4 sm:size-6 shrink-0"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#2131E5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M15 3v18" />
+                    <path d="m8 9 3 3-3 3" />
+                  </svg>
+                </button> 
                 {isLoggedIn && userRole === "user" ? (
                   <>
                     <div className="hs-dropdown relative inline-flex items-center space-x-2 sm:space-x-4">
@@ -341,7 +368,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
         </div>
       </nav>
       {isLoggedIn && userRole === "user" ? (
-        <div className="px-4 sm:px-6 lg:px-8 xl:hidden">
+        <div className="px-4 sm:px-6 xl:px-2 xl:hidden">
           <nav className="pt-4 bg-navy sm:bg-transparent rounded-tl-[20px] rounded-tr-[20px] flex flex-wrap sm:justify-end xl:hidden">
             <Link
               to="/bookmarks"
