@@ -98,7 +98,7 @@ const handleRightClick = (event, record) => {
 };
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2">
       <button
         type="button"
         className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"

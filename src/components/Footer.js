@@ -23,7 +23,7 @@ const Footer = () => {
             </nav>
 
             <footer className="py-4 bg-dark-blue w-full">
-                <div className="max-w-screen-2xl mx-auto text-center text-white">
+                <div className="max-w-screen-3xl mx-auto text-center text-white">
                     Copyright © 2025 Zillion Linx. All rights reserved.
                 </div>
             </footer>

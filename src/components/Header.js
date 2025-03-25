@@ -36,7 +36,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
   };
   return (
     <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-40 w-full">
-      <nav className="relative max-w-screen-2xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+      <nav className="relative max-w-screen-3xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={redirectTo}

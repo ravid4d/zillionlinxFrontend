@@ -57,7 +57,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="relative overflow-hidden max-w-screen-2xl mx-auto">
+      <div className="relative overflow-hidden max-w-screen-3xl mx-auto">
         <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-24">
           <div className="text-center">
             <h1 className="text-[5.7vw] leading-[6.1vw] font-medium uppercase text-dark-blue">

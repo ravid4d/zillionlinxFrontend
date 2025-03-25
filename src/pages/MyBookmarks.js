@@ -180,8 +180,8 @@ const MyBookmarks = () => {
   }, [bookmark_addto]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-navy rounded-bl-[20px] rounded-br-[20px] p-8">
+    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2">
+      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-8">
         <div className="flex flex-wrap xl:space-x-8">
           <div
             id="hs-application-sidebar"
