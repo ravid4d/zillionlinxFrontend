@@ -180,12 +180,13 @@ const MyBookmarks = () => {
   }, [bookmark_addto]);
 
   return (
-    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2">
-      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-8">
-        <div className="flex flex-wrap xl:space-x-8">
+    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-8 h-full">
+        <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
             id="hs-application-sidebar"
             className={`
+              h-full
                 bookmark-sidebar-wrapper    
                 hs-overlay [--auto-close:xl]
                 hs-overlay-open:translate-x-0         
@@ -200,7 +201,7 @@ const MyBookmarks = () => {
             <Sidebar setId={setId} id={id} />
           </div>
 
-          <div className="bookmark-content-wrapper">
+          <div className="bookmark-content-wrapper h-full">
             <div className="flex flex-wrap items-center justify-between">
               <div className="flex flex-wrap items-center gap-2">
                 <button
@@ -237,7 +238,7 @@ const MyBookmarks = () => {
               </div>
               <GoogleSearchbar />
             </div>
-            <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
+            <div className="rounded-2xl bg-white p-6 h-[calc(100%-66px)]">
               <p className="text-[28px] text-dark-blue capitalize mb-5">
                 {isTopLink
                   ? "Top Links"
@@ -255,7 +256,7 @@ const MyBookmarks = () => {
                   </span>
                 ) : null}
               </p>
-              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
+              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
                 {loading ? (
                   <span className="loader"></span>
                 ) : bookmarks?.length === 0 && error !== null ? (

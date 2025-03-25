@@ -341,7 +341,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
         </div>
       </nav>
       {isLoggedIn && userRole === "user" ? (
-        <div className="px-4 sm:px-6 lg:px-8 xl:hidden">
+        <div className="px-4 sm:px-6 xl:px-2 xl:hidden">
           <nav className="pt-4 bg-navy sm:bg-transparent rounded-tl-[20px] rounded-tr-[20px] flex flex-wrap sm:justify-end xl:hidden">
             <Link
               to="/bookmarks"

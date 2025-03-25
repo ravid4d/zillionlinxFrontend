@@ -38,6 +38,10 @@ body {
   border-radius: 10px;
 }
 
+.content-area {
+  height: calc(100vh - 68px);
+}
+
 .bookmark-sidebar-wrapper {
   @apply w-[300px] xl:w-[375px] p-5 xl:p-0 bg-white xl:bg-transparent;
 }

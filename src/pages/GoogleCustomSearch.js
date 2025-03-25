@@ -228,7 +228,7 @@ const handleRightClick = (event, record) => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
+                                        <span className="block g-white text-center underline text-[23px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
                                           {result?.title}
                                         </span>
                                       </Link>
