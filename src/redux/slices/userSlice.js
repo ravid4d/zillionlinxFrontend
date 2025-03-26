@@ -30,7 +30,7 @@ export const handleUsersPagination = createAsyncThunk(
   async ({ url, token }, { rejectWithValue }) => {
     try {
       let response = await axiosInstance.get(url, {
-        headers: {
+        headers: {  
           Authorization: `Bearer ${token}`
         }
       });
