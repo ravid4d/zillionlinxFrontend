@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { getAdminCategory } from "../../redux/slices/adminSlice";
+import { getAdminCategory, setEditingCategory } from "../../redux/slices/adminSlice";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
@@ -19,7 +19,7 @@ const CategoryList = ({ classes }) => {
     if(adminCategories?.length>0) {
       setCategories(adminCategories);
     }
-  }, [adminCategories?.length]);
+  }, [adminCategories]);
 
   const { token } = useSelector((state) => state.auth);
   useEffect(() => {
@@ -87,6 +87,10 @@ const CategoryList = ({ classes }) => {
       return newSelection;
     });
   };
+
+  const handleEditCategory = (category) => {
+    dispatch(setEditingCategory(category))
+  }
 
   const handleDelete = () => {
     setCategories((prevCategories) =>
@@ -250,9 +254,9 @@ const CategoryList = ({ classes }) => {
                               </td>
                               <td className="size-px whitespace-nowrap">
                                 <div className="px-6 py-1.5">
-                                  <a
+                                  <button
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                    href="#"
+                                    onClick={()=>handleEditCategory(category)}
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -268,7 +272,7 @@ const CategoryList = ({ classes }) => {
                                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                                       />
                                     </svg>
-                                  </a>
+                                  </button>
                                   <a
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
                                     href="#"
@@ -475,9 +479,9 @@ const CategoryList = ({ classes }) => {
                                             </td>
                                             <td className="size-px whitespace-nowrap">
                                               <div className="px-6 py-1.5">
-                                                <a
+                                                <button
                                                   className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                                  href="#"
+                                                  onClick={()=>handleEditCategory(sub)}
                                                 >
                                                   <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -493,7 +497,7 @@ const CategoryList = ({ classes }) => {
                                                       d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                                                     />
                                                   </svg>
-                                                </a>
+                                                </button>
                                                 <a
                                                   className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
                                                   href="#"

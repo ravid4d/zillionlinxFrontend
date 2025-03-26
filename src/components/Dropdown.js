@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Select, { components } from "react-select";
-const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder }) => {
+const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder, isDisabled= false }) => {
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
     ...items.map(item => ({
@@ -110,6 +110,7 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
         styles={customStyles}
         options={formattedOptions}
         isSearchable={true}
+        isDisabled={isDisabled}
         components={{
           DropdownIndicator: CustomDropdownIndicator,
           MenuList: CustomMenuList,
