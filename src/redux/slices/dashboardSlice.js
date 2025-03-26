@@ -66,6 +66,7 @@ const dashboardSlice = createSlice({
   name: "admin",
   initialState: {
     dashboardData: null,
+    sixMonthUserCount: null,
     loading: false,
     error: null,
     status: "",
@@ -83,6 +84,20 @@ const dashboardSlice = createSlice({
         state.status = "success";
       })
       .addCase(getDashboardData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "An error occurred";
+        state.status = action.payload?.status || 500;
+      })
+      .addCase(getSixMonthUserCount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getSixMonthUserCount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sixMonthUserCount = action.payload;
+        state.status = "success";
+      })
+      .addCase(getSixMonthUserCount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "An error occurred";
         state.status = action.payload?.status || 500;
