@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import MyBookmarks from './pages/MyBookmarks';
@@ -18,6 +18,7 @@ import GoogleCustomSearch from './pages/GoogleCustomSearch';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminBookmarks from './components/admin/AdminBookmarks';
+import ImportBookmarks from './pages/ImportBookmarks';
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
                     <Route path="/" element={<Layout />}>
                         <Route path="bookmarks" element={<MyBookmarks />} />
                         <Route path="result" element={<GoogleCustomSearch />} />
+                        <Route path="import" element={<ImportBookmarks />} />
                     </Route>
                 </Route>
 
