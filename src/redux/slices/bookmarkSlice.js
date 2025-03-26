@@ -63,6 +63,7 @@ export const fetchCategoryWiseBookmarks = createAsyncThunk(
           }
         }
       );
+      // console.log(response, 'fetch');
       return {
         bookmarks: response?.data?.bookmarks,
         message: response?.data?.message
@@ -183,6 +184,7 @@ export const searchBookmarks = createAsyncThunk(
           "Content-Type": "multipart/form-data"
         }
       });
+      // console.log(response, 'search results')
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({

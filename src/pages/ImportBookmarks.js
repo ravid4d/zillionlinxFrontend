@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import { clearImportBookmarksMessage, importBookmarks } from "../redux/slices/bookmarkSlice";
+import {  importBookmarks } from "../redux/slices/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const ImportBookmarks = () => {
