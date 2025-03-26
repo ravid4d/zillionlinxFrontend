@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "@preline/select";
 import Input from "./elements/Input";
 import { getToken } from "../../services/authService";
@@ -11,7 +11,10 @@ import Textfield from "../Textfield";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewCategory,
-  getParentCategories
+  getAdminCategory,
+  getParentCategories,
+  setEditingCategory,
+  updateCategory
 } from "../../redux/slices/adminSlice";
 
 // const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
@@ -19,14 +22,28 @@ import {
 const AddCategory = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { parentCategories } = useSelector((state) => state.admin);
+  const { parentCategories, editingCategory, categoryLoading } = useSelector((state) => state.admin);
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     if (token) {
       dispatch(getParentCategories(token));
     }
   }, [token, dispatch]);
-
+  
+  useEffect(() => {
+    if (editingCategory) {
+      if(inputRef.current){
+        inputRef.current.focus()
+      }
+      formik.setValues({
+        title: editingCategory.title || "",
+        parent_id: editingCategory.parent_id || ""
+      });
+    }
+  }, [editingCategory?.id]);
+  
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -40,13 +57,32 @@ const AddCategory = () => {
       parent_id: YUP.string().nullable().notRequired()
     }),
     onSubmit: async (values) => {
-      let result = await dispatch(addNewCategory({ values, token }));
-      if (addNewCategory.fulfilled.match(result)) {
-        //Do not need to show success message using toast while getting data on load
-        toast.success(result.payload || "Categories fetched successfully!");
-        formik.resetForm();
-      } else {
-        toast.error(result.payload || "Failed to add new category!");
+      try {
+        let result
+        if (editingCategory) {
+          // If editing, update the category
+          result = await dispatch(updateCategory({ id: editingCategory.id, values, token }));
+        } else {
+          // Otherwise, add new category
+          result = await dispatch(addNewCategory({ values, token }));
+        }
+        if (result.meta.requestStatus === "fulfilled") {
+          toast.success(editingCategory ? "Category updated successfully!" : "Category added successfully!");
+          formik.resetForm();
+          
+          // Fetch updated categories list
+          await dispatch(getAdminCategory(token));
+        } else {
+          if(result.payload?.isDuplicateEntry){
+            toast.error(result.payload?.isDuplicateEntry);
+            return
+          }
+          throw new Error(result.payload?.message || "Failed to save category!");
+        }
+      } catch (error) {
+        toast.error(error.message || "Failed to save category");
+      } finally {
+        dispatch(setEditingCategory(null))
       }
     }
   });
@@ -78,6 +114,7 @@ const AddCategory = () => {
                 setFieldValue={formik.handleChange}
                 setFieldValueOnBlur={formik.handleBlur}
                 icon="category"
+                ref={inputRef}
               />
               {formik.touched.title && formik.errors.title ? (
                 <div className="text-red-500 text-sm mt-1">
@@ -95,32 +132,40 @@ const AddCategory = () => {
                 formik.setFieldValue("parent_id", selectedOption?.value)
               }
               items={parentCategories}
+              isDisabled={editingCategory?.id}
             />
             {formik.touched.parent_id && formik.errors.parent_id ? (
               <div className="text-red-500 text-sm mt-1">
                 {formik.errors.parent_id}
               </div>
             ) : null}
-
             <button
               type="submit"
+              disabled={categoryLoading}
               className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
             >
-              Save Category
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46"
-                />
-              </svg>
+              {categoryLoading ? (
+                <>
+                  <span className="loader"></span> {editingCategory?.id ? "Updating Category" : "Saving Category"}
+                </> 
+              ) : (
+                <>
+                {editingCategory?.id ? "Update Category" : "Save Category"}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="size-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46"
+                  />
+                </svg>
+              </>)}
             </button>
           </div>
         </form>

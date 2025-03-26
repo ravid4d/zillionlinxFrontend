@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
-const Textfield = ({ label, type, id, icon = "", name, placeholder = "", iconPlacement, fieldValue, setFieldValue, setFieldValueOnBlur }) => {
+const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = "", iconPlacement, fieldValue, setFieldValue, setFieldValueOnBlur }, ref) => {
    
     
     return (
@@ -17,6 +17,7 @@ const Textfield = ({ label, type, id, icon = "", name, placeholder = "", iconPla
                     value={fieldValue}
                     onChange={setFieldValue}
                     onBlur={setFieldValueOnBlur}
+                    ref={ref}
                     {...(type === "password" && { autoComplete: "new-password" })}
                 />
                 {
@@ -59,6 +60,6 @@ const Textfield = ({ label, type, id, icon = "", name, placeholder = "", iconPla
             </div>
         </>
     )
-}
+})
 
 export default Textfield
