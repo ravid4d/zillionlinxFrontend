@@ -99,7 +99,7 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
 
   return (
     <>
-      <label htmlFor={id} className="block text-sm text-light-black mb-3">
+      <label htmlFor={id} className="block text-base text-light-black mb-3">
         {label}
       </label>
       <Select

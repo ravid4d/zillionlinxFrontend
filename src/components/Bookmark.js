@@ -78,7 +78,7 @@ const Bookmark = ({
           className="relative w-full block"
         >
           <div className="w-full aspect-[16/9]">
-          <img src={item?.icon_path} alt="" className="w-full h-full object-cover rounded-lg" />
+          <img src={item?.icon_path} alt="" className="w-full h-full object-cover object-top rounded-lg" />
           </div>
         </Link>
 

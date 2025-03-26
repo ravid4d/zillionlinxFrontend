@@ -158,15 +158,15 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
         tabIndex="-1"
         aria-labelledby="add-new-bookmark-modal-label"
       >
-        <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[700px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+        <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
           <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
-            <div className="w-full py-10 xl:py-20 px-10">
-              <div className="flex justify-between items-center flex-col">
+            <div className="w-full py-20 px-10">
+              <div className="flex justify-between items-center flex-col max-w-[400px] mx-auto">
                 <h3
                   id="add-new-bookmark-modal-label"
-                  className="uppercase text-dark-blue text-center w-full text-5xl xl:text-7xl mb-6 xl:mb-12"
+                  className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
                 >
-                  Add New <br/>Bookmark
+                  Add Bookmark
                 </h3>
                 <button
                   type="button"
@@ -331,7 +331,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"
-                      className="block text-sm text-light-black mb-3"
+                      className="block text-base text-light-black mb-3"
                     >
                       Add To?
                     </label>
@@ -348,7 +348,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         />
                         <label
                           htmlFor="bookmark"
-                          className="text-sm text-gray-500 ms-2"
+                          className="text-base text-gray-500 ms-2"
                         >
                           Bookmark
                         </label>
@@ -366,7 +366,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         />
                         <label
                           htmlFor="top_links"
-                          className="text-sm text-gray-500 ms-2"
+                          className="text-base text-gray-500 ms-2"
                         >
                           Top Links
                         </label>

@@ -157,7 +157,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                           />
                         </svg>
                       </Link>
-                      <Link to="/quick-access" className="group">
+                      {/* <Link to="/quick-access" className="group">
                         <svg
                           width="26"
                           height="26"
@@ -175,7 +175,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                             </clipPath>
                           </defs>
                         </svg>
-                      </Link>
+                      </Link> */}
                     </div>
                     <div className="mx-1 sm:mx-4">
                       <div className="w-px h-4 bg-mid-blue"></div>
@@ -354,12 +354,12 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                     >
                       Add New Bookmark
                     </button>
-                    <button
-                      type="button"
+                    <Link
+                      to="/import"
                       className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       Import Bookmarks
-                    </button>
+                    </Link>
                   </nav>
                 ) : null}
               </div>

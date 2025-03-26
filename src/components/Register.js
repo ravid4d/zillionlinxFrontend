@@ -58,12 +58,12 @@ const Register = ({ openModal, closeAllModals}) => {
     return (
         <>
             <div id="register" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.register ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="register-label" data-hs-overlay-keyboard="false">
-                <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[700px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center" >
+                <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center" >
                     <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
-                        <div className='w-full py-10 xl:py-20 px-10'>
-                            <div className="flex justify-between items-center">
-                                <h3 id="register-label" className="uppercase text-dark-blue text-center w-full text-5xl xl:text-7xl mb-6 xl:mb-12">
-                                    Join ZillioLinX for free now
+                        <div className='w-full py-20 px-10'>
+                            <div className="flex justify-between items-center max-w-[400px] mx-auto">
+                                <h3 id="register-label" className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6">
+                                    Join ZillioLinX <br/>for free now
                                 </h3>
                                 <button type="button"
                                     onClick={closeModal}
@@ -123,7 +123,7 @@ const Register = ({ openModal, closeAllModals}) => {
                                                     className="bg-light-blue border-mid-blue size-5 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" aria-describedby="terms_condition-description" />
                                             </div>
                                             <label htmlFor="terms_condition" className="ms-3">
-                                                <span className="block text-md text-light-black">I have read and accept the User Agreement.</span>
+                                                <span className="block text-base text-light-black">I have read and accept the User Agreement.</span>
                                             </label>
                                         </div>
                                         {formik.touched.terms_condition && formik.errors.terms_condition ? (

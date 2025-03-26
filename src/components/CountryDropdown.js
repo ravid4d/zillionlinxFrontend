@@ -3,7 +3,7 @@ import React from 'react'
 const CountryDropdown = ({ fieldValue, setFieldValue }) => {
     return (
         <>
-            <label htmlFor="input-label" className="block text-sm text-light-black mb-3">Select Country</label>
+            <label htmlFor="input-label" className="block text-base text-light-black mb-3">Select Country</label>
             <select name="country" id="country" value={fieldValue} onChange={setFieldValue} data-hs-select='{
                 "hasSearch": true,
                 "searchPlaceholder": "Search...",
