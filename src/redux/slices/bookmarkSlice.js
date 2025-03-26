@@ -8,6 +8,7 @@ const pinBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/`;
 const orderBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/reorder`;
 const googleSearchUrl = `${process.env.REACT_APP_API_URL}/api/search`;
 const sarchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/search_bookmark`;
+const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/import-bookmark`;
 
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
@@ -95,9 +96,7 @@ export const addNewBookmark = createAsyncThunk(
           }
         }
       );
-      // console.log(response, 'add new');
       return response?.data;
-      // return { message: response?.data?.message, bookmark: response?.data?.data };
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -184,7 +183,6 @@ export const searchBookmarks = createAsyncThunk(
           "Content-Type": "multipart/form-data"
         }
       });
-      console.log(response, 'hi data');
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
@@ -194,6 +192,23 @@ export const searchBookmarks = createAsyncThunk(
     }
   }
 );
+
+export const importBookmarks = createAsyncThunk("bookmarks/importBookmarks", async({token, formData}, {rejectWithValue})=>{
+  try {
+    let response = await axiosInstance.post(importBookmarkUrl, formData, {
+      headers:{
+        Authorization:`Bearer ${token}`,
+        'Content-Type':'multipart/form-data'
+      }
+    })
+    return response;
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.data?.status,
+      message: error?.response?.data?.message || "Failed to load bookmarks from google search api."
+    });
+  }
+})
 
 const bookmarkSlice = createSlice({
   name: "bookmark",
@@ -216,7 +231,8 @@ const bookmarkSlice = createSlice({
     wikiStaticLink: "",
     ebayStaticLink: "",
     amazonStaticLink: "",
-    error: null
+    error: null,
+    importBookmarkMessage:""
   },
   reducers: {
     callTopLinks: (state) => {
@@ -224,6 +240,9 @@ const bookmarkSlice = createSlice({
     },
     disabledTopLinks:(state)=>{
       state.isTopLink = false;
+    },
+    clearImportBookmarksMessage:(state)=>{
+      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -356,7 +375,19 @@ const bookmarkSlice = createSlice({
       state.error = action.payload.message;
       state.status = action.payload.status;
     });
+    builder.addCase(importBookmarks.pending, (state, action)=>{
+      state.loading = true;
+    })
+    .addCase(importBookmarks.fulfilled, (state, action)=>{
+      state.loading = false;
+      // state.error = action.payload.message
+          // state.error = action.payload;
+    })
+    .addCase(importBookmarks.rejected, (state, action)=>{
+      state.loading = false;
+      state.error = action.payload?.message;
+    })
   }
 });
-export const { callTopLinks, disabledTopLinks } = bookmarkSlice.actions;
+export const { callTopLinks, disabledTopLinks, clearImportBookmarksMessage } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
