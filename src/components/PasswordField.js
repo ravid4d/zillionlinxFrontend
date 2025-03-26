@@ -16,7 +16,7 @@ const PasswordField = ({
   let newType = type === "password" && showPassword ? "text" : type;
   return (
     <>
-      <label htmlFor={id} className="block text-sm text-light-black mb-3">
+      <label htmlFor={id} className="block text-base text-light-black mb-3">
         {label}
       </label>
       <div className="relative">

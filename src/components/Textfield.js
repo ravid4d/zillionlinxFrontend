@@ -5,7 +5,7 @@ const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = 
     
     return (
         <>
-            <label htmlFor={id} className="block text-sm text-light-black mb-3">{label}</label>
+            <label htmlFor={id} className="block text-base text-light-black mb-3">{label}</label>
             <div className="relative">
                 <input
                     type={type}

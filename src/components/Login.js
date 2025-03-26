@@ -51,12 +51,12 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
     }
     return (
         <div id="hs-slide-down-animation-modal" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.login ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="hs-slide-down-animation-modal-label" data-hs-overlay-keyboard="false">
-            <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[700px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+            <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
                 <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
-                    <div className='w-full py-10 xl:py-20 px-10'>
-                        <div className="flex justify-between items-center flex-col">
+                    <div className='w-full py-20 px-10'>
+                        <div className="flex justify-between items-center flex-col max-w-[400px] mx-auto">
                         {/* <div className='w-full text-red-600'>{error}</div> */}
-                            <h3 id="hs-slide-down-animation-modal-label" className="uppercase text-dark-blue text-center w-full text-5xl xl:text-7xl mb-6 xl:mb-12">
+                            <h3 id="hs-slide-down-animation-modal-label" className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6">
                                 Login
                             </h3>
                             <button type="button"
@@ -86,8 +86,8 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                                 </div>
                                 <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>login</button>
                             </form>
-                            <div className="pt-7 pb-2 flex items-center text-xl text-light-black uppercase before:flex-1 before:border-t before:border-light-black before:me-6 after:flex-1 after:border-t after:border-light-black after:ms-6">Or</div>
-                            <div className='text-base xl:text-xl text-light-black text-center'>
+                            <div className="pt-7 pb-2 flex items-center text-lg text-light-black uppercase before:flex-1 before:border-t before:border-light-black before:me-6 after:flex-1 after:border-t after:border-light-black after:ms-6">Or</div>
+                            <div className='text-base xl:text-lg text-light-black text-center'>
                                 <p className='uppercase'>Sign in with:</p>
                                 <div className='flex flex-wrap items-center justify-center my-4'>
                                     <button type="button" className="relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
@@ -123,7 +123,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                                         </svg>
                                     </button>
                                 </div>
-                                <p className='mb-4'>Don't have an account? <span className="cursor-pointer hover:text-dark-blue" onClick={() => setWhichModalOpen('register')}>Sign up</span></p>
+                                <p className='mb-2'>Don't have an account? <span className="cursor-pointer hover:text-dark-blue" onClick={() => setWhichModalOpen('register')}>Sign up</span></p>
                                 <p><span onClick={() => setWhichModalOpen('forgot')} className='cursor-pointer hover:text-dark-blue'>Forgot your password?</span></p>
                             </div>
                         </div>
