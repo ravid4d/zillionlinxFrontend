@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import categoryData from "../../json/category.json";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { getAdminCategory, setEditingCategory } from "../../redux/slices/adminSlice";
+import { getAdminCategory, setEditingCategory, deleteCategory } from "../../redux/slices/adminSlice";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
@@ -17,7 +17,7 @@ const CategoryList = ({ classes }) => {
 
   useEffect(() => {
     if(adminCategories?.length>0) {
-      setCategories(adminCategories);
+      setCategories(adminCategories); 
     }
   }, [adminCategories]);
 
@@ -38,7 +38,7 @@ const CategoryList = ({ classes }) => {
       const isSelected = prev[categoryId];
 
       // If selected, remove it and its subcategories
-      if (isSelected) {
+      if (isSelected) { 
         const updatedSelection = { ...prev };
         delete updatedSelection[categoryId];
         subcategories.forEach((sub) => delete updatedSelection[sub.id]);
@@ -92,21 +92,74 @@ const CategoryList = ({ classes }) => {
     dispatch(setEditingCategory(category))
   }
 
-  const handleDelete = () => {
-    setCategories((prevCategories) =>
-      prevCategories
-        .filter((category) => !selectedItems[category.id]) // Remove selected categories
-        .map((category) => ({
-          ...category,
-          subcategories: category.subcategories?.filter(
-            (sub) => !selectedItems[sub.id]
-          )
-        }))
-    );
 
-    setSelectedItems({});
-    toast.success("Selected categories/subcategories deleted.");
-  };
+const handlesingleDelete =(id)=>{
+ 
+      const confirmDelete = () => {
+        dispatch(deleteCategory({ ids: id, token }))
+          .unwrap()
+          .then(() => {
+            dispatch(getAdminCategory(token)); 
+          })
+          .catch((err) => {
+           
+          });
+          
+      };
+    
+      // Show confirmation toast with Yes/No buttons
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this category?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d9534f",
+        cancelButtonColor: "#5bc0de",
+        confirmButtonText: "Yes, delete!",
+        cancelButtonText: "No, cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          confirmDelete();
+          Swal.fire("Deleted!", "Category have been removed.", "success");
+        }
+      });
+}
+  const handlemultipleDelete = () => {
+    const selectedIds = Object.keys(selectedItems).filter((id) => selectedItems[id]);
+   // alert(selectedIds);
+    if (selectedIds.length === 0) {
+      Swal.fire("No categories selected", "Please select at least one category.", "warning");
+      return;
+    }
+    
+      const confirmDelete = () => {
+        dispatch(deleteCategory({ ids: selectedIds, token }))
+          .unwrap()
+          .then(() => {
+            dispatch(getAdminCategory(token)); 
+          })
+          .catch((err) => {       
+          });
+      };
+    
+      // Show confirmation toast with Yes/No buttons
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete these categories?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d9534f",
+        cancelButtonColor: "#5bc0de",
+        confirmButtonText: "Yes, delete!",
+        cancelButtonText: "No, cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          confirmDelete();
+          Swal.fire("Deleted!", "Categories have been removed.", "success");
+        }
+      });
+    };
+    
 
   return (  
     <div className={classes}>
@@ -123,7 +176,7 @@ const CategoryList = ({ classes }) => {
                     Update and delete categories.
                   </p>
                   <button
-                    onClick={handleDelete}
+                    onClick={handlemultipleDelete}
                     className="bg-red-500 text-white px-4 py-2 rounded"
                   >
                     Delete Selected
@@ -142,7 +195,7 @@ const CategoryList = ({ classes }) => {
                           <input
                             type="checkbox"
                             checked={
-                              categories.length > 0 &&
+                              categories?.length > 0 &&
                               categories.every((cat) => selectedItems[cat.id])
                             }
                             onChange={() =>
@@ -273,9 +326,9 @@ const CategoryList = ({ classes }) => {
                                       />
                                     </svg>
                                   </button>
-                                  <a
+                                  <button
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                    href="#"
+                                    onClick={()=>handlesingleDelete(category.id)}
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -291,7 +344,7 @@ const CategoryList = ({ classes }) => {
                                         d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                                       />
                                     </svg>
-                                  </a>
+                                  </button>
                                 </div>
                               </td>
                               <td className="size-px whitespace-nowrap">
@@ -498,9 +551,9 @@ const CategoryList = ({ classes }) => {
                                                     />
                                                   </svg>
                                                 </button>
-                                                <a
+                                                <button
                                                   className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                                  href="#"
+                                                  onClick={()=>handlesingleDelete(sub.id)}
                                                 >
                                                   <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -516,7 +569,7 @@ const CategoryList = ({ classes }) => {
                                                       d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                                                     />
                                                   </svg>
-                                                </a>
+                                                </button>
                                               </div>
                                             </td>
                                           </tr>

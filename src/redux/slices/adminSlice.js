@@ -5,6 +5,34 @@ const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 const deleteuserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/delete`;
 const fetchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/getAllBookmarks`;
 const updateCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/update-categories`;
+const deleteCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete/categories`;
+
+export const deleteCategory = createAsyncThunk(
+  "admin/delete-categories",
+  async ({ids}, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axiosInstance.post(
+        deleteCategoryUrl,
+        {
+          ids: ids
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      return response?.data?.message;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Something went wrong!",
+        isDuplicateEntry: error?.response?.data?.message?.includes("SQLSTATE[23000]") || false, 
+      });
+    }
+  }
+);
 
 export const getParentCategories = createAsyncThunk(
   "admin/getParentCategories",
@@ -254,7 +282,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = state.users.filter((user) => !action.payload.ids.includes(user.id)); // Remove deleted users
+        state.users = state.users.filter((user) => !action.payload.ids?.includes(user.id)); // Remove deleted users
       })
       .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false;
@@ -289,6 +317,20 @@ const adminSlice = createSlice({
         state.pagination = action.payload.data?.links;
       })
       .addCase(handleBookmarksPagination.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+      builder
+      .addCase(deleteCategory.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminCategories = state.adminCategories.filter((cat) => !action.payload.ids?.includes(cat.id));
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
