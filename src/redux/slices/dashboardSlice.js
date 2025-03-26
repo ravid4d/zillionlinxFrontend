@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../axiosInstance";
 
 const dashboardUrl = `${process.env.REACT_APP_API_URL}/api/admin/dashboard`;
+const sixmonthUSerCountUrl = `${process.env.REACT_APP_API_URL}/api/admin/six-months-user`;
 
 // Async thunk to fetch dashboard data
 export const getDashboardData = createAsyncThunk(
@@ -22,6 +23,34 @@ export const getDashboardData = createAsyncThunk(
         }
       );
    
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status || 500,
+        message: error?.response?.data?.message || "Failed to fetch dashboard data",
+      });
+    }
+  }
+);
+
+export const getSixMonthUserCount = createAsyncThunk(
+  "admin/getSixMonthUser",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token || localStorage.getItem("token");
+
+      if (!token) {
+        return rejectWithValue({ status: 401, message: "Unauthorized: No token found" });
+      }
+
+      const response = await axiosInstance.post(
+        sixmonthUSerCountUrl,
+        {}, 
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+  // console.log(response.data.six_months_user) ;
       return response.data;
     } catch (error) {
       return rejectWithValue({

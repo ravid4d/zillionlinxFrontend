@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getDashboardData } from "../../redux/slices/dashboardSlice";
+import { getDashboardData, getSixMonthUserCount } from "../../redux/slices/dashboardSlice";
 import { getAllUsers, handleUsersPagination } from "../../redux/slices/userSlice";
 import UserTableData from "./UserTableData";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -21,6 +21,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getAllUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getSixMonthUserCount());
   }, [dispatch]);
 
   const handlePagination = (url) => {
