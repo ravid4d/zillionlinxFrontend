@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getDashboardData, getSixMonthUserCount } from "../../redux/slices/dashboardSlice";
+import { getDashboardData, getSixMonthUserCount , getSixMonthBookmarkCount } from "../../redux/slices/dashboardSlice";
 import { getAllUsers, handleUsersPagination } from "../../redux/slices/userSlice";
 import UserTableData from "./UserTableData";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { dashboardData, sixMonthUserCount } = useSelector((state) => state.dashboard);
+  const { dashboardData, sixMonthUserCount , sixMonthBookmarkCount} = useSelector((state) => state.dashboard);
   const { token } = useSelector((state) => state.auth);
   const { users = [], pagination } = useSelector((state) => state.user);
 
@@ -27,6 +27,10 @@ const Dashboard = () => {
     dispatch(getSixMonthUserCount());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(getSixMonthBookmarkCount());
+  }, [dispatch]);
+
   const handlePagination = (url) => {
     if (url) dispatch(handleUsersPagination({ url, token }));
   };
@@ -41,7 +45,17 @@ const Dashboard = () => {
     })
   : [];
 
-console.log(userStats);
+  const bookmarkStats = sixMonthBookmarkCount?.six_months_bookmark
+  ? sixMonthBookmarkCount.six_months_bookmark.map(({ month, count }) => {
+  
+      const date = new Date(month + "-01"); 
+      const monthName = date.toLocaleString("en-US", { month: "short" }); 
+
+      return { month: monthName, count };
+    })
+  : [];
+
+
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
       
@@ -81,7 +95,7 @@ console.log(userStats);
   <div className="w-1/2">
     <h3 className="text-md font-semibold mb-2 text-center">Bookmarks Created</h3>
     <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={userStats}>
+      <LineChart data={bookmarkStats}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
@@ -91,7 +105,6 @@ console.log(userStats);
     </ResponsiveContainer>
   </div>
 </div>
-
 
 
           <div className="flex flex-col">
