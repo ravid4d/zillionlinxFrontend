@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: ["master"]
+    branches: ["main"]
   pull_request:
-    branches: ["master"]
+    branches: ["main"]
 
 jobs:
   deploy:
@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy to Server
-        uses: appleboy/ssh-action@main
+        uses: appleboy/ssh-action@v0.1.6  # Using a stable version
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -21,5 +21,4 @@ jobs:
           script: |
             cd /var/www/html/zillionlinx-front
             git pull origin main
-            # sudo cp /var/www/html/zillionlinx-front/.htaccess /var/www/html/zillionlinx-front/build/
-            sudo systemctl restart apache2 
+            sudo systemctl restart apache2

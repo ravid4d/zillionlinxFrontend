@@ -46,6 +46,7 @@ const MyBookmarks = () => {
   } = useSelector((state) => state.bookmark);
 
   const [draggedItemId, setDraggedItemId] = useState(null);
+  const [searchResults, setSearchResults] = useState(false);
 
   useEffect(() => {
     if (loginMessage) {
@@ -179,12 +180,13 @@ const MyBookmarks = () => {
   }, [bookmark_addto]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-navy rounded-bl-[20px] rounded-br-[20px] p-8">
-        <div className="flex flex-wrap xl:space-x-8">
+    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
+        <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
             id="hs-application-sidebar"
             className={`
+              h-full
                 bookmark-sidebar-wrapper    
                 hs-overlay [--auto-close:xl]
                 hs-overlay-open:translate-x-0         
@@ -195,14 +197,14 @@ const MyBookmarks = () => {
             tabIndex="-1"
             aria-label="Sidebar"
           >
-            <Searchbar />
+            <Searchbar setSearchResults={setSearchResults} />
             <Sidebar setId={setId} id={id} />
           </div>
 
-          <div className="bookmark-content-wrapper">
-            <div className="flex flex-wrap items-center justify-between">
+          <div className="bookmark-content-wrapper h-full">
+            <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
               <div className="flex flex-wrap items-center gap-2">
-                <button
+                {/* <button
                   type="button"
                   className="mb-4 size-8 xl:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
                   aria-haspopup="dialog"
@@ -228,7 +230,7 @@ const MyBookmarks = () => {
                     <path d="M15 3v18" />
                     <path d="m8 9 3 3-3 3" />
                   </svg>
-                </button>
+                </button> */}
                 <AddNewBookmarkField
                   setWhichModalOpen={setWhichModalOpen}
                   setUrlToBookmark={setUrlToBookmark}
@@ -236,31 +238,32 @@ const MyBookmarks = () => {
               </div>
               <GoogleSearchbar />
             </div>
-            <div className="rounded-2xl bg-white p-6 h-[calc(100%-64px)]">
-              <p className="text-[28px] text-dark-blue capitalize mb-5">
+            <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
+              <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
                 {isTopLink
-                  ? "Top Links"
+                  ? <span>Top Links</span>
                   : id?.categoryId
                   ? `${selectedCategory?.title} ${
                       selectedSubCategory?.title
                         ? `| ${selectedSubCategory?.title}`
                         : ""
                     }`
-                  : ""}
-                {!id?.categoryId ? (
-                  <span className="text-base text-light-black inline-block ml-4">
+                  : searchResults ? 'Search Results' : ""}
+                {!id?.categoryId && !searchResults ? (
+                  <span className="text-base text-light-black inline-block">
                     (Drag and drop thumbnails to position top links or pin to a
                     grid location)
                   </span>
                 ) : null}
               </p>
-              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100vh-66px)]">
+              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
                 {loading ? (
                   <span className="loader"></span>
                 ) : bookmarks?.length === 0 && error !== null ? (
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 ) : (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
+                    {console.log(bookmarks, 'data are')}
                     {bookmarks && bookmarks?.length > 0 ? (
                       bookmarks?.map((bookmark, index) => (
                         <li

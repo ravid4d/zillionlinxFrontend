@@ -98,8 +98,8 @@ const handleRightClick = (event, record) => {
 };
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      <button
+    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+      {/* <button
         type="button"
         className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
         aria-haspopup="dialog"
@@ -125,21 +125,17 @@ const handleRightClick = (event, record) => {
           <path d="M15 3v18" />
           <path d="m8 9 3 3-3 3" />
         </svg>
-      </button>
-      <div className="bg-navy rounded-l-[20px] rounded-br-[20px] p-8">
-        <div className="flex flex-wrap lg:space-x-8">
-          <div className="bookmark-content-wrappers w-full">
-            <div className="flex flex-wrap items-center justify-between">
-              <div className="bg-white rounded-xl p-3 mb-4">
+      </button> */}
+      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
+        <div className="flex flex-wrap lg:space-x-8 h-full">
+          <div className="bookmark-content-wrappers w-full h-full">
+            <div className="flex flex-wrap flex-col md:flex-row md:items-start gap-x-4 justify-between">
+              <div className="bg-white rounded-xl p-3 mb-4 w-full md:w-[calc(50%-25px)]">
                 Hint: Right Click on any URL / Title below to Bookmark that Link
               </div>
-              {/* <AddNewBookmarkField
-                setWhichModalOpen={setWhichModalOpen}
-                setUrlToBookmark={setUrlToBookmark}
-              /> */}
               <GoogleSearchbar />
             </div>
-            <div className="rounded-2xl py-6 h-[calc(100%-64px)] flex flex-wrap">
+            <div className="rounded-2xl lg:h-[calc(100%-64px)] flex flex-wrap">
               {noContent ? (
                 <div className="text-center w-full p-6 bg-white rounded-xl">
                   <h1 className="text-2xl font-bold">No Content Found</h1>
@@ -147,13 +143,13 @@ const handleRightClick = (event, record) => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white w-3/4 rounded-xl border border-light-blue p-6 flex flex-wrap ">
-                    <div className="w-3/4">
+                  <div className="bg-white w-full lg:w-3/4 rounded-xl border border-light-blue p-6 flex flex-wrap h-full mb-5 lg:mb-0">
+                    <div className="w-full lg:w-3/4 h-full">
                       <div className="flex flex-wrap items-center space-x-5 mb-2">
                         <img src="/google.svg" alt="" width="160" />
                         <p>Google Custom Search</p>
                       </div>
-                      <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-screen">
+                      <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)] max-h-96 lg:max-h-full">
                         {googleLoading ? (
                           <span className="loader"></span>
                         ) : (
@@ -191,15 +187,15 @@ const handleRightClick = (event, record) => {
                         }
                       </div>
                     </div>
-                    <div className={`w-1/4 rounded-2xl ps-6`}>
-                      <div className="bg-white">
+                    <div className={`w-full lg:w-1/4 rounded-2xl lg:ps-6 h-full`}>
+                      <div className="bg-white h-full">
                         <img
                           src="/member-rank.svg"
                           alt=""
                           width="160"
-                          className="mx-auto block mb-2"
+                          className="mt-5 lg:mt-0 lg:mx-auto block mb-2"
                         />
-                        <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-screen">
+                        <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
                           <ul className="grid grid-cols-1 gap-4">
                             {googleLoading ? (
                               <span className="loader"></span>
@@ -209,7 +205,6 @@ const handleRightClick = (event, record) => {
                               bookmarks?.map((result, index) => {
                                 return (
                                   <li key={index} className="relative">
-                                    {/* {result.icon_path} */}
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
                                         className="min-h-[85px] block"
@@ -228,7 +223,7 @@ const handleRightClick = (event, record) => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        <span className="block g-white text-center underline text-xl py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
+                                        <span className="block g-white text-center underline text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
                                           {result?.title}
                                         </span>
                                       </Link>
@@ -242,39 +237,23 @@ const handleRightClick = (event, record) => {
                       </div>
                     </div>
                   </div>
-                  <div className={`w-1/4 rounded-2xl ps-6`}>
+                  <div className={`w-full lg:w-1/4 rounded-2xl lg:ps-6 h-full`}>
                     <div className="bg-white rounded-xl p-6 h-full">
                       <div className="bg-white rounded-xl border border-light-blue h-full p-4">
                         <p className="text-[28px] text-dark-blue capitalize mb-5">
                           Popular Links
                         </p>
-                        <div className="overflow-auto custom-scrollbar h-[calc(100%-62px)]">
+                        <div className="overflow-auto custom-scrollbar h-[calc(100%-62px)] flex flex-wrap flex-col md:flex-row md:block">
                           {googleLoading ? (
                             <span className="loader"></span>
                           ) : (
                             <>
-                              {/* {googleResults && googleResults?.length > 0 && (
-                                <button
-                                  className="block mb-2 last:mb-0 w-full"
-                                  onClick={() => handleResult("google")}
-                                >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
-                                    <img
-                                      src="/google.svg"
-                                      alt=""
-                                      width="187"
-                                      className="mx-auto max-w-full"
-                                    />
-                                  </figure>
-                                </button>
-                              )} */}
                               {wikiStaticLink !== "" && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={wikiStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  //   onClick={() => handleResult("wikki")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
@@ -292,7 +271,6 @@ const handleRightClick = (event, record) => {
                                   to={ebayStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  //   onClick={() => handleResult("ebay")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
@@ -323,11 +301,10 @@ const handleRightClick = (event, record) => {
                               )}
                               {youtubeStaticLink !== "" && (
                                 <Link
-                                  className="block mb-2 last:mb-0"
+                                  className="block mb-2 last:mb-0 w-full"
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   to={youtubeStaticLink}
-                                  //   onClick={() => handleResult("youtube")}
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img

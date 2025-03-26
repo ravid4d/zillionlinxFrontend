@@ -7,6 +7,7 @@ const addNewBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-bookmark`;
 const pinBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/`;
 const orderBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/reorder`;
 const googleSearchUrl = `${process.env.REACT_APP_API_URL}/api/search`;
+const sarchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/search_bookmark`;
 
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
@@ -173,6 +174,27 @@ export const googleSearch = createAsyncThunk(
   }
 );
 
+export const searchBookmarks = createAsyncThunk(
+  "bookmarks/searchBookmarks",
+  async ({ token, formData }, { rejectWithValue }) => {
+    try {
+      let response = await axiosInstance.post(sarchBookmarkUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      console.log(response, 'hi data');
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to load bookmarks from google search api."
+      });
+    }
+  }
+);
+
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
@@ -293,6 +315,20 @@ const bookmarkSlice = createSlice({
       state.loading = false;
     })
     .addCase(orderBookmarks.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+      state.status = action.payload.status;
+    });
+
+    builder
+    .addCase(searchBookmarks.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(searchBookmarks.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bookmarks = action.payload.bookmarks;
+    })
+    .addCase(searchBookmarks.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
       state.status = action.payload.status;
