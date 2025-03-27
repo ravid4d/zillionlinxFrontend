@@ -8,7 +8,7 @@ export const getAllUsers = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       let token = getState().auth.token;
-      let searchQuery = getState().user.searchQuery;
+      let searchQuery = getState().admin?.searchQuery;
       
       let response = await axiosInstance.get(`${allUsersUrl}?search=${searchQuery}`, {
         headers: {
@@ -81,7 +81,6 @@ const userSlice = createSlice({
   initialState: {
     users: [],
     status: "",
-    searchQuery: "",
     totalUsers: undefined,
     user: {},
     pagination: [],
@@ -89,9 +88,6 @@ const userSlice = createSlice({
     userError: null
   },
   reducers: {
-    setSearchQuery: (state, action) => {
-      state.searchQuery = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -143,5 +139,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { setSearchQuery } = userSlice.actions;
+// export const { } = userSlice.actions;
 export default userSlice.reducer;
