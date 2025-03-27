@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchAllBookmarks, handleBookmarksPagination } from "../../redux/slices/adminSlice";
+import { deleteBookmark, fetchAllBookmarks, handleBookmarksPagination } from "../../redux/slices/adminSlice";
 import BookmarkTableData from "./BookmarkTableData";
+import Swal from "sweetalert2";
 
 const AdminBookmarks = () => {
     const dispatch = useDispatch();
     const { token } = useSelector((state) => state.auth);
     const { adminBookmarks, totalBookmarks, pagination } = useSelector((state) => state.admin);
+
     useEffect(() => {
       dispatch(fetchAllBookmarks(token));
     }, [dispatch, token]);
@@ -15,7 +17,42 @@ const AdminBookmarks = () => {
     const handlePagination = async (url) => {
       dispatch(handleBookmarksPagination({ url, token }));
     };
-  
+    
+    const deleteBookmarkHandler = async (id) => {
+      if (!id) {
+        toast.warning("No bookmark found!");
+        return;
+      }
+    
+      const confirmDelete = async () => {
+        await dispatch(deleteBookmark(id))
+          .unwrap()
+          .then(() => {
+            dispatch(fetchAllBookmarks(token)); 
+          })
+          .catch((err) => {
+            console.error("Error deleting bookmark: " + err.message);
+          });
+      };
+    
+      // Show confirmation toast with Yes/No buttons
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d9534f",
+        cancelButtonColor: "#5bc0de",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          confirmDelete();
+          Swal.fire("Deleted!", "Your item has been deleted.", "success");
+        }
+      });
+    };
+
   return (
     <div className="w-full lg:ps-64">
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -129,11 +166,13 @@ const AdminBookmarks = () => {
               </thead>
 
               <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                {adminBookmarks && adminBookmarks?.length>0 && adminBookmarks?.map((bookmark) => {
+                {adminBookmarks && adminBookmarks?.length>0 && adminBookmarks?.map((bookmark, index) => {
                   return (
                     <BookmarkTableData
                       bookmark={bookmark}
-                      key={bookmark?.id}
+                      key={bookmark?.id || `bookmark-${index}`}
+                      deleteBookmarkHandler={deleteBookmarkHandler}
+                      
                     />
                   );
                 })}
