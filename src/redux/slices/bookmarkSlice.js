@@ -203,7 +203,8 @@ export const importBookmarks = createAsyncThunk("bookmarks/importBookmarks", asy
         'Content-Type':'multipart/form-data'
       }
     })
-    return response;
+    console.log(response, 'imported data');
+    return response?.data?.message;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,
@@ -234,6 +235,7 @@ const bookmarkSlice = createSlice({
     ebayStaticLink: "",
     amazonStaticLink: "",
     error: null,
+    importError:null,
     importBookmarkMessage:""
   },
   reducers: {
@@ -244,7 +246,7 @@ const bookmarkSlice = createSlice({
       state.isTopLink = false;
     },
     clearImportBookmarksMessage:(state)=>{
-      state.error = null
+      state.importError = null
     }
   },
   extraReducers: (builder) => {
@@ -382,12 +384,12 @@ const bookmarkSlice = createSlice({
     })
     .addCase(importBookmarks.fulfilled, (state, action)=>{
       state.loading = false;
-      // state.error = action.payload.message
+      state.importBookmarkMessage = action.payload
           // state.error = action.payload;
     })
     .addCase(importBookmarks.rejected, (state, action)=>{
       state.loading = false;
-      state.error = action.payload?.message;
+      state.importError = action.payload?.message;
     })
   }
 });

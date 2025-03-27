@@ -1,14 +1,15 @@
 import React, {  useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import {  importBookmarks } from "../redux/slices/bookmarkSlice";
+import {  clearImportBookmarksMessage, importBookmarks } from "../redux/slices/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ImportBookmarks = () => {
   const dispatch = useDispatch();
   const [errors, setError] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const { token } = useSelector((state) => state.auth);
-  const { error } = useSelector((state) => state.bookmark);
+  const { importError, importBookmarkMessage } = useSelector((state) => state.bookmark);
   const handleDrop = (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -37,16 +38,23 @@ const ImportBookmarks = () => {
   // console.log(errors, 'aa')
 
   useEffect(() => {
-    // if(error !==null) {
-      // console.log('aaaaaaaaaaaaaaaaa', error)
-      setError(error);
-    //   setTimeout(() => {
-    //     setError("");
-    //     setUploadedFile(null);
-    //   }, 5000);
-    //   dispatch(clearImportBookmarksMessage())
-    // }
-  }, [error, dispatch]);
+    if(importError !== null) {
+      setError(importError);
+      toast.error(importError);
+      setTimeout(() => {
+        dispatch(clearImportBookmarksMessage())
+        setError("");
+        setUploadedFile(null);
+      }, 1000);
+    }
+  }, [importError, dispatch]);
+
+  useEffect(()=>{
+    if(importBookmarkMessage!=="") {
+      toast.success(importBookmarkMessage);
+      setUploadedFile(null);
+    }
+  },[importBookmarkMessage]);
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
@@ -97,11 +105,7 @@ const ImportBookmarks = () => {
                     <p className="mt-1 text-xs text-gray-400 dark:text-neutral-400">
                       Pick a file up to 2MB. 
                     </p>
-                    {errors !== "" && (
-                      <p className="mt-1 text-xs text-red-400 font-medium">
-                        {error}
-                      </p>
-                    )}
+                    
                   </div>
                 </div>
                 {uploadedFile && errors === "" ? (
