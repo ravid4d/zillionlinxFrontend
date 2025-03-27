@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
-import { setSearchQuery } from "../../redux/slices/userSlice";
+import { setSearchQuery } from "../../redux/slices/adminSlice";
 
 const AdminHeader = () => {
   const dispatch = useDispatch();
@@ -11,8 +11,8 @@ const AdminHeader = () => {
 
   const [toggleProfileDropdown, setToggleProfileDropdown] = useState(false);
   const {user} = useSelector(state=>state.auth);
-  const {searchQuery} = useSelector(state=>state.user);
-
+  const {searchQuery} = useSelector(state=>state.admin);
+  
   const handleSearchChange = async(e) =>{
     await dispatch(setSearchQuery(e.target.value));
   };
