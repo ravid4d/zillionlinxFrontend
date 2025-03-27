@@ -35,7 +35,6 @@ const ImportBookmarks = () => {
     formData.append("file", uploadedFile);
     dispatch(importBookmarks({ token, formData }));
   };
-  // console.log(errors, 'aa')
 
   useEffect(() => {
     if(importError !== null) {
@@ -181,31 +180,6 @@ const ImportBookmarks = () => {
                             <line x1="14" x2="14" y1="11" y2="17"></line>
                           </svg>
                         </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-x-3 whitespace-nowrap">
-                      <div
-                        className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-                        role="progressbar"
-                        aria-valuenow="0"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        data-hs-file-upload-progress-bar=""
-                      >
-                        <div
-                          className="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition-all duration-500 hs-file-upload-complete:bg-green-500"
-                          style={{ width: "0" }}
-                          data-hs-file-upload-progress-bar-pane=""
-                        ></div>
-                      </div>
-                      <div className="w-10 text-end">
-                        <span className="text-sm text-gray-800 dark:text-white">
-                          <span data-hs-file-upload-progress-bar-value="">
-                            0
-                          </span>
-                          %
-                        </span>
                       </div>
                     </div>
                   </div>
