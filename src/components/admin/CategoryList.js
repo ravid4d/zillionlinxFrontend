@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { getAdminCategory, setEditingCategory, deleteCategory } from "../../redux/slices/adminSlice";
+import { getAdminCategory, setEditingCategory, deleteCategory, setSearchQuery, handleCategoryPagination } from "../../redux/slices/adminSlice";
+import useDebounce from "../../hooks/useDebounce";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
@@ -13,7 +14,8 @@ const CategoryList = ({ classes }) => {
   const [categories, setCategories] = useState([]);
   const [activeId, setActiveId] = useState(undefined);
   const [selectedItems, setSelectedItems] = useState({});
-  const {adminCategories} = useSelector(state=>state.admin);
+  const {adminCategories, paginationCategories, totalCategories,  searchQuery} = useSelector(state=>state.admin);
+  const debouncedQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
     if(adminCategories?.length>0) {
@@ -26,8 +28,13 @@ const CategoryList = ({ classes }) => {
     if (token) {
       dispatch(getAdminCategory(token));
     }
-  }, [token, dispatch]);
-
+  }, [token, dispatch, debouncedQuery]);
+  
+  useEffect(() => {
+    return () => {
+      dispatch(setSearchQuery(""));
+    };
+  }, [dispatch]);
 
   const activeTab = (activeId) => {
     setActiveId((prev) => (prev === activeId ? undefined : activeId));
@@ -92,6 +99,9 @@ const CategoryList = ({ classes }) => {
     dispatch(setEditingCategory(category))
   }
 
+ const handlePagination = async (url) => {
+    dispatch(handleCategoryPagination({ url, token }));
+  };
 
 const handlesingleDelete =(id)=>{
  
@@ -590,56 +600,33 @@ const handlesingleDelete =(id)=>{
                 <div>
                   <p className="text-sm text-gray-600 dark:text-neutral-400">
                     <span className="font-semibold text-gray-800 dark:text-neutral-200">
-                      12
+                      {totalCategories}
                     </span>{" "}
                     results
                   </p>
                 </div>
 
                 <div>
+                   {/* Counter Pagination */}
                   <div className="inline-flex gap-x-2">
-                    <button
-                      type="button"
-                      className="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                    >
-                      <svg
-                        className="shrink-0 size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="m15 18-6-6 6-6" />
-                      </svg>
-                      Prev
-                    </button>
-
-                    <button
-                      type="button"
-                      className="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                    >
-                      Next
-                      <svg
-                        className="shrink-0 size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="m9 18 6-6-6-6" />
-                      </svg>
-                    </button>
-                  </div>
+                    {paginationCategories && paginationCategories?.length>0 && paginationCategories.map((pageNumber, index) => {
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          disabled={pageNumber?.url === null}
+                          onClick={() => handlePagination(pageNumber?.url)}
+                          className={`${
+                            pageNumber?.active ? "bg-gray-100" : "bg-white"
+                          } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
+                        >
+                          {
+                            index===0 ? '<' : index === paginationCategories?.length-1 ? '>' : pageNumber?.label
+                          }
+                        </button>
+                      );
+                    })}
+                  </div> 
                 </div>
               </div>
             </div>
