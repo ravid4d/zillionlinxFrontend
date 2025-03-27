@@ -6,12 +6,16 @@ import { getDashboardData, getSixMonthUserCount , getSixMonthBookmarkCount } fro
 import { getAllUsers, handleUsersPagination } from "../../redux/slices/userSlice";
 import UserTableData from "./UserTableData";
 import {AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { setSearchQuery } from '../../redux/slices/adminSlice';
+import useDebounce from '../../hooks/useDebounce';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { dashboardData, sixMonthUserCount , sixMonthBookmarkCount} = useSelector((state) => state.dashboard);
   const { token } = useSelector((state) => state.auth);
   const { users = [], pagination } = useSelector((state) => state.user);
+  const { searchQuery } = useSelector((state) => state.admin);
+  const debouncedQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
     dispatch(getDashboardData()).catch((err) => {
@@ -21,6 +25,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getAllUsers());
+  }, [dispatch, debouncedQuery]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSearchQuery(""));
+    };
   }, [dispatch]);
 
   useEffect(() => {

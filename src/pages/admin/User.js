@@ -3,21 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllUsers,
   handleUsersPagination,
-  setSearchQuery
 } from "../../redux/slices/userSlice";
-import { deleteUser } from "../../redux/slices/adminSlice";
+import { deleteUser, setSearchQuery } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
 import UpdateUser from "../../components/admin/UpdateUser";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+import useDebounce from "../../hooks/useDebounce";
 
 const User = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { users, totalUsers, searchQuery, pagination } = useSelector(
+  const { searchQuery } = useSelector((state) => state.admin);
+  const { users, totalUsers, pagination } = useSelector(
     (state) => state.user
   );
+  const debouncedQuery = useDebounce(searchQuery, 500);
 
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
@@ -117,7 +119,7 @@ const User = () => {
 
   useEffect(() => {
     dispatch(getAllUsers());
-  }, [dispatch, searchQuery]);
+  }, [dispatch, debouncedQuery]);
 
   useEffect(() => {
     return () => {
@@ -257,7 +259,7 @@ const User = () => {
 
             {/* Counter Pagination */}
             <div className="inline-flex gap-x-2">
-              {pagination.map((pageNumber, index) => {
+              {pagination && pagination?.length > 0 && pagination?.map((pageNumber, index) => {
                 return (
                   <button
                     key={index}

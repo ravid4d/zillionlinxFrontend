@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { deleteBookmark, fetchAllBookmarks, handleBookmarksPagination } from "../../redux/slices/adminSlice";
+import { deleteBookmark, fetchAllBookmarks, handleBookmarksPagination, setSearchQuery } from "../../redux/slices/adminSlice";
 import BookmarkTableData from "./BookmarkTableData";
 import Swal from "sweetalert2";
+import useDebounce from "../../hooks/useDebounce";
 
 const AdminBookmarks = () => {
     const dispatch = useDispatch();
     const { token } = useSelector((state) => state.auth);
-    const { adminBookmarks, totalBookmarks, pagination } = useSelector((state) => state.admin);
+    const { adminBookmarks, totalBookmarks, pagination, searchQuery } = useSelector((state) => state.admin);
+    const debouncedQuery = useDebounce(searchQuery, 500);
 
     useEffect(() => {
       dispatch(fetchAllBookmarks(token));
-    }, [dispatch, token]);
+    }, [dispatch, token, debouncedQuery]);
+    
+    useEffect(() => {
+      return () => {
+        dispatch(setSearchQuery(""));
+      };
+    }, [dispatch]);
   
     const handlePagination = async (url) => {
       dispatch(handleBookmarksPagination({ url, token }));
@@ -192,7 +200,7 @@ const AdminBookmarks = () => {
 
           {/* Counter Pagination */}
           <div className="inline-flex gap-x-2">
-            {pagination && pagination?.length>0&&pagination.map((pageNumber, index) => {
+            {pagination && pagination?.length>0 && pagination.map((pageNumber, index) => {
               return (
                 <button
                   key={index}
