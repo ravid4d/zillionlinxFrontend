@@ -125,8 +125,8 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y">
-                        {users.map((user) => (
-                          <UserTableData key={user.id} user={{ ...user, country: user.country || "N/A" }} showEditOrDelete={false} />
+                        {users.map((user, index) => (
+                          <UserTableData key={user.id || `user-${index}`} user={{ ...user, country: user.country || "N/A" }} showEditOrDelete={false} />
                         ))}
                       </tbody>
                     </table>
