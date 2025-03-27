@@ -49,7 +49,8 @@ const authSlice = createSlice({
       state.userRole = null;
       state.isLoggedIn = false;
       state.user = null;
-      localStorage.removeItem("persist:auth"); 
+      sessionStorage.clear();
+      // localStorage.removeItem("persist:auth"); 
     }
   },
   extraReducers: (builder) => {
