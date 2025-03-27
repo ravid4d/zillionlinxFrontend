@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllUsers,
-  handleUsersPagination
+  handleUsersPagination,
+  setSearchQuery
 } from "../../redux/slices/userSlice";
 import { deleteUser } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
@@ -14,7 +15,7 @@ import Swal from "sweetalert2";
 const User = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { users, totalUsers, pagination } = useSelector(
+  const { users, totalUsers, searchQuery, pagination } = useSelector(
     (state) => state.user
   );
 
@@ -117,6 +118,12 @@ const User = () => {
 
   useEffect(() => {
     dispatch(getAllUsers());
+  }, [dispatch, searchQuery]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSearchQuery(""));
+    };
   }, [dispatch]);
 
   const handlePagination = async (url) => {
