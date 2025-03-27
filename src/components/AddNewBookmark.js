@@ -114,6 +114,8 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
           }
       });
       }
+      await dispatch(fetchCategories(token));
+
       closeModal();
       setShowNewSubCategory(false)
     } else {
@@ -265,6 +267,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       </div>
                     </>
                   ) : null}
+                  
                   {!showNewSubCategory && (
                     <div className="mb-5">
                       <Dropdown
@@ -289,12 +292,6 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       ) : null}
                     </div>
                   )}
-                  
-                  <div className="mb-5">
-                    <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>
-                     <span className="capitalize"> + New Sub Category</span>
-                    </button>
-                  </div>
 
                   {showNewSubCategory && (
                     <div className="mb-5 relative">
@@ -328,6 +325,12 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       ) : null}
                     </div>
                   )} 
+                  
+                  <div className="mb-5">
+                    <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>
+                     <span className="capitalize"> + New Sub Category</span>
+                    </button>
+                  </div>
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"

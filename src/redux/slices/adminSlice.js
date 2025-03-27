@@ -4,6 +4,7 @@ import axiosInstance from "../../axiosInstance";
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 const deleteuserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/delete`;
 const fetchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/getAllBookmarks`;
+const deleteBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-Bookmarks`;
 const updateCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/update-categories`;
 const deleteCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete/categories`;
 
@@ -196,6 +197,31 @@ export const handleBookmarksPagination = createAsyncThunk(
   }
 );
 
+export const deleteBookmark = createAsyncThunk(
+  "admin/deleteBookmark",
+  async (id, { getState, rejectWithValue }) => {
+    const token = getState().auth?.token;
+
+    try {
+      const response = await axiosInstance.post(`${deleteBookmarkUrl}/${id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        
+      });
+      return {
+        id, // Return deleted IDs
+        message: response?.data?.message || "Bookmark deleted successfully",
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status || 500,
+        message: error?.response?.data?.message || "Failed to delete bookmark"
+      });
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -305,6 +331,7 @@ const adminSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+      
       builder
       .addCase(handleBookmarksPagination.pending, (state, action) => {
         state.loading = true;
@@ -321,6 +348,20 @@ const adminSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
+      builder
+      .addCase(deleteBookmark.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteBookmark.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminBookmarks = state.adminBookmarks.filter((book) => action.payload.id !== book.id); // Remove deleted bookmark
+      })
+      .addCase(deleteBookmark.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+      });
+
       builder
       .addCase(deleteCategory.pending, (state, action) => {
         state.loading = true;

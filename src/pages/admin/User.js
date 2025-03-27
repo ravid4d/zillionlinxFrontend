@@ -88,12 +88,11 @@ const User = () => {
       dispatch(deleteUser({ ids: selectedUsers, token }))
         .unwrap()
         .then(() => {
-          toast.success("Users deleted successfully!", { position: "top-center" });
           setSelectedUsers([]); // Clear selection after deletion
           dispatch(getAllUsers()); 
         })
         .catch((err) => {
-          toast.error("Error deleting users: " + err.message, { position: "top-center" });
+          console.error("Error deleting users: " + err.message);
         });
     };
   
@@ -225,12 +224,12 @@ const User = () => {
                 </thead>
 
                 <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                  {users?.map((user) => {
+                  {users?.map((user, index) => {
                     return (
                       <UserTableData
-                      showEditOrDelete={true}
+                        showEditOrDelete={true}
                         user={user}
-                        key={user?.id}
+                        key={user?.id || `user-${index}`}
                         selectedUsers={selectedUsers}
                         handleSelectOneUser={handleSelectOneUser}
                         deleteSingleUser={deleteSingleUser}
