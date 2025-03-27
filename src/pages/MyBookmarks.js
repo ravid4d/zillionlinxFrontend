@@ -3,10 +3,12 @@ import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  addToBookmarks,
   callTopLinks,
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
   orderBookmarks,
+  removeFromBookmarks,
   removeTopLink
 } from "../redux/slices/bookmarkSlice";
 import Bookmark from "../components/Bookmark";
@@ -14,6 +16,7 @@ import GoogleSearchbar from "../components/GoogleSearchbar";
 import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
+import AddRemoveBookmarkContext from "../components/AddRemoveBookmarkContext";
 
 const MyBookmarks = () => {
   const {
@@ -26,6 +29,44 @@ const MyBookmarks = () => {
     id,
     setId
   } = useOutletContext();
+  const [contextMenu, setContextMenu] = useState(null);
+  const handleRightClick = (event, record) => {
+    event.preventDefault();
+    setContextMenu({
+      x: event.clientX,
+      y: event.clientY,
+      record: record
+    });
+  };
+
+  const handleOptionClick = async (option) => {
+    let bookmark_id = contextMenu?.record?.bookmark_id;
+    if (option === "add") {
+      try {
+        let result = await dispatch(
+          addToBookmarks({ token, bookmark_id })
+        ).unwrap();
+        if (result!=="") {
+          toast.success(result);
+        }
+      } catch (error) {
+        console.log(error, "Error while adding bookmark to top links");
+        toast.error(error.message || "Failed to add bookmark to top links");
+      }
+    } else {
+      try {
+        let result = await dispatch(removeFromBookmarks({ token, bookmark_id })).unwrap();
+        dispatch(fetchAllTopLinks(token));
+        if (result) {
+          toast.success(result);
+        }
+      } catch (error) {
+        console.log(error, "Error while removing bookmark from top links");
+        toast.error(error.message || "Failed to removing bookmark from top links");
+      }
+    }
+    setContextMenu(null); 
+  };
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -240,15 +281,19 @@ const MyBookmarks = () => {
             </div>
             <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
-                {isTopLink
-                  ? <span>Top Links</span>
-                  : id?.categoryId
-                  ? `${selectedCategory?.title} ${
-                      selectedSubCategory?.title
-                        ? `| ${selectedSubCategory?.title}`
-                        : ""
-                    }`
-                  : searchResults ? 'Search Results' : ""}
+                {isTopLink ? (
+                  <span>Top Links</span>
+                ) : id?.categoryId ? (
+                  `${selectedCategory?.title} ${
+                    selectedSubCategory?.title
+                      ? `| ${selectedSubCategory?.title}`
+                      : ""
+                  }`
+                ) : searchResults ? (
+                  "Search Results"
+                ) : (
+                  ""
+                )}
                 {!id?.categoryId && !searchResults ? (
                   <span className="text-base text-light-black inline-block">
                     (Drag and drop thumbnails to position top links or pin to a
@@ -262,32 +307,43 @@ const MyBookmarks = () => {
                 ) : bookmarks?.length === 0 && error !== null ? (
                   <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
                 ) : (
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
-                    {console.log(bookmarks, 'data are')}
-                    {bookmarks && bookmarks?.length > 0 ? (
-                      bookmarks?.map((bookmark, index) => (
-                        <li
-                          key={bookmark?.id}
-                          draggable
-                          onDragStart={() => handleDragStart(bookmark?.id)}
-                          onDragOver={handleDragOver}
-                          onDrop={() => handleDrop(bookmark.id)}
-                          className="relative"
-                          style={{ opacity: draggedItemId === index ? 0.5 : 1 }}
-                        >
-                          <Bookmark
-                            item={bookmark}
-                            handleRemoveItem={handleRemoveItem}
-                            categoryId={id?.categoryId}
-                            subCategoryId={id?.subCategoryId}
-                            setId={setId}
-                          />
-                        </li>
-                      ))
-                    ) : (
-                      <></>
+                  <>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
+                      {console.log(bookmarks, "data are")}
+                      {bookmarks && bookmarks?.length > 0 ? (
+                        bookmarks?.map((bookmark, index) => (
+                          <li
+                            key={bookmark?.id}
+                            draggable
+                            onDragStart={() => handleDragStart(bookmark?.id)}
+                            onDragOver={handleDragOver}
+                            onDrop={() => handleDrop(bookmark.id)}
+                            onContextMenu={(e) => handleRightClick(e, bookmark)}
+                            className="relative"
+                            style={{
+                              opacity: draggedItemId === index ? 0.5 : 1
+                            }}
+                          >
+                            <Bookmark
+                              item={bookmark}
+                              handleRemoveItem={handleRemoveItem}
+                              categoryId={id?.categoryId}
+                              subCategoryId={id?.subCategoryId}
+                              setId={setId}
+                            />
+                          </li>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </ul>
+                    {contextMenu && (
+                      <AddRemoveBookmarkContext
+                        contextMenu={contextMenu}
+                        handleOptionClick={handleOptionClick}
+                      />
                     )}
-                  </ul>
+                  </>
                 )}
               </div>
             </div>

@@ -8,10 +8,11 @@ import categoryReducer from "./slices/categorySlice";
 import userReducer from "./slices/userSlice";
 import adminReducer from "./slices/adminSlice";
 import dashboardReducer from "./slices/dashboardSlice";
+import storageSession from "redux-persist/lib/storage/session";
 // Define persist configuration for the auth reducer
 const authPersistConfig = {
     key: "auth",
-    storage,
+    storage: storageSession,
     whitelist: ["token", "userRole", "isLoggedIn"], // Persist only these fields
 };
 

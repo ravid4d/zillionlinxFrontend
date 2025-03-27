@@ -2,32 +2,22 @@ import React, { useEffect, useState } from "react";
 import GoogleSearchbar from "../components/GoogleSearchbar";
 import {
   Link,
-  Navigate,
   useLocation,
-  useNavigate,
   useOutletContext
 } from "react-router-dom";
-import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import { useDispatch, useSelector } from "react-redux";
 import { googleSearch } from "../redux/slices/bookmarkSlice";
 import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
 
 const GoogleCustomSearch = () => {
-  const navigate = useNavigate();
   const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();
   const { token } = useSelector((state) => state.auth);
   const [noContent, setNoContent] = useState(false);
   const [mainContent, setMainContent] = useState([]);
   const [contextMenu, setContextMenu] = useState(null); 
-  const [selectedRecord, setSelectedRecord] = useState(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const {
     googleResults,
-    wikkiResults,
-    ebayResults,
-    youtubeResults,
-    amazonResults,
     bookmarks,
     googleLoading,
     youtubeStaticLink,
@@ -88,14 +78,9 @@ const handleRightClick = (event, record) => {
       contextMenu.record = { ...contextMenu.record, type:option };
       setUrlToBookmark(contextMenu)
       // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
-      setWhichModalOpen("newBookmark"); // Show second modal
       setContextMenu(null); // Close context menu
+      setWhichModalOpen("newBookmark"); // Show second modal
   };
-
-  const closeModals = () => {
-    setContextMenu(null);
-    setWhichModalOpen("newBookmark");
-};
 
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
@@ -157,9 +142,8 @@ const handleRightClick = (event, record) => {
                           mainContent?.length > 0 &&
                           mainContent?.map((result, index) => {
                             return (
-                              <React.Fragment key={index}>
                                 <Link
-                                  // key={index}
+                                  key={index}
                                   to={result?.link}
                                   className={`block mb-4 last:mb-0 google_result google_result_${index}`}
                                   target="_blank"
@@ -178,7 +162,6 @@ const handleRightClick = (event, record) => {
                                     {result?.snippet}
                                   </p>
                                 </Link>
-                              </React.Fragment>
                             );
                           })
                         )}
@@ -207,7 +190,7 @@ const handleRightClick = (event, record) => {
                                   <li key={index} className="relative">
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
-                                        className="min-h-[85px] block"
+                                        className="block aspect-[16/9] overflow-hidden object-cover object-top"
                                         to={result?.website_url}
                                         target="_blank"
                                         rel="noopener noreferrer"

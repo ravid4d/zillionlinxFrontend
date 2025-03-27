@@ -39,6 +39,7 @@ const Bookmark = ({
   return (
     <>
     {/* {`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`} */}
+    {item?.bookmark_id}
       <span
         className={`bg-whtie relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30`}
       >
@@ -79,8 +80,8 @@ const Bookmark = ({
           to={item?.website_url}
           className="relative w-full block"
         >
-          <div className="w-full aspect-[16/9]">
-          <img src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`} alt="" className="w-full h-full object-cover object-top rounded-lg" />
+          <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
+          <img src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`} alt="" className="w-full rounded-lg" />
           </div>
         </Link>
 
