@@ -8,7 +8,9 @@ export const getAllUsers = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       let token = getState().auth.token;
-      let response = await axiosInstance.get(allUsersUrl, {
+      let searchQuery = getState().user.searchQuery;
+      
+      let response = await axiosInstance.get(`${allUsersUrl}?search=${searchQuery}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -79,13 +81,18 @@ const userSlice = createSlice({
   initialState: {
     users: [],
     status: "",
+    searchQuery: "",
     totalUsers: undefined,
     user: {},
     pagination: [],
     userLoading: false,
     userError: null
   },
-  reducers: {},
+  reducers: {
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllUsers.pending, (state, action) => {
@@ -136,5 +143,5 @@ const userSlice = createSlice({
   }
 });
 
-// export const {} = userSlice.actions;
+export const { setSearchQuery } = userSlice.actions;
 export default userSlice.reducer;
