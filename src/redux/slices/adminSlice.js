@@ -138,15 +138,17 @@ export const updateCategory = createAsyncThunk(
 
 export const getAdminCategory = createAsyncThunk(
   "admin/getAdminCategory",
-  async (token, { rejectWithValue }) => {
+  async (token, { getState, rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(categoryUrl, {
+      let searchQuery = getState().admin?.searchQuery;
+
+      const response = await axiosInstance.get(`${categoryUrl}?title=${searchQuery}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      let allCategories = response?.data?.data?.filter((category) => category);
-      return allCategories;
+      
+      return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -156,12 +158,35 @@ export const getAdminCategory = createAsyncThunk(
   }
 );
 
+export const handleCategoryPagination = createAsyncThunk(
+  "users/pagination",
+  async ({ url, token }, { rejectWithValue }) => {
+    try {
+      let response = await axiosInstance.get(url, {
+        headers: {  
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While getting the users via pagination."
+      });
+    }
+  }
+);
+
 // Fetch All Top Links
 export const fetchAllBookmarks = createAsyncThunk(
   "admin/fetchAllBookmarks",
-  async (token, { rejectWithValue }) => {
+  async (token, { getState, rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(fetchBookmarkUrl, {
+      let searchQuery = getState().admin?.searchQuery;
+
+      const response = await axiosInstance.get(`${fetchBookmarkUrl}?search=${searchQuery}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -185,7 +210,7 @@ export const handleBookmarksPagination = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
-      return response?.data;
+      return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -226,10 +251,13 @@ const adminSlice = createSlice({
   name: "admin",
   initialState: {
     status: "",
+    searchQuery: "",
     loading: false,
     categoryLoading: false,
     error: null,
     editingCategory: null,
+    totalCategories: undefined,
+    paginationCategories: [],
     totalBookmarks: undefined,
     pagination: [],
     users: [],
@@ -238,9 +266,12 @@ const adminSlice = createSlice({
     adminBookmarks:[],
   },
   reducers: {
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+    },
     setEditingCategory:(state, action)=>{
       state.editingCategory = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     //Fetch Top Links
@@ -294,9 +325,27 @@ const adminSlice = createSlice({
       })
       .addCase(getAdminCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminCategories = action.payload
+        state.adminCategories = action.payload.data;
+        state.totalCategories = action.payload?.total;
+        state.paginationCategories = action.payload?.links;
       })
       .addCase(getAdminCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+    builder
+      .addCase(handleCategoryPagination.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleCategoryPagination.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminCategories = action.payload.data;
+        state.totalCategories = action.payload?.total;
+        state.paginationCategories = action.payload?.links;
+      })
+      .addCase(handleCategoryPagination.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
@@ -323,8 +372,8 @@ const adminSlice = createSlice({
       .addCase(fetchAllBookmarks.fulfilled, (state, action) => {
         state.loading = false;
         state.adminBookmarks = action.payload.data;
-        state.totalBookmarks = action.payload.data?.total;
-        state.pagination = action.payload.data?.links;
+        state.totalBookmarks = action.payload?.total;
+        state.pagination = action.payload?.links;
       })
       .addCase(fetchAllBookmarks.rejected, (state, action) => {
         state.loading = false;
@@ -339,9 +388,9 @@ const adminSlice = createSlice({
       })
       .addCase(handleBookmarksPagination.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminBookmarks = action.payload.data?.data;
-        state.totalBookmarks = action.payload.data?.total;
-        state.pagination = action.payload.data?.links;
+        state.adminBookmarks = action.payload.data;
+        state.totalBookmarks = action.payload?.total;
+        state.pagination = action.payload?.links;
       })
       .addCase(handleBookmarksPagination.rejected, (state, action) => {
         state.loading = false;
@@ -380,5 +429,5 @@ const adminSlice = createSlice({
 
 });
 
-export const { setEditingCategory } = adminSlice.actions;
+export const { setSearchQuery, setEditingCategory } = adminSlice.actions;
 export default adminSlice.reducer;
