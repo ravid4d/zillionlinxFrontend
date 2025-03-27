@@ -3,13 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
+import { setSearchQuery } from "../../redux/slices/userSlice";
 
 const AdminHeader = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [toggleProfileDropdown, setToggleProfileDropdown] = useState(false);
-const {user} = useSelector(state=>state.auth);
+  const {user} = useSelector(state=>state.auth);
+  const {searchQuery} = useSelector(state=>state.user);
+
+  const handleSearchChange = async(e) =>{
+    await dispatch(setSearchQuery(e.target.value));
+  };
+
   const handleLogout = async() => {
     try {
         // localStorage.removeItem("token"); // Remove token from local storage
@@ -19,7 +26,7 @@ const {user} = useSelector(state=>state.auth);
     } catch (error) {
         toast.error("Logout failed! Please try again.");
     }
-}
+  }
   return (
     <>
       <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-64 dark:bg-neutral-800 dark:border-neutral-700">
@@ -90,6 +97,8 @@ const {user} = useSelector(state=>state.auth);
                   type="text"
                   className="py-2 ps-10 pe-16 block w-full bg-white border-gray-200 rounded-lg text-sm focus:outline-hidden focus:border-blue-500 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder:text-neutral-400 dark:focus:ring-neutral-600"
                   placeholder="Search"
+                  onChange={handleSearchChange}
+                  value={searchQuery}
                 />
                 <div className="hidden absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-1">
                   <button
