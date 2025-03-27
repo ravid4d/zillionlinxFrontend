@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,6 +30,7 @@ const MyBookmarks = () => {
     setId
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
+
   const handleRightClick = (event, record) => {
     event.preventDefault();
     setContextMenu({
@@ -309,7 +310,6 @@ const MyBookmarks = () => {
                 ) : (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
-                      {console.log(bookmarks, "data are")}
                       {bookmarks && bookmarks?.length > 0 ? (
                         bookmarks?.map((bookmark, index) => (
                           <li
@@ -320,6 +320,7 @@ const MyBookmarks = () => {
                             onDrop={() => handleDrop(bookmark.id)}
                             onContextMenu={(e) => handleRightClick(e, bookmark)}
                             className="relative"
+                          
                             style={{
                               opacity: draggedItemId === index ? 0.5 : 1
                             }}
@@ -340,6 +341,7 @@ const MyBookmarks = () => {
                     {contextMenu && (
                       <AddRemoveBookmarkContext
                         contextMenu={contextMenu}
+                        setContextMenu={setContextMenu}
                         handleOptionClick={handleOptionClick}
                       />
                     )}

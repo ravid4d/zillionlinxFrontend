@@ -269,6 +269,11 @@ const bookmarkSlice = createSlice({
     wikiStaticLink: "",
     ebayStaticLink: "",
     amazonStaticLink: "",
+    walmartStaticLink:"",
+    aliexpressStaticLink:"",
+    etsyStaticLink:"",
+    neweggStaticLink:"",
+    mercadolibreStaticLink:"",
     error: null,
     importError:null,
     importBookmarkMessage:"",
@@ -408,6 +413,14 @@ const bookmarkSlice = createSlice({
       state.wikiStaticLink = action.payload?.wikiStaticLink;
       state.ebayStaticLink = action.payload?.ebayStaticLink;
       state.amazonStaticLink = action.payload?.amazonStaticLink;
+
+      state.walmartStaticLink=action.payload?.walmartStaticLink;
+      state.aliexpressStaticLink=action.payload?.aliexpressStaticLink;
+      state.etsyStaticLink=action.payload?.etsyStaticLink;
+      state.neweggStaticLink=action.payload?.neweggStaticLink;
+      state.mercadolibreStaticLink=action.payload?.mercadolibreStaticLink;
+
+
       state.bookmarks = action.payload?.bookmarks;
     })
     .addCase(googleSearch.rejected, (state, action) => {

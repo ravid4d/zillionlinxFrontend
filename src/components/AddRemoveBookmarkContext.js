@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const AddRemoveBookmarkContext = ({ contextMenu, handleOptionClick }) => {
+const AddRemoveBookmarkContext = ({ contextMenu, setContextMenu, handleOptionClick }) => {
 //   const [bookmarkId] = useState(contextMenu?.record?.bookmark_id);
+const menuRef = useRef(null);
+
+useEffect(() => {
+  function handleClickOutside(event) {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setContextMenu(null); 
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
   
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [setContextMenu]);
   return (
     <div
       style={{
@@ -10,6 +24,7 @@ const AddRemoveBookmarkContext = ({ contextMenu, handleOptionClick }) => {
         top: contextMenu.y,
         left: contextMenu.x
       }}
+      ref={menuRef}
     >
       <div className="relative z-20">
         <div
