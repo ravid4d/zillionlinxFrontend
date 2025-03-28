@@ -96,12 +96,12 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       toast.success(result.payload.message || "Bookmark added successfully!");
       let categoryId = result?.payload?.category_id;
       let subCategoryId = result?.payload?.sub_category_id;
-
+      
       if(location?.pathname === "/bookmarks") {
-        if(result?.payload?.addto === "bookmark") {
+        if(result?.payload?.add_to === "bookmark") {
           await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}))
         }
-        if(result?.payload?.addto === "top_link") {
+        if(result?.payload?.add_to === "top_link") {
           await dispatch(fetchAllTopLinks(token));
         }
       }
