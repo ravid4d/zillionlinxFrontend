@@ -7,10 +7,12 @@ import { handleRegister } from '../redux/slices/registerSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import PasswordField from './PasswordField';
 import CountryDropdown from './CountryDropdown';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = ({ openModal, closeAllModals}) => {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { loading } = useSelector((state) => state.register);
     
     const formik = useFormik({
@@ -29,7 +31,7 @@ const Register = ({ openModal, closeAllModals}) => {
             email: YUP.string().email('Invalid email format').required("Email is required"),
             password: YUP.string()
                 .min(8, "Password must be at least 8 characters")
-                .max(16, "Password must not exceed 12 characters")
+                .max(16, "Password must not exceed 16 characters")
                 .matches(/[a-z]/, "Must include at least one lowercase letter")
                 .matches(/[A-Z]/, "Must include at least one uppercase letter")
                 .matches(/\d/, "Must include at least one number")
@@ -123,7 +125,7 @@ const Register = ({ openModal, closeAllModals}) => {
                                                     className="bg-light-blue border-mid-blue size-5 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" aria-describedby="terms_condition-description" />
                                             </div>
                                             <label htmlFor="terms_condition" className="ms-3">
-                                                <span className="block text-base text-light-black">I have read and accept the User Agreement.</span>
+                                                <span className="block text-base text-light-black">I have read and accept the <button type="button" onClick={()=>{navigate('/user-agreement'); closeModal(); }} className='text-dark-blue hover:underline'>User Agreement</button> and <button type="button" onClick={()=>{navigate("/privacy-policy"); closeModal(); }} className='text-dark-blue hover:underline'>Privacy Policy</button>.</span>
                                             </label>
                                         </div>
                                         {formik.touched.terms_condition && formik.errors.terms_condition ? (
