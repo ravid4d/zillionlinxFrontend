@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { getAdminCategory, setEditingCategory, deleteCategory, setSearchQuery, handleCategoryPagination } from "../../redux/slices/adminSlice";
+import {
+  getAdminCategory,
+  setEditingCategory,
+  deleteCategory,
+  setSearchQuery,
+  handleCategoryPagination,
+} from "../../redux/slices/adminSlice";
 import useDebounce from "../../hooks/useDebounce";
 
 const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
@@ -14,12 +20,17 @@ const CategoryList = ({ classes }) => {
   const [categories, setCategories] = useState([]);
   const [activeId, setActiveId] = useState(undefined);
   const [selectedItems, setSelectedItems] = useState({});
-  const {adminCategories, paginationCategories, totalCategories,  searchQuery} = useSelector(state=>state.admin);
+  const {
+    adminCategories,
+    paginationCategories,
+    totalCategories,
+    searchQuery,
+  } = useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    if(adminCategories?.length>0) {
-      setCategories(adminCategories); 
+    if (adminCategories?.length > 0) {
+      setCategories(adminCategories);
     }
   }, [adminCategories]);
 
@@ -29,7 +40,7 @@ const CategoryList = ({ classes }) => {
       dispatch(getAdminCategory(token));
     }
   }, [token, dispatch, debouncedQuery]);
-  
+
   useEffect(() => {
     return () => {
       dispatch(setSearchQuery(""));
@@ -45,7 +56,7 @@ const CategoryList = ({ classes }) => {
       const isSelected = prev[categoryId];
 
       // If selected, remove it and its subcategories
-      if (isSelected) { 
+      if (isSelected) {
         const updatedSelection = { ...prev };
         delete updatedSelection[categoryId];
         subcategories.forEach((sub) => delete updatedSelection[sub.id]);
@@ -96,102 +107,109 @@ const CategoryList = ({ classes }) => {
   };
 
   const handleEditCategory = (category) => {
-    dispatch(setEditingCategory(category))
-  }
+    dispatch(setEditingCategory(category));
+  };
 
- const handlePagination = async (url) => {
+  const handlePagination = async (url) => {
     dispatch(handleCategoryPagination({ url, token }));
   };
 
-const handlesingleDelete =(id)=>{
- 
-      const confirmDelete = () => {
-        dispatch(deleteCategory({ ids: id, token }))
-          .unwrap()
-          .then(() => {
-            dispatch(getAdminCategory(token)); 
-          })
-          .catch((err) => {
-           
-          });
-          
-      };
-    
-      // Show confirmation toast with Yes/No buttons
-      Swal.fire({
-        title: "Are you sure?",
-        text: "Do you really want to delete this category?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d9534f",
-        cancelButtonColor: "#5bc0de",
-        confirmButtonText: "Yes, delete!",
-        cancelButtonText: "No, cancel",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          confirmDelete();
-          Swal.fire("Deleted!", "Category have been removed.", "success");
-        }
-      });
-}
+  const handlesingleDelete = (id) => {
+    const confirmDelete = () => {
+      dispatch(deleteCategory({ ids: id, token }))
+        .unwrap()
+        .then(() => {
+          dispatch(getAdminCategory(token));
+        })
+        .catch((err) => {});
+    };
+
+    // Show confirmation toast with Yes/No buttons
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this category?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        setSelectedItems({})
+        Swal.fire("Deleted!", "Category have been removed.", "success");
+      }
+    });
+  };
   const handlemultipleDelete = () => {
-    const selectedIds = Object.keys(selectedItems).filter((id) => selectedItems[id]);
-   // alert(selectedIds);
+    const selectedIds = Object.keys(selectedItems).filter(
+      (id) => selectedItems[id]
+    );
+    // alert(selectedIds);
     if (selectedIds.length === 0) {
-      Swal.fire("No categories selected", "Please select at least one category.", "warning");
+      Swal.fire(
+        "No categories selected",
+        "Please select at least one category.",
+        "warning"
+      );
       return;
     }
-    
-      const confirmDelete = () => {
-        dispatch(deleteCategory({ ids: selectedIds, token }))
-          .unwrap()
-          .then(() => {
-            dispatch(getAdminCategory(token)); 
-          })
-          .catch((err) => {       
-          });
-      };
-    
-      // Show confirmation toast with Yes/No buttons
-      Swal.fire({
-        title: "Are you sure?",
-        text: "Do you really want to delete these categories?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d9534f",
-        cancelButtonColor: "#5bc0de",
-        confirmButtonText: "Yes, delete!",
-        cancelButtonText: "No, cancel",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          confirmDelete();
-          Swal.fire("Deleted!", "Categories have been removed.", "success");
-        }
-      });
-    };
-    
 
-  return (  
+    const confirmDelete = () => {
+      dispatch(deleteCategory({ ids: selectedIds, token }))
+        .unwrap()
+        .then(() => {
+          dispatch(getAdminCategory(token));
+        })
+        .catch((err) => {});
+    };
+
+    // Show confirmation toast with Yes/No buttons
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete these categories?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        setSelectedItems({})
+        Swal.fire("Deleted!", "Categories have been removed.", "success");
+      }
+    });
+  };
+
+  const selectedCount = Object.values(selectedItems).filter(Boolean).length;
+
+  return (
     <div className={classes}>
       <div className="flex flex-col">
         <div className="overflow-x-auto">
           <div className="min-w-full inline-block align-middle">
-            <div className="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
+            <div className="bg-white border overflow-x-auto border-gray-200 rounded-md shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
               <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                    Categories
-                  </h2>
-                  <p className="text-sm text-gray-600 dark:text-neutral-400">
-                    Update and delete categories.
-                  </p>
-                  <button
-                    onClick={handlemultipleDelete}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete Selected
-                  </button>
-                </div>
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                      Categories
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-neutral-400">
+                      Update and delete categories.
+                    </p>
+                  </div>
+                  <div className="inline-flex gap-x-2">
+                    <button
+                      onClick={handlemultipleDelete}
+                      className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                      disabled={selectedCount === 0 ? "disabled" : ""}
+                    >
+                      Delete Selected
+                    </button>
+                  </div>
               </div>
               <div className="w-full overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 table-auto">
@@ -319,7 +337,7 @@ const handlesingleDelete =(id)=>{
                                 <div className="px-6 py-1.5">
                                   <button
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                    onClick={()=>handleEditCategory(category)}
+                                    onClick={() => handleEditCategory(category)}
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -338,7 +356,7 @@ const handlesingleDelete =(id)=>{
                                   </button>
                                   <button
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                    onClick={()=>handlesingleDelete(category.id)}
+                                    onClick={() =>handlesingleDelete(category.id)}
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -544,7 +562,7 @@ const handlesingleDelete =(id)=>{
                                               <div className="px-6 py-1.5">
                                                 <button
                                                   className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                                  onClick={()=>handleEditCategory(sub)}
+                                                  onClick={() =>handleEditCategory(sub)}
                                                 >
                                                   <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -563,7 +581,7 @@ const handlesingleDelete =(id)=>{
                                                 </button>
                                                 <button
                                                   className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                                  onClick={()=>handlesingleDelete(sub.id)}
+                                                  onClick={() =>handlesingleDelete(sub.id)}
                                                 >
                                                   <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -607,26 +625,30 @@ const handlesingleDelete =(id)=>{
                 </div>
 
                 <div>
-                   {/* Counter Pagination */}
+                  {/* Counter Pagination */}
                   <div className="inline-flex gap-x-2">
-                    {paginationCategories && paginationCategories?.length>0 && paginationCategories.map((pageNumber, index) => {
-                      return (
-                        <button
-                          key={index}
-                          type="button"
-                          disabled={pageNumber?.url === null}
-                          onClick={() => handlePagination(pageNumber?.url)}
-                          className={`${
-                            pageNumber?.active ? "bg-gray-100" : "bg-white"
-                          } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
-                        >
-                          {
-                            index===0 ? '<' : index === paginationCategories?.length-1 ? '>' : pageNumber?.label
-                          }
-                        </button>
-                      );
-                    })}
-                  </div> 
+                    {paginationCategories &&
+                      paginationCategories?.length > 0 &&
+                      paginationCategories.map((pageNumber, index) => {
+                        return (
+                          <button
+                            key={index}
+                            type="button"
+                            disabled={pageNumber?.url === null}
+                            onClick={() => handlePagination(pageNumber?.url)}
+                            className={`${
+                              pageNumber?.active ? "bg-gray-100" : "bg-white"
+                            } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
+                          >
+                            {index === 0
+                              ? "<"
+                              : index === paginationCategories?.length - 1
+                              ? ">"
+                              : pageNumber?.label}
+                          </button>
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
             </div>
