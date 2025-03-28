@@ -49,11 +49,11 @@ const Dropdown = ({ id, name, label, length, fieldValue, setFieldValue, items, p
       ...baseStyles,
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      fontFamily: "'Open Sans', serif",
+      fontFamily: "Roboto, serif",
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
-      fontFamily: "'Open Sans', serif",
+      fontFamily: "Roboto, serif",
       fontSize: "14px",
       color: state.isSelected ? "#ffffff" : "#1f2937",
       backgroundColor: state.isSelected ? "#2131e5" : "#E3E6FF",

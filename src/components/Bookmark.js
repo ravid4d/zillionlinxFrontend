@@ -84,7 +84,7 @@ const Bookmark = ({
         </Link>
 
         <Link target="_blank" to={item?.website_url}>
-          <span className="block g-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
+          <span className="block bg-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
             {item?.title}
           </span>
         </Link>
