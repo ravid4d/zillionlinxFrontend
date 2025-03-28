@@ -13,6 +13,8 @@ import Sidebar from "./Sidebar";
 import Searchbar from "./Searchbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
+import UpdateUserModal from "./UpdateUserModal";
+import UpdateUser from "./admin/UpdateUser";
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ const Layout = () => {
   const [sidebar, hideSidebar] = useState(false);
   const [id, setId] = useState({ categoryId: null, subCategoryId: null });
   const { categories } = useSelector((state) => state.category);
-  const { token, isLoggedIn } = useSelector((state) => state.auth);
+  const { token, isLoggedIn, user } = useSelector((state) => state.auth);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
 
@@ -49,7 +51,8 @@ const Layout = () => {
     register: false,
     forgot: false,
     newBookmark: false,
-    newCategory: false
+    newCategory: false,
+    updateUser: false
   });
 
   const setWhichModalOpen = (modalName) => {
@@ -59,6 +62,7 @@ const Layout = () => {
       forgot: false,
       newBookmark: false,
       newCategory: false,
+      updateUser: false,
       [modalName]: true
     });
   };
@@ -69,7 +73,8 @@ const Layout = () => {
       register: false,
       forgot: false,
       newBookmark: false,
-      newCategory: false
+      newCategory: false,
+      updateUser: false
     });
   };
 
@@ -79,7 +84,7 @@ const Layout = () => {
 
   const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
-  const [urlToBookmark, setUrlToBookmark] = useState(""||{});
+  const [urlToBookmark, setUrlToBookmark] = useState("" || {});
 
   return (
     <div className="app-layout">
@@ -89,22 +94,40 @@ const Layout = () => {
         }`}
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>
-      
+
       <div className="app-content flex flex-wrap w-full">
-        <Login
-          closeAllModals={closeAllModals}
-          openModal={openModal}
-          setWhichModalOpen={setWhichModalOpen}
-        />
-        <Register closeAllModals={closeAllModals} openModal={openModal} />
-        <ForgotPassword closeAllModals={closeAllModals} openModal={openModal} />
-        <AddNewBookmark
-          urlToBookmark={urlToBookmark}
-          closeAllModals={closeAllModals}
-          openModal={openModal}
-          id={id}
-        />
-        <AddNewCategory closeAllModals={closeAllModals} openModal={openModal} />
+        {!isLoggedIn ? (
+          <>
+            <Login
+              closeAllModals={closeAllModals}
+              openModal={openModal}
+              setWhichModalOpen={setWhichModalOpen}
+            />
+            <Register closeAllModals={closeAllModals} openModal={openModal} />
+            <ForgotPassword
+              closeAllModals={closeAllModals}
+              openModal={openModal}
+            />
+          </>
+        ) : (
+          <>
+            <AddNewBookmark
+              urlToBookmark={urlToBookmark}
+              closeAllModals={closeAllModals}
+              openModal={openModal}
+              id={id}
+            />
+            <AddNewCategory
+              closeAllModals={closeAllModals}
+              openModal={openModal}
+            />
+            <UpdateUserModal
+              user={user}
+              closeAllModals={closeAllModals}
+              openModal={openModal}
+            />
+          </>
+        )}
         <Header
           setWhichModalOpen={setWhichModalOpen}
           sidebar={sidebar}
@@ -112,7 +135,14 @@ const Layout = () => {
           id={id}
           setId={setId}
         />
-        <div className={`w-full content-area ${isLoggedIn?'user-loggedin':''} ${(location?.pathname!=="" || location?.pathname!=="/") && location?.pathname.slice(1)}`}>
+        <div
+          className={`w-full content-area ${
+            isLoggedIn ? "user-loggedin" : ""
+          } ${
+            (location?.pathname !== "" || location?.pathname !== "/") &&
+            location?.pathname.slice(1)
+          }`}
+        >
           <Outlet
             context={{
               setUrlToBookmark,

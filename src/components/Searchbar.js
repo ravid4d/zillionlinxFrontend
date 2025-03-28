@@ -7,7 +7,8 @@ const Searchbar = ({setSearchResults}) => {
   const { token } = useSelector((state) => state.auth);
   const [title, setTitle] = useState("");
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault(); 
     if (title.trim() !== "") {
         let formData = new FormData();
         formData.append("title", title);
@@ -18,7 +19,7 @@ const Searchbar = ({setSearchResults}) => {
   };
 
   return (
-    <div className="flex items-center rounded-xl shadow-sm mb-4 relative">
+    <form className="flex items-center rounded-xl shadow-sm mb-4 relative" onSubmit={handleSearch}>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -29,8 +30,8 @@ const Searchbar = ({setSearchResults}) => {
           className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
         />
         <button
-          type="button"
-          onClick={handleSearch}
+          type="submit"
+          // onClick={handleSearch}
           className="absolute z-20 right-2 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-dark-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
         >
           <svg
@@ -49,7 +50,7 @@ const Searchbar = ({setSearchResults}) => {
             <path d="m21 21-4.3-4.3"></path>
           </svg>
         </button>
-    </div>
+    </form>
   );
 };
 
