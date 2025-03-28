@@ -1,7 +1,6 @@
-import axios from "axios";
-import React, { useEffect } from "react";
+import React  from "react";
 import Select, { components } from "react-select";
-const Dropdown = ({ id, name, label, length, fieldValue, setFieldValue, items, placeholder, isDisabled= false }) => {
+const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder, isDisabled= false }) => {
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
     ...items.map(item => ({
