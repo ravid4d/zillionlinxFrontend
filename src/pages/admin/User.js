@@ -170,6 +170,12 @@ const User = () => {
           )} */}
           {users && users?.length > 0 ? (
             <>
+              <div
+        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+          userToEditModal ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+        id="updateUser-backdrop"
+      ></div>
               <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead className="bg-gray-50 dark:bg-neutral-800">
                   <tr>

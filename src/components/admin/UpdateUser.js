@@ -70,13 +70,13 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
       aria-labelledby="updateUser-label"
       data-hs-overlay-keyboard="false"
     >
-      <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-3xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+      <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
         <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
           <div className="w-full py-20 px-10">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center max-w-[400px] mx-auto">
               <h3
                 id="updateUser-label"
-                className="uppercase text-dark-blue text-center w-full text-7xl mb-12"
+                className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
               >
                 Edit User
               </h3>
@@ -112,7 +112,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     id="first_name"
                     name="first_name"
                     icon="title"
-                    fieldValue={formik.values.first_name?formik.values?.first_name:userToEdit?.first_name}
+                    fieldValue={formik.values.first_name}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
                     label="First Name"
@@ -131,7 +131,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     id="last_name"
                     name="last_name"
                     icon="title"
-                    fieldValue={formik.values.last_name?formik.values?.last_name:userToEdit?.last_name}
+                    fieldValue={formik.values.last_name}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
                     label="Last Name"
@@ -152,7 +152,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     label="Email"
                     type="email"
                     iconPlacement="left"
-                    fieldValue={formik.values.email?formik.values?.email:userToEdit?.email}
+                    fieldValue={formik.values.email}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
                   />
@@ -162,15 +162,15 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     </div>
                   ) : null}
                 </div>
-                {
-                  countries?.length>0&&
-                  <div className="mb-5">
+               
+                <div className="mb-5">
                   <Dropdown
+                    isDisabled={countries?.length===0}
                     id="country"
                     name="country"
                     label="Country"
                     placeholder="Select an option"
-                    fieldValue={formik.values.country?formik.values.country:userToEdit?.country}
+                    fieldValue={formik.values.country}
                     setFieldValue={(selectedOption) => {
                       formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:userToEdit);
                     }}
@@ -182,7 +182,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     </div>
                   ) : null}
                 </div>
-                }
+                
                 <button
                   disabled={loading}
                   type="submit"

@@ -2,43 +2,39 @@ import React, { useEffect, useState } from "react";
 import GoogleSearchbar from "../components/GoogleSearchbar";
 import {
   Link,
-  Navigate,
   useLocation,
-  useNavigate,
   useOutletContext
 } from "react-router-dom";
-import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import { useDispatch, useSelector } from "react-redux";
 import { googleSearch } from "../redux/slices/bookmarkSlice";
 import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
 
 const GoogleCustomSearch = () => {
-  const navigate = useNavigate();
   const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();
   const { token } = useSelector((state) => state.auth);
   const [noContent, setNoContent] = useState(false);
   const [mainContent, setMainContent] = useState([]);
   const [contextMenu, setContextMenu] = useState(null); 
-  const [selectedRecord, setSelectedRecord] = useState(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const {
     googleResults,
-    wikkiResults,
-    ebayResults,
-    youtubeResults,
-    amazonResults,
     bookmarks,
     googleLoading,
     youtubeStaticLink,
     wikiStaticLink,
     ebayStaticLink,
-    amazonStaticLink
+    amazonStaticLink,
+    walmartStaticLink,
+    aliexpressStaticLink,
+    etsyStaticLink,
+    neweggStaticLink,
+    mercadolibreStaticLink
   } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("query");
+
   useEffect(() => {
     if (!query) {
       setNoContent(true);
@@ -63,69 +59,25 @@ const GoogleCustomSearch = () => {
     }
   }, [googleResults]);
 
-  //   const handleResult = (whichResult) => {
-  //     whichResult === "youtube"
-  //       ? setMainContent(youtubeResults)
-  //       : whichResult === "google"
-  //       ? setMainContent(googleResults)
-  //       : whichResult === "ebay"
-  //       ? setMainContent(ebayResults)
-  //       : whichResult === "wikki"
-  //       ? setMainContent(wikkiResults)
-  //       : setNoContent([]);
-  //   };
-
-const handleRightClick = (event, record) => {
-        event.preventDefault(); // Prevent default browser context menu
-        setContextMenu({
-            x: event.clientX,
-            y: event.clientY,
-            record: record, // Save clicked record
-        });
-    };
+  const handleRightClick = (event, record) => {
+          event.preventDefault(); // Prevent default browser context menu
+          setContextMenu({
+              x: event.clientX,
+              y: event.clientY,
+              record: record, // Save clicked record
+          });
+  };
 
     const handleOptionClick = (option) => {
       contextMenu.record = { ...contextMenu.record, type:option };
       setUrlToBookmark(contextMenu)
       // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
-      setWhichModalOpen("newBookmark"); // Show second modal
       setContextMenu(null); // Close context menu
+      setWhichModalOpen("newBookmark"); // Show second modal
   };
-
-  const closeModals = () => {
-    setContextMenu(null);
-    setWhichModalOpen("newBookmark");
-};
 
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
-      {/* <button
-        type="button"
-        className="size-8 lg:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
-        aria-haspopup="dialog"
-        aria-expanded="false"
-        aria-controls="hs-application-sidebar"
-        aria-label="Toggle navigation"
-        data-hs-overlay="#hs-application-sidebar"
-      >
-        <span className="sr-only">Toggle Navigation</span>
-        <svg
-          className="shrink-0 size-4"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect width="18" height="18" x="3" y="3" rx="2" />
-          <path d="M15 3v18" />
-          <path d="m8 9 3 3-3 3" />
-        </svg>
-      </button> */}
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap lg:space-x-8 h-full">
           <div className="bookmark-content-wrappers w-full h-full">
@@ -157,9 +109,8 @@ const handleRightClick = (event, record) => {
                           mainContent?.length > 0 &&
                           mainContent?.map((result, index) => {
                             return (
-                              <React.Fragment key={index}>
                                 <Link
-                                  // key={index}
+                                  key={index}
                                   to={result?.link}
                                   className={`block mb-4 last:mb-0 google_result google_result_${index}`}
                                   target="_blank"
@@ -178,12 +129,11 @@ const handleRightClick = (event, record) => {
                                     {result?.snippet}
                                   </p>
                                 </Link>
-                              </React.Fragment>
                             );
                           })
                         )}
                         {contextMenu && 
-                          <BookmarkGoogleResultContext contextMenu={contextMenu} handleOptionClick={handleOptionClick} />
+                          <BookmarkGoogleResultContext  setContextMenu={setContextMenu}  contextMenu={contextMenu} handleOptionClick={handleOptionClick} />
                         }
                       </div>
                     </div>
@@ -207,7 +157,7 @@ const handleRightClick = (event, record) => {
                                   <li key={index} className="relative">
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
-                                        className="min-h-[85px] block"
+                                        className="block aspect-[16/9] overflow-hidden object-cover object-top"
                                         to={result?.website_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -316,6 +266,91 @@ const handleRightClick = (event, record) => {
                                   </figure>
                                 </Link>
                               )}
+                               {walmartStaticLink !== "" && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={walmartStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="walmart.png"
+                                      alt=""
+                                      width="187"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                               )} 
+                               {etsyStaticLink !== "" && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={etsyStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/etsy.png"
+                                      alt=""
+                                      width="187"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                              )}
+                               {aliexpressStaticLink !== "" && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={aliexpressStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/ali-express.png"
+                                      alt=""
+                                      width="187"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                               )} 
+                               {neweggStaticLink !== "" && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={neweggStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/newegg.svg"
+                                      alt=""
+                                      width="187"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                               )} 
+                               {mercadolibreStaticLink !== "" && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={mercadolibreStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/mercado.jpg"
+                                      alt=""
+                                      width="187"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                               )} 
                             </>
                           )}
                         </div>
