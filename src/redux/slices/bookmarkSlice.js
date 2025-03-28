@@ -9,7 +9,8 @@ const orderBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/reorder`
 const googleSearchUrl = `${process.env.REACT_APP_API_URL}/api/search`;
 const sarchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/search_bookmark`;
 const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/import-bookmark`;
-
+const addToBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-toplink-bookmark`;
+const removeFromBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/remove-toplink-bookmark`;
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
   "bookmark/fetchAllTopLinks",
@@ -203,14 +204,49 @@ export const importBookmarks = createAsyncThunk("bookmarks/importBookmarks", asy
         'Content-Type':'multipart/form-data'
       }
     })
-    return response;
+    console.log(response, 'imported data');
+    return response?.data?.message;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,
-      message: error?.response?.data?.message || "Failed to load bookmarks from google search api."
+      message: error?.response?.data?.message || "Failed to import bookmarks"
     });
   }
-})
+});
+
+export const addToBookmarks = createAsyncThunk("bookmarks/addToBookmarks", async({token, bookmark_id}, {rejectWithValue})=>{
+  try {
+    let url = `${addToBookmarkUrl}/${bookmark_id}`;
+    let response = await axiosInstance.post(url, {}, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response?.data?.message;
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.data?.status,
+      message: error?.response?.data?.message || "Failed to add bookmarks in top links"
+    });
+  }
+});
+
+export const removeFromBookmarks = createAsyncThunk("bookmarks/removeFromBookmarks", async({token, bookmark_id}, {rejectWithValue})=>{
+  try {
+    let url = `${removeFromBookmarkUrl}/${bookmark_id}`;
+    let response = await axiosInstance.post(url, {}, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response?.data?.message;
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.data?.status,
+      message: error?.response?.data?.message || "Failed to remove bookmarks from top links"
+    });
+  }
+});
 
 const bookmarkSlice = createSlice({
   name: "bookmark",
@@ -233,8 +269,15 @@ const bookmarkSlice = createSlice({
     wikiStaticLink: "",
     ebayStaticLink: "",
     amazonStaticLink: "",
+    walmartStaticLink:"",
+    aliexpressStaticLink:"",
+    etsyStaticLink:"",
+    neweggStaticLink:"",
+    mercadolibreStaticLink:"",
     error: null,
-    importBookmarkMessage:""
+    importError:null,
+    importBookmarkMessage:"",
+    // addToRemoveFromMessage:""
   },
   reducers: {
     callTopLinks: (state) => {
@@ -244,7 +287,7 @@ const bookmarkSlice = createSlice({
       state.isTopLink = false;
     },
     clearImportBookmarksMessage:(state)=>{
-      state.error = null
+      state.importError = null
     }
   },
   extraReducers: (builder) => {
@@ -370,6 +413,14 @@ const bookmarkSlice = createSlice({
       state.wikiStaticLink = action.payload?.wikiStaticLink;
       state.ebayStaticLink = action.payload?.ebayStaticLink;
       state.amazonStaticLink = action.payload?.amazonStaticLink;
+
+      state.walmartStaticLink=action.payload?.walmartStaticLink;
+      state.aliexpressStaticLink=action.payload?.aliexpressStaticLink;
+      state.etsyStaticLink=action.payload?.etsyStaticLink;
+      state.neweggStaticLink=action.payload?.neweggStaticLink;
+      state.mercadolibreStaticLink=action.payload?.mercadolibreStaticLink;
+
+
       state.bookmarks = action.payload?.bookmarks;
     })
     .addCase(googleSearch.rejected, (state, action) => {
@@ -382,12 +433,25 @@ const bookmarkSlice = createSlice({
     })
     .addCase(importBookmarks.fulfilled, (state, action)=>{
       state.loading = false;
-      // state.error = action.payload.message
+      state.importBookmarkMessage = action.payload
           // state.error = action.payload;
     })
     .addCase(importBookmarks.rejected, (state, action)=>{
       state.loading = false;
-      state.error = action.payload?.message;
+      state.importError = action.payload?.message;
+    })
+    builder.addCase(addToBookmarks.pending, (state, action)=>{
+      state.loading = true;
+    })
+    .addCase(addToBookmarks.fulfilled, (state, action)=>{
+      state.loading = false;
+      // state.addToRemoveFromMessage = action.payload;
+      // state.importBookmarkMessage = action.payload
+          // state.error = action.payload;
+    })
+    .addCase(addToBookmarks.rejected, (state, action)=>{
+      state.loading = false;
+      // state.importError = action.payload?.message;
     })
   }
 });

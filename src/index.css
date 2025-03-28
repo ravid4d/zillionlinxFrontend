@@ -39,6 +39,7 @@ body {
   border-radius: 10px;
 }
 
+.content-area.user-loggedin.import,
 .content-area.user-loggedin.bookmarks {
   @apply md:h-[calc(100vh-128px)] xl:h-[calc(100vh-68px)] md:max-h-[1024px]
 }

@@ -1,5 +1,4 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage"; // Defaults to localStorage for web
 import { persistReducer } from "redux-persist";
 import bookmarkReducer from "./slices/bookmarkSlice";
 import authReducer from "./slices/authSlice";
@@ -8,11 +7,12 @@ import categoryReducer from "./slices/categorySlice";
 import userReducer from "./slices/userSlice";
 import adminReducer from "./slices/adminSlice";
 import dashboardReducer from "./slices/dashboardSlice";
+import storageSession from "redux-persist/lib/storage/session";
 // Define persist configuration for the auth reducer
 const authPersistConfig = {
     key: "auth",
-    storage,
-    whitelist: ["token", "userRole", "isLoggedIn"], // Persist only these fields
+    storage: storageSession,
+    // whitelist: ["token", "userRole", "isLoggedIn"], // Persist only these fields
 };
 
 // Define the root reducer

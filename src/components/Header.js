@@ -102,9 +102,10 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
           <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
             <div className="py-2 md:py-0 flex flex-row items-center gap-0.5 md:gap-1">
               <div className="ms-auto flex flex-wrap items-center gap-x-1.5">
+                
               <button
                   type="button" 
-                  className="relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden flex justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                  className={`${location?.pathname === "/" ? 'hidden':'flex'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none`}
                   aria-haspopup="dialog"
                   aria-expanded="false"
                   aria-controls="hs-application-sidebar"
@@ -386,12 +387,12 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
             >
               Add New Bookmark
             </button>
-            <button
-              type="button"
+            <Link
+              to="/import"
               className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
             >
               Import Bookmarks
-            </button>
+            </Link>
           </nav>
         </div>
       ) : null}
