@@ -323,12 +323,12 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                 ) : null}
                 {isLoggedIn && userRole === "user" ? (
                   <nav className="justify-end ml-3 hidden xl:flex flex-wrap">
-                    <Link
-                      to="/bookmarks"
+                    <button
+                    onClick={redirectTo}
                       className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       My Bookmarks
-                    </Link>
+                    </button>
                     {/* btnRef.current.click(); */}
                     <button
                       type="button"

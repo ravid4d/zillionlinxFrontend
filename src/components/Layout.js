@@ -98,34 +98,46 @@ const Layout = () => {
       <div className="app-content flex flex-wrap w-full">
         {!isLoggedIn ? (
           <>
-            <Login
-              closeAllModals={closeAllModals}
-              openModal={openModal}
-              setWhichModalOpen={setWhichModalOpen}
-            />
-            <Register closeAllModals={closeAllModals} openModal={openModal} />
-            <ForgotPassword
-              closeAllModals={closeAllModals}
-              openModal={openModal}
-            />
+            {openModal?.login ? (
+              <Login
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+                setWhichModalOpen={setWhichModalOpen}
+              />
+            ) : openModal?.register ? (
+              <Register
+                setWhichModalOpen={setWhichModalOpen}
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+              />
+            ) : openModal?.forgot ? (
+              <ForgotPassword
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+              />
+            ) : null}
           </>
         ) : (
           <>
-            <AddNewBookmark
-              urlToBookmark={urlToBookmark}
-              closeAllModals={closeAllModals}
-              openModal={openModal}
-              id={id}
-            />
-            <AddNewCategory
-              closeAllModals={closeAllModals}
-              openModal={openModal}
-            />
-            <UpdateUserModal
-              user={user}
-              closeAllModals={closeAllModals}
-              openModal={openModal}
-            />
+            {openModal?.newBookmark ? (
+              <AddNewBookmark
+                urlToBookmark={urlToBookmark}
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+                id={id}
+              />
+            ) : openModal?.newCategory ? (
+              <AddNewCategory
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+              />
+            ) : openModal?.updateUser ? (
+              <UpdateUserModal
+                user={user}
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+              />
+            ) : null}
           </>
         )}
         <Header

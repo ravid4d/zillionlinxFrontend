@@ -1,6 +1,6 @@
 import React  from "react";
 import Select, { components } from "react-select";
-const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder, isDisabled= false }) => {
+const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder, isDisabled= false, formik }) => {
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
     ...items.map(item => ({
@@ -105,6 +105,7 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
         name={name}
         value={formattedOptions.find((option) => option.value === fieldValue)}
         onChange={(selectedOption) => setFieldValue(selectedOption)}
+        // onBlur={(selectedOption) => setFieldValue(selectedOption)}
         placeholder={placeholder?placeholder:"Search Parent Category"}
         styles={customStyles}
         options={formattedOptions}
@@ -113,6 +114,18 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
         components={{
           DropdownIndicator: CustomDropdownIndicator,
           MenuList: CustomMenuList,
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Tab") {
+            // Prevent react-select from hijacking Tab behavior
+            e.stopPropagation(); 
+          }
+        }}
+        onBlur={() => {
+          // Mark the field as touched
+          formik.setFieldTouched(name, true);
+          // Manually trigger validation
+          formik.validateField(name);
         }}
       />
     </>
