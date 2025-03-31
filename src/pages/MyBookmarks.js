@@ -306,7 +306,10 @@ const MyBookmarks = () => {
                 {loading ? (
                   <span className="loader"></span>
                 ) : bookmarks?.length === 0 && error !== null ? (
-                  <h2 className="text-[22px] text-red-500 mb-5">{error}</h2>
+                  <div className=" flex justify-center items-center">
+                   {/* <h2 className="text-[22px] text-red-500 mb-5">{error}</h2> */}
+                    <img src="./no-data-concept.jpeg" alt ="No Data Found!"/>
+                  </div>
                 ) : (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
