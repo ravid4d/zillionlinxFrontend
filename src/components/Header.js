@@ -133,8 +133,11 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                 {isLoggedIn && userRole === "user" ? (
                   <>
                     <div className="hs-dropdown relative inline-flex items-center space-x-2 sm:space-x-4">
-                      <Link
-                        to="/bookmarks"
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setWhichModalOpen("updateUser");
+                        }}
                         className="flex flex-wrap items-center group"
                       >
                         {/* <span className='text-lg text-light-black mr-3'>Welcome, ZillionLinx Demo</span> */}
@@ -157,26 +160,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                             d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                           />
                         </svg>
-                      </Link>
-                      {/* <Link to="/quick-access" className="group">
-                        <svg
-                          width="26"
-                          height="26"
-                          viewBox="0 0 26 26"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="fill-dark-blue group-hover:fill-navy size-4 sm:size-6"
-                        >
-                          <g clipPath="url(#clip0_43_71)">
-                            <path d="M22.1996 22.7022L18.9902 24.5559C17.9116 25.1789 16.7533 25.4905 15.5954 25.4906C14.4373 25.4906 13.2795 25.1791 12.2007 24.5559L4.90004 20.3419C4.5762 20.1548 4.34439 19.8516 4.24714 19.4882C4.14984 19.1248 4.19931 18.7464 4.38633 18.4227C4.81335 17.6824 5.48432 17.1477 6.27555 16.9174C7.082 16.6826 7.93457 16.7893 8.67613 17.2179L10.7413 18.41L4.36434 7.36445C4.08231 6.87537 4.00801 6.30404 4.15492 5.7555C4.30204 5.20635 4.65263 4.74881 5.14201 4.46702C5.63002 4.18473 6.20161 4.11003 6.75071 4.25709C7.29955 4.40405 7.75745 4.75414 8.04014 5.24286L10.9894 10.3527C11.1527 9.85532 11.4874 9.44201 11.9419 9.18039C12.711 8.73636 13.6463 8.8305 14.3081 9.34527C14.4322 8.78338 14.7822 8.27328 15.3181 7.96387C16.1773 7.46926 17.242 7.64425 17.9027 8.32503C18.0527 7.84982 18.3693 7.45443 18.8018 7.20525C19.258 6.94098 19.7921 6.87065 20.3054 7.00781C20.8193 7.14513 21.2481 7.47317 21.5128 7.93147L24.6858 13.4268C26.5574 16.6704 25.4421 20.8313 22.1996 22.7023V22.7022ZM4.066 2.60447C6.10817 1.42584 8.72864 2.12779 9.90773 4.1695C10.1452 4.58032 10.3116 5.0243 10.4023 5.4891C10.4829 5.902 10.8827 6.1715 11.2958 6.09091C11.7087 6.01037 11.9782 5.61036 11.8976 5.19741C11.7746 4.56656 11.5488 3.96414 11.2268 3.40727C9.62792 0.638574 6.07395 -0.313473 3.30429 1.28507C0.535641 2.88397 -0.416456 6.43795 1.18148 9.20644C1.50313 9.76564 1.91202 10.2624 2.39672 10.6832C2.54089 10.8083 2.71868 10.8696 2.8957 10.8696C3.10873 10.8696 3.32069 10.7807 3.47131 10.6072C3.74705 10.2894 3.71302 9.80835 3.39529 9.53261C3.03931 9.22365 2.73873 8.85833 2.50148 8.44594C1.32285 6.40382 2.0248 3.78336 4.066 2.60452V2.60447Z" />
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_43_71">
-                              <rect width="26" height="26" fill="white" />
-                            </clipPath>
-                          </defs>
-                        </svg>
-                      </Link> */}
+                      </button>
                     </div>
                     <div className="mx-1 sm:mx-4">
                       <div className="w-px h-4 bg-mid-blue"></div>
@@ -339,12 +323,12 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                 ) : null}
                 {isLoggedIn && userRole === "user" ? (
                   <nav className="justify-end ml-3 hidden xl:flex flex-wrap">
-                    <Link
-                      to="/bookmarks"
+                    <button
+                    onClick={redirectTo}
                       className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       My Bookmarks
-                    </Link>
+                    </button>
                     {/* btnRef.current.click(); */}
                     <button
                       type="button"

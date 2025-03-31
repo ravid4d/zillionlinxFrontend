@@ -1,7 +1,12 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect, useRef } from 'react'
 
-const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = "", iconPlacement, fieldValue, setFieldValue, setFieldValueOnBlur }, ref) => {
-   
+const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = "", iconPlacement, fieldValue, setFieldValue, setFieldValueOnBlur,autoFocus }, ref) => {
+    const inputRef = useRef(null);
+    useEffect(() => {
+        if (autoFocus && inputRef.current) {
+          inputRef.current.focus();  // Focus the input if autoFocus is true
+        }
+      }, [autoFocus]);
     
     return (
         <>
@@ -12,12 +17,13 @@ const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = 
                     id={id}
                     name={name}
                     className={`py-3 px-4 ${iconPlacement === "left" ? 'ps-11' : 'pe-11'} h-12 block bg-transparent w-full border-dark-blue rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500`}
-                    placeholder={placeholder} autoFocus=""
-                    // defaultValue={type === "password" ? "12345qwerty" : ""}
+                    placeholder={placeholder} 
                     value={fieldValue}
                     onChange={setFieldValue}
                     onBlur={setFieldValueOnBlur}
-                    ref={ref}
+                    tabIndex={0}
+                    ref={ref || inputRef}
+                    autoFocus={autoFocus}
                     {...(type === "password" && { autoComplete: "new-password" })}
                 />
                 {

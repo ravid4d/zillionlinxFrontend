@@ -9,7 +9,7 @@ const ImportBookmarks = () => {
   const [errors, setError] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const { token } = useSelector((state) => state.auth);
-  const { importError, importBookmarkMessage } = useSelector((state) => state.bookmark);
+  const { importError, importBookmarkMessage, loading } = useSelector((state) => state.bookmark);
   const handleDrop = (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -153,7 +153,6 @@ const ImportBookmarks = () => {
                           </p>
                         </div>
                       </div>
-
                       <div className="flex items-center gap-x-2">
                         <button
                           type="button"
@@ -187,7 +186,8 @@ const ImportBookmarks = () => {
 
                 <div className="flex flex-wrap justify-end">
                   <button
-                    className="btn dark-btn h-12 border-none"
+                  disabled={loading}
+                    className="disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none btn dark-btn h-12 border-none"
                     onClick={importBookmark}
                   >
                     Import

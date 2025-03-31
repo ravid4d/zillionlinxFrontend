@@ -6,6 +6,7 @@ const PasswordField = ({
   id,
   showPassword,
   setShowPassword,
+  need_icon,
   name,
   placeholder = "",
   iconPlacement,
@@ -22,6 +23,7 @@ const PasswordField = ({
       <div className="relative">
         <input
           type={newType}
+          tabIndex="0"
           id={id}
           name={name}
           className={`py-3 px-4 ${
@@ -35,7 +37,8 @@ const PasswordField = ({
           {...(type === "password" && { autoComplete: "new-password" })}
         />
         {
-          id !== 'registerConfirmPassword' ?
+          // id !== 'registerConfirmPassword' ?
+          need_icon ?
           <button
           type="button"
           onClick={() => {

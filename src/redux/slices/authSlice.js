@@ -21,7 +21,7 @@ export const handleLogin = createAsyncThunk(
       let isLoggedIn =
         response?.data?.data?.token !== undefined ||
         response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
-      let user = response?.data?.data?.user;
+      let user = response?.data?.user;
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
       return rejectWithValue({

@@ -17,6 +17,7 @@ const Bookmark = ({
   setId
 }) => {
   const { token } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const addToPin = async (bookmarkId) => {
@@ -84,12 +85,12 @@ const Bookmark = ({
         </Link>
 
         <Link target="_blank" to={item?.website_url}>
-          <span className="block g-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
+          <span className="block bg-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
             {item?.title}
           </span>
         </Link>
       </span>
-      {/* {item?.bookmark_id} */}
+      {/* {item?.id} */}
       <span
         onClick={() => handleRemoveItem(item?.id)}
         className="cross-icon w-6 h-6 rounded-full bg-dark-blue flex flex-wrap items-center justify-center cursor-pointer absolute -right-2 -top-2 transition-all hover:bg-red-500"

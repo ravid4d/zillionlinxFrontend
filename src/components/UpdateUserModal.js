@@ -1,0 +1,293 @@
+import React, { useEffect, useState } from "react";
+import Textfield from "./Textfield";
+import { useFormik } from "formik";
+import * as YUP from "yup";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import PasswordField from "./PasswordField";
+import CountryDropdown from "./CountryDropdown";
+import { updateFrontUser } from "../redux/slices/userSlice";
+import axios from "axios";
+import Dropdown from "./Dropdown";
+
+const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const[countries, setCountry] = useState([]);
+  const dispatch = useDispatch();
+  const { loading, token } = useSelector((state) => state.auth);
+
+  const formik = useFormik({
+    initialValues: {
+      first_name: user?.first_name || "",
+      last_name: user?.last_name || "",
+      email: user?.email || "",
+      old_password: "",
+      password: user?.password || "",
+      password_confirmation: user?.password_confirmation || "",
+      country: user?.country || ""
+    },
+    validationSchema: YUP.object({
+      first_name: YUP.string()
+        .min(2, "First Name must be atleast 2 characters")
+        .required("First Name is required"),
+      last_name: YUP.string()
+        .min(2, "Last Name must be atleast 2 characters")
+        .required("Last Name is required"),
+      email: YUP.string()
+        .email("Invalid email format")
+        .required("Email is required"),
+      old_password: YUP.string()
+        .min(8, "Old Password must be at least 8 characters")
+        .max(16, "Old Password must not exceed 16 characters")
+        .matches(/[a-z]/, "Must include at least one lowercase letter")
+        .matches(/[A-Z]/, "Must include at least one uppercase letter")
+        .matches(/\d/, "Must include at least one number")
+        .required("Old Password is required"),
+      password: YUP.string()
+        .min(8, "Password must be at least 8 characters")
+        .max(16, "Password must not exceed 16 characters")
+        .matches(/[a-z]/, "Must include at least one lowercase letter")
+        .matches(/[A-Z]/, "Must include at least one uppercase letter")
+        .matches(/\d/, "Must include at least one number")
+        .required("New Password is required"),
+      password_confirmation: YUP.string()
+        .oneOf([YUP.ref("password"), null], "Passwords must match")
+        .required("Confirm Password is required"),
+      country: YUP.string().required("Please select a country")
+    }),
+    onSubmit: async (values) => {
+        let userId = user?.id;
+      const result = await dispatch(updateFrontUser({token, values, userId}));
+      if (updateFrontUser.fulfilled.match(result)) {
+        toast.success(result.payload.message || "Registered successfully!");
+        closeModal();
+      } else {
+        toast.error(result.payload || "Register failed!");
+      }
+    }
+  });
+  const closeModal = () => {
+    formik.resetForm();
+    closeAllModals();
+  };
+  useEffect(()=>{
+    const getCountryList = async() => {
+      let response = await axios.get("https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code");
+      setCountry(response?.data?.countries);
+    }
+    getCountryList()
+  }, []);
+  return (
+    <div
+      id="updateModal"
+      className={`hs-overlay [--overlay-backdrop:static] ${
+        openModal?.updateUser ? "open opened" : "hidden"
+      } size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`}
+      role="dialog"
+      tabIndex="-1"
+      aria-labelledby="updateModal-label"
+      data-hs-overlay-keyboard="false"
+    >
+      <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+        <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
+          <div className="w-full py-20 px-10">
+            <div className="flex justify-between items-center max-w-[400px] mx-auto">
+              <h3
+                id="updateModal-label"
+                className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
+              >
+               Edit User
+              </h3>
+              <button
+                type="button"
+                onClick={closeModal}
+                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                aria-label="Close"
+                data-hs-overlay="#updateModal"
+              >
+                <span className="sr-only">Close</span>
+                <svg
+                  className="shrink-0 size-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 6 6 18"></path>
+                  <path d="m6 6 12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <div className="max-w-[400px] mx-auto">
+              <form onSubmit={formik.handleSubmit}>
+                <div className="mb-5">
+                  <Textfield
+                    id="update_user_first_name"
+                    name="first_name"
+                    icon="title"
+                    fieldValue={formik.values.first_name}
+                    setFieldValue={formik.handleChange}
+                    setFieldValueOnBlur={formik.handleBlur}
+                    label="First Name"
+                    type="text"
+                    placeholder=""
+                    iconPlacement="left"
+                  />
+                  {formik.touched.first_name && formik.errors.first_name ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.first_name}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-5">
+                  <Textfield
+                    id="update_user_last_name"
+                    name="last_name"
+                    icon="title"
+                    fieldValue={formik.values.last_name}
+                    setFieldValue={formik.handleChange}
+                    setFieldValueOnBlur={formik.handleBlur}
+                    label="Last Name"
+                    type="text"
+                    placeholder=""
+                    iconPlacement="left"
+                  />
+                  {formik.touched.last_name && formik.errors.last_name ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.last_name}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-5">
+                  <Textfield
+                    id="update_user_email"
+                    name="email"
+                    label="Email"
+                    type="email"
+                    iconPlacement="left"
+                    fieldValue={formik.values.email}
+                    setFieldValue={formik.handleChange}
+                    setFieldValueOnBlur={formik.handleBlur}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.email}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-5">
+                  <PasswordField
+                    id="update_user_oldPassword"
+                    setShowPassword={setShowPassword}
+                    showPassword={showPassword}
+                    need_icon={true}
+                    name="old_password"
+                    label="Old Password"
+                    type="password"
+                    placeholder=""
+                    iconPlacement="right"
+                    fieldValue={formik.values.old_password}
+                    setFieldValue={formik.handleChange}
+                    setFieldValueOnBlur={formik.handleBlur}
+                  />
+                  {formik.touched.old_password && formik.errors.old_password ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.old_password}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-5">
+                  <PasswordField
+                    id="update_user_password"
+                    setShowPassword={setShowPassword}
+                    showPassword={showPassword}
+                    name="password"
+                    label="New Password"
+                    type="password"
+                    need_icon={true}
+                    placeholder=""
+                    iconPlacement="right"
+                    fieldValue={formik.values.password}
+                    setFieldValue={formik.handleChange}
+                    setFieldValueOnBlur={formik.handleBlur}
+                  />
+                  {formik.touched.password && formik.errors.password ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.password}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-5">
+                  <PasswordField
+                    id="update_user_confirmPassword"
+                    name="password_confirmation"
+                    label="New Confirm Password"
+                    type="password"
+                    placeholder=""
+                    iconPlacement="right"
+                    fieldValue={formik.values.password_confirmation}
+                    setFieldValue={formik.handleChange}
+                    setFieldValueOnBlur={formik.handleBlur}
+                  />
+                  {formik.touched.password_confirmation &&
+                  formik.errors.password_confirmation ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.password_confirmation}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="mb-5">
+                <Dropdown
+                    isDisabled={countries?.length===0}
+                    id="country"
+                    name="country"
+                    label="Country"
+                    placeholder="Select an option"
+                    fieldValue={formik.values.country}
+                    setFieldValue={(selectedOption) => {
+                      formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:user);
+                    }}
+                    items={countries}
+                    />
+                  {formik.touched.country && formik.errors.country ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.country}
+                    </div>
+                  ) : null}
+                  {/* <CountryDropdown
+                    fieldValue={formik.values.country}
+                    setFieldValue={formik.handleChange}
+                  />
+                  {formik.touched.country && formik.errors.country ? (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.country}
+                    </div>
+                  ) : null} */}
+                </div>
+
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className={`btn dark-btn w-full justify-center h-12 ${
+                    loading
+                      ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                      : ""
+                  }`}
+                >
+                    Update Information
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UpdateUserModal;
