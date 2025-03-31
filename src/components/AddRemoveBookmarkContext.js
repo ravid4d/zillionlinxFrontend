@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const AddRemoveBookmarkContext = ({ contextMenu, setContextMenu, handleOptionClick, handleRemoveItem }) => {
+  const {isTopLink} = useSelector(state=>state.bookmark);
+  console.log(isTopLink, 'isTopLink')
 //   const [bookmarkId] = useState(contextMenu?.record?.bookmark_id);
 const menuRef = useRef(null);
 console.log(contextMenu, 'a')
@@ -55,7 +58,7 @@ useEffect(() => {
                 </svg>
                 Delete bookmark
               </button>
-            {contextMenu?.record?.add_to === "top_link" ? (
+            {contextMenu?.record?.add_to === "top_link" && isTopLink && (
               <button
                 type="button"
                 onClick={() => handleOptionClick('remove')}
@@ -77,7 +80,9 @@ useEffect(() => {
                 </svg>
                 Remove from top links
               </button>
-            ) : (
+            )
+          }
+            {contextMenu?.record?.add_to === "bookmark" && !isTopLink &&(
               <button
                 type="button"
                 onClick={() => handleOptionClick('add')}

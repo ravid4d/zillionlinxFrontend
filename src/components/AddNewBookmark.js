@@ -15,7 +15,7 @@ import {
   fetchSubCategories,
   resetSubCategories
 } from "../redux/slices/categorySlice";
-import { useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const dispatch = useDispatch();
@@ -77,14 +77,14 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       sub_category_name: YUP.string().when("sub_category_id", {
         is: () => showNewSubCategory,
         then: (schema) => schema.required("New Sub Category Name is required"),
-        otherwise: (schema) => schema.notRequired(),
+        otherwise: (schema) => schema.notRequired()
       }),
       add_to: YUP.string().required("Add To is required")
     }),
-    onSubmit: (values) => { 
+    onSubmit: (values) => {
       const updatedValues = {
         ...values,
-        ...(showNewSubCategory ? {} : { sub_category_name: "" }), // Remove sub_category_name if not needed
+        ...(showNewSubCategory ? {} : { sub_category_name: "" }) // Remove sub_category_name if not needed
       };
       handleAddNewBookmark(updatedValues);
     }
@@ -96,28 +96,29 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       toast.success(result.payload.message || "Bookmark added successfully!");
       let categoryId = result?.payload?.category_id;
       let subCategoryId = result?.payload?.sub_category_id;
-      
-      if(location?.pathname === "/bookmarks") {
-        if(result?.payload?.add_to === "bookmark") {
-          await dispatch(fetchCategoryWiseBookmarks({token, categoryId, subCategoryId}))
+
+      if (location?.pathname === "/bookmarks") {
+        if (result?.payload?.add_to === "bookmark") {
+          await dispatch(
+            fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
+          );
         }
-        if(result?.payload?.add_to === "top_link") {
+        if (result?.payload?.add_to === "top_link") {
           await dispatch(fetchAllTopLinks(token));
         }
-      }
-      else {
+      } else {
         navigate("/bookmarks", {
           state: {
-              categoryId: result?.payload?.category_id,
-              subCategoryId: result?.payload?.sub_category_id,
-              addTo: result?.payload?.addto
+            categoryId: result?.payload?.category_id,
+            subCategoryId: result?.payload?.sub_category_id,
+            addTo: result?.payload?.addto
           }
-      });
+        });
       }
       await dispatch(fetchCategories(token));
 
       closeModal();
-      setShowNewSubCategory(false)
+      setShowNewSubCategory(false);
     } else {
       toast.error(result.payload?.message || "Failed to add bookmark.");
     }
@@ -128,11 +129,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
     closeAllModals();
   };
 
-  useEffect(()=>{
-    if(urlToBookmark?.link) {
-      formik.setFieldValue('url', urlToBookmark?.link);
+  useEffect(() => {
+    if (urlToBookmark?.link) {
+      formik.setFieldValue("url", urlToBookmark?.link);
     }
-  },[urlToBookmark?.link]);
+  }, [urlToBookmark?.link]);
 
   useEffect(() => {
     let record =
@@ -209,6 +210,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       label="Title"
                       type="text"
                       placeholder=""
+                      autoFocus={true}
                       icon="title"
                       iconPlacement="left"
                       fieldValue={formik.values.title}
@@ -255,6 +257,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                             );
                             setSelectedCategoryId(selectedOption?.value);
                           }}
+                          formik={formik}
                           items={categories}
                         />
                         {formik.touched.category_id &&
@@ -267,9 +270,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       </div>
                     </>
                   ) : null}
-                  
+
                   {!showNewSubCategory && (
-                    <div className="mb-5">
+                    <div className="mb-5 relative">
                       <Dropdown
                         key={resetKey}
                         id="sub_category_id"
@@ -282,8 +285,29 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                             selectedOption?.value
                           )
                         }
+                        formik={formik}
                         items={subCategories}
                       />
+                      <span
+                        title="Add new sub category"
+                        className="capitalize absolute top-0.5 right-0 cursor-pointer group"
+                        onClick={() => setShowNewSubCategory(true)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="#1b1b1b"
+                          className="group-hover:stroke-dark-blue size-5 shrink-0"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+                      </span>
                       {formik.touched.sub_category_id &&
                       formik.errors.sub_category_id ? (
                         <div className="text-red-500 text-sm mt-1">
@@ -296,17 +320,26 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                   {showNewSubCategory && (
                     <div className="mb-5 relative">
                       <div className="flex justify-end items-center">
-                        <button type="button"
-                          class="absolute top-0 size-6 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
-                          aria-label="Close" data-hs-overlay="#hs-slide-down-animation-modal" aria-expanded="false" onClick={()=>setShowNewSubCategory(false)}>
-                          <span class="sr-only">Close</span>
-                          <svg class="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M18 6 6 18"></path>
-                            <path d="m6 6 12 12"></path>
+                        <span
+                        title="Don't add new sub category?"
+                          className="capitalize absolute top-0.5 right-0 cursor-pointer group"
+                          onClick={() => setShowNewSubCategory(false)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="#1b1b1b"
+                            className="group-hover:stroke-dark-blue size-5 shrink-0"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
                           </svg>
-                        </button>
+                        </span>
                       </div>
                       <Textfield
                         id="sub_category_name"
@@ -318,19 +351,20 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         setFieldValue={formik.handleChange}
                         setFieldValueOnBlur={formik.handleBlur}
                       />
-                      {formik.touched.url && formik.errors?.sub_category_name ? (
+                      {formik.touched.url &&
+                      formik.errors?.sub_category_name ? (
                         <div className="text-red-500 text-sm mt-1">
                           {formik.errors.sub_category_name}
                         </div>
                       ) : null}
                     </div>
-                  )} 
-                  
-                  <div className="mb-5">
+                  )}
+
+                  {/* <div className="mb-5">
                     <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>
                      <span className="capitalize"> + New Sub Category</span>
                     </button>
-                  </div>
+                  </div> */}
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"
@@ -391,10 +425,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         : ""
                     }`}
                   >
-                    {
-                      addBookmarkLoading?<span className="loader"></span>:"Add New Bookmark"
-                    }
-                    
+                    {addBookmarkLoading ? (
+                      <span className="loader"></span>
+                    ) : (
+                      "Add New Bookmark"
+                    )}
                   </button>
                 </form>
               </div>

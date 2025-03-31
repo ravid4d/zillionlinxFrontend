@@ -17,6 +17,7 @@ const Bookmark = ({
   setId
 }) => {
   const { token } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const addToPin = async (bookmarkId) => {

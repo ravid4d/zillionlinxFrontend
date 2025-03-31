@@ -23,6 +23,7 @@ const PasswordField = ({
       <div className="relative">
         <input
           type={newType}
+          tabIndex="0"
           id={id}
           name={name}
           className={`py-3 px-4 ${
