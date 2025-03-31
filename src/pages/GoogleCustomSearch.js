@@ -198,7 +198,7 @@ const GoogleCustomSearch = () => {
                             <span className="loader"></span>
                           ) : (
                             <>
-                              {wikiStaticLink !== "" && (
+                              {wikiStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={wikiStaticLink}
@@ -215,7 +215,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                              {ebayStaticLink !== "" && (
+                              {ebayStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={ebayStaticLink}
@@ -232,7 +232,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                              {amazonStaticLink !== "" && (
+                              {amazonStaticLink && (
                                 <Link
                                   target="_blank"
                                   to={amazonStaticLink}
@@ -249,7 +249,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                              {youtubeStaticLink !== "" && (
+                              {youtubeStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   target="_blank"
@@ -266,7 +266,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                               {walmartStaticLink !== "" && (
+                               {walmartStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={walmartStaticLink}
@@ -283,7 +283,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                                )} 
-                               {etsyStaticLink !== "" && (
+                               {etsyStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={etsyStaticLink}
@@ -300,7 +300,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                               {aliexpressStaticLink !== "" && (
+                               {aliexpressStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={aliexpressStaticLink}
@@ -317,7 +317,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                                )} 
-                               {neweggStaticLink !== "" && (
+                               {neweggStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={neweggStaticLink}
@@ -334,7 +334,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                                )} 
-                               {mercadolibreStaticLink !== "" && (
+                               {mercadolibreStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={mercadolibreStaticLink}
