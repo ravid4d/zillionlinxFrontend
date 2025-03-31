@@ -404,7 +404,7 @@ const bookmarkSlice = createSlice({
     })
     .addCase(googleSearch.fulfilled, (state, action) => {
       state.googleLoading = false;
-      state.googleResults = action.payload?.google_search_results;
+      state.googleResults = action.payload?.google_search_results?.original;
       state.wikkiResults = action.payload?.wikimedia_search_results;
       state.ebayResults = action.payload?.ebay_search_results;
       state.youtubeResults = action.payload?.youtube_search_results;
