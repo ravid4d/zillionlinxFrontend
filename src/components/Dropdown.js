@@ -1,7 +1,6 @@
-import axios from "axios";
-import React, { useEffect } from "react";
+import React  from "react";
 import Select, { components } from "react-select";
-const Dropdown = ({ id, name, label, length, fieldValue, setFieldValue, items, placeholder, isDisabled= false }) => {
+const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placeholder, isDisabled= false }) => {
   const formattedOptions = [
     { value: "", label: "Select an option" }, 
     ...items.map(item => ({
@@ -49,11 +48,11 @@ const Dropdown = ({ id, name, label, length, fieldValue, setFieldValue, items, p
       ...baseStyles,
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      fontFamily: "'Open Sans', serif",
+      fontFamily: "Roboto, serif",
     }),
     option: (baseStyles, state) => ({
       ...baseStyles,
-      fontFamily: "'Open Sans', serif",
+      fontFamily: "Roboto, serif",
       fontSize: "14px",
       color: state.isSelected ? "#ffffff" : "#1f2937",
       backgroundColor: state.isSelected ? "#2131e5" : "#E3E6FF",

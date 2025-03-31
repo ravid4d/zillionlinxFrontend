@@ -6,6 +6,7 @@ const PasswordField = ({
   id,
   showPassword,
   setShowPassword,
+  need_icon,
   name,
   placeholder = "",
   iconPlacement,
@@ -35,7 +36,8 @@ const PasswordField = ({
           {...(type === "password" && { autoComplete: "new-password" })}
         />
         {
-          id !== 'registerConfirmPassword' ?
+          // id !== 'registerConfirmPassword' ?
+          need_icon ?
           <button
           type="button"
           onClick={() => {

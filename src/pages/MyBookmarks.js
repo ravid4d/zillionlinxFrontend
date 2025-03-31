@@ -340,6 +340,7 @@ const MyBookmarks = () => {
                     </ul>
                     {contextMenu && (
                       <AddRemoveBookmarkContext
+                        handleRemoveItem={handleRemoveItem}
                         contextMenu={contextMenu}
                         setContextMenu={setContextMenu}
                         handleOptionClick={handleOptionClick}

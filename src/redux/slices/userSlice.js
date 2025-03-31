@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../axiosInstance";
 const allUsersUrl = `${process.env.REACT_APP_API_URL}/api/admin/users`;
 const updateUserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/update/`;
+const updateFrontUserUrl = `${process.env.REACT_APP_API_URL}/api/user/update/`;
 
 export const getAllUsers = createAsyncThunk(
   "users/getAllUsers",
@@ -64,6 +65,35 @@ export const updateUser = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While getting the users via pagination."
+      });
+    }
+  }
+);
+
+export const updateFrontUser = createAsyncThunk(
+  "users/updateFrontUser",
+  async({token, values, userId}, {rejectWithValue})=>{
+    try {
+      let response = await axiosInstance.post(`${updateFrontUserUrl}${userId}`,
+      {
+        first_name: values?.first_name,
+        last_name: values?.last_name,
+        email: values?.email,
+        country: values?.country,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response, 'ddff')
       return response?.data;
     } catch (error) {
       return rejectWithValue({
