@@ -174,6 +174,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                     setFieldValue={(selectedOption) => {
                       formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:userToEdit);
                     }}
+                    formik={formik}
                     items={countries}
                     />
                   {formik.touched.country && formik.errors.country ? (

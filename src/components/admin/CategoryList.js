@@ -17,6 +17,7 @@ const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
 const CategoryList = ({ classes }) => {
   const dispatch = useDispatch();
+  const [draggedItemId, setDraggedItemId] = useState(null);
   const [categories, setCategories] = useState([]);
   const [activeId, setActiveId] = useState(undefined);
   const [selectedItems, setSelectedItems] = useState({});
@@ -186,6 +187,60 @@ const CategoryList = ({ classes }) => {
 
   const selectedCount = Object.values(selectedItems).filter(Boolean).length;
 
+  const handleDragStart = (itemId) => {
+    setDraggedItemId(itemId);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  // When dragged over another item, reorder the list
+  const handleDrop = async (itemId) => {
+    if (draggedItemId === null || draggedItemId === itemId) return;
+
+    // Ensure bookmarks.bookmarks is an array
+    const newItems = Array.isArray(categories) ? [...categories] : [];
+    const draggedItems = newItems.find((item) => item.id === draggedItemId);
+ 
+
+    // // Find indexes
+    const draggedIndex = newItems.findIndex(
+      (item) => item.id === draggedItemId
+    );
+    const targetIndex = newItems.findIndex(
+      (item) => item.id === itemId
+    );
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // // Reorder items
+    const [draggedItem] = newItems.splice(draggedIndex, 1);
+    newItems.splice(targetIndex, 0, draggedItem);
+
+    setDraggedItemId(null);
+    const updatedBookmarks = [...newItems];
+
+    // // Generate the order array for API
+    const order = updatedBookmarks.map((item) => item.id);
+
+    // const result = await dispatch(orderBookmarks({ token, order }));
+    // if (orderBookmarks.fulfilled.match(result)) {
+    //   toast.success(result.payload || "Bookmarks re-arranged successfully!");
+    //   if (id?.categoryId) {
+    //     let categoryId = id?.categoryId;
+    //     let subCategoryId = id?.subCategoryId;
+    //     await dispatch(
+    //       fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
+    //     );
+    //   } else {
+    //     await dispatch(fetchAllTopLinks(token));
+    //   }
+    // } else {
+    //   toast.error(result.payload || "Failed to re-arrange bookmarks.");
+    // }
+  };
+
   return (
     <div className={classes}>
       <div className="flex flex-col">
@@ -284,10 +339,18 @@ const CategoryList = ({ classes }) => {
                   <tbody className="divide-y divide-gray-200">
                     {categories &&
                       categories?.length > 0 &&
-                      categories?.map((category) => {
+                      categories?.map((category, index) => {
                         return (
                           <React.Fragment key={category?.id}>
-                            <tr>
+                            <tr
+                            draggable
+                            onDragStart={() => handleDragStart(category?.id)}
+                            onDragOver={handleDragOver}
+                            onDrop={() => handleDrop(category.id)}
+                            style={{
+                              opacity: draggedItemId === index ? 0.5 : 1
+                            }}
+                            >
                               <td className="size-px whitespace-nowrap">
                                 <div className="px-6 py-3">
                                   <label

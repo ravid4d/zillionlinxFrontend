@@ -7,14 +7,9 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import AddNewCategory from "./AddNewCategory";
-import GoogleSearchbar from "./GoogleSearchbar";
-import AddNewBookmarkField from "./AddNewBookmarkField";
-import Sidebar from "./Sidebar";
-import Searchbar from "./Searchbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
 import UpdateUserModal from "./UpdateUserModal";
-import UpdateUser from "./admin/UpdateUser";
 
 const Layout = () => {
   const dispatch = useDispatch();

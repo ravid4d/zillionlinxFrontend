@@ -39,6 +39,7 @@ export const getParentCategories = createAsyncThunk(
   "admin/getParentCategories",
   async (token, { rejectWithValue }) => {
     try {
+      console.log('object')
       const response = await axiosInstance.get(categoryUrl, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -47,8 +48,10 @@ export const getParentCategories = createAsyncThunk(
       let parentCategories = response?.data?.data?.filter(
         (category) => category?.parent_id === null
       );
+      console.log(response?.data?.data, 'parentCategories')
       return parentCategories;
     } catch (error) {
+      console.log('error')
       return rejectWithValue({
         status: error?.response?.status,
         message: error?.response?.data?.message || "Login failed"

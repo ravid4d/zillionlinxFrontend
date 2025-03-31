@@ -246,33 +246,7 @@ const MyBookmarks = () => {
           <div className="bookmark-content-wrapper h-full">
             <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
               <div className="flex flex-wrap items-center gap-2">
-                {/* <button
-                  type="button"
-                  className="mb-4 size-8 xl:hidden flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
-                  aria-haspopup="dialog"
-                  aria-expanded="false"
-                  aria-controls="hs-application-sidebar"
-                  aria-label="Toggle navigation"
-                  data-hs-overlay="#hs-application-sidebar"
-                >
-                  <span className="sr-only">Toggle Navigation</span>
-                  <svg
-                    className="shrink-0 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M15 3v18" />
-                    <path d="m8 9 3 3-3 3" />
-                  </svg>
-                </button> */}
+               
                 <AddNewBookmarkField
                   setWhichModalOpen={setWhichModalOpen}
                   setUrlToBookmark={setUrlToBookmark}
