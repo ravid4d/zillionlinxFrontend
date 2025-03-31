@@ -179,7 +179,6 @@ export const handleCategoryPagination = createAsyncThunk(
   }
 );
 
-// Fetch All Top Links
 export const fetchAllBookmarks = createAsyncThunk(
   "admin/fetchAllBookmarks",
   async (token, { getState, rejectWithValue }) => {
