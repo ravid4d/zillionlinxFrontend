@@ -316,14 +316,6 @@ const CategoryList = ({ classes }) => {
                       <th scope="col" className="px-6 py-3 text-start">
                         <div className="flex items-center gap-x-2">
                           <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                            Parent Category
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3 text-start">
-                        <div className="flex items-center gap-x-2">
-                          <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                             Created
                           </span>
                         </div>
@@ -392,7 +384,6 @@ const CategoryList = ({ classes }) => {
                                   </span>
                                 </div>
                               </td>
-                              <td className="h-px w-36"></td>
 
                               <td className="size-px whitespace-nowrap">
                                 <div className="px-6 py-3">

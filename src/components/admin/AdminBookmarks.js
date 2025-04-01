@@ -75,28 +75,14 @@ const AdminBookmarks = () => {
             </p>
           </div>
           <div>
-            {/* <div className="inline-flex gap-x-2">
-              <button
-                onClick={handleDeleteSelected}
-                className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
-                disabled={selectedUsers.length === 0 ? "disabled" : ""}
-              >
-                Delete all ({selectedUsers.length})
-              </button>
-            </div> */}
           </div>
         </div>
-        {/* {!userLoading && (
-          <div className="animate-spin inline-block size-6 border-3 border-red-400 border-t-transparent text-gray-800 rounded-full" role="status" aria-label="loading">
-          <span className="sr-only">Loading...</span>
-        </div>
-        )} */}
         {adminBookmarks && adminBookmarks?.length > 0 ? (
           <>
             <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
               <thead className="bg-gray-50 dark:bg-neutral-800">
                 <tr>
-                  {/* <th scope="col" className="px-6 py-3 text-start">
+                   {/* <th scope="col" className="px-6 py-3 text-start">
                     <label
                       htmlFor="hs-at-with-checkboxes-main"
                       className="flex"
@@ -116,38 +102,24 @@ const AdminBookmarks = () => {
                       </span>
                     </label>
                   </th> */}
-
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-start"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Category
-                      </span>
-                    </div>
-                  </th>
-
                   <th scope="col" className="px-6 py-3 text-start">
                     <div className="flex items-center gap-x-2">
                       <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        Sub Category
+                        Thumbnail
                       </span>
                     </div>
                   </th>
-
-                  <th scope="col" className="px-6 py-3 text-start">
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                        User Name
-                      </span>
-                    </div>
-                  </th>
-
                   <th scope="col" className="px-6 py-3 text-start">
                     <div className="flex items-center gap-x-2">
                       <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                         Website Url
+                      </span>
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        Saved By User
                       </span>
                     </div>
                   </th>
@@ -168,7 +140,24 @@ const AdminBookmarks = () => {
                     </div>
                   </th>
 
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-start"
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        Category
+                      </span>
+                    </div>
+                  </th>
 
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        Sub Category
+                      </span>
+                    </div>
+                  </th>
                   <th scope="col" className="px-6 py-3 text-end"></th>
                 </tr>
               </thead>
