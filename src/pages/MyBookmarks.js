@@ -27,7 +27,9 @@ const MyBookmarks = () => {
     setSelectedSubCategory,
     selectedSubCategory,
     id,
-    setId
+    setId,
+    openModal,
+    closeAllModals
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
 
@@ -221,6 +223,21 @@ const MyBookmarks = () => {
     }
   }, [bookmark_addto]);
 
+useEffect(()=>{
+  if(openModal?.sidebar) {
+    let sidebarOverlay = document.getElementById("hs-application-sidebar-backdrop");
+    if (!sidebarOverlay) return;
+
+    const handleClickOutside = () => {
+      closeAllModals();
+    };
+
+    sidebarOverlay.addEventListener("click", handleClickOutside);
+    return ()=> sidebarOverlay.removeEventListener("click", handleClickOutside)
+    
+  }
+},[openModal?.sidebar]);
+
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
@@ -229,11 +246,11 @@ const MyBookmarks = () => {
             id="hs-application-sidebar"
             className={`
               h-full
-                bookmark-sidebar-wrapper    
-                hs-overlay [--auto-close:xl]
-                hs-overlay-open:translate-x-0         
-                -translate-x-full xl:translate-x-0 transition-all duration-300 transform
-                fixed xl:relative inset-y-0 start-0 z-[40] xl:block
+              bookmark-sidebar-wrapper    
+              hs-overlay [--auto-close:xl]
+              ${openModal?.sidebar ? 'translate-x-0' : '-translate-x-full'}       
+               xl:translate-x-0 transition-all duration-300 transform
+              fixed xl:relative inset-y-0 start-0 z-[50] xl:block
             `}
             role="dialog"
             tabIndex="-1"
