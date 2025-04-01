@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
@@ -10,12 +10,14 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { isLoggedIn, userRole, token } = useSelector((state) => state.auth);
+  const [toggleSettingsDropdown, setToggleSettingsDropdown] = useState(false);
+  const menuRef = useRef(null);
 
   const handleLogout = async () => {
     try {
       await dispatch(logout());
       navigate("/", {
-        state: { loginMessage: "You have been logged out successfully!" }
+        state: { loginMessage: "You have been logged out successfully!" },
       });
     } catch (error) {
       toast.error("Logout failed! Please try again.");
@@ -34,6 +36,21 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
       }
     }
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setToggleSettingsDropdown(false); 
+      }
+    }
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef]);
+
   return (
     <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-[38] w-full">
       <nav className="relative max-w-screen-3xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
@@ -49,63 +66,20 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
               className="max-w-full max-h-full block"
             />
           </div>
-       
-          {/* <button
-            type="button"
-            className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-[12px] rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-            id="hs-header-base-collapse"
-            aria-expanded="false"
-            aria-controls="hs-header-base"
-            aria-label="Toggle navigation"
-            data-hs-collapse="#hs-header-base"
-          >
-            <svg
-              className="hs-collapse-open:hidden size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="3" x2="21" y1="6" y2="6" />
-              <line x1="3" x2="21" y1="12" y2="12" />
-              <line x1="3" x2="21" y1="18" y2="18" />
-            </svg>
-            <svg
-              className="hs-collapse-open:block shrink-0 hidden size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-            <span className="sr-only">Toggle navigation</span>
-          </button> */}
         </div>
 
         <div
           id="hs-header-base"
-          className="overflow-hidden transition-all duration-300 basis-full grow block "
-          aria-labelledby="hs-header-base-collapse"
+          className="transition-all duration-300 basis-full grow block"
         >
-          <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+          <div className="">
             <div className="py-2 md:py-0 flex flex-row items-center gap-0.5 md:gap-1">
               <div className="ms-auto flex flex-wrap items-center gap-x-1.5">
-                
-              <button
-                  type="button" 
-                  className={`${location?.pathname === "/" ? 'hidden':'flex'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none`}
+                <button
+                  type="button"
+                  className={`${
+                    location?.pathname === "/" ? "hidden" : "flex"
+                  } relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none`}
                   aria-haspopup="dialog"
                   aria-expanded="false"
                   aria-controls="hs-application-sidebar"
@@ -129,18 +103,27 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                     <path d="M15 3v18" />
                     <path d="m8 9 3 3-3 3" />
                   </svg>
-                </button> 
+                </button>
                 {isLoggedIn && userRole === "user" ? (
                   <>
-                    <div className="hs-dropdown relative inline-flex items-center space-x-2 sm:space-x-4">
+                    <div
+                      className={`${toggleSettingsDropdown?'open':''} relative `}
+                      ref={menuRef}
+                    >
+           
                       <button
                         type="button"
-                        onClick={() => {
-                          setWhichModalOpen("updateUser");
-                        }}
-                        className="flex flex-wrap items-center group"
+                        className="flex flex-wrap w-full items-center group"
+                        id="hs-dropdown-with-icons"
+                        aria-haspopup="menu"
+                        aria-expanded={
+                          toggleSettingsDropdown ? "true" : "false"
+                        }
+                        aria-label="Dropdown"
+                        onClick={() =>
+                          setToggleSettingsDropdown(!toggleSettingsDropdown)
+                        }
                       >
-                        {/* <span className='text-lg text-light-black mr-3'>Welcome, ZillionLinx Demo</span> */}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -161,6 +144,60 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                           />
                         </svg>
                       </button>
+                      <div
+                        className={`${
+                          toggleSettingsDropdown ? "opacity-100" : "hidden"
+                        } absolute transition-[opacity,margin] duration opacity-0 min-w-60 bg-white shadow-md rounded-lg block mt-4 divide-y divide-gray-200 left-[-112px] sm:left-[-108px] w-60 before:content-[''] before:absolute before:-top-4 before:left-1/2 before:-translate-x-1/2 before:border-8 before:border-transparent before:border-b-white`}
+                      >
+                        <div className="p-1 space-y-0.5">
+                          <button
+                            className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                            type="button"
+                            onClick={() => {
+                              setWhichModalOpen("updateUser");
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                              />
+                            </svg>
+                            Update User Info
+                          </button>
+                          <button
+                            className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                            type="button"
+                            onClick={() => {
+                              setWhichModalOpen("changePassword");
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                              />
+                            </svg>
+                            Change Password
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     <div className="mx-1 sm:mx-4">
                       <div className="w-px h-4 bg-mid-blue"></div>
@@ -324,7 +361,7 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                 {isLoggedIn && userRole === "user" ? (
                   <nav className="justify-end ml-3 hidden xl:flex flex-wrap">
                     <button
-                    onClick={redirectTo}
+                      onClick={redirectTo}
                       className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       My Bookmarks

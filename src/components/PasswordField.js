@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 const PasswordField = ({
   label,
   type,
   id,
-  showPassword,
-  setShowPassword,
   need_icon,
   name,
   placeholder = "",
@@ -14,7 +12,8 @@ const PasswordField = ({
   setFieldValue,
   setFieldValueOnBlur
 }) => {
-  let newType = type === "password" && showPassword ? "text" : type;
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       <label htmlFor={id} className="block text-base text-light-black mb-3">
@@ -22,7 +21,7 @@ const PasswordField = ({
       </label>
       <div className="relative">
         <input
-          type={newType}
+          type={showPassword ? "text" : "password"}
           tabIndex="0"
           id={id}
           name={name}

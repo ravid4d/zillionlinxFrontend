@@ -4,14 +4,12 @@ import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import PasswordField from "./PasswordField";
 import CountryDropdown from "./CountryDropdown";
 import { updateFrontUser } from "../redux/slices/userSlice";
 import axios from "axios";
 import Dropdown from "./Dropdown";
 
 const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
-  const [showPassword, setShowPassword] = useState(false);
   const[countries, setCountry] = useState([]);
   const dispatch = useDispatch();
   const { loading, token } = useSelector((state) => state.auth);
@@ -21,9 +19,6 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
       first_name: user?.first_name || "",
       last_name: user?.last_name || "",
       email: user?.email || "",
-      old_password: "",
-      password: user?.password || "",
-      password_confirmation: user?.password_confirmation || "",
       country: user?.country || ""
     },
     validationSchema: YUP.object({
@@ -36,23 +31,7 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
       email: YUP.string()
         .email("Invalid email format")
         .required("Email is required"),
-      old_password: YUP.string()
-        .min(8, "Old Password must be at least 8 characters")
-        .max(16, "Old Password must not exceed 16 characters")
-        .matches(/[a-z]/, "Must include at least one lowercase letter")
-        .matches(/[A-Z]/, "Must include at least one uppercase letter")
-        .matches(/\d/, "Must include at least one number")
-        .required("Old Password is required"),
-      password: YUP.string()
-        .min(8, "Password must be at least 8 characters")
-        .max(16, "Password must not exceed 16 characters")
-        .matches(/[a-z]/, "Must include at least one lowercase letter")
-        .matches(/[A-Z]/, "Must include at least one uppercase letter")
-        .matches(/\d/, "Must include at least one number")
-        .required("New Password is required"),
-      password_confirmation: YUP.string()
-        .oneOf([YUP.ref("password"), null], "Passwords must match")
-        .required("Confirm Password is required"),
+      
       country: YUP.string().required("Please select a country")
     }),
     onSubmit: async (values) => {
@@ -177,67 +156,6 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
                   {formik.touched.email && formik.errors.email ? (
                     <div className="text-red-500 text-sm mt-1">
                       {formik.errors.email}
-                    </div>
-                  ) : null}
-                </div>
-                <div className="mb-5">
-                  <PasswordField
-                    id="update_user_oldPassword"
-                    setShowPassword={setShowPassword}
-                    showPassword={showPassword}
-                    need_icon={true}
-                    name="old_password"
-                    label="Old Password"
-                    type="password"
-                    placeholder=""
-                    iconPlacement="right"
-                    fieldValue={formik.values.old_password}
-                    setFieldValue={formik.handleChange}
-                    setFieldValueOnBlur={formik.handleBlur}
-                  />
-                  {formik.touched.old_password && formik.errors.old_password ? (
-                    <div className="text-red-500 text-sm mt-1">
-                      {formik.errors.old_password}
-                    </div>
-                  ) : null}
-                </div>
-                <div className="mb-5">
-                  <PasswordField
-                    id="update_user_password"
-                    setShowPassword={setShowPassword}
-                    showPassword={showPassword}
-                    name="password"
-                    label="New Password"
-                    type="password"
-                    need_icon={true}
-                    placeholder=""
-                    iconPlacement="right"
-                    fieldValue={formik.values.password}
-                    setFieldValue={formik.handleChange}
-                    setFieldValueOnBlur={formik.handleBlur}
-                  />
-                  {formik.touched.password && formik.errors.password ? (
-                    <div className="text-red-500 text-sm mt-1">
-                      {formik.errors.password}
-                    </div>
-                  ) : null}
-                </div>
-                <div className="mb-5">
-                  <PasswordField
-                    id="update_user_confirmPassword"
-                    name="password_confirmation"
-                    label="New Confirm Password"
-                    type="password"
-                    placeholder=""
-                    iconPlacement="right"
-                    fieldValue={formik.values.password_confirmation}
-                    setFieldValue={formik.handleChange}
-                    setFieldValueOnBlur={formik.handleBlur}
-                  />
-                  {formik.touched.password_confirmation &&
-                  formik.errors.password_confirmation ? (
-                    <div className="text-red-500 text-sm mt-1">
-                      {formik.errors.password_confirmation}
                     </div>
                   ) : null}
                 </div>

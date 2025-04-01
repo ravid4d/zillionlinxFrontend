@@ -3,6 +3,7 @@ import axiosInstance from "../../axiosInstance";
 const allUsersUrl = `${process.env.REACT_APP_API_URL}/api/admin/users`;
 const updateUserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/update/`;
 const updateFrontUserUrl = `${process.env.REACT_APP_API_URL}/api/user/update/`;
+const updateUserPasswordUrl = `${process.env.REACT_APP_API_URL}/api/change-password`;
 
 export const getAllUsers = createAsyncThunk(
   "users/getAllUsers",
@@ -106,6 +107,33 @@ export const updateFrontUser = createAsyncThunk(
   }
 );
 
+export const updateUserPassword = createAsyncThunk(
+  "users/updateUserPassword",
+  async({token, values}, {rejectWithValue})=>{
+    try {
+      let response = await axiosInstance.post(`${updateUserPasswordUrl}`, 
+        {
+          current_password:values.currentPassword,
+          new_password:values.newPassword,
+          new_password_confirmation:values.confirmPassword
+        }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("Password update response:", response);
+      return response?.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Error updating password.";
+      return rejectWithValue({
+        status: error?.response?.status || 500,
+        message: errorMessage,
+      });
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "users",
   initialState: {
@@ -162,6 +190,20 @@ const userSlice = createSlice({
         // state.users = action.payload.data?.data;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.userLoading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+
+    builder
+      .addCase(updateUserPassword.pending, (state, action) => {
+        state.userLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUserPassword.fulfilled, (state, action) => {
+        state.userLoading = false;
+      })
+      .addCase(updateUserPassword.rejected, (state, action) => {
         state.userLoading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
