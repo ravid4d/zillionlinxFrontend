@@ -10,6 +10,7 @@ import AddNewCategory from "./AddNewCategory";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
 import UpdateUserModal from "./UpdateUserModal";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,8 @@ const Layout = () => {
     newBookmark: false,
     newCategory: false,
     updateUser: false,
-    sidebar:false
+    sidebar:false,
+    changePassword: false
   });
 
   const setWhichModalOpen = (modalName) => {
@@ -60,6 +62,7 @@ const Layout = () => {
       newCategory: false,
       updateUser: false,
       sidebar:false,
+      changePassword: false,
       [modalName]: true
     });
   };
@@ -72,7 +75,8 @@ const Layout = () => {
       newBookmark: false,
       newCategory: false,
       updateUser: false,
-      sidebar:false
+      sidebar:false,
+      changePassword: false
     });
   };
 
@@ -134,7 +138,13 @@ const Layout = () => {
                 closeAllModals={closeAllModals}
                 openModal={openModal}
               />
-            ) : null}
+            ) : openModal?.changePassword ? (
+              <ChangePasswordModal
+                id={id}
+                closeAllModals={closeAllModals}
+                openModal={openModal}
+              />
+            ): null}
           </>
         )}
         <Header

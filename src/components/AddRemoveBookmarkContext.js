@@ -3,10 +3,7 @@ import { useSelector } from "react-redux";
 
 const AddRemoveBookmarkContext = ({ contextMenu, setContextMenu, handleOptionClick, handleRemoveItem }) => {
   const {isTopLink} = useSelector(state=>state.bookmark);
-  console.log(isTopLink, 'isTopLink')
-//   const [bookmarkId] = useState(contextMenu?.record?.bookmark_id);
-const menuRef = useRef(null);
-console.log(contextMenu, 'a')
+  const menuRef = useRef(null);
 
 useEffect(() => {
   function handleClickOutside(event) {
