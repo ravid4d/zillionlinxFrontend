@@ -50,13 +50,13 @@ const BookmarkTableData = ({
         </span>
       </div>
     </td>
-    <td className="h-px max-w-72">
-      <div className="px-6 py-3 flex flex-wrap items-center">
+    <td className="h-px min-w-48 w-48 xl:max-w-72">
+      <div className="px-6 py-3 flex flex-wrap flex-col">
         
         <Link to={bookmark?.website_url} target="_blank"  rel="noopener noreferrer" className="text-sm text-gray-500 dark:text-neutral-500">
         <img src={`${process.env.REACT_APP_API_URL}/storage/${bookmark?.icon_path}`} alt="" width="50" height="50" />        
         </Link>
-        <Link to={bookmark?.website_url} target="_blank" rel="noopener noreferrer" className="inline-block break-all text-sm text-gray-500 dark:text-neutral-500 group-hover:text-blue-500">
+        <Link to={bookmark?.website_url} target="_blank" rel="noopener noreferrer" className="block break-all text-sm text-gray-500 dark:text-neutral-500 group-hover:text-blue-500">
           {bookmark?.website_url}
         </Link>
       </div>

@@ -10,10 +10,11 @@ import {
   deleteCategory,
   setSearchQuery,
   handleCategoryPagination,
+  categoryReorder
 } from "../../redux/slices/adminSlice";
 import useDebounce from "../../hooks/useDebounce";
 
-const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
+// const categoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories`;
 
 const CategoryList = ({ classes }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const CategoryList = ({ classes }) => {
     adminCategories,
     paginationCategories,
     totalCategories,
-    searchQuery,
+    searchQuery
   } = useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
@@ -134,11 +135,11 @@ const CategoryList = ({ classes }) => {
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#5bc0de",
       confirmButtonText: "Yes, delete!",
-      cancelButtonText: "No, cancel",
+      cancelButtonText: "No, cancel"
     }).then((result) => {
       if (result.isConfirmed) {
         confirmDelete();
-        setSelectedItems({})
+        setSelectedItems({});
         Swal.fire("Deleted!", "Category have been removed.", "success");
       }
     });
@@ -175,11 +176,11 @@ const CategoryList = ({ classes }) => {
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#5bc0de",
       confirmButtonText: "Yes, delete!",
-      cancelButtonText: "No, cancel",
+      cancelButtonText: "No, cancel"
     }).then((result) => {
       if (result.isConfirmed) {
         confirmDelete();
-        setSelectedItems({})
+        setSelectedItems({});
         Swal.fire("Deleted!", "Categories have been removed.", "success");
       }
     });
@@ -202,15 +203,12 @@ const CategoryList = ({ classes }) => {
     // Ensure bookmarks.bookmarks is an array
     const newItems = Array.isArray(categories) ? [...categories] : [];
     const draggedItems = newItems.find((item) => item.id === draggedItemId);
- 
 
     // // Find indexes
     const draggedIndex = newItems.findIndex(
       (item) => item.id === draggedItemId
     );
-    const targetIndex = newItems.findIndex(
-      (item) => item.id === itemId
-    );
+    const targetIndex = newItems.findIndex((item) => item.id === itemId);
 
     if (draggedIndex === -1 || targetIndex === -1) return;
 
@@ -219,26 +217,17 @@ const CategoryList = ({ classes }) => {
     newItems.splice(targetIndex, 0, draggedItem);
 
     setDraggedItemId(null);
-    const updatedBookmarks = [...newItems];
+    const updatedCategories = [...newItems];
 
     // // Generate the order array for API
-    const order = updatedBookmarks.map((item) => item.id);
-
-    // const result = await dispatch(orderBookmarks({ token, order }));
-    // if (orderBookmarks.fulfilled.match(result)) {
-    //   toast.success(result.payload || "Bookmarks re-arranged successfully!");
-    //   if (id?.categoryId) {
-    //     let categoryId = id?.categoryId;
-    //     let subCategoryId = id?.subCategoryId;
-    //     await dispatch(
-    //       fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
-    //     );
-    //   } else {
-    //     await dispatch(fetchAllTopLinks(token));
-    //   }
-    // } else {
-    //   toast.error(result.payload || "Failed to re-arrange bookmarks.");
-    // }
+    const order = updatedCategories.map((item) => item.id);
+    const result = await dispatch(categoryReorder({ token, order }));
+    if (categoryReorder.fulfilled.match(result)) {
+      toast.success(result.payload || "Categories re-arranged successfully!");
+      await dispatch(getAdminCategory(token));
+    } else {
+      toast.error(result.payload || "Failed to re-arrange admin categories.");
+    }
   };
 
   return (
@@ -248,29 +237,38 @@ const CategoryList = ({ classes }) => {
           <div className="min-w-full inline-block align-middle">
             <div className="bg-white border overflow-x-auto border-gray-200 rounded-md shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
               <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                      Categories
-                    </h2>
-                    <p className="text-sm text-gray-600 dark:text-neutral-400">
-                      Update and delete categories.
-                    </p>
-                  </div>
-                  <div className="inline-flex gap-x-2">
-                    <button
-                      onClick={handlemultipleDelete}
-                      className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
-                      disabled={selectedCount === 0 ? "disabled" : ""}
-                    >
-                      Delete Selected
-                    </button>
-                  </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                    Categories
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-neutral-400">
+                    Update and delete categories.
+                  </p>
+                </div>
+                <div className="inline-flex gap-x-2">
+                  <button
+                    onClick={handlemultipleDelete}
+                    className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                    disabled={selectedCount === 0 ? "disabled" : ""}
+                  >
+                    Delete Selected
+                  </button>
+                </div>
               </div>
               <div className="w-full overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 table-auto">
                   <thead className="bg-gray-50 dark:bg-neutral-800">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-start">
+                      <th scope="col" className="px-6 py-3 text-start flex flex-wrap items-center gap-2">
+                        <svg
+                          width="18"
+                          height="18"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 320 512"
+                          className="cursor-grab fill-gray-300 opacity-0"
+                        >
+                          <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z" />
+                        </svg>
                         <label
                           htmlFor="hs-at-with-checkboxes-main"
                           className="flex"
@@ -343,16 +341,25 @@ const CategoryList = ({ classes }) => {
                         return (
                           <React.Fragment key={category?.id}>
                             <tr
-                            draggable
-                            onDragStart={() => handleDragStart(category?.id)}
-                            onDragOver={handleDragOver}
-                            onDrop={() => handleDrop(category.id)}
-                            style={{
-                              opacity: draggedItemId === index ? 0.5 : 1
-                            }}
+                              draggable
+                              onDragStart={() => handleDragStart(category?.id)}
+                              onDragOver={handleDragOver}
+                              onDrop={() => handleDrop(category.id)}
+                              style={{
+                                opacity: draggedItemId === index ? 0.5 : 1
+                              }}
                             >
                               <td className="size-px whitespace-nowrap">
-                                <div className="px-6 py-3">
+                                <div className="px-6 py-3 flex flex-wrap items-center gap-2">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 320 512"
+                                    className="cursor-grab fill-gray-300"
+                                  >
+                                    <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z" />
+                                  </svg>
                                   <label
                                     htmlFor="hs-at-with-checkboxes-1"
                                     className="flex"
@@ -419,7 +426,9 @@ const CategoryList = ({ classes }) => {
                                   </button>
                                   <button
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                    onClick={() =>handlesingleDelete(category.id)}
+                                    onClick={() =>
+                                      handlesingleDelete(category.id)
+                                    }
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -439,8 +448,8 @@ const CategoryList = ({ classes }) => {
                                 </div>
                               </td>
                               <td className="size-px whitespace-nowrap">
-                                {category?.subcategories &&
-                                category?.subcategories?.length > 0 ? (
+                                {category?.adminsubcategories &&
+                                category?.adminsubcategories?.length > 0 ? (
                                   <div className="px-6 py-1.5">
                                     <button
                                       type="button"
@@ -474,8 +483,8 @@ const CategoryList = ({ classes }) => {
                                 ) : null}
                               </td>
                             </tr>
-                            {category?.subcategories &&
-                            category?.subcategories?.length > 0 ? (
+                            {category?.adminsubcategories &&
+                            category?.adminsubcategories?.length > 0 ? (
                               <tr className="border-0">
                                 <td colSpan="7" className="p-0 border-0">
                                   <table
@@ -562,110 +571,116 @@ const CategoryList = ({ classes }) => {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {category?.subcategories?.map((sub) => {
-                                        return (
-                                          <tr key={sub?.id}>
-                                            <td className="size-px whitespace-nowrap"></td>
-                                            <td className="size-px whitespace-nowrap">
-                                              <div className="px-6 py-3">
-                                                <label
-                                                  htmlFor="hs-at-with-checkboxes-1"
-                                                  className="flex"
-                                                >
-                                                  <input
-                                                    type="checkbox"
-                                                    checked={
-                                                      !!selectedItems[sub.id]
-                                                    }
-                                                    onChange={() =>
-                                                      handleSubcategorySelect(
-                                                        category.id,
-                                                        sub.id,
-                                                        category.subcategories
-                                                      )
-                                                    }
-                                                    className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                                    id="hs-at-with-checkboxes-1"
-                                                  />
-                                                  <span className="sr-only">
-                                                    Checkbox
+                                      {category?.adminsubcategories?.map(
+                                        (sub) => {
+                                          return (
+                                            <tr key={sub?.id}>
+                                              <td className="size-px whitespace-nowrap"></td>
+                                              <td className="size-px whitespace-nowrap">
+                                                <div className="px-6 py-3">
+                                                  <label
+                                                    htmlFor="hs-at-with-checkboxes-1"
+                                                    className="flex"
+                                                  >
+                                                    <input
+                                                      type="checkbox"
+                                                      checked={
+                                                        !!selectedItems[sub.id]
+                                                      }
+                                                      onChange={() =>
+                                                        handleSubcategorySelect(
+                                                          category.id,
+                                                          sub.id,
+                                                          category.subcategories
+                                                        )
+                                                      }
+                                                      className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                      id="hs-at-with-checkboxes-1"
+                                                    />
+                                                    <span className="sr-only">
+                                                      Checkbox
+                                                    </span>
+                                                  </label>
+                                                </div>
+                                              </td>
+                                              <td className="size-px whitespace-nowrap">
+                                                <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                                  {sub?.id}
+                                                </div>
+                                              </td>
+                                              <td className="size-px whitespace-nowrap">
+                                                <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                                  <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200 mb-1">
+                                                    {sub?.title}
                                                   </span>
-                                                </label>
-                                              </div>
-                                            </td>
-                                            <td className="size-px whitespace-nowrap">
-                                              <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                                                {sub?.id}
-                                              </div>
-                                            </td>
-                                            <td className="size-px whitespace-nowrap">
-                                              <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                                <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200 mb-1">
-                                                  {sub?.title}
-                                                </span>
-                                              </div>
-                                            </td>
-                                            <td className="h-px w-36">
-                                              <div className="px-6 py-3">
-                                                <span className="block text-sm text-gray-500 dark:text-neutral-500">
-                                                  {sub?.parent_id}
-                                                </span>
-                                              </div>
-                                            </td>
-                                            <td className="size-px whitespace-nowrap">
-                                              <div className="px-6 py-3">
-                                                <span className="text-sm text-gray-500 dark:text-neutral-500">
-                                                  {moment(
-                                                    category?.created_at
-                                                  ).format("MMMM Do YYYY")}
-                                                </span>
-                                              </div>
-                                            </td>
-                                            <td className="size-px whitespace-nowrap">
-                                              <div className="px-6 py-1.5">
-                                                <button
-                                                  className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                                  onClick={() =>handleEditCategory(sub)}
-                                                >
-                                                  <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    strokeWidth={2}
-                                                    stroke="currentColor"
-                                                    className="size-5"
+                                                </div>
+                                              </td>
+                                              <td className="h-px w-36">
+                                                <div className="px-6 py-3">
+                                                  <span className="block text-sm text-gray-500 dark:text-neutral-500">
+                                                    {sub?.parent_id}
+                                                  </span>
+                                                </div>
+                                              </td>
+                                              <td className="size-px whitespace-nowrap">
+                                                <div className="px-6 py-3">
+                                                  <span className="text-sm text-gray-500 dark:text-neutral-500">
+                                                    {moment(
+                                                      category?.created_at
+                                                    ).format("MMMM Do YYYY")}
+                                                  </span>
+                                                </div>
+                                              </td>
+                                              <td className="size-px whitespace-nowrap">
+                                                <div className="px-6 py-1.5">
+                                                  <button
+                                                    className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                                                    onClick={() =>
+                                                      handleEditCategory(sub)
+                                                    }
                                                   >
-                                                    <path
-                                                      strokeLinecap="round"
-                                                      strokeLinejoin="round"
-                                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                                    />
-                                                  </svg>
-                                                </button>
-                                                <button
-                                                  className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-                                                  onClick={() =>handlesingleDelete(sub.id)}
-                                                >
-                                                  <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    strokeWidth={2}
-                                                    stroke="currentColor"
-                                                    className="size-5"
+                                                    <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      strokeWidth={2}
+                                                      stroke="currentColor"
+                                                      className="size-5"
+                                                    >
+                                                      <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                                      />
+                                                    </svg>
+                                                  </button>
+                                                  <button
+                                                    className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                                                    onClick={() =>
+                                                      handlesingleDelete(sub.id)
+                                                    }
                                                   >
-                                                    <path
-                                                      strokeLinecap="round"
-                                                      strokeLinejoin="round"
-                                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                                    />
-                                                  </svg>
-                                                </button>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        );
-                                      })}
+                                                    <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      strokeWidth={2}
+                                                      stroke="currentColor"
+                                                      className="size-5"
+                                                    >
+                                                      <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                                      />
+                                                    </svg>
+                                                  </button>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          );
+                                        }
+                                      )}
                                     </tbody>
                                   </table>
                                 </td>

@@ -7,6 +7,7 @@ const fetchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/getAllBookm
 const deleteBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-Bookmarks`;
 const updateCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/update-categories`;
 const deleteCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete/categories`;
+const categoryReorderUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories/reorder`;
 
 export const deleteCategory = createAsyncThunk(
   "admin/delete-categories",
@@ -45,10 +46,11 @@ export const getParentCategories = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
-      let parentCategories = response?.data?.data?.filter(
+      // console.log(response?.data?.data?.data, 'aaaaa')
+      let parentCategories = response?.data?.data?.data?.filter(
         (category) => category?.parent_id === null
       );
-      console.log(response?.data?.data, 'parentCategories')
+      // console.log(response?.data?.data, 'parentCategories')
       return parentCategories;
     } catch (error) {
       console.log('error')
@@ -249,6 +251,25 @@ export const deleteBookmark = createAsyncThunk(
   }
 );
 
+export const categoryReorder = createAsyncThunk(
+  "admin/categoryReorder",
+  async ({token, order}, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(categoryReorderUrl, {order}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },        
+      });
+      return response?.data?.message;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Failed to add bookmark"
+      });
+    }
+  }
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -423,6 +444,18 @@ const adminSlice = createSlice({
         state.adminCategories = state.adminCategories.filter((cat) => !action.payload.ids?.includes(cat.id));
       })
       .addCase(deleteCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+      builder
+      .addCase(categoryReorder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(categoryReorder.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(categoryReorder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
