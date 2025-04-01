@@ -321,7 +321,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                     <div className="mb-5 relative">
                       <div className="flex justify-end items-center">
                         <span
-                        title="Don't add new sub category?"
+                          title="Don't add new sub category?"
                           className="capitalize absolute top-0.5 right-0 cursor-pointer group"
                           onClick={() => setShowNewSubCategory(false)}
                         >
@@ -351,7 +351,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         setFieldValue={formik.handleChange}
                         setFieldValueOnBlur={formik.handleBlur}
                       />
-                      {formik.touched.url &&
+                      {formik.touched.sub_category_name &&
                       formik.errors?.sub_category_name ? (
                         <div className="text-red-500 text-sm mt-1">
                           {formik.errors.sub_category_name}
