@@ -40,20 +40,16 @@ export const getParentCategories = createAsyncThunk(
   "admin/getParentCategories",
   async (token, { rejectWithValue }) => {
     try {
-      console.log('object')
       const response = await axiosInstance.get(categoryUrl, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      // console.log(response?.data?.data?.data, 'aaaaa')
       let parentCategories = response?.data?.data?.data?.filter(
         (category) => category?.parent_id === null
       );
-      // console.log(response?.data?.data, 'parentCategories')
       return parentCategories;
     } catch (error) {
-      console.log('error')
       return rejectWithValue({
         status: error?.response?.status,
         message: error?.response?.data?.message || "Login failed"
@@ -230,9 +226,8 @@ export const deleteBookmark = createAsyncThunk(
   "admin/deleteBookmark",
   async (id, { getState, rejectWithValue }) => {
     const token = getState().auth?.token;
-
     try {
-      const response = await axiosInstance.post(`${deleteBookmarkUrl}/${id}`, {}, {
+      const response = await axiosInstance.post(`${deleteBookmarkUrl}`, id, {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -427,7 +422,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteBookmark.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminBookmarks = state.adminBookmarks.filter((book) => action.payload.id !== book.id); // Remove deleted bookmark
+        state.adminBookmarks = state.adminBookmarks.filter((book) => action.payload.id !== book.bookmark_id); // Remove deleted bookmark
       })
       .addCase(deleteBookmark.rejected, (state, action) => {
         state.loading = false;

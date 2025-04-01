@@ -2,39 +2,58 @@ import moment from "moment/moment";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const BookmarkTableData = ({ bookmark, key, deleteBookmarkHandler }) => {
+const BookmarkTableData = ({
+  bookmark,
+  deleteSingleBookmark,
+  selectedBookmarks,
+  handleSelectOneBookmark
+}) => {
   return (
-    <tr key={key}>
-         {/* <td className="size-px whitespace-nowrap">
-      <div className="px-6 py-3">
-        <label htmlFor={`hs-at-with-checkboxes-${bookmark.id}`} className="flex">
-          <input
-            type="checkbox"
-            className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-            // id={`hs-at-with-checkboxes-${user.id}`}
-            // checked={selectedUsers.includes(user.id)}
-            // onChange={() => handleSelectOneUser(user.id)}
-          />
-          <span className="block text-sm text-gray-500 dark:text-neutral-500">
-            {bookmark?.bookmark_id}
-          </span>
-        </label>
-      </div>
-    </td> */}
+    <tr>
+      <td className="size-px whitespace-nowrap">
+        <div className="px-6 py-3">
+          <label
+            htmlFor={`hs-at-with-checkboxes-${bookmark.id}`}
+            className="flex"
+          >
+            <input
+              type="checkbox"
+              className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+              id={`hs-at-with-checkboxes-${bookmark?.bookmark_id}`}
+              checked={selectedBookmarks?.includes(bookmark?.bookmark_id)}
+              onChange={() => handleSelectOneBookmark(bookmark?.bookmark_id)}
+            />
+            <span className="block text-sm text-gray-500 dark:text-neutral-500">
+              {bookmark?.bookmark_id}
+            </span>
+          </label>
+        </div>
+      </td>
       <td className="h-px min-w-48 w-48 xl:max-w-72">
-        <div className="px-6 py-3 flex flex-wrap flex-col">
+        <div className="px-6 py-3">
           <Link
             to={bookmark?.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-gray-500 dark:text-neutral-500"
+            className="text-sm text-gray-500 dark:text-neutral-500 group overflow-hidden inline-block"
           >
-            <img
-              src={`${process.env.REACT_APP_API_URL}/storage/${bookmark?.icon_path}`}
-              alt=""
-              width="50"
-              height="50"
-            />
+            {bookmark?.icon_path ? (
+              <img
+                src={`${process.env.REACT_APP_API_URL}/storage/${bookmark?.icon_path}`}
+                alt=""
+                width="50"
+                height="50"
+                className="transition-transform group-hover:scale-125"
+              />
+            ) : (
+              <img
+                src={`/placeholder.png`}
+                alt=""
+                width="50"
+                height="50"
+                className="transition-transform group-hover:scale-125"
+              />
+            )}
           </Link>
         </div>
       </td>
@@ -93,7 +112,7 @@ const BookmarkTableData = ({ bookmark, key, deleteBookmarkHandler }) => {
         <div className="px-6 py-1.5">
           <button
             className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-            onClick={() => deleteBookmarkHandler(bookmark?.id)}
+            onClick={() => deleteSingleBookmark([bookmark?.bookmark_id])}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
