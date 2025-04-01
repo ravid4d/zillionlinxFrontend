@@ -256,55 +256,52 @@ const CategoryList = ({ classes }) => {
                 </div>
               </div>
               <div className="w-full overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 table-auto">
+                <table className="min-w-full divide-y divide-gray-200 w-56 table-auto md:table-fixed">
                   <thead className="bg-gray-50 dark:bg-neutral-800">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-start flex flex-wrap items-center gap-2">
-                        <svg
-                          width="18"
-                          height="18"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 320 512"
-                          className="cursor-grab fill-gray-300 opacity-0"
-                        >
-                          <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z" />
-                        </svg>
-                        <label
-                          htmlFor="hs-at-with-checkboxes-main"
-                          className="flex"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={
-                              categories?.length > 0 &&
-                              categories.every((cat) => selectedItems[cat.id])
-                            }
-                            onChange={() =>
-                              categories.forEach((cat) =>
-                                handleCategorySelect(cat.id, cat.subcategories)
-                              )
-                            }
-                            className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                            id="hs-at-with-checkboxes-main"
-                          />
-                          <span className="sr-only">Checkbox</span>
-                        </label>
-                      </th>
-
                       <th
                         scope="col"
-                        className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                        className="px-6 py-3 text-start  whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                       >
-                        <div className="flex items-center gap-x-2">
-                          <span className="whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                            ID
-                          </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <svg
+                            width="18"
+                            height="18"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 320 512"
+                            className="cursor-grab fill-gray-300 opacity-0"
+                          >
+                            <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z" />
+                          </svg>
+                          <label
+                            htmlFor="hs-at-with-checkboxes-main"
+                            className="flex"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={
+                                categories?.length > 0 &&
+                                categories.every((cat) => selectedItems[cat.id])
+                              }
+                              onChange={() =>
+                                categories.forEach((cat) =>
+                                  handleCategorySelect(
+                                    cat.id,
+                                    cat.subcategories
+                                  )
+                                )
+                              }
+                              className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                              id="hs-at-with-checkboxes-main"
+                            />
+                            <span className="sr-only">Checkbox</span>
+                          </label>
                         </div>
                       </th>
 
                       <th
                         scope="col"
-                        className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                        className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                       >
                         <div className="flex items-center gap-x-2">
                           <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -313,7 +310,18 @@ const CategoryList = ({ classes }) => {
                         </div>
                       </th>
 
-                      <th scope="col" className="px-6 py-3 text-start">
+                      <th
+                        scope="col"
+                        className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <span className="text-xs font-semibold uppercase tracking-wide text-gray-800">
+                            {/* Parent Category */}
+                          </span>
+                        </div>
+                      </th>
+
+                      <th scope="col" className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                         <div className="flex items-center gap-x-2">
                           <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                             Created
@@ -321,8 +329,13 @@ const CategoryList = ({ classes }) => {
                         </div>
                       </th>
 
-                      <th scope="col" className="px-6 py-3 text-end"></th>
-                      <th scope="col" className="px-6 py-3 text-end"></th>
+                      <th scope="col" className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
+                        <div className="flex items-center gap-x-2">
+                          <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                            Action
+                          </span>
+                        </div>
+                      </th>
                     </tr>
                   </thead>
 
@@ -341,7 +354,7 @@ const CategoryList = ({ classes }) => {
                                 opacity: draggedItemId === index ? 0.5 : 1
                               }}
                             >
-                              <td className="size-px whitespace-nowrap">
+                              <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                 <div className="px-6 py-3 flex flex-wrap items-center gap-2">
                                   <svg
                                     width="18"
@@ -372,20 +385,22 @@ const CategoryList = ({ classes }) => {
                                   </label>
                                 </div>
                               </td>
-                              <td className="size-px whitespace-nowrap">
-                                <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                                  {category?.id}
-                                </div>
-                              </td>
-                              <td className="size-px whitespace-nowrap">
+
+                              <td className=" whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                 <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                  <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200 mb-1">
+                                  <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
                                     {category?.title}
                                   </span>
                                 </div>
                               </td>
 
-                              <td className="size-px whitespace-nowrap">
+                              <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
+                                <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                  {/* {category?.id} */}
+                                </div>
+                              </td>
+
+                              <td className=" whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                 <div className="px-6 py-3">
                                   <span className="text-sm text-gray-500 dark:text-neutral-500">
                                     {moment(category?.created_at).format(
@@ -394,7 +409,8 @@ const CategoryList = ({ classes }) => {
                                   </span>
                                 </div>
                               </td>
-                              <td className="size-px whitespace-nowrap">
+
+                              <td className=" whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                 <div className="px-6 py-1.5">
                                   <button
                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
@@ -436,12 +452,8 @@ const CategoryList = ({ classes }) => {
                                       />
                                     </svg>
                                   </button>
-                                </div>
-                              </td>
-                              <td className="size-px whitespace-nowrap">
-                                {category?.adminsubcategories &&
-                                category?.adminsubcategories?.length > 0 ? (
-                                  <div className="px-6 py-1.5">
+                                  {category?.adminsubcategories &&
+                                  category?.adminsubcategories?.length > 0 ? (
                                     <button
                                       type="button"
                                       onClick={() => activeTab(category?.id)}
@@ -456,7 +468,7 @@ const CategoryList = ({ classes }) => {
                                           activeId === category?.id
                                             ? "rotate-180"
                                             : ""
-                                        } shrink-0 size-4`}
+                                        } shrink-0 size-5`}
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
                                         height="24"
@@ -470,62 +482,58 @@ const CategoryList = ({ classes }) => {
                                         <path d="m6 9 6 6 6-6"></path>
                                       </svg>
                                     </button>
-                                  </div>
-                                ) : null}
+                                  ) : null}
+                                </div>
                               </td>
                             </tr>
                             {category?.adminsubcategories &&
                             category?.adminsubcategories?.length > 0 ? (
                               <tr className="border-0">
-                                <td colSpan="7" className="p-0 border-0">
+                                <td colSpan="5" className="p-0 border-0">
                                   <table
                                     id={`hs-show-hide-collapse-heading_${category?.id}`}
                                     className={`hs-collapse ${
                                       activeId === category?.id
                                         ? "open"
                                         : "hidden"
-                                    } w-full overflow-hidden transition-[height] duration-300 `}
+                                    } overflow-hidden transition-[height] duration-300 divide-y divide-gray-200 min-w-full table-auto md:table-fixed`}
                                     aria-labelledby={`hs-show-hide-collapse_${category?.id}`}
                                   >
                                     <thead className="bg-gray-50 dark:bg-neutral-800">
                                       <tr>
                                         <th
                                           scope="col"
-                                          className="px-6 py-3 text-end"
-                                        ></th>
-                                        <th
-                                          scope="col"
-                                          className="px-6 py-3 text-start"
+                                          className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                         >
-                                          <label
-                                            htmlFor="hs-at-with-checkboxes-main"
-                                            className="flex"
-                                          >
-                                            <input
-                                              type="checkbox"
-                                              className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                              id="hs-at-with-checkboxes-main"
-                                            />
-                                            <span className="sr-only">
-                                              Checkbox
-                                            </span>
-                                          </label>
-                                        </th>
-
-                                        <th
-                                          scope="col"
-                                          className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
-                                        >
-                                          <div className="flex items-center gap-x-2">
-                                            <span className="whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                              ID
-                                            </span>
+                                          <div className="flex flex-wrap items-center gap-2">
+                                            <svg
+                                              width="18"
+                                              height="18"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              viewBox="0 0 320 512"
+                                              className="fill-gray-300 opacity-0"
+                                            >
+                                              <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z" />
+                                            </svg>
+                                            <label
+                                              htmlFor="hs-at-with-checkboxes-main"
+                                              className="flex"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                id="hs-at-with-checkboxes-main"
+                                              />
+                                              <span className="sr-only">
+                                                Checkbox
+                                              </span>
+                                            </label>
                                           </div>
                                         </th>
 
                                         <th
                                           scope="col"
-                                          className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                                          className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                         >
                                           <div className="flex items-center gap-x-2">
                                             <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -536,7 +544,7 @@ const CategoryList = ({ classes }) => {
 
                                         <th
                                           scope="col"
-                                          className="px-6 py-3 text-start"
+                                          className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                         >
                                           <div className="flex items-center gap-x-2">
                                             <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -547,7 +555,7 @@ const CategoryList = ({ classes }) => {
 
                                         <th
                                           scope="col"
-                                          className="px-6 py-3 text-start"
+                                          className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                         >
                                           <div className="flex items-center gap-x-2">
                                             <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -555,20 +563,35 @@ const CategoryList = ({ classes }) => {
                                             </span>
                                           </div>
                                         </th>
+
                                         <th
                                           scope="col"
-                                          className="px-6 py-3 text-start"
-                                        ></th>
+                                          className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
+                                        >
+                                          <div className="flex items-center gap-x-2">
+                                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                              Action
+                                            </span>
+                                          </div>
+                                        </th>
                                       </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="divide-y divide-gray-200 bg-gray-50">
                                       {category?.adminsubcategories?.map(
                                         (sub) => {
                                           return (
                                             <tr key={sub?.id}>
-                                              <td className="size-px whitespace-nowrap"></td>
-                                              <td className="size-px whitespace-nowrap">
-                                                <div className="px-6 py-3">
+                                              <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
+                                                <div className="px-6 py-3 flex flex-wrap items-center gap-2">
+                                                  <svg
+                                                    width="18"
+                                                    height="18"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 320 512"
+                                                    className="cursor-grab fill-gray-300 opacity-0"
+                                                  >
+                                                    <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z" />
+                                                  </svg>
                                                   <label
                                                     htmlFor="hs-at-with-checkboxes-1"
                                                     className="flex"
@@ -594,26 +617,24 @@ const CategoryList = ({ classes }) => {
                                                   </label>
                                                 </div>
                                               </td>
-                                              <td className="size-px whitespace-nowrap">
-                                                <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                                                  {sub?.id}
-                                                </div>
-                                              </td>
-                                              <td className="size-px whitespace-nowrap">
+
+                                              <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                 <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                                  <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200 mb-1">
+                                                  <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
                                                     {sub?.title}
                                                   </span>
                                                 </div>
                                               </td>
-                                              <td className="h-px w-36">
+
+                                              <td className="h-px whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                 <div className="px-6 py-3">
                                                   <span className="block text-sm text-gray-500 dark:text-neutral-500">
                                                     {sub?.parent_id}
                                                   </span>
                                                 </div>
                                               </td>
-                                              <td className="size-px whitespace-nowrap">
+
+                                              <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                 <div className="px-6 py-3">
                                                   <span className="text-sm text-gray-500 dark:text-neutral-500">
                                                     {moment(
@@ -622,7 +643,8 @@ const CategoryList = ({ classes }) => {
                                                   </span>
                                                 </div>
                                               </td>
-                                              <td className="size-px whitespace-nowrap">
+
+                                              <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                 <div className="px-6 py-1.5">
                                                   <button
                                                     className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
