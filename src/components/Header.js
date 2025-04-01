@@ -5,7 +5,7 @@ import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 
-const Header = ({ setWhichModalOpen, id, setId }) => {
+const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -49,49 +49,6 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
               className="max-w-full max-h-full block"
             />
           </div>
-       
-          {/* <button
-            type="button"
-            className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-[12px] rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-            id="hs-header-base-collapse"
-            aria-expanded="false"
-            aria-controls="hs-header-base"
-            aria-label="Toggle navigation"
-            data-hs-collapse="#hs-header-base"
-          >
-            <svg
-              className="hs-collapse-open:hidden size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="3" x2="21" y1="6" y2="6" />
-              <line x1="3" x2="21" y1="12" y2="12" />
-              <line x1="3" x2="21" y1="18" y2="18" />
-            </svg>
-            <svg
-              className="hs-collapse-open:block shrink-0 hidden size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-            <span className="sr-only">Toggle navigation</span>
-          </button> */}
         </div>
 
         <div
@@ -105,12 +62,13 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
                 
               <button
                   type="button" 
-                  className={`${location?.pathname === "/" ? 'hidden':'flex'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none`}
+                  className={`${location?.pathname === "/" ? 'hidden':'flex'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none !z-[10]`}
                   aria-haspopup="dialog"
                   aria-expanded="false"
                   aria-controls="hs-application-sidebar"
                   aria-label="Toggle navigation"
                   data-hs-overlay="#hs-application-sidebar"
+                  onClick={()=>setWhichModalOpen('sidebar')}
                 >
                   <span className="sr-only">Toggle Navigation</span>
                   <svg
