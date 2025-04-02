@@ -13,7 +13,7 @@ const AdminLayout = () => {
         {/* <div className="w-full content-area"> */}
           <Outlet />
         {/* </div> */}
-        <AdminFooter />
+        {/* <AdminFooter /> */}
       {/* // </div> */}
     </div>
   );

@@ -49,6 +49,7 @@ const Layout = () => {
     newBookmark: false,
     newCategory: false,
     updateUser: false,
+    sidebar:false,
     changePassword: false
   });
 
@@ -60,6 +61,7 @@ const Layout = () => {
       newBookmark: false,
       newCategory: false,
       updateUser: false,
+      sidebar:false,
       changePassword: false,
       [modalName]: true
     });
@@ -73,6 +75,7 @@ const Layout = () => {
       newBookmark: false,
       newCategory: false,
       updateUser: false,
+      sidebar:false,
       changePassword: false
     });
   };
@@ -84,12 +87,11 @@ const Layout = () => {
   const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
   const [urlToBookmark, setUrlToBookmark] = useState("" || {});
-
   return (
     <div className="app-layout">
       <div
         className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
-          isAnyModalOpen ? "visible opacity-100" : "invisible opacity-0"
+          isAnyModalOpen && !openModal?.sidebar ? "visible opacity-100" : "invisible opacity-0"
         }`}
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>
@@ -146,6 +148,7 @@ const Layout = () => {
           </>
         )}
         <Header
+          openModal={openModal}
           setWhichModalOpen={setWhichModalOpen}
           sidebar={sidebar}
           hideSidebar={hideSidebar}
@@ -162,6 +165,8 @@ const Layout = () => {
         >
           <Outlet
             context={{
+              openModal,
+              closeAllModals,
               setUrlToBookmark,
               setWhichModalOpen,
               selectedSubCategory,

@@ -27,9 +27,9 @@ const UserTableData = ({
             />
              </>
             }
-            <span className="block text-sm text-gray-500 dark:text-neutral-500">
+            {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
               {user?.id}
-            </span>
+            </span> */}
            
           </label>
 

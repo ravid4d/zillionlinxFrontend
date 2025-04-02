@@ -5,7 +5,7 @@ import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 
-const Header = ({ setWhichModalOpen, id, setId }) => {
+const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -75,16 +75,16 @@ const Header = ({ setWhichModalOpen, id, setId }) => {
           <div className="">
             <div className="py-2 md:py-0 flex flex-row items-center gap-0.5 md:gap-1">
               <div className="ms-auto flex flex-wrap items-center gap-x-1.5">
-                <button
-                  type="button"
-                  className={`${
-                    location?.pathname === "/" ? "hidden" : "flex"
-                  } relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none`}
+                
+              <button
+                  type="button" 
+                  className={`${location?.pathname === "/" ? 'hidden':'flex'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none !z-[10]`}
                   aria-haspopup="dialog"
                   aria-expanded="false"
                   aria-controls="hs-application-sidebar"
                   aria-label="Toggle navigation"
                   data-hs-overlay="#hs-application-sidebar"
+                  onClick={()=>setWhichModalOpen('sidebar')}
                 >
                   <span className="sr-only">Toggle Navigation</span>
                   <svg
