@@ -150,26 +150,29 @@ const GoogleCustomSearch = () => {
                             {googleLoading ? (
                               <span className="loader"></span>
                             ) : (
-                              bookmarks &&
-                              bookmarks?.length > 0 &&
-                              bookmarks?.map((result, index) => {
+                              googleResults &&
+                              googleResults?.length > 0 &&
+                              googleResults?.map((result, index) => {
                                 return (
                                   <li key={index} className="relative">
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
                                         className="block aspect-[16/9] overflow-hidden object-cover object-top"
-                                        to={result?.website_url}
+                                        // to={result?.website_url}
+                                        to={result?.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
                                         <img
                                           alt=""
                                           className="w-full"
-                                          src={`${process.env.REACT_APP_API_URL}/storage/${result.icon_path}`}
+                                          // src={`${process.env.REACT_APP_API_URL}/storage/${result.image}`}
+                                          src={result.image}
                                         />
                                       </Link>
                                       <Link
-                                        to={result?.website_url}
+                                        // to={result?.website_url}
+                                        to={result?.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
