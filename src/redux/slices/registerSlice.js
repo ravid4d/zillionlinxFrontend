@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const registerUrl = `${process.env.REACT_APP_API_URL}/api/register`;
 const forgotPasswordUrl = `${process.env.REACT_APP_API_URL}/api/forgot-password`;
+const resetPasswordUrl = `${process.env.REACT_APP_API_URL}/api/reset-password`;
 
 
 export const handleRegister = createAsyncThunk(
@@ -49,6 +50,24 @@ export const handleForgotPassword = createAsyncThunk(
   }
 );
 
+export const handleResetPassword = createAsyncThunk(
+  "auth/reset-password",
+  async ( values , { rejectWithValue }) => {
+    try {
+      const response = await axios.post(resetPasswordUrl,  values );
+
+      return {
+        message: response?.data?.message || "Password reset successful! Redirecting...",
+      };
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status || 500,
+        message: error?.response?.data?.message || "Failed to reset password.",
+      });
+    }
+  }
+);
+
 
 const registerSlice = createSlice({
   name: "register",
@@ -79,6 +98,18 @@ const registerSlice = createSlice({
       state.loading = false;
     })
     .addCase(handleForgotPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(handleResetPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(handleResetPassword.fulfilled, (state, action) => {
+      state.loading = false;
+    })
+    .addCase(handleResetPassword.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
