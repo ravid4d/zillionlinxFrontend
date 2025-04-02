@@ -15,13 +15,14 @@ export const handleLogin = createAsyncThunk(
           password: values?.password
         }
       );
+      console.log(response, 'aaa');
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
       let message = response?.data?.message || "";
       let isLoggedIn =
         response?.data?.data?.token !== undefined ||
         response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
-      let user = response?.data?.user;
+      let user = response?.data?.data?.user;
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
       return rejectWithValue({

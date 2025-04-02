@@ -37,9 +37,16 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             // values.password=encryptedPassword;
             try {
                 const result = await dispatch(handleLogin({ values, loginType })).unwrap();
-                closeModal();    
-                //Pass state to show login successfull toast in mybookmarks page.
-                navigate('/bookmarks', {state:{loginMessage:result?.message}})
+                console.log(result, 'resulta');
+                if(!result?.isLoggedIn) {
+                    toast.error(result?.message)
+                }
+                else {
+                    // toast.success(result?.message)
+                    closeModal();    
+                    //Pass state to show login successfull toast in mybookmarks page.
+                    navigate('/bookmarks', {state:{loginMessage:result?.message}})
+                }
             } catch (error) {
                 toast.error(error?.message || "Login failed!");
             }

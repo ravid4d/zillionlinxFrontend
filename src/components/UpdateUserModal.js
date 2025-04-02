@@ -171,21 +171,13 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
                       formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:user);
                     }}
                     items={countries}
+                    formik={formik}
                     />
                   {formik.touched.country && formik.errors.country ? (
                     <div className="text-red-500 text-sm mt-1">
                       {formik.errors.country}
                     </div>
                   ) : null}
-                  {/* <CountryDropdown
-                    fieldValue={formik.values.country}
-                    setFieldValue={formik.handleChange}
-                  />
-                  {formik.touched.country && formik.errors.country ? (
-                    <div className="text-red-500 text-sm mt-1">
-                      {formik.errors.country}
-                    </div>
-                  ) : null} */}
                 </div>
 
                 <button

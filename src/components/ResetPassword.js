@@ -64,10 +64,10 @@ const ResetPassword = () => {
   return (
     <div className="flex flex-col rounded-[30px] pointer-events-auto w-full relative h-screen flex-wrap items-center justify-center">
       <div className="w-full py-20 px-10">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto">
           <h3
             id="hs-slide-down-animation-modal-label"
-            className="uppercase text-dark-blue text-center w-full text-7xl mb-12"
+            className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
           >
             Reset Password
           </h3>
