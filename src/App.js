@@ -19,6 +19,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminBookmarks from './components/admin/AdminBookmarks';
 import ImportBookmarks from './pages/ImportBookmarks';
+import ResetPassword from './components/ResetPassword';
 
 function App() {
     return (
@@ -34,6 +35,9 @@ function App() {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Route>
 
+                {/* Reset Password Page */}
+                <Route path="/reset-password" element={<ResetPassword />} />
+                
                 {/* Unauthorized Page - Rendered Independently */}
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
