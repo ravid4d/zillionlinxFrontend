@@ -140,9 +140,9 @@ const GoogleCustomSearch = () => {
                     <div className={`w-full lg:w-1/4 rounded-2xl lg:ps-6 h-full`}>
                       <div className="bg-white h-full">
                         <img
-                          src="/member-rank.svg"
+                          src="/google-image.png"
                           alt=""
-                          width="160"
+                          width="200"
                           className="mt-5 lg:mt-0 lg:mx-auto block mb-2"
                         />
                         <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
