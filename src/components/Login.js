@@ -4,9 +4,11 @@ import { useFormik } from 'formik';
 import * as YUP from "yup";
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleLogin } from '../redux/slices/authSlice';
+import { handleGoogleLogin, handleLogin } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import PasswordField from './PasswordField';
+import { useGoogleLogin } from '@react-oauth/google';
+
 // import CryptoJS from "crypto-js";
 
 const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
@@ -52,10 +54,34 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             }
         }
     });
+    
     const closeModal = () => {
         formik.resetForm();
         closeAllModals();
     }
+  
+    const googleLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                const accessToken = tokenResponse?.access_token;
+                const result = await dispatch(handleGoogleLogin({ accessToken })).unwrap();
+                console.log('Login successful:', result);
+
+                closeModal();    
+                navigate('/bookmarks', {state:{loginMessage:result?.message}})
+
+            } catch (error) {
+                console.error('Error during login process:', error);
+            }
+        },
+        onError: (error) => {
+            toast.error(error?.message || "Login failed!");
+            console.error('Google login failed:', error);
+        },
+    });
+
+      
+     
     return (
         <div id="hs-slide-down-animation-modal" className={`hs-overlay [--overlay-backdrop:static] ${openModal?.login ? 'open opened' : 'hidden'} size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`} role="dialog" tabIndex="-1" aria-labelledby="hs-slide-down-animation-modal-label" data-hs-overlay-keyboard="false">
             <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
@@ -114,7 +140,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                                             <path d="M18.3263 1.90391H21.6998L14.3297 10.3274L23 21.7899H16.2112L10.894 14.8379L4.80995 21.7899H1.43443L9.31744 12.78L1 1.90391H7.96111L12.7674 8.25824L18.3263 1.90391ZM17.1423 19.7707H19.0116L6.94539 3.81704H4.93946L17.1423 19.7707Z" fill="#2131E5" />
                                         </svg>
                                     </button>
-                                    <button type="button"  className={`relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none `} aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
+                                    <button type="button" onClick={() => googleLogin()}  className={`relative size-9 flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none `} aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-header-base-offcanvas" aria-label="Toggle navigation" data-hs-overlay="#hs-header-base-offcanvas">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className='size-6 shrink-0'>
                                             <g clipPath="url(#clip0_55_183)">
                                                 <path d="M11.9998 9.81815V14.4654H18.4579C18.1743 15.96 17.3233 17.2255 16.047 18.0764L19.9415 21.0982C22.2106 19.0037 23.5197 15.9273 23.5197 12.2728C23.5197 11.4219 23.4433 10.6037 23.3015 9.81828L11.9998 9.81815Z" fill="#2131E5" />
