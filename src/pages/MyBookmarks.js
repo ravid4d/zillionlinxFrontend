@@ -288,8 +288,7 @@ useEffect(()=>{
                 )}
                 {!id?.categoryId && !searchResults ? (
                   <span className="text-base text-light-black inline-block">
-                    (Drag and drop thumbnails to position top links or pin to a
-                    grid location)
+                    Drag thumbnails to desired position, pin to a grid location, or right-click for more options.
                   </span>
                 ) : null}
               </p>
