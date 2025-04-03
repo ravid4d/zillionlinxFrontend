@@ -29,14 +29,14 @@ const UserTableData = ({
             }
             {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
               {user?.id}
-            </span> */}
+            </span>  */}
            
           </label>
 
         </div>
       </td>
       <td className="size-px whitespace-nowrap">
-        <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+        <div className="px-6 py-3">
           <div className="flex items-center gap-x-3">
             <div className="grow">
               <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">

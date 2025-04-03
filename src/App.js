@@ -19,6 +19,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminBookmarks from './components/admin/AdminBookmarks';
 import ImportBookmarks from './pages/ImportBookmarks';
+import ResetPassword from './components/ResetPassword';
+import ChangePassword from './components/admin/ChangePassword';
+import UpdateAdmin from './components/admin/UpdateAdmin';
 
 function App() {
     return (
@@ -34,6 +37,9 @@ function App() {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Route>
 
+                {/* Reset Password Page */}
+                <Route path="/reset-password" element={<ResetPassword />} />
+                
                 {/* Unauthorized Page - Rendered Independently */}
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -56,6 +62,8 @@ function App() {
                         <Route path="category" element={<Category />} />
                         <Route path="user" element={<User />} />
                         <Route path="admin-bookmarks" element={<AdminBookmarks />} />
+                        <Route path="change-password" element={<ChangePassword />} />
+                        <Route path="update-user" element={<UpdateAdmin />} />
                     </Route>
                 </Route>
 

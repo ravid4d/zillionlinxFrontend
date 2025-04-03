@@ -117,7 +117,7 @@ const AddCategory = () => {
                 id="title"
                 name="title"
                 label="Categroy Title"
-                autoFocus={true}
+                autoFocus={false}
                 type="text"
                 placeholder="Enter Category Title"
                 iconPlacement="left"

@@ -196,13 +196,13 @@ const User = () => {
                         />
                         {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                           ID
-                        </span> */}
+                        </span>  */}
                       </label>
                     </th>
 
                     <th
                       scope="col"
-                      className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start"
+                      className="px-6 py-3"
                     >
                       <div className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">

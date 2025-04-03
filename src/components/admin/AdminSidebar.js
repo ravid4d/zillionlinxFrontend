@@ -1,23 +1,47 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
   const location = useLocation();
-
+  const adminSidebarRef = useRef(null);
   const isActive = (path) => location.pathname === path;
 
+  useEffect(() => {
+    const handleSidebar = (event) => {
+      if (
+        adminSidebarRef?.current &&
+        !adminSidebarRef?.current.contains(event.target)
+      ) {
+        setOpenSidebar(false);
+      }
+    };
+    document.addEventListener("mousedown", handleSidebar);
+    return () => {
+      document.removeEventListener("mousedown", handleSidebar);
+    };
+  }, [adminSidebarRef, setOpenSidebar]);
+
   return (
+    <>
+      <div
+        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+          openSidebar ? "visible opacity-100" : "invisible opacity-0"
+        }`}
+        id="updateUser-backdrop"
+      ></div>
+    
     <div
       id="hs-application-sidebar"
-      className="hs-overlay  [--auto-close:lg]
-    hs-overlay-open:translate-x-0
-    -translate-x-full transition-all duration-300 transform
+      ref={adminSidebarRef}
+      className={`hs-overlay  [--auto-close:lg]
+        ${openSidebar?'translate-x-0 block':'hidden -translate-x-full'}
+    transition-all duration-300 transform
     w-64 h-full
-    hidden
+    
     fixed inset-y-0 start-0 z-50
     bg-white border-e border-gray-200
     lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
-    dark:bg-neutral-800 dark:border-neutral-700"
+    `}
       role="dialog"
       tabIndex="-1"
       aria-label="Sidebar"
@@ -34,9 +58,7 @@ const AdminSidebar = () => {
             <path d="M5 29.5V16.66C5 12.1534 8.58172 8.5 13 8.5C17.4183 8.5 21 12.1534 21 16.66C21 21.1666 17.4183 24.82 13 24.82H12" className="stroke-blue-600 dark:stroke-white" stroke="currentColor" strokeWidth="2" />
             <circle cx="13" cy="16.5214" r="5" className="fill-blue-600 dark:fill-white" fill="currentColor" />
           </svg> */}
-            <span
-              className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16"
-            >
+            <span className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 w-72 h-16">
               <img
                 src="/logo.svg"
                 alt=""
@@ -212,6 +234,7 @@ const AdminSidebar = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
