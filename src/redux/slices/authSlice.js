@@ -32,6 +32,35 @@ export const handleLogin = createAsyncThunk(
   }
 );
 
+export const handleGoogleLogin = createAsyncThunk(
+  "auth/googleLogin",
+  async ({accessToken}, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(loginUrl,
+        {
+          type: "google",
+          google_token: accessToken
+        }
+      );
+      let token = response?.data?.data?.token || null;
+      let userRole = response?.data?.data?.user?.role || undefined;
+      let message = response?.data?.message || "";
+      let isLoggedIn =
+      response?.data?.data?.token !== undefined ||
+      response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
+      let user = response?.data?.user;
+      return { token, message, userRole, isLoggedIn, user };
+    } catch (error) {
+      console.log(error,"/error")
+      
+      return rejectWithValue({
+        status: error?.response?.status,
+        message: error?.response?.data?.message || "Login failed",
+      });
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -68,6 +97,24 @@ const authSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(handleLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+
+    builder
+      .addCase(handleGoogleLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleGoogleLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isLoggedIn = action.payload.isLoggedIn;
+        state.userRole = action.payload.userRole;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+      })
+      .addCase(handleGoogleLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
