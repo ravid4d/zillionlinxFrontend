@@ -63,7 +63,7 @@ const BookmarkTableData = ({
             to={bookmark?.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block break-all text-sm text-gray-500 dark:text-neutral-500 group-hover:text-blue-500"
+            className="block break-all text-sm text-gray-500 dark:text-neutral-500 group-hover:text-blue-500 text-truncate"
           >
             {bookmark?.website_url}
           </Link>
