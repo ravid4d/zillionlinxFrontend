@@ -73,6 +73,15 @@ body {
   animation: rotation 1s linear infinite;
 }
 
+.text-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Number of lines to display */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
