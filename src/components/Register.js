@@ -10,6 +10,8 @@ import CountryDropdown from "./CountryDropdown";
 import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
+import { handleGoogleLogin } from "../redux/slices/authSlice";
 
 const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
   const [countries, setCountry] = useState([]);
@@ -77,6 +79,28 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
     formik.resetForm();
     closeAllModals();
   };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+        try {
+            const accessToken = tokenResponse?.access_token;
+            const result = await dispatch(handleGoogleLogin({ accessToken })).unwrap();
+            console.log('Login successful:', result);
+
+            closeModal();    
+            navigate('/bookmarks', {state:{loginMessage:result?.message}})
+
+        } catch (error) {
+            console.error('Error during login process:', error);
+        }
+    },
+    onError: (error) => {
+        toast.error(error?.message || "Login failed!");
+        console.error('Google login failed:', error);
+    },
+  });
+
+
   return (
     <div
       id="register"
@@ -305,6 +329,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                 </button>
                 <button
                   type="button"
+                  onClick={googleLogin}
                   className="mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
                 >
                   <svg
