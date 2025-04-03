@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../axiosInstance";
+import { setUser } from "./userSlice";
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async ({ values, loginType }, { rejectWithValue }) => {
+  async ({ values, loginType }, {dispatch, rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
@@ -15,7 +16,7 @@ export const handleLogin = createAsyncThunk(
           password: values?.password
         }
       );
-      console.log(response, 'aaa');
+      // console.log(response, 'aaa');
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
       let message = response?.data?.message || "";
@@ -23,6 +24,7 @@ export const handleLogin = createAsyncThunk(
         response?.data?.data?.token !== undefined ||
         response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
       let user = response?.data?.data?.user;
+      dispatch(setUser(user));
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
       return rejectWithValue({

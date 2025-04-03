@@ -18,7 +18,8 @@ const Layout = () => {
   const [sidebar, hideSidebar] = useState(false);
   const [id, setId] = useState({ categoryId: null, subCategoryId: null });
   const { categories } = useSelector((state) => state.category);
-  const { token, isLoggedIn, user } = useSelector((state) => state.auth);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
 

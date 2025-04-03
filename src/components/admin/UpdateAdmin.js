@@ -11,7 +11,8 @@ import Dropdown from "../Dropdown";
 const UpdateAdmin = () => {
     const[countries, setCountry] = useState([]);
     const dispatch = useDispatch();
-    const { loading, token, user } = useSelector((state) => state.auth);
+    const { loading, token } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.user);
     const formik = useFormik({
       initialValues: {
         first_name: user?.first_name || "",
