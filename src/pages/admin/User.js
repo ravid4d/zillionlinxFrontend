@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllUsers,
-  handleUsersPagination,
+  handleUsersPagination
 } from "../../redux/slices/userSlice";
 import { deleteUser, setSearchQuery } from "../../redux/slices/adminSlice";
 import UserTableData from "./UserTableData";
@@ -16,9 +16,7 @@ const User = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { searchQuery } = useSelector((state) => state.admin);
-  const { users, totalUsers, pagination } = useSelector(
-    (state) => state.user
-  );
+  const { users, totalUsers, pagination } = useSelector((state) => state.user);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -27,7 +25,7 @@ const User = () => {
 
   //Select / Unselect all the users
   const handleSelectAllUsers = () => {
-    selectedUsers?.length === users?.length 
+    selectedUsers?.length === users?.length
       ? setSelectedUsers([])
       : setSelectedUsers(users?.map((user) => user?.id));
   };
@@ -47,20 +45,20 @@ const User = () => {
       toast.warning("No users selected!");
       return;
     }
-  
+
     const confirmDelete = () => {
       dispatch(deleteUser({ ids, token }))
         .unwrap()
         .then(() => {
           toast.success("User deleted successfully!");
           setSelectedUsers([]); // Clear selection
-          dispatch(getAllUsers()); 
+          dispatch(getAllUsers());
         })
         .catch((err) => {
           toast.error("Error deleting user: " + err.message);
         });
     };
-  
+
     // Show confirmation toast with Yes/No buttons
     Swal.fire({
       title: "Are you sure?",
@@ -70,14 +68,14 @@ const User = () => {
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#5bc0de",
       confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel",
+      cancelButtonText: "No, cancel"
     }).then((result) => {
       if (result.isConfirmed) {
         confirmDelete();
         Swal.fire("Deleted!", "Your item has been deleted.", "success");
       }
     });
-  };  
+  };
 
   //Delete selected users.
   const handleDeleteSelected = () => {
@@ -85,19 +83,19 @@ const User = () => {
       toast.warning("No users selected!", { position: "top-center" });
       return;
     }
-  
+
     const confirmDelete = () => {
       dispatch(deleteUser({ ids: selectedUsers, token }))
         .unwrap()
         .then(() => {
           setSelectedUsers([]); // Clear selection after deletion
-          dispatch(getAllUsers()); 
+          dispatch(getAllUsers());
         })
         .catch((err) => {
           console.error("Error deleting users: " + err.message);
         });
     };
-  
+
     // Show confirmation toast with Yes/No buttons
     Swal.fire({
       title: "Are you sure?",
@@ -107,7 +105,7 @@ const User = () => {
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#5bc0de",
       confirmButtonText: "Yes, delete!",
-      cancelButtonText: "No, cancel",
+      cancelButtonText: "No, cancel"
     }).then((result) => {
       if (result.isConfirmed) {
         confirmDelete();
@@ -115,7 +113,6 @@ const User = () => {
       }
     });
   };
-  
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -132,11 +129,16 @@ const User = () => {
   };
 
   // Open User Edit Modal
-  useEffect(()=>{
-    if(typeof userToEdit === "object" && userToEdit !== null && !Array.isArray(userToEdit) && Object.keys(userToEdit).length > 0) {
+  useEffect(() => {
+    if (
+      typeof userToEdit === "object" &&
+      userToEdit !== null &&
+      !Array.isArray(userToEdit) &&
+      Object.keys(userToEdit).length > 0
+    ) {
       setUserToEditModal(true);
     }
-  },[userToEdit])
+  }, [userToEdit]);
 
   return (
     <div className="w-full lg:ps-64">
@@ -171,11 +173,13 @@ const User = () => {
           {users && users?.length > 0 ? (
             <>
               <div
-        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
-          userToEditModal ? "visible opacity-100" : "invisible opacity-0"
-        }`}
-        id="updateUser-backdrop"
-      ></div>
+                className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+                  userToEditModal
+                    ? "visible opacity-100"
+                    : "invisible opacity-0"
+                }`}
+                id="updateUser-backdrop"
+              ></div>
               <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead className="bg-gray-50 dark:bg-neutral-800">
                   <tr>
@@ -200,10 +204,7 @@ const User = () => {
                       </label>
                     </th>
 
-                    <th
-                      scope="col"
-                      className="px-6 py-3"
-                    >
+                    <th scope="col" className="px-6 py-3">
                       <div className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                           Name
@@ -252,10 +253,13 @@ const User = () => {
                   })}
                 </tbody>
               </table>
-              {
-              userToEditModal &&
-              <UpdateUser userToEditModal={userToEditModal} setUserToEditModal={setUserToEditModal} userToEdit={userToEdit} />
-              }
+              {userToEditModal && (
+                <UpdateUser
+                  userToEditModal={userToEditModal}
+                  setUserToEditModal={setUserToEditModal}
+                  userToEdit={userToEdit}
+                />
+              )}
             </>
           ) : null}
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
@@ -270,23 +274,27 @@ const User = () => {
 
             {/* Counter Pagination */}
             <div className="inline-flex gap-x-2">
-              {pagination && pagination?.length > 0 && pagination?.map((pageNumber, index) => {
-                return (
-                  <button
-                    key={index}
-                    type="button"
-                    disabled={pageNumber?.url === null}
-                    onClick={() => handlePagination(pageNumber?.url)}
-                    className={`${
-                      pageNumber?.active ? "bg-gray-100" : "bg-white"
-                    } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
-                  >
-                    {
-                    index===0 ? '<' : index === pagination?.length-1 ? '>' : pageNumber?.label
-                  }
-                  </button>
-                );
-              })}
+              {pagination &&
+                pagination?.length > 0 &&
+                pagination?.map((pageNumber, index) => {
+                  return (
+                    <button
+                      key={index}
+                      type="button"
+                      disabled={pageNumber?.url === null}
+                      onClick={() => handlePagination(pageNumber?.url)}
+                      className={`${
+                        pageNumber?.active ? "bg-gray-100" : "bg-white"
+                      } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
+                    >
+                      {index === 0
+                        ? "<"
+                        : index === pagination?.length - 1
+                        ? ">"
+                        : pageNumber?.label}
+                    </button>
+                  );
+                })}
             </div>
           </div>
         </div>

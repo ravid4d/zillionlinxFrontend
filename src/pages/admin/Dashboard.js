@@ -13,8 +13,6 @@ import {
 } from "../../redux/slices/userSlice";
 import UserTableData from "./UserTableData";
 import {
-  AreaChart,
-  Area,
   LineChart,
   Line,
   XAxis,
@@ -26,6 +24,7 @@ import {
 import { deleteUser, setSearchQuery } from "../../redux/slices/adminSlice";
 import useDebounce from "../../hooks/useDebounce";
 import Swal from "sweetalert2";
+import UpdateUser from "../../components/admin/UpdateUser";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -36,6 +35,8 @@ const Dashboard = () => {
   const { searchQuery } = useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [userToEdit, setUserToEdit] = useState({});
+  const [userToEditModal, setUserToEditModal] = useState(false);
 
   useEffect(() => {
     dispatch(getDashboardData()).catch((err) => {
@@ -97,43 +98,42 @@ const Dashboard = () => {
     );
   };
 
-//Delete selected users.
-const handleDeleteSelected = () => {
-  if (selectedUsers.length === 0) {
-    toast.warning("No users selected!", { position: "top-center" });
-    return;
-  }
-
-  const confirmDelete = () => {
-    dispatch(deleteUser({ ids: selectedUsers, token }))
-      .unwrap()
-      .then(() => {
-        setSelectedUsers([]); // Clear selection after deletion
-        dispatch(getAllUsers()); 
-      })
-      .catch((err) => {
-        console.error("Error deleting users: " + err.message);
-      });
-  };
-
-  // Show confirmation toast with Yes/No buttons
-  Swal.fire({
-    title: "Are you sure?",
-    text: "Do you really want to delete these users?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d9534f",
-    cancelButtonColor: "#5bc0de",
-    confirmButtonText: "Yes, delete!",
-    cancelButtonText: "No, cancel",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      confirmDelete();
-      Swal.fire("Deleted!", "Users have been removed.", "success");
+  //Delete selected users.
+  const handleDeleteSelected = () => {
+    if (selectedUsers.length === 0) {
+      toast.warning("No users selected!", { position: "top-center" });
+      return;
     }
-  });
-};
 
+    const confirmDelete = () => {
+      dispatch(deleteUser({ ids: selectedUsers, token }))
+        .unwrap()
+        .then(() => {
+          setSelectedUsers([]); // Clear selection after deletion
+          dispatch(getAllUsers());
+        })
+        .catch((err) => {
+          console.error("Error deleting users: " + err.message);
+        });
+    };
+
+    // Show confirmation toast with Yes/No buttons
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete these users?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete!",
+      cancelButtonText: "No, cancel"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Users have been removed.", "success");
+      }
+    });
+  };
 
   //Delete single user
   const deleteSingleUser = (ids) => {
@@ -172,6 +172,17 @@ const handleDeleteSelected = () => {
       }
     });
   };
+    // Open User Edit Modal
+    useEffect(() => {
+      if (
+        typeof userToEdit === "object" &&
+        userToEdit !== null &&
+        !Array.isArray(userToEdit) &&
+        Object.keys(userToEdit).length > 0
+      ) {
+        setUserToEditModal(true);
+      }
+    }, [userToEdit]);
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
@@ -228,28 +239,39 @@ const handleDeleteSelected = () => {
             <div className="overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
                 <div className="bg-white border rounded-xl shadow overflow-hidden">
-                <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                Users
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
-                Edit and delete users.
-              </p>
-            </div>
-            <div>
-              <div className="inline-flex gap-x-2">
-                <button
-                  onClick={handleDeleteSelected}
-                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
-                  disabled={selectedUsers.length === 0 ? "disabled" : ""}
-                >
-                  Delete all ({selectedUsers.length})
-                </button>
-              </div>
-            </div>
-          </div>
+                  <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                        Users
+                      </h2>
+                      <p className="text-sm text-gray-600 dark:text-neutral-400">
+                        Edit and delete users.
+                      </p>
+                    </div>
+                    <div>
+                      <div className="inline-flex gap-x-2">
+                        <button
+                          onClick={handleDeleteSelected}
+                          className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                          disabled={
+                            selectedUsers.length === 0 ? "disabled" : ""
+                          }
+                        >
+                          Delete all ({selectedUsers.length})
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   {users.length > 0 ? (
+                    <>
+                    <div
+                className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+                  userToEditModal
+                    ? "visible opacity-100"
+                    : "invisible opacity-0"
+                }`}
+                id="updateUser-backdrop"
+              ></div>
                     <table className="min-w-full divide-y">
                       <thead className="bg-gray-50">
                         <tr>
@@ -306,17 +328,25 @@ const handleDeleteSelected = () => {
                       <tbody className="divide-y">
                         {users.map((user, index) => (
                           <UserTableData
-                            key={user.id || `user-${index}`}
-                            user={{ ...user, country: user.country || "N/A" }}
                             showEditOrDelete={true}
-                            setUserToEdit={user}
+                            user={{ ...user, country: user.country || "N/A" }}
+                            key={user?.id || `user-${index}`}
                             selectedUsers={selectedUsers}
                             handleSelectOneUser={handleSelectOneUser}
                             deleteSingleUser={deleteSingleUser}
+                            setUserToEdit={setUserToEdit}
                           />
                         ))}
                       </tbody>
                     </table>
+                    {userToEditModal && (
+                      <UpdateUser
+                        userToEditModal={userToEditModal}
+                        setUserToEditModal={setUserToEditModal}
+                        userToEdit={userToEdit}
+                      />
+                    )}
+                   </>
                   ) : (
                     <p className="p-4 text-center text-gray-500">
                       No users found.
