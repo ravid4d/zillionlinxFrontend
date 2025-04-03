@@ -22,11 +22,13 @@ import ImportBookmarks from './pages/ImportBookmarks';
 import ResetPassword from './components/ResetPassword';
 import ChangePassword from './components/admin/ChangePassword';
 import UpdateAdmin from './components/admin/UpdateAdmin';
+import ScrollToTop from './services/ScrollToTop';
 
 function App() {
     return (
         // <BrowserRouter basename='/zillionfront/'> "homepage": "/zillionfront",       
         <>
+        <ScrollToTop />
         <ToastContainer hideProgressBar={true} autoClose={2000} />
             <Routes>
                 {/* Routes, those both users and admin can access */}

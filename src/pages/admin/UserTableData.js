@@ -59,14 +59,14 @@ const UserTableData = ({
       <td className="h-px w-72 whitespace-nowrap">
         <div className="px-6 py-3">
           <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-            {/* {user?.country} */}
+            {moment(user?.last_login_at).format("MMMM Do YYYY")}
           </span>
         </div>
       </td>
       <td className="h-px w-72 whitespace-nowrap">
         <div className="px-6 py-3">
           <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-            {/* {user?.country} */}
+            {user?.total_bookmarks_count}
           </span>
         </div>
       </td>
