@@ -258,13 +258,13 @@ const MyBookmarks = () => {
                 openModal?.sidebar ? "translate-x-0" : "-translate-x-full"
               }       
                xl:translate-x-0 transition-all duration-300 transform
-              fixed xl:relative inset-y-0 start-0 z-[50] xl:block
+              fixed xl:relative inset-y-0 start-0 z-[50] xl:z-[37] xl:block
             `}
             role="dialog"
             tabIndex="-1"
             aria-label="Sidebar"
           >
-            <Searchbar setSearchResults={setSearchResults} />
+            <Searchbar closeAllModals={closeAllModals} setSearchResults={setSearchResults} />
             <Sidebar setId={setId} id={id} />
           </div>
 

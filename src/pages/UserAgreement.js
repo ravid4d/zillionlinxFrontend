@@ -1,9 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const UserAgreement = () => {
+  const {isLoggedIn} = useSelector(state=>state.auth);
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
-      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
+      <div className={`${isLoggedIn ? "sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px]" : "rounded-[20px]"} bg-navy p-4 xl:p-8 h-full`}>
         <div className="flex flex-wrap h-full w-full text-white flex-col">
           <h1 className="text-xl mb-2">User Agreement for ZillionLinX</h1>
           <p className="text-xs mb-1">Effective Date: January 1, 2025</p>

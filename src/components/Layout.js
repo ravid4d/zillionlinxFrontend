@@ -91,8 +91,9 @@ const Layout = () => {
   return (
     <div className="app-layout">
       <div
+      onClick={closeAllModals}
         className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
-          isAnyModalOpen && !openModal?.sidebar ? "visible opacity-100" : "invisible opacity-0"
+          isAnyModalOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>

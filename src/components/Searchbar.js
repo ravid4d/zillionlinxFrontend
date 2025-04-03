@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { disabledTopLinks, searchBookmarks } from "../redux/slices/bookmarkSlice";
 
-const Searchbar = ({setSearchResults}) => {
+const Searchbar = ({setSearchResults, closeAllModals}) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const [title, setTitle] = useState("");
@@ -15,6 +15,7 @@ const Searchbar = ({setSearchResults}) => {
       dispatch(searchBookmarks({ token, formData }));
       setSearchResults(true);
       dispatch(disabledTopLinks());
+      closeAllModals()
     }
   };
 
