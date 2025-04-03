@@ -3,6 +3,7 @@ import axiosInstance from "../../axiosInstance";
 const allUsersUrl = `${process.env.REACT_APP_API_URL}/api/admin/users`;
 const updateUserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/update/`;
 const updateFrontUserUrl = `${process.env.REACT_APP_API_URL}/api/user/update/`;
+const updateAdminPasswordUrl = `${process.env.REACT_APP_API_URL}/api/admin/change-password`;
 const updateUserPasswordUrl = `${process.env.REACT_APP_API_URL}/api/change-password`;
 
 export const getAllUsers = createAsyncThunk(
@@ -82,6 +83,7 @@ export const updateFrontUser = createAsyncThunk(
   "users/updateFrontUser",
   async({token, values, userId}, {rejectWithValue})=>{
     try {
+      console.log(token, values, userId, 'data are');
       let response = await axiosInstance.post(`${updateFrontUserUrl}${userId}`,
       {
         first_name: values?.first_name,
@@ -94,7 +96,7 @@ export const updateFrontUser = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response, 'ddff')
+      // console.log(response, 'ddff')
       return response?.data;
     } catch (error) {
       return rejectWithValue({
@@ -122,6 +124,33 @@ export const updateUserPassword = createAsyncThunk(
         }
       });
       console.log("Password update response:", response);
+      return response?.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Error updating password.";
+      return rejectWithValue({
+        status: error?.response?.status || 500,
+        message: errorMessage,
+      });
+    }
+  }
+);
+
+export const updateAdminPassword = createAsyncThunk(
+  "users/updateAdminPassword",
+  async({token, values}, {rejectWithValue})=>{
+    try {
+      let response = await axiosInstance.post(`${updateAdminPasswordUrl}`, 
+        {
+          current_password:values.currentPassword,
+          new_password:values.newPassword,
+          new_password_confirmation:values.confirmPassword
+        }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // console.log("Password update response:", response);
       return response?.data;
     } catch (error) {
       const errorMessage =
@@ -208,8 +237,21 @@ const userSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+    builder
+      .addCase(updateAdminPassword.pending, (state, action) => {
+        state.userLoading = true;
+        state.error = null;
+      })
+      .addCase(updateAdminPassword.fulfilled, (state, action) => {
+        state.userLoading = false;
+      })
+      .addCase(updateAdminPassword.rejected, (state, action) => {
+        state.userLoading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
   }
 });
 
-// export const { } = userSlice.actions;
+export const {updateUserCountry } = userSlice.actions;
 export default userSlice.reducer;

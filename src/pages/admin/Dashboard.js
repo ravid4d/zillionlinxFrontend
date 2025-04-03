@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,8 +23,9 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
-import { setSearchQuery } from "../../redux/slices/adminSlice";
+import { deleteUser, setSearchQuery } from "../../redux/slices/adminSlice";
 import useDebounce from "../../hooks/useDebounce";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const Dashboard = () => {
   const { users = [], pagination } = useSelector((state) => state.user);
   const { searchQuery } = useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   useEffect(() => {
     dispatch(getDashboardData()).catch((err) => {
@@ -80,6 +82,96 @@ const Dashboard = () => {
         return { month: monthName, count };
       })
     : [];
+
+  const handleSelectAllUsers = () => {
+    selectedUsers?.length === users?.length
+      ? setSelectedUsers([])
+      : setSelectedUsers(users?.map((user) => user?.id));
+  };
+  //Select / Unselect individual user
+  const handleSelectOneUser = (userId) => {
+    setSelectedUsers((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+//Delete selected users.
+const handleDeleteSelected = () => {
+  if (selectedUsers.length === 0) {
+    toast.warning("No users selected!", { position: "top-center" });
+    return;
+  }
+
+  const confirmDelete = () => {
+    dispatch(deleteUser({ ids: selectedUsers, token }))
+      .unwrap()
+      .then(() => {
+        setSelectedUsers([]); // Clear selection after deletion
+        dispatch(getAllUsers()); 
+      })
+      .catch((err) => {
+        console.error("Error deleting users: " + err.message);
+      });
+  };
+
+  // Show confirmation toast with Yes/No buttons
+  Swal.fire({
+    title: "Are you sure?",
+    text: "Do you really want to delete these users?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d9534f",
+    cancelButtonColor: "#5bc0de",
+    confirmButtonText: "Yes, delete!",
+    cancelButtonText: "No, cancel",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      confirmDelete();
+      Swal.fire("Deleted!", "Users have been removed.", "success");
+    }
+  });
+};
+
+
+  //Delete single user
+  const deleteSingleUser = (ids) => {
+    if (!ids || ids.length === 0) {
+      toast.warning("No users selected!");
+      return;
+    }
+
+    const confirmDelete = () => {
+      dispatch(deleteUser({ ids, token }))
+        .unwrap()
+        .then(() => {
+          toast.success("User deleted successfully!");
+          setSelectedUsers([]); // Clear selection
+          dispatch(getAllUsers());
+        })
+        .catch((err) => {
+          toast.error("Error deleting user: " + err.message);
+        });
+    };
+
+    // Show confirmation toast with Yes/No buttons
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      }
+    });
+  };
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
@@ -136,19 +228,79 @@ const Dashboard = () => {
             <div className="overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
                 <div className="bg-white border rounded-xl shadow overflow-hidden">
-                  <div className="px-6 py-4 grid md:flex md:justify-between md:items-center border-b">
-                    <h2 className="text-xl font-semibold text-gray-800">
-                      Users
-                    </h2>
-                  </div>
+                <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                Users
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-neutral-400">
+                Edit and delete users.
+              </p>
+            </div>
+            <div>
+              <div className="inline-flex gap-x-2">
+                <button
+                  onClick={handleDeleteSelected}
+                  className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                  disabled={selectedUsers.length === 0 ? "disabled" : ""}
+                >
+                  Delete all ({selectedUsers.length})
+                </button>
+              </div>
+            </div>
+          </div>
                   {users.length > 0 ? (
                     <table className="min-w-full divide-y">
                       <thead className="bg-gray-50">
                         <tr>
-                          {/* <th className="px-6 py-3 text-start">ID</th> */}
-                          <th className="px-6 py-3 text-start">Name</th>
-                          <th className="px-6 py-3 text-start">Country</th>
-                          <th className="px-6 py-3 text-start">Created</th>
+                          <th scope="col" className="px-6 py-3 text-start">
+                            <label
+                              htmlFor="hs-at-with-checkboxes-main"
+                              className="flex"
+                            >
+                              <input
+                                type="checkbox"
+                                onChange={handleSelectAllUsers}
+                                checked={
+                                  selectedUsers.length === users.length &&
+                                  users.length > 0
+                                }
+                                className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                id="hs-at-with-checkboxes-main"
+                              />
+                              {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          ID
+                        </span>  */}
+                            </label>
+                          </th>
+                          <th scope="col" className="px-6 py-3">
+                            <div className="flex items-center gap-x-2">
+                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                Name
+                              </span>
+                            </div>
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-start">
+                            <div className="flex items-center gap-x-2">
+                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                Country
+                              </span>
+                            </div>
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-start">
+                            <div className="flex items-center gap-x-2">
+                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                Created
+                              </span>
+                            </div>
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-start">
+                            <div className="flex items-center gap-x-2">
+                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                Action
+                              </span>
+                            </div>
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y">
@@ -156,7 +308,11 @@ const Dashboard = () => {
                           <UserTableData
                             key={user.id || `user-${index}`}
                             user={{ ...user, country: user.country || "N/A" }}
-                            showEditOrDelete={false}
+                            showEditOrDelete={true}
+                            setUserToEdit={user}
+                            selectedUsers={selectedUsers}
+                            handleSelectOneUser={handleSelectOneUser}
+                            deleteSingleUser={deleteSingleUser}
                           />
                         ))}
                       </tbody>

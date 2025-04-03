@@ -140,9 +140,9 @@ const GoogleCustomSearch = () => {
                     <div className={`w-full lg:w-1/4 rounded-2xl lg:ps-6 h-full`}>
                       <div className="bg-white h-full">
                         <img
-                          src="/member-rank.svg"
+                          src="/google-image.png"
                           alt=""
-                          width="160"
+                          width="200"
                           className="mt-5 lg:mt-0 lg:mx-auto block mb-2"
                         />
                         <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
@@ -201,24 +201,58 @@ const GoogleCustomSearch = () => {
                             <span className="loader"></span>
                           ) : (
                             <>
-                              {wikiStaticLink && (
+                              {amazonStaticLink && (
+                                <Link
+                                  target="_blank"
+                                  to={amazonStaticLink}
+                                  rel="noopener noreferrer"
+                                  className="block mb-2 last:mb-0 w-full"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/amazon.svg"
+                                      alt=""
+                                      width="150"
+                                      className="max-w-full mx-auto"
+                                    />
+                                  </figure>
+                                </Link>
+                              )}
+                               {walmartStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
-                                  to={wikiStaticLink}
+                                  to={walmartStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
                                   <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
                                     <img
-                                      src="/wikki.svg"
+                                      src="walmart.png"
                                       alt=""
-                                      width="187"
+                                      width="150"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                               )} 
+                                 {etsyStaticLink && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={etsyStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/etsy.png"
+                                      alt=""
+                                      width="150"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
                                 </Link>
                               )}
-                              {ebayStaticLink && (
+                               {ebayStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={ebayStaticLink}
@@ -235,75 +269,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                              {amazonStaticLink && (
-                                <Link
-                                  target="_blank"
-                                  to={amazonStaticLink}
-                                  rel="noopener noreferrer"
-                                  className="block mb-2 last:mb-0 w-full"
-                                >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
-                                    <img
-                                      src="/amazon.svg"
-                                      alt=""
-                                      width="187"
-                                      className="max-w-full mx-auto"
-                                    />
-                                  </figure>
-                                </Link>
-                              )}
-                              {youtubeStaticLink && (
-                                <Link
-                                  className="block mb-2 last:mb-0 w-full"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  to={youtubeStaticLink}
-                                >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
-                                    <img
-                                      src="/youtube.svg"
-                                      alt=""
-                                      width="187"
-                                      className="mx-auto max-w-full"
-                                    />
-                                  </figure>
-                                </Link>
-                              )}
-                               {walmartStaticLink && (
-                                <Link
-                                  className="block mb-2 last:mb-0 w-full"
-                                  to={walmartStaticLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
-                                    <img
-                                      src="walmart.png"
-                                      alt=""
-                                      width="187"
-                                      className="mx-auto max-w-full"
-                                    />
-                                  </figure>
-                                </Link>
-                               )} 
-                               {etsyStaticLink && (
-                                <Link
-                                  className="block mb-2 last:mb-0 w-full"
-                                  to={etsyStaticLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
-                                    <img
-                                      src="/etsy.png"
-                                      alt=""
-                                      width="187"
-                                      className="mx-auto max-w-full"
-                                    />
-                                  </figure>
-                                </Link>
-                              )}
-                               {aliexpressStaticLink && (
+                                {aliexpressStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={aliexpressStaticLink}
@@ -314,12 +280,38 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ali-express.png"
                                       alt=""
-                                      width="187"
+                                      width="150"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
                                 </Link>
                                )} 
+
+
+
+
+                              {/* {wikiStaticLink && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  to={wikiStaticLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/wikki.svg"
+                                      alt=""
+                                      width="150"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                              )}                         */}
+                            
+                             
+                              
+                             
+                             
                                {neweggStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
@@ -331,13 +323,13 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/newegg.svg"
                                       alt=""
-                                      width="187"
+                                      width="150"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
                                 </Link>
                                )} 
-                               {mercadolibreStaticLink && (
+                               {/* {mercadolibreStaticLink && (
                                 <Link
                                   className="block mb-2 last:mb-0 w-full"
                                   to={mercadolibreStaticLink}
@@ -348,12 +340,29 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/mercado.jpg"
                                       alt=""
-                                      width="187"
+                                      width="150"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
                                 </Link>
-                               )} 
+                               )}  */}
+                                {youtubeStaticLink && (
+                                <Link
+                                  className="block mb-2 last:mb-0 w-full"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  to={youtubeStaticLink}
+                                >
+                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                    <img
+                                      src="/youtube.svg"
+                                      alt=""
+                                      width="150"
+                                      className="mx-auto max-w-full"
+                                    />
+                                  </figure>
+                                </Link>
+                              )}
                             </>
                           )}
                         </div>
