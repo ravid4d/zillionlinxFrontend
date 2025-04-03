@@ -23,9 +23,9 @@ const BookmarkTableData = ({
               checked={selectedBookmarks?.includes(bookmark?.bookmark_id)}
               onChange={() => handleSelectOneBookmark(bookmark?.bookmark_id)}
             />
-            <span className="block text-sm text-gray-500 dark:text-neutral-500">
+            {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
               {bookmark?.bookmark_id}
-            </span>
+            </span> */}
           </label>
         </div>
       </td>
