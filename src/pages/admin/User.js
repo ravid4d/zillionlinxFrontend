@@ -223,6 +223,20 @@ const User = () => {
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Last access date
+                        </span>
+                      </div>
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          number of bookmarks
+                        </span>
+                      </div>
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                           Created
                         </span>
                       </div>

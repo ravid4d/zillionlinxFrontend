@@ -56,6 +56,20 @@ const UserTableData = ({
           </span>
         </div>
       </td>
+      <td className="h-px w-72 whitespace-nowrap">
+        <div className="px-6 py-3">
+          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+            {/* {user?.country} */}
+          </span>
+        </div>
+      </td>
+      <td className="h-px w-72 whitespace-nowrap">
+        <div className="px-6 py-3">
+          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+            {/* {user?.country} */}
+          </span>
+        </div>
+      </td>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
           <span className="text-sm text-gray-500 dark:text-neutral-500">
