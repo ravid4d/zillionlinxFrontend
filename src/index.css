@@ -90,4 +90,8 @@ body {
     transform: rotate(360deg);
   }
 }
+.import-bookmarks-list h1 {display: none;}
+.import-bookmarks-list h3 {@apply font-bold mt-4;}
+.import-bookmarks-list dl:first-child {@apply -mt-4;}
+.import-bookmarks-list a {@apply text-sm mb-2 inline-block hover:text-dark-blue;}
 /* border-gray-200 bg-white text-gray-800 hover:bg-gray-50 */

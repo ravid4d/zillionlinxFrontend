@@ -154,7 +154,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                   <Textfield
                     id="first_name"
                     name="first_name"
-                    autoFocus={true} 
+                    autoFocus={false} 
                     icon="title"
                     fieldValue={formik.values.first_name}
                     setFieldValue={formik.handleChange}
@@ -284,27 +284,23 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                     <label htmlFor="terms_condition" className="ms-3">
                       <span className="block text-base text-light-black">
                         I have read and accept the{" "}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigate("/user-agreement");
-                            closeModal();
-                          }}
-                          className="text-dark-blue hover:underline"
+                        <Link
+                        to='/user-agreement'
+                        target="_blank"
+                        rel="noopener noreferrer"
+                          className="text-dark-blue hover:underline inline-block"
                         >
                           User Agreement
-                        </button>{" "}
-                        and{" "}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigate("/privacy-policy");
-                            closeModal();
-                          }}
-                          className="text-dark-blue hover:underline"
+                        </Link> {' '}
+                        and
+                        <Link
+                          to="/privacy-policy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-dark-blue hover:underline inline-block"
                         >
                           Privacy Policy
-                        </button>
+                        </Link>
                         .
                       </span>
                     </label>
