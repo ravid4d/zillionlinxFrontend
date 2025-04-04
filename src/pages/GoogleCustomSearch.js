@@ -95,8 +95,8 @@ const GoogleCustomSearch = () => {
                 </div>
               ) : (
                 <>
-                  <div className="bg-white w-full lg:w-3/4 rounded-xl border border-light-blue p-6 flex flex-wrap h-full mb-5 lg:mb-0">
-                    <div className="w-full lg:w-3/4 h-full">
+                  <div className="bg-white w-full lg:w-4/5 rounded-xl border border-light-blue p-6 flex flex-wrap h-full mb-5 lg:mb-0">
+                    <div className="w-full lg:w-4/6 h-full">
                       <div className="flex flex-wrap items-center space-x-5 mb-2">
                         <img src="/google.svg" alt="" width="160" />
                         <p>Google Custom Search</p>
@@ -137,7 +137,7 @@ const GoogleCustomSearch = () => {
                         }
                       </div>
                     </div>
-                    <div className={`w-full lg:w-1/4 rounded-2xl lg:ps-6 h-full`}>
+                    <div className={`w-full lg:w-2/6 rounded-2xl lg:ps-6 h-full`}>
                       <div className="bg-white h-full">
                         <img
                           src="/google-image.png"
@@ -190,9 +190,9 @@ const GoogleCustomSearch = () => {
                       </div>
                     </div>
                   </div>
-                  <div className={`w-full lg:w-1/4 rounded-2xl lg:ps-6 h-full`}>
-                    <div className="bg-white rounded-xl p-6 h-full">
-                      <div className="bg-white rounded-xl border border-light-blue h-full p-4">
+                  <div className={`w-full lg:w-1/5 rounded-2xl lg:ps-6 h-full`}>
+                    <div className="bg-white rounded-xl p-6 h-full flex flex-wrap flex-col justify-between">
+                      <div className="bg-white rounded-xl border border-light-blue w-full h-[calc(66%-10px)] p-4">
                         <p className="text-[28px] text-dark-blue capitalize mb-5">
                           Popular Links
                         </p>
@@ -366,6 +366,9 @@ const GoogleCustomSearch = () => {
                             </>
                           )}
                         </div>
+                      </div>
+                      <div className="bg-white rounded-xl border border-light-blue h-1/3 p-4 overflow-auto custom-scrollbar text-center">
+                        <span className="block">Disclaimer:</span> This site contains affiliate links. As an associate or partner of Amazon, eBay, YouTube, Walmart, Etsy, and AliExpress, I may earn a commission from qualifying purchases made through these links — at no extra cost to you.
                       </div>
                     </div>
                   </div>

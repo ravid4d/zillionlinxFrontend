@@ -12,13 +12,16 @@ export const getAllUsers = createAsyncThunk(
     try {
       let token = getState().auth.token;
       let searchQuery = getState().admin?.searchQuery;
-      
-      let response = await axiosInstance.get(`${allUsersUrl}?search=${searchQuery}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+
+      let response = await axiosInstance.get(
+        `${allUsersUrl}?search=${searchQuery}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
-   
+      );
+
       return response?.data;
     } catch (error) {
       return rejectWithValue({
@@ -35,7 +38,7 @@ export const handleUsersPagination = createAsyncThunk(
   async ({ url, token }, { rejectWithValue }) => {
     try {
       let response = await axiosInstance.get(url, {
-        headers: {  
+        headers: {
           Authorization: `Bearer ${token}`
         }
       });
@@ -53,20 +56,23 @@ export const handleUsersPagination = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "users/updateUser",
-  async({token, values, userId}, {rejectWithValue})=>{
+  async ({ token, values, userId }, { rejectWithValue }) => {
     try {
-      let response = await axiosInstance.post(`${updateUserUrl}${userId}`,
-      {
-        first_name: values?.first_name,
-        last_name: values?.last_name,
-        email: values?.email,
-        country: values?.country,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+      let response = await axiosInstance.post(
+        `${updateUserUrl}${userId}`,
+        {
+          first_name: values?.first_name,
+          last_name: values?.last_name,
+          email: values?.email,
+          country: values?.country
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
+      
       return response?.data;
     } catch (error) {
       return rejectWithValue({
@@ -81,22 +87,23 @@ export const updateUser = createAsyncThunk(
 
 export const updateFrontUser = createAsyncThunk(
   "users/updateFrontUser",
-  async({token, values, userId}, {rejectWithValue})=>{
+  async ({ token, values, userId }, { rejectWithValue }) => {
     try {
-      console.log(token, values, userId, 'data are');
-      let response = await axiosInstance.post(`${updateFrontUserUrl}${userId}`,
-      {
-        first_name: values?.first_name,
-        last_name: values?.last_name,
-        email: values?.email,
-        country: values?.country,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+      // console.log(token, values, userId, "data are");
+      let response = await axiosInstance.post(
+        `${updateFrontUserUrl}${userId}`,
+        {
+          first_name: values?.first_name,
+          last_name: values?.last_name,
+          email: values?.email,
+          country: values?.country
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
-      // console.log(response, 'ddff')
+      );
       return response?.data;
     } catch (error) {
       return rejectWithValue({
@@ -111,18 +118,21 @@ export const updateFrontUser = createAsyncThunk(
 
 export const updateUserPassword = createAsyncThunk(
   "users/updateUserPassword",
-  async({token, values}, {rejectWithValue})=>{
+  async ({ token, values }, { rejectWithValue }) => {
     try {
-      let response = await axiosInstance.post(`${updateUserPasswordUrl}`, 
+      let response = await axiosInstance.post(
+        `${updateUserPasswordUrl}`,
         {
-          current_password:values.currentPassword,
-          new_password:values.newPassword,
-          new_password_confirmation:values.confirmPassword
-        }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+          current_password: values.currentPassword,
+          new_password: values.newPassword,
+          new_password_confirmation: values.confirmPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
       console.log("Password update response:", response);
       return response?.data;
     } catch (error) {
@@ -130,7 +140,7 @@ export const updateUserPassword = createAsyncThunk(
         error?.response?.data?.message || "Error updating password.";
       return rejectWithValue({
         status: error?.response?.status || 500,
-        message: errorMessage,
+        message: errorMessage
       });
     }
   }
@@ -138,18 +148,21 @@ export const updateUserPassword = createAsyncThunk(
 
 export const updateAdminPassword = createAsyncThunk(
   "users/updateAdminPassword",
-  async({token, values}, {rejectWithValue})=>{
+  async ({ token, values }, { rejectWithValue }) => {
     try {
-      let response = await axiosInstance.post(`${updateAdminPasswordUrl}`, 
+      let response = await axiosInstance.post(
+        `${updateAdminPasswordUrl}`,
         {
-          current_password:values.currentPassword,
-          new_password:values.newPassword,
-          new_password_confirmation:values.confirmPassword
-        }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+          current_password: values.currentPassword,
+          new_password: values.newPassword,
+          new_password_confirmation: values.confirmPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
       // console.log("Password update response:", response);
       return response?.data;
     } catch (error) {
@@ -157,7 +170,7 @@ export const updateAdminPassword = createAsyncThunk(
         error?.response?.data?.message || "Error updating password.";
       return rejectWithValue({
         status: error?.response?.status || 500,
-        message: errorMessage,
+        message: errorMessage
       });
     }
   }
@@ -175,6 +188,12 @@ const userSlice = createSlice({
     userError: null
   },
   reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    clearUser: (state) => {
+      state.user = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -193,6 +212,7 @@ const userSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
     builder
       .addCase(handleUsersPagination.pending, (state, action) => {
         state.userLoading = true;
@@ -209,6 +229,7 @@ const userSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
     builder
       .addCase(updateUser.pending, (state, action) => {
         state.userLoading = true;
@@ -216,9 +237,24 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.userLoading = false;
-        // state.users = action.payload.data?.data;
+        state.user = action.payload.user;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.userLoading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+
+    builder
+      .addCase(updateFrontUser.pending, (state, action) => {
+        state.userLoading = true;
+        state.error = null;
+      })
+      .addCase(updateFrontUser.fulfilled, (state, action) => {
+        state.userLoading = false;
+        state.user = action.payload.user;
+      })
+      .addCase(updateFrontUser.rejected, (state, action) => {
         state.userLoading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
@@ -237,6 +273,7 @@ const userSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
     builder
       .addCase(updateAdminPassword.pending, (state, action) => {
         state.userLoading = true;
@@ -253,5 +290,5 @@ const userSlice = createSlice({
   }
 });
 
-export const {updateUserCountry } = userSlice.actions;
+export const {setUser, clearUser, updateUserCountry } = userSlice.actions;
 export default userSlice.reducer;

@@ -18,7 +18,8 @@ const Layout = () => {
   const [sidebar, hideSidebar] = useState(false);
   const [id, setId] = useState({ categoryId: null, subCategoryId: null });
   const { categories } = useSelector((state) => state.category);
-  const { token, isLoggedIn, user } = useSelector((state) => state.auth);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
 
@@ -90,8 +91,9 @@ const Layout = () => {
   return (
     <div className="app-layout">
       <div
+      onClick={closeAllModals}
         className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
-          isAnyModalOpen && !openModal?.sidebar ? "visible opacity-100" : "invisible opacity-0"
+          isAnyModalOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
         id={getOpenModalName() ? `${getOpenModalName()}-backdrop` : ""}
       ></div>

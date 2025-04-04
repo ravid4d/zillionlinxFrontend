@@ -78,12 +78,7 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
                 
               <button
                   type="button" 
-                  className={`${location?.pathname === "/" ? 'hidden':'flex'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none !z-[10]`}
-                  aria-haspopup="dialog"
-                  aria-expanded="false"
-                  aria-controls="hs-application-sidebar"
-                  aria-label="Toggle navigation"
-                  data-hs-overlay="#hs-application-sidebar"
+                  className={`${location?.pathname === "/bookmarks" ? 'flex':'hidden'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none !z-[10]`}
                   onClick={()=>setWhichModalOpen('sidebar')}
                 >
                   <span className="sr-only">Toggle Navigation</span>
@@ -104,6 +99,7 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
                     <path d="m8 9 3 3-3 3" />
                   </svg>
                 </button>
+
                 {isLoggedIn && userRole === "user" ? (
                   <>
                     <div

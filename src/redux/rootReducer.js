@@ -12,16 +12,22 @@ import storageSession from "redux-persist/lib/storage/session";
 const authPersistConfig = {
     key: "auth",
     storage: storageSession,
-    // whitelist: ["token", "userRole", "isLoggedIn"], // Persist only these fields
+    whitelist: ["token", "userRole", "isLoggedIn"], // Persist only these fields
+};
+
+const userPersistConfig = {
+    key: "user",
+    storage: storageSession, 
+    whitelist: ["user"], // ✅ Persist user details separately
 };
 
 // Define the root reducer
 const rootReducer = combineReducers({
     bookmark: bookmarkReducer,
     auth: persistReducer(authPersistConfig, authReducer), // Persisted auth reducer
+    user: persistReducer(userPersistConfig, userReducer),
     register: registerReducer,
     category: categoryReducer,
-    user: userReducer,
     admin: adminReducer,
     dashboard: dashboardReducer
 });

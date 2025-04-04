@@ -431,6 +431,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       "Add New Bookmark"
                     )}
                   </button>
+                  {addBookmarkLoading &&(<div className="mt-3">
+                    <p class="text-gray-700 text-xs text-center">
+                      Please be patient for about 5 seconds while we are generating a high quality screenshot. Thank you!
+                    </p>
+                  </div>)}
                 </form>
               </div>
             </div>

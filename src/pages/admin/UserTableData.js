@@ -56,6 +56,20 @@ const UserTableData = ({
           </span>
         </div>
       </td>
+      <td className="h-px w-72 whitespace-nowrap">
+        <div className="px-6 py-3">
+          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+            {moment(user?.last_login_at).format("MMMM Do YYYY")}
+          </span>
+        </div>
+      </td>
+      <td className="h-px w-72 whitespace-nowrap">
+        <div className="px-6 py-3">
+          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+            {user?.total_bookmarks_count}
+          </span>
+        </div>
+      </td>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
           <span className="text-sm text-gray-500 dark:text-neutral-500">
