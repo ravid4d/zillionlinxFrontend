@@ -330,7 +330,7 @@ const bookmarkSlice = createSlice({
       state.bookmarks = action.payload?.bookmarks;
       // state.message =  action.payload?.bookmarks?.length === 0 && action.payload?.message
       state.isTopLink = false;
-      state.error = action.payload.message;
+      state.message = action.payload.message;
     })
     .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
       state.loading = false;

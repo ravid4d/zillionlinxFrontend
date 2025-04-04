@@ -4,6 +4,9 @@ import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import Swal from 'sweetalert2';
+import axios from 'axios';
+
 
 const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
   const navigate = useNavigate();
@@ -50,6 +53,35 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
+
+  const deleteAccount = async () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Your account and all associated data will be permanently deleted!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.post(`${process.env.REACT_APP_API_URL}/api/delete-user`, {}, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          Swal.fire('Deleted!', 'Your account has been deleted.', 'success').then(async() => {
+            navigate("/goodbye");
+            await dispatch(logout());
+          });
+        } catch (error) {
+          console.error('Delete failed:', error);
+          Swal.fire('Error', 'Something went wrong while deleting your account.', 'error');
+        }
+      }
+    });
+  };
 
   return (
     <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-[38] w-full">
@@ -191,6 +223,27 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
                               />
                             </svg>
                             Change Password
+                          </button>
+                          <button
+                            className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                            type="button"
+                            onClick={deleteAccount}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18.75A2.25 2.25 0 0 0 8.25 21h7.5A2.25 2.25 0 0 0 18 18.75V7.5M4.5 7.5h15M10.5 11.25v6M13.5 11.25v6M9.75 4.5h4.5a.75.75 0 0 1 .75.75V6H9V5.25a.75.75 0 0 1 .75-.75Z"
+                              />
+                            </svg>
+                            Delete Account
                           </button>
                         </div>
                       </div>

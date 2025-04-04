@@ -53,8 +53,8 @@ const AddCategory = () => {
     },
     validationSchema: YUP.object({
       title: YUP.string()
-        .max(25, "Category name must not exceed 25 characters")
-        .matches(/^[A-Za-z\s&]+$/, "Only letters, spaces and & are allowed") // ✅ No digits, no special symbols
+        .max(100, "Category name must not exceed 25 characters")
+        // .matches(/^[A-Za-z\s&]+$/, "Only letters, spaces and & are allowed") // ✅ No digits, no special symbols
         .required("Category Title is required"),
       parent_id: YUP.string().nullable().notRequired()
     }),
