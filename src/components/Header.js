@@ -4,11 +4,10 @@ import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
-import Swal from 'sweetalert2';
-import axios from 'axios';
+import Swal from "sweetalert2";
+import axios from "axios";
 
-
-const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
+const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
     try {
       await dispatch(logout());
       navigate("/", {
-        state: { loginMessage: "You have been logged out successfully!" },
+        state: { loginMessage: "You have been logged out successfully!" }
       });
     } catch (error) {
       toast.error("Logout failed! Please try again.");
@@ -43,12 +42,12 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setToggleSettingsDropdown(false); 
+        setToggleSettingsDropdown(false);
       }
     }
-  
+
     document.addEventListener("mousedown", handleClickOutside);
-    
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -56,28 +55,40 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
 
   const deleteAccount = async () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Your account and all associated data will be permanently deleted!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.post(`${process.env.REACT_APP_API_URL}/api/delete-user`, {}, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          Swal.fire('Deleted!', 'Your account has been deleted.', 'success').then(async() => {
+          await axios.post(
+            `${process.env.REACT_APP_API_URL}/api/delete-user`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          Swal.fire(
+            "Deleted!",
+            "Your account has been deleted.",
+            "success"
+          ).then(async () => {
             navigate("/goodbye");
             await dispatch(logout());
           });
         } catch (error) {
-          console.error('Delete failed:', error);
-          Swal.fire('Error', 'Something went wrong while deleting your account.', 'error');
+          console.error("Delete failed:", error);
+          Swal.fire(
+            "Error",
+            "Something went wrong while deleting your account.",
+            "error"
+          );
         }
       }
     });
@@ -85,7 +96,7 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
 
   return (
     <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-[38] w-full">
-      <nav className="relative max-w-screen-3xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
+      <nav className="relative max-w-screen-2xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={redirectTo}
@@ -107,11 +118,12 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
           <div className="">
             <div className="py-2 md:py-0 flex flex-row items-center gap-0.5 md:gap-1">
               <div className="ms-auto flex flex-wrap items-center gap-x-1.5">
-                
-              <button
-                  type="button" 
-                  className={`${location?.pathname === "/bookmarks" ? 'flex':'hidden'} relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none !z-[10]`}
-                  onClick={()=>setWhichModalOpen('sidebar')}
+                <button
+                  type="button"
+                  className={`${
+                    location?.pathname === "/bookmarks" ? "flex" : "hidden"
+                  } relative text-sm font-semibold border border-transparent text-gray-800 hover:bg-gray-100 focus:bg-gray-100 size-4 sm:size-9 xl:hidden justify-center items-center rounded-lg focus:outline-none disabled:opacity-50 disabled:pointer-events-none !z-[10]`}
+                  onClick={() => setWhichModalOpen("sidebar")}
                 >
                   <span className="sr-only">Toggle Navigation</span>
                   <svg
@@ -135,10 +147,11 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
                 {isLoggedIn && userRole === "user" ? (
                   <>
                     <div
-                      className={`${toggleSettingsDropdown?'open':''} relative `}
+                      className={`${
+                        toggleSettingsDropdown ? "open" : ""
+                      } relative `}
                       ref={menuRef}
                     >
-           
                       <button
                         type="button"
                         className="flex flex-wrap w-full items-center group"
@@ -276,6 +289,27 @@ const Header = ({ setWhichModalOpen, id, setId,  openModal }) => {
                         d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
                       />
                     </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="c
+                      urrentColor"
+                      className="size-4 sm:size-6 shrink-0 stroke-dark-blue group-hover:fill-navy block 2xl:hidden"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                      />
+                    </svg>
+                    <Link
+                      className="btn dark-btn !hidden 2xl:!inline-flex"
+                      to="/"
+                    >
+                      Home
+                    </Link>
                     {userRole === "admin" ? (
                       <Link className="btn dark-btn" to="/admin">
                         Dashboard

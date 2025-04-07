@@ -15,12 +15,11 @@ import {
   fetchSubCategories,
   resetSubCategories
 } from "../redux/slices/categorySlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [resetKey, setResetKey] = useState(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState([]);
@@ -430,7 +429,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                     )}
                   </button>
                   {addBookmarkLoading &&(<div className="mt-3">
-                    <p className="text-gray-700 text-xs text-center">
+                    <p className="text-gray-700 text-sm text-center">
                       Please be patient for about 5 seconds while we are generating a high quality screenshot. Thank you!
                     </p>
                   </div>)}

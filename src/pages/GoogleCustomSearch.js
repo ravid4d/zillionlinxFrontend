@@ -77,7 +77,7 @@ const GoogleCustomSearch = () => {
   };
 
   return (
-    <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap lg:space-x-8 h-full">
           <div className="bookmark-content-wrappers w-full h-full">
