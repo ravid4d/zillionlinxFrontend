@@ -148,7 +148,6 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       formik.setFieldValue("add_to", record?.type);
     }
   }, [urlToBookmark?.record?.title]);
-
   return (
     <>
       {/* {urlToBookmark?.link} */}
@@ -266,7 +265,6 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                             {formik.errors.category_id}
                           </div>
                         ) : null}
-                        {/* <p>{categories?.length==0&&'Server Issue'}</p> */}
                       </div>
                     </>
                   ) : null}
@@ -432,7 +430,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                     )}
                   </button>
                   {addBookmarkLoading &&(<div className="mt-3">
-                    <p class="text-gray-700 text-xs text-center">
+                    <p className="text-gray-700 text-xs text-center">
                       Please be patient for about 5 seconds while we are generating a high quality screenshot. Thank you!
                     </p>
                   </div>)}
