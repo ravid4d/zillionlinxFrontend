@@ -23,6 +23,7 @@ import ResetPassword from './components/ResetPassword';
 import ChangePassword from './components/admin/ChangePassword';
 import UpdateAdmin from './components/admin/UpdateAdmin';
 import ScrollToTop from './services/ScrollToTop';
+import Import from './pages/admin/Import';
 
 function App() {
     return (
@@ -66,6 +67,7 @@ function App() {
                         <Route path="admin-bookmarks" element={<AdminBookmarks />} />
                         <Route path="change-password" element={<ChangePassword />} />
                         <Route path="update-user" element={<UpdateAdmin />} />
+                        <Route path="import" element={<Import />} />
                     </Route>
                 </Route>
 

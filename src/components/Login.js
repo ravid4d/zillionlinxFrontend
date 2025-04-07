@@ -39,7 +39,6 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
             // values.password=encryptedPassword;
             try {
                 const result = await dispatch(handleLogin({ values, loginType })).unwrap();
-                console.log(result, 'resulta');
                 if(!result?.isLoggedIn) {
                     toast.error(result?.message)
                 }

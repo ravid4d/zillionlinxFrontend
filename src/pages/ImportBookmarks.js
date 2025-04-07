@@ -113,7 +113,6 @@ const ImportBookmarks = () => {
     setContextMenu(null);
     setWhichModalOpen("newBookmark");
   };
-console.log(contextMenu, 'contextMenu')
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-2 h-full">

@@ -204,8 +204,7 @@ export const importBookmarks = createAsyncThunk("bookmarks/importBookmarks", asy
         'Content-Type':'multipart/form-data'
       }
     })
-    console.log(response, 'imported data');
-    return response?.data?.message;
+    return response?.data?.status;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,

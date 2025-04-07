@@ -85,7 +85,6 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
         try {
             const accessToken = tokenResponse?.access_token;
             const result = await dispatch(handleGoogleLogin({ accessToken })).unwrap();
-            console.log('Login successful:', result);
 
             closeModal();    
             navigate('/bookmarks', {state:{loginMessage:result?.message}})
