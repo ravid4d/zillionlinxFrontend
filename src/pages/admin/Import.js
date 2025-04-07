@@ -14,7 +14,7 @@ const Import = () => {
   const [errors, setError] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const { token } = useSelector((state) => state.auth);
-  const { importError, importBookmarkMessage, loading } = useSelector(
+  const { importError, importBookmarkMessage } = useSelector(
     (state) => state.bookmark
   );
 

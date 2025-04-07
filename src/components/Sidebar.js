@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../redux/slices/categorySlice';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({setId, id}) => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const { token } = useSelector((state) => state.auth);
     const {categories, loading} = useSelector(state=>state.category);
     const {bookmark_addto} = useSelector((state) => state.bookmark);
@@ -101,7 +102,7 @@ const Sidebar = ({setId, id}) => {
                     }
                 </ul>
             </div>
-            <div className='bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto'>
+            <div onClick={()=>navigate('/instant-links')} className='cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto'>
                 <div className='absolute left-2 top-2 w-[85px]'>
                     <img src="/search-bookmark-icon.png" alt="" className="w-full" />
                 </div>

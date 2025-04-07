@@ -24,6 +24,7 @@ import ChangePassword from './components/admin/ChangePassword';
 import UpdateAdmin from './components/admin/UpdateAdmin';
 import ScrollToTop from './services/ScrollToTop';
 import Import from './pages/admin/Import';
+import InstantLinks from './pages/InstantLinks';
 
 function App() {
     return (
@@ -53,6 +54,7 @@ function App() {
                         <Route path="bookmarks" element={<MyBookmarks />} />
                         <Route path="result" element={<GoogleCustomSearch />} />
                         <Route path="import" element={<ImportBookmarks />} />
+                        <Route path="instant-links" element={<InstantLinks />} />
                     </Route>
                 </Route>
 
