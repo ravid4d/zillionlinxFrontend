@@ -107,13 +107,13 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
           await dispatch(fetchAllTopLinks(token));
         }
       } else {
-        navigate("/bookmarks", {
-          state: {
-            categoryId: result?.payload?.category_id,
-            subCategoryId: result?.payload?.sub_category_id,
-            addTo: result?.payload?.addto
-          }
-        });
+        // navigate("/bookmarks", {
+        //   state: {
+        //     categoryId: result?.payload?.category_id,
+        //     subCategoryId: result?.payload?.sub_category_id,
+        //     addTo: result?.payload?.addto
+        //   }
+        // });
       }
       await dispatch(fetchCategories(token));
 

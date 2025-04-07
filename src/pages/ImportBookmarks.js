@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import parse from "html-react-parser";
 import { useOutletContext } from "react-router-dom";
+import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
 
 const ImportBookmarks = () => {
   const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();
@@ -19,6 +20,7 @@ const ImportBookmarks = () => {
   const { importError, importBookmarkMessage, loading } = useSelector(
     (state) => state.bookmark
   );
+  const [contextMenu, setContextMenu] = useState(null);
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -35,15 +37,18 @@ const ImportBookmarks = () => {
 
       // Right-Click Event Handler (Prevent default & show alert)
       const handleRightClick = (event) => {
-        event.preventDefault(); // Prevent default context menu
-        setUrlToBookmark({record:{title:event.target.textContent, link:event.target.href}})
-        setWhichModalOpen('newBookmark');
+        event.preventDefault(); 
+        setContextMenu({
+          x: event.clientX,
+          y: event.clientY,
+          record: { title: event.target.textContent, link: event.target.href } 
+        });
       };
 
       // Left-Click Event Handler (Open in New Tab)
       const handleLeftClick = (event) => {
-        event.preventDefault(); // Prevent default navigation
-        window.open(event.target.href, "_blank", "noopener,noreferrer"); // Open in a new tab
+        event.preventDefault(); 
+        window.open(event.target.href, "_blank", "noopener,noreferrer"); 
       };
 
       // Attach events to all anchor tags
@@ -61,31 +66,27 @@ const ImportBookmarks = () => {
       };
     }
   }, [htmlContent]);
+
+  
   const handleDrop = (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
-      setUploadedFile(file); // Store uploaded file
+      setUploadedFile(file); 
       setError("");
     }
   };
 
   const handleRejected = (fileRejections) => {
     if (fileRejections.length > 0) {
-      const rejected = fileRejections[0].file; // Get rejected file details
+      const rejected = fileRejections[0].file; 
       setError(
         `Only .html files are allowed. You uploaded: ${rejected.name} (${(
           rejected.size / 1024
         ).toFixed(2)} KB)`
       );
-      setUploadedFile(null); // Reset uploaded file if invalid
+      setUploadedFile(null); 
     }
   };
-
-  // const importBookmark = () => {
-  //   let formData = new FormData();
-  //   formData.append("file", uploadedFile);
-  //   dispatch(importBookmarks({ token, formData }));
-  // };
 
   useEffect(() => {
     if (importError !== null) {
@@ -105,13 +106,22 @@ const ImportBookmarks = () => {
       setUploadedFile(null);
     }
   }, [importBookmarkMessage]);
+
+  const handleOptionClick = (option) => {
+    contextMenu.record = { ...contextMenu.record, type: option };
+    setUrlToBookmark(contextMenu);
+    setContextMenu(null);
+    setWhichModalOpen("newBookmark");
+  };
+console.log(contextMenu, 'contextMenu')
+
   return (
     <div className="max-w-screen-3xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap md:h-full w-full flex-col ">
           <Dropzone
             accept={{
-              "text/html": [".html"] // Accept only HTML files
+              "text/html": [".html"]
             }}
             onDropRejected={handleRejected}
             onDrop={handleDrop}
@@ -122,7 +132,11 @@ const ImportBookmarks = () => {
                   className="cursor-pointer p-12 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600 h-full items-center"
                   {...getRootProps()}
                 >
-                  <input {...getInputProps()} accept=".html"  onChange={handleFileUpload}  />
+                  <input
+                    {...getInputProps()}
+                    accept=".html"
+                    onChange={handleFileUpload}
+                  />
                   <div className="text-center">
                     <span className="inline-flex justify-center items-center size-16 bg-gray-100 text-gray-800 rounded-full dark:bg-neutral-700 dark:text-neutral-200">
                       <svg
@@ -238,10 +252,14 @@ const ImportBookmarks = () => {
           </Dropzone>
           <div className="w-full md:w-1/2 md:ps-4 import-bookmarks-list min-h-[500px] md:min-h-full h-[500px] overflow-auto md:h-full">
             <div className="w-full p-12 pt-8 bg-white border border-dashed border-gray-300 rounded-xl h-full overflow-auto flex flex-wrap items-center">
-            {htmlContent ? parse(htmlContent) : <img src="/no-data-concept.jpeg" alt="" />}
+              {htmlContent ? (
+                parse(htmlContent)
+              ) : (
+                <img src="/no-data-concept.jpeg" alt="" />
+              )}
             </div>
           </div>
-              {/* <div className="flex flex-wrap justify-end">
+          {/* <div className="flex flex-wrap justify-end">
                   <button
                   disabled={loading}
                     className="disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none btn dark-btn h-12 border-none"
@@ -251,6 +269,13 @@ const ImportBookmarks = () => {
                   </button>
                 </div> */}
         </div>
+        {contextMenu && (
+          <BookmarkGoogleResultContext
+            setContextMenu={setContextMenu}
+            contextMenu={contextMenu}
+            handleOptionClick={handleOptionClick}
+          />
+        )}
       </div>
     </div>
   );
