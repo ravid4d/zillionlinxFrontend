@@ -80,7 +80,7 @@ const authSlice = createSlice({
       state.userRole = null;
       state.isLoggedIn = false;
       state.user = null;
-      sessionStorage.clear();
+      localStorage.clear();
       // localStorage.removeItem("persist:auth");
     },
   },
