@@ -18,11 +18,11 @@ export const handleLogin = createAsyncThunk(
         }
       );
       console.log(response, 'aaa');
-      let token = response?.data?.token || null;
-      let userRole = response?.data?.user?.role || undefined;
-      let message = response?.data?.message || "";
+      let token = response?.data?.data?.token || null;
+      let userRole = response?.data?.data?.user?.role || undefined;
+      let message = response?.data?.data?.message || "";
       let isLoggedIn = token !== undefined || token !== null ? !!token : false;
-      let user = response?.data?.user;
+      let user = response?.data?.data?.user;
       dispatch(setUser(user));
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
