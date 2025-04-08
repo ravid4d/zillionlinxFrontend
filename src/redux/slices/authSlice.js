@@ -6,24 +6,23 @@ const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
-  async ({ values, loginType }, {dispatch, rejectWithValue }) => {
+  async ({ values, loginType }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
         loginType === "admin" ? loginAdminUrl : loginUrl,
         {
           type: "email",
           email: values?.email,
-          password: values?.password
+          password: values?.password,
+          remember_me: values?.remember_me || false,
         }
       );
-      // console.log(response, 'aaa');
-      let token = response?.data?.data?.token || null;
-      let userRole = response?.data?.data?.user?.role || undefined;
+      console.log(response, 'aaa');
+      let token = response?.data?.token || null;
+      let userRole = response?.data?.user?.role || undefined;
       let message = response?.data?.message || "";
-      let isLoggedIn =
-        response?.data?.data?.token !== undefined ||
-        response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
-      let user = response?.data?.data?.user;
+      let isLoggedIn = token !== undefined || token !== null ? !!token : false;
+      let user = response?.data?.user;
       dispatch(setUser(user));
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
@@ -37,25 +36,25 @@ export const handleLogin = createAsyncThunk(
 
 export const handleGoogleLogin = createAsyncThunk(
   "auth/googleLogin",
-  async ({accessToken}, { rejectWithValue }) => {
+  async ({ accessToken }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(loginUrl,
-        {
-          type: "google",
-          google_token: accessToken
-        }
-      );
+      const response = await axiosInstance.post(loginUrl, {
+        type: "google",
+        google_token: accessToken,
+      });
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
       let message = response?.data?.message || "";
       let isLoggedIn =
-      response?.data?.data?.token !== undefined ||
-      response?.data?.data?.token !== null ? !!response?.data?.data?.token : false;
+        response?.data?.data?.token !== undefined ||
+        response?.data?.data?.token !== null
+          ? !!response?.data?.data?.token
+          : false;
       let user = response?.data?.user;
       return { token, message, userRole, isLoggedIn, user };
     } catch (error) {
-      console.log(error,"/error")
-      
+      console.log(error, "/error");
+
       return rejectWithValue({
         status: error?.response?.status,
         message: error?.response?.data?.message || "Login failed",
@@ -69,11 +68,11 @@ const authSlice = createSlice({
   initialState: {
     token: null,
     userRole: null,
-    status:"",
+    status: "",
     isLoggedIn: false,
     loading: false,
     error: null,
-    user:null
+    user: null,
   },
   reducers: {
     logout: (state) => {
@@ -82,8 +81,8 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
       sessionStorage.clear();
-      // localStorage.removeItem("persist:auth"); 
-    }
+      // localStorage.removeItem("persist:auth");
+    },
   },
   extraReducers: (builder) => {
     //Fetch Top Links
@@ -122,7 +121,7 @@ const authSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
-  }
+  },
 });
 
 export const { logout } = authSlice.actions;

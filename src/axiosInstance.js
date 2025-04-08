@@ -3,6 +3,7 @@ import { logout } from "./redux/slices/authSlice";
 
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true
 });
 
 // Request Interceptor (Attaching Token)
