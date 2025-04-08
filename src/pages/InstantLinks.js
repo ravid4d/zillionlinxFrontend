@@ -1,33 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
   Link,
-  useLocation,
-  useNavigate,
   useOutletContext
 } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  addToBookmarks,
-  callTopLinks,
-  fetchAllTopLinks,
-  fetchCategoryWiseBookmarks,
-  removeFromBookmarks,
-} from "../redux/slices/bookmarkSlice";
+import { useSelector } from "react-redux";
 import GoogleSearchbar from "../components/GoogleSearchbar";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
-import AddRemoveBookmarkContext from "../components/AddRemoveBookmarkContext";
 import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
 
 const InstantLinks = () => {
   const {
     setUrlToBookmark,
     setWhichModalOpen,
-    selectedCategory,
-    setSelectedCategory,
-    setSelectedSubCategory,
-    selectedSubCategory,
     id,
     setId,
     openModal,
@@ -36,7 +21,7 @@ const InstantLinks = () => {
   const [contextMenu, setContextMenu] = useState(null);
 
   const handleRightClick = (event, record) => {
-    console.log(record, 'record');
+    // console.log(record, 'record');
     event.preventDefault();
     let newRecord = {...record, link:record?.website_url};
     setContextMenu({
@@ -53,55 +38,13 @@ const InstantLinks = () => {
     setWhichModalOpen("newBookmark"); 
   };
 
-  const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
-  const { categories } = useSelector((state) => state.category);
   const {
     bookmarks,
     loading,
     error,
-    isTopLink,
-    bookmark_addto,
-    bookmark_category,
-    bookmark_subcategory
   } = useSelector((state) => state.bookmark);
 
   const [searchResults, setSearchResults] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch(callTopLinks());
-      await dispatch(fetchAllTopLinks(token));
-    };
-    if (token && (bookmark_addto === "top_link" || bookmark_addto === "")) {
-      fetchData();
-    }
-  }, [dispatch, token, bookmark_addto]);
-
-  useEffect(() => {
-    if (bookmark_addto === "top_link") {
-      dispatch(fetchAllTopLinks(token));
-    } else if (bookmark_addto === "bookmark") {
-      let categoryId = bookmark_category;
-      let subCategoryId = bookmark_subcategory ? bookmark_subcategory : "";
-      const category = categories.find((cat) => cat.id === bookmark_category);
-
-      const subCategry = category?.subcategories?.find((subCategory) =>
-        bookmark_subcategory ? subCategory?.id === bookmark_subcategory : ""
-      );
-      setSelectedCategory(category);
-      setSelectedSubCategory(subCategry);
-
-      setId({
-        categoryId: categoryId,
-        subCategoryId: subCategoryId
-      });
-      dispatch(
-        fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
-      );
-    }
-  }, [bookmark_addto]);
-
   useEffect(() => {
     if (openModal?.sidebar) {
       let sidebarOverlay = document.getElementById(
@@ -165,7 +108,6 @@ const InstantLinks = () => {
                         bookmarks?.map((bookmark) => (
                           <li
                             key={bookmark?.id}
-                            draggable
                             onContextMenu={(e) => handleRightClick(e, bookmark)}
                             className="relative"
                           >
