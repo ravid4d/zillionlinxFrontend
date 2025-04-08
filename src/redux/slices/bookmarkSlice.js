@@ -11,16 +11,18 @@ const sarchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/search_bookmark`;
 const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/import-bookmark`;
 const addToBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-toplink-bookmark`;
 const removeFromBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/remove-toplink-bookmark`;
+const linkUrl = `${process.env.REACT_APP_API_URL}/api/listing-admin-bookmark`;
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
   "bookmark/fetchAllTopLinks",
-  async (token, { rejectWithValue }) => {
+  async (token, {dispatch, rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(fetchTopLinkUrl, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      dispatch(setPageHeading('Top Links'));
       return { bookmarks: response?.data?.data };
     } catch (error) {
       return rejectWithValue({
@@ -247,6 +249,26 @@ export const removeFromBookmarks = createAsyncThunk("bookmarks/removeFromBookmar
   }
 });
 
+export const linkListing = createAsyncThunk("bookmarks/linkListing", async({token, title},{rejectWithValue})=>{
+  try {
+    let url = title ? `${linkUrl}?search=${title}` : linkUrl;
+    let newTitle = title ? title : {};
+    // api/listing-admin-bookmark?search=Gmail
+    let response = await axiosInstance.post(url, {newTitle}, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log(response, 'dear')
+    return response?.data?.data;
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.data?.status,
+      message: error?.response?.data?.message || "Failed to remove bookmarks from top links"
+    });
+  }
+})
+
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
@@ -276,7 +298,8 @@ const bookmarkSlice = createSlice({
     error: null,
     importError:null,
     importBookmarkMessage:"",
-    // addToRemoveFromMessage:""
+    links:[],
+    pageHeading:""
   },
   reducers: {
     callTopLinks: (state) => {
@@ -287,6 +310,12 @@ const bookmarkSlice = createSlice({
     },
     clearImportBookmarksMessage:(state)=>{
       state.importError = null
+    },
+    clearInstantLink:(state)=>{
+      state.links = [];
+    },
+    setPageHeading:(state, action)=>{
+      state.pageHeading = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -452,7 +481,19 @@ const bookmarkSlice = createSlice({
       state.loading = false;
       // state.importError = action.payload?.message;
     })
+    builder.addCase(linkListing?.pending, (state, action)=>{
+      state.loading=true;
+      state.error=null;
+    })
+    .addCase(linkListing?.fulfilled, (state, action)=>{
+      state.loading=false;
+      state.links = action.payload
+    })
+    .addCase(linkListing?.rejected, (state, action)=>{
+      state.loading=false;
+      state.error = action.payload
+    })
   }
 });
-export const { callTopLinks, disabledTopLinks, clearImportBookmarksMessage } = bookmarkSlice.actions;
+export const { callTopLinks, disabledTopLinks, clearImportBookmarksMessage, clearInstantLink, setPageHeading } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
