@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   disabledTopLinks,
+  linkFrontListing,
   searchBookmarks,
-  setPageHeading
-} from "../redux/slices/bookmarkSlice";
-import {
+  setPageHeading,
   clearInstantLink,
-  linkListing,
-} from "../redux/slices/adminSlice";
+} from "../redux/slices/bookmarkSlice";
 
 const Searchbar = ({
   linkSearch = false,
@@ -30,7 +28,7 @@ const Searchbar = ({
         dispatch(clearInstantLink());
       } else {
         setisEmpty(true);
-        dispatch(linkListing({ token, title }));
+        dispatch(linkFrontListing({ token, title }));
       }
       dispatch(setPageHeading("Search Results"));
       setSearchResults(true);
@@ -61,7 +59,7 @@ const Searchbar = ({
           onClick={() => {
             setisEmpty(false);
             setTitle("");
-            dispatch(linkListing({ token }));
+            dispatch(linkFrontListing({ token }));
           }}
         >
           <svg

@@ -349,10 +349,7 @@ const adminSlice = createSlice({
     },
     setEditingCategory:(state, action)=>{
       state.editingCategory = action.payload;
-    },
-    clearInstantLink:(state)=>{
-      state.links = [];
-    },
+    }
   },
   extraReducers: (builder) => {
     //Fetch Top Links
@@ -571,5 +568,5 @@ const adminSlice = createSlice({
 
 });
 
-export const { setSearchQuery, setEditingCategory, clearInstantLink } = adminSlice.actions;
+export const { setSearchQuery, setEditingCategory } = adminSlice.actions;
 export default adminSlice.reducer;

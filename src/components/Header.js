@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks,  fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
-import { clearInstantLink } from "../redux/slices/adminSlice";
+import { clearInstantLink } from "../redux/slices/bookmarkSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 

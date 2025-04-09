@@ -11,7 +11,7 @@ const sarchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/search_bookmark`;
 const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/import-bookmark`;
 const addToBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-toplink-bookmark`;
 const removeFromBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/remove-toplink-bookmark`;
-const linkUrl = `${process.env.REACT_APP_API_URL}/api/listing-admin-bookmark`;
+const linkUrl = `${process.env.REACT_APP_API_URL}/api/listing-bookmark`;
 
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
@@ -275,27 +275,19 @@ export const removeFromBookmarks = createAsyncThunk(
   }
 );
 
-export const linkListing = createAsyncThunk(
+export const linkFrontListing = createAsyncThunk(
   "bookmarks/linkListing",
   async ({ token, title }, { rejectWithValue }) => {
     try {
-      let url = "";
-      if (title) {
-        url = `${linkUrl}?search=${title}`;
-      } else {
-        url = linkUrl;
-      }
-      let newTitle = title ? title : {};
+      let url = title ? `${linkUrl}?search=${title}` : linkUrl;     
       let response = await axiosInstance.get(
         url,
-        { newTitle },
         {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }
       );
-      console.log(response?.data, "hh");
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
@@ -353,6 +345,9 @@ const bookmarkSlice = createSlice({
     },
     setPageHeading: (state, action) => {
       state.pageHeading = action.payload;
+    },
+    clearInstantLink:(state)=>{
+      state.links = [];
     }
   },
   extraReducers: (builder) => {
@@ -520,17 +515,17 @@ const bookmarkSlice = createSlice({
         // state.importError = action.payload?.message;
       });
 
-      builder.addCase(linkListing?.pending, (state, action)=>{
+      builder.addCase(linkFrontListing?.pending, (state, action)=>{
         state.loading=true;
         state.error=null;
       })
-      .addCase(linkListing?.fulfilled, (state, action)=>{
+      .addCase(linkFrontListing?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = action.payload.data;
-        state.totalBookmarks = action.payload?.total;
+        state.totalLinks = action.payload?.total;
         state.paginationLinks = action.payload?.links;
       })
-      .addCase(linkListing?.rejected, (state, action)=>{
+      .addCase(linkFrontListing?.rejected, (state, action)=>{
         state.loading=false;
         state.error = action.payload;
         state.status = action.payload.status;
@@ -541,6 +536,7 @@ export const {
   callTopLinks,
   disabledTopLinks,
   clearImportBookmarksMessage,
-  setPageHeading
+  setPageHeading,
+  clearInstantLink
 } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
