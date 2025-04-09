@@ -146,7 +146,7 @@ const User = () => {
         <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+              <h2 className="text-xl font-semibold text-gray-800">
                 Users
               </h2>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
@@ -165,11 +165,7 @@ const User = () => {
               </div>
             </div>
           </div>
-          {/* {!userLoading && (
-            <div className="animate-spin inline-block size-6 border-3 border-red-400 border-t-transparent text-gray-800 rounded-full" role="status" aria-label="loading">
-            <span className="sr-only">Loading...</span>
-          </div>
-          )} */}
+
           {users && users?.length > 0 ? (
             <>
               <div
@@ -198,7 +194,7 @@ const User = () => {
                           className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                           id="hs-at-with-checkboxes-main"
                         />
-                        {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        {/* <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           ID
                         </span>  */}
                       </label>
@@ -206,44 +202,49 @@ const User = () => {
 
                     <th scope="col" className="px-6 py-3">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          Name
+                        <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                          <span>Name</span>
+                          <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
                         </span>
                       </div>
                     </th>
 
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          Country
+                        <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                          <span>Country</span>
+                          <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
                         </span>
                       </div>
                     </th>
 
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          Last access date
+                        <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                          <span>Last access date</span>
+                          <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
                         </span>
                       </div>
                     </th>
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          number of bookmarks
+                        <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                          <span>number of bookmarks</span>
+                          <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
                         </span>
                       </div>
                     </th>
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          Created
+                        <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                          <span>Created</span>
+                          <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
                         </span>
                       </div>
                     </th>
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           Action
                         </span>
                       </div>
@@ -254,15 +255,16 @@ const User = () => {
                 <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
                   {users?.map((user, index) => {
                     return (
+                      <tr key={user?.id || `user-${index}`}>
                       <UserTableData
                         showEditOrDelete={true}
                         user={user}
-                        key={user?.id || `user-${index}`}
                         selectedUsers={selectedUsers}
                         handleSelectOneUser={handleSelectOneUser}
                         deleteSingleUser={deleteSingleUser}
                         setUserToEdit={setUserToEdit}
                       />
+                      </tr>
                     );
                   })}
                 </tbody>
@@ -279,7 +281,7 @@ const User = () => {
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
             <div>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
-                <span className="font-semibold text-gray-800 dark:text-neutral-200">
+                <span className="font-semibold text-gray-800">
                   {totalUsers}
                 </span>{" "}
                 results

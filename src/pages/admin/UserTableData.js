@@ -4,14 +4,13 @@ import React from "react";
 const UserTableData = ({
   showEditOrDelete,
   user,
-  key,
   selectedUsers,
   handleSelectOneUser,
   deleteSingleUser,
   setUserToEdit
 }) => {
   return (
-    <tr key={key}>
+   <>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
         
@@ -130,7 +129,7 @@ const UserTableData = ({
         </div>
       </td>
      }
-    </tr>
+    </>
   );
 };
 
