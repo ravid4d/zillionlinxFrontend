@@ -17,7 +17,6 @@ export const handleLogin = createAsyncThunk(
           remember_me: values?.remember_me || false,
         }
       );
-      console.log(response, 'aaa');
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
       let message = response?.data?.data?.message || "";
