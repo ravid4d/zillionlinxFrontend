@@ -88,18 +88,18 @@ const Links = () => {
   //Delete single user
   const deleteSingleBookmark = (ids) => {
     if (!ids || ids.length === 0) {
-      toast.warning("No users selected!");
+      toast.warning("No LinX selected!");
       return;
     }
     const confirmDelete = () => {
       dispatch(deleteLink({ ids:ids }))
         .unwrap()
         .then(() => {
-          toast.success("Bookmark deleted successfully!");
-          dispatch(linkListing({token, title:"", isAdmin:true})); 
+          toast.success("LinX deleted successfully!");
+          dispatch(linkListing({token, title:""})); 
         })
         .catch((err) => {
-          toast.error("Error deleting Bookmark: " + err.message);
+          toast.error("Error deleting LinX: " + err.message);
         });
     };
   

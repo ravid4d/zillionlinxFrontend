@@ -61,7 +61,7 @@ const LinksTableData = ({
         <div className="px-6 py-1.5">
           <button
             className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-            onClick={() => deleteSingleBookmark([bookmark?.bookmark_id])}
+            onClick={() => deleteSingleBookmark([bookmark?.id])}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -270,13 +270,11 @@ export const categoryReorder = createAsyncThunk(
 export const linkListing = createAsyncThunk("admin/linkListing", async({token, title},{rejectWithValue})=>{
   try {
     let url = title ? `${linkAdminUrl}?search=${title}` : linkAdminUrl;
-    //let newTitle = title ? title : {};
     let response = await axiosInstance.get(url, {
       headers:{
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(response?.data, 'hh')
     return response?.data?.data;
   } catch (error) {
     return rejectWithValue({
@@ -290,13 +288,11 @@ export const handleLinksPagination = createAsyncThunk(
   "admin/linkPagination",
   async ({ url, token }, { rejectWithValue }) => {
     try {
-      console.log(url, token,'data are');
       let response = await axiosInstance.get(url, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response, 'output is')
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
@@ -309,15 +305,18 @@ export const handleLinksPagination = createAsyncThunk(
   }
 );
 
-export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token,isAdmin},{rejectWithValue})=>{
+export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token, ids},{rejectWithValue})=>{
   try {
-   let response = await axiosInstance.post(deleteLinkUrl, {}, {
+    // console.log(typeof ids, Array.isArray(ids), 'ids');
+    // return false;
+   let response = await axiosInstance.post(deleteLinkUrl, {ids}, {
       headers:{
         Authorization: `Bearer ${token}`
       }
     });
     console.log(response, 'dear baba')
-    return response?.data?.data;
+    return false;
+    // return response?.data?.data;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,
