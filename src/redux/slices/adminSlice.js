@@ -8,7 +8,6 @@ const deleteBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-Boo
 const updateCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/update-categories`;
 const deleteCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete/categories`;
 const categoryReorderUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories/reorder`;
-const linkUrl = `${process.env.REACT_APP_API_URL}/api/listing-admin-bookmark`;
 const linkAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/listing-admin-bookmark`;
 const deleteLinkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-admin-bookmark`;
 
@@ -268,27 +267,17 @@ export const categoryReorder = createAsyncThunk(
   }
 );
 
-export const linkListing = createAsyncThunk("bookmarks/linkListing", async({token, title, isAdmin},{rejectWithValue})=>{
+export const linkListing = createAsyncThunk("bookmarks/linkListing", async({token, title},{rejectWithValue})=>{
   try {
     let url = "";
-    if(isAdmin) {
       if(title) {
         url = `${linkAdminUrl}?search=${title}`
       }
       else {
         url = linkAdminUrl
       }
-    }
-    else {
-      if(title) {
-        url = `${linkUrl}?search=${title}`
-      }
-      else {
-        url = linkUrl
-      }
-    }
     let newTitle = title ? title : {};
-    let response = await axiosInstance.get(url, {newTitle}, {
+    let response = await axiosInstance.post(url, {newTitle}, {
       headers:{
         Authorization: `Bearer ${token}`
       }
