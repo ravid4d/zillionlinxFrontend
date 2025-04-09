@@ -267,17 +267,11 @@ export const categoryReorder = createAsyncThunk(
   }
 );
 
-export const linkListing = createAsyncThunk("bookmarks/linkListing", async({token, title},{rejectWithValue})=>{
+export const linkListing = createAsyncThunk("admin/linkListing", async({token, title},{rejectWithValue})=>{
   try {
-    let url = "";
-      if(title) {
-        url = `${linkAdminUrl}?search=${title}`
-      }
-      else {
-        url = linkAdminUrl
-      }
-    let newTitle = title ? title : {};
-    let response = await axiosInstance.post(url, {newTitle}, {
+    let url = title ? `${linkAdminUrl}?search=${title}` : linkAdminUrl;
+    //let newTitle = title ? title : {};
+    let response = await axiosInstance.get(url, {
       headers:{
         Authorization: `Bearer ${token}`
       }
