@@ -8,19 +8,21 @@ const pinBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/`;
 const orderBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/reorder`;
 const googleSearchUrl = `${process.env.REACT_APP_API_URL}/api/search`;
 const sarchBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/search_bookmark`;
-const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/import-bookmark`;
+const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/import-bookmark`;
 const addToBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-toplink-bookmark`;
 const removeFromBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/remove-toplink-bookmark`;
+
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
   "bookmark/fetchAllTopLinks",
-  async (token, { rejectWithValue }) => {
+  async (token, {dispatch, rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(fetchTopLinkUrl, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      dispatch(setPageHeading('Top Links'));
       return { bookmarks: response?.data?.data };
     } catch (error) {
       return rejectWithValue({
@@ -204,7 +206,7 @@ export const importBookmarks = createAsyncThunk("bookmarks/importBookmarks", asy
         'Content-Type':'multipart/form-data'
       }
     })
-    return response?.data?.status;
+    return response?.data?.message;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,
@@ -247,6 +249,7 @@ export const removeFromBookmarks = createAsyncThunk("bookmarks/removeFromBookmar
   }
 });
 
+
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
@@ -276,7 +279,7 @@ const bookmarkSlice = createSlice({
     error: null,
     importError:null,
     importBookmarkMessage:"",
-    // addToRemoveFromMessage:""
+    pageHeading:""
   },
   reducers: {
     callTopLinks: (state) => {
@@ -287,6 +290,9 @@ const bookmarkSlice = createSlice({
     },
     clearImportBookmarksMessage:(state)=>{
       state.importError = null
+    },
+    setPageHeading:(state, action)=>{
+      state.pageHeading = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -452,7 +458,8 @@ const bookmarkSlice = createSlice({
       state.loading = false;
       // state.importError = action.payload?.message;
     })
+  
   }
 });
-export const { callTopLinks, disabledTopLinks, clearImportBookmarksMessage } = bookmarkSlice.actions;
+export const { callTopLinks, disabledTopLinks, clearImportBookmarksMessage, setPageHeading } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;

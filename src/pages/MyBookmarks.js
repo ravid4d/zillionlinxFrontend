@@ -1,5 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext
+} from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -10,35 +15,78 @@ import {
   orderBookmarks,
   removeFromBookmarks,
   removeTopLink,
+  setPageHeading
 } from "../redux/slices/bookmarkSlice";
+import {
+  clearInstantLink,
+  linkListing,
+} from "../redux/slices/adminSlice";
 import Bookmark from "../components/Bookmark";
 import GoogleSearchbar from "../components/GoogleSearchbar";
 import AddNewBookmarkField from "../components/AddNewBookmarkField";
 import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
 import AddRemoveBookmarkContext from "../components/AddRemoveBookmarkContext";
+import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
 
 const MyBookmarks = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     setUrlToBookmark,
     setWhichModalOpen,
-    selectedCategory,
     setSelectedCategory,
     setSelectedSubCategory,
-    selectedSubCategory,
     id,
     setId,
     openModal,
-    closeAllModals,
+    closeAllModals
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
+  const [draggedItemId, setDraggedItemId] = useState(null);
+  const [searchResults, setSearchResults] = useState(false);
+
+  const {
+    bookmarks,
+    loading,
+    error,
+    bookmark_addto,
+    bookmark_category,
+    bookmark_subcategory,
+    pageHeading,
+    links
+  } = useSelector((state) => state.bookmark);
+  const { token } = useSelector((state) => state.auth);
+  const { categories } = useSelector((state) => state.category);
+
+  const loginMessage = location?.state?.loginMessage
+    ? location?.state?.loginMessage
+    : "";
+
+  const linkHandleRightClick = (event, record) => {
+    event.preventDefault();
+    let newRecord = { ...record, link: record?.website_url };
+    setContextMenu({
+      x: event.clientX,
+      y: event.clientY,
+      record: newRecord
+    });
+  };
+
+  const linkHandleOptionClick = async (option) => {
+    contextMenu.record = { ...contextMenu.record, type: option };
+    setUrlToBookmark(contextMenu);
+    setContextMenu(null); // Close context menu
+    setWhichModalOpen("newBookmark");
+  };
 
   const handleRightClick = (event, record) => {
     event.preventDefault();
     setContextMenu({
       x: event.clientX,
       y: event.clientY,
-      record: record,
+      record: record
     });
   };
 
@@ -74,27 +122,6 @@ const MyBookmarks = () => {
     }
     setContextMenu(null);
   };
-
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const loginMessage = location?.state?.loginMessage
-    ? location?.state?.loginMessage
-    : "";
-  const { token } = useSelector((state) => state.auth);
-  const { categories } = useSelector((state) => state.category);
-  const {
-    bookmarks,
-    loading,
-    error,
-    isTopLink,
-    bookmark_addto,
-    bookmark_category,
-    bookmark_subcategory,
-  } = useSelector((state) => state.bookmark);
-
-  const [draggedItemId, setDraggedItemId] = useState(null);
-  const [searchResults, setSearchResults] = useState(false);
 
   useEffect(() => {
     if (loginMessage) {
@@ -206,6 +233,7 @@ const MyBookmarks = () => {
   useEffect(() => {
     if (bookmark_addto === "top_link") {
       dispatch(fetchAllTopLinks(token));
+      dispatch(setPageHeading("Top Links"));
     } else if (bookmark_addto === "bookmark") {
       let categoryId = bookmark_category;
       let subCategoryId = bookmark_subcategory ? bookmark_subcategory : "";
@@ -219,12 +247,14 @@ const MyBookmarks = () => {
 
       setId({
         categoryId: categoryId,
-        subCategoryId: subCategoryId,
+        subCategoryId: subCategoryId
       });
       dispatch(
         fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
       );
+      dispatch(setPageHeading(`${category?.title} | ${subCategry?.title}`));
     }
+    dispatch(clearInstantLink());
   }, [bookmark_addto]);
 
   useEffect(() => {
@@ -264,36 +294,40 @@ const MyBookmarks = () => {
             tabIndex="-1"
             aria-label="Sidebar"
           >
-            <Searchbar closeAllModals={closeAllModals} setSearchResults={setSearchResults} />
+            <Searchbar
+              closeAllModals={closeAllModals}
+              setSearchResults={setSearchResults}
+            />
             <Sidebar setId={setId} id={id} />
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
-              <div className="flex flex-wrap items-center gap-2">
-                <AddNewBookmarkField
-                  setWhichModalOpen={setWhichModalOpen}
-                  setUrlToBookmark={setUrlToBookmark}
-                />
+            {links && links?.length === 0 ? (
+              <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
+                <div className="flex flex-wrap items-center gap-2">
+                  <AddNewBookmarkField
+                    setWhichModalOpen={setWhichModalOpen}
+                    setUrlToBookmark={setUrlToBookmark}
+                  />
+                </div>
+                <GoogleSearchbar />
               </div>
-              <GoogleSearchbar />
-            </div>
+            ) : (
+              <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
+                <div className="flex flex-wrap items-center gap-2"></div>
+                <div className="w-2/5">
+                  <Searchbar
+                    linkSearch={true}
+                    closeAllModals={closeAllModals}
+                    setSearchResults={setSearchResults}
+                  />
+                </div>
+              </div>
+            )}
             <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
-                {isTopLink ? (
-                  <span>Top Links</span>
-                ) : id?.categoryId ? (
-                  `${selectedCategory?.title} ${
-                    selectedSubCategory?.title
-                      ? `| ${selectedSubCategory?.title}`
-                      : ""
-                  }`
-                ) : searchResults ? (
-                  "Search Results"
-                ) : (
-                  ""
-                )}
-                {!id?.categoryId && !searchResults ? (
+                {pageHeading}
+                {pageHeading === "Top Links" ? (
                   <span className="text-base text-light-black inline-block">
                     Drag thumbnails to desired position, pin to a grid location,
                     or right-click for more options.
@@ -303,6 +337,22 @@ const MyBookmarks = () => {
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
                 {loading ? (
                   <span className="loader"></span>
+                ) : links && links?.length > 0 ? (
+                  <ul className="list-disc ps-6">
+                    {links?.map((link) => (
+                      <li
+                        key={link?.title}
+                        onContextMenu={(e) => linkHandleRightClick(e, link)}
+                        className="relative mb-2"
+                      >
+                          <Link target="_blank" to={link?.website_url}>
+                            <span className="text-sm font-semibold hover:text-dark-blue">
+                              {link?.title}
+                            </span>
+                          </Link>
+                      </li>
+                    ))}
+                  </ul>
                 ) : bookmarks?.length > 0 && !error ? (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
@@ -317,7 +367,7 @@ const MyBookmarks = () => {
                             onContextMenu={(e) => handleRightClick(e, bookmark)}
                             className="relative"
                             style={{
-                              opacity: draggedItemId === index ? 0.5 : 1,
+                              opacity: draggedItemId === index ? 0.5 : 1
                             }}
                           >
                             <Bookmark
@@ -344,9 +394,16 @@ const MyBookmarks = () => {
                   </>
                 ) : (
                   <div className=" flex justify-center items-center">
-                    {/* <h2 className="text-[22px] text-red-500 mb-5">{error}</h2> */}
                     <img src="./no-data-concept.jpeg" alt="No Data Found!" />
                   </div>
+                )}
+
+                {links && links?.length > 0 && contextMenu && (
+                  <BookmarkGoogleResultContext
+                    setContextMenu={setContextMenu}
+                    contextMenu={contextMenu}
+                    handleOptionClick={linkHandleOptionClick}
+                  />
                 )}
               </div>
             </div>

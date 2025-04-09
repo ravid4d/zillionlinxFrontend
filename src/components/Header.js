@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import { callTopLinks,  fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import { clearInstantLink } from "../redux/slices/adminSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -29,9 +30,11 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
     if (isLoggedIn && location.pathname === "/bookmarks") {
       setId({ categoryId: null, subCategoryId: null });
       dispatch(callTopLinks());
+      dispatch(clearInstantLink())
       dispatch(fetchAllTopLinks(token));
     } else if (isLoggedIn && location.pathname !== "/bookmarks") {
       navigate("/bookmarks");
+      dispatch(clearInstantLink())
     } else {
       if (!isLoggedIn) {
         navigate("/");
@@ -304,12 +307,15 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
                         d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                       />
                     </svg>
-                    <Link
+                    <button
                       className="btn dark-btn !hidden 2xl:!inline-flex"
-                      to="/"
+                      onClick={
+                        redirectTo
+                      }
+                      // to="/bookmarks"
                     >
                       Home
-                    </Link>
+                    </button>
                     {userRole === "admin" ? (
                       <Link className="btn dark-btn" to="/admin">
                         Dashboard

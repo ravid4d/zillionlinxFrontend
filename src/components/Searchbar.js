@@ -1,35 +1,85 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { disabledTopLinks, searchBookmarks } from "../redux/slices/bookmarkSlice";
+import {
+  disabledTopLinks,
+  searchBookmarks,
+  setPageHeading
+} from "../redux/slices/bookmarkSlice";
+import {
+  clearInstantLink,
+  linkListing,
+} from "../redux/slices/adminSlice";
 
-const Searchbar = ({setSearchResults, closeAllModals}) => {
+const Searchbar = ({
+  linkSearch = false,
+  setSearchResults,
+  closeAllModals
+}) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const [title, setTitle] = useState("");
+  const [isEmpty, setisEmpty] = useState(false);
 
   const handleSearch = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     if (title.trim() !== "") {
+      if (!linkSearch) {
         let formData = new FormData();
         formData.append("title", title);
-      dispatch(searchBookmarks({ token, formData }));
+        dispatch(searchBookmarks({ token, formData }));
+        dispatch(clearInstantLink());
+      } else {
+        setisEmpty(true);
+        dispatch(linkListing({ token, title }));
+      }
+      dispatch(setPageHeading("Search Results"));
       setSearchResults(true);
       dispatch(disabledTopLinks());
-      closeAllModals()
+      closeAllModals();
     }
   };
 
   return (
-    <form className="flex items-center rounded-xl shadow-sm mb-4 relative" onSubmit={handleSearch}>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          type="text"
-          placeholder="Search my Bookmarks"
-          id="hs-trailing-button-add-on-with-icon"
-          name="hs-trailing-button-add-on-with-icon"
-          className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-        />
+    <form
+      className="flex items-center rounded-xl shadow-sm mb-4 relative"
+      onSubmit={handleSearch}
+    >
+      <input
+        value={title}
+        onChange={(e) => {
+          setTitle(e.target.value);
+        }}
+        type="text"
+        placeholder="Search my Bookmarks"
+        id="hs-trailing-button-add-on-with-icon"
+        name="hs-trailing-button-add-on-with-icon"
+        className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+      />
+      {isEmpty ? (
+        <button
+          className="absolute z-20 right-2 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-dark-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+          onClick={() => {
+            setisEmpty(false);
+            setTitle("");
+            dispatch(linkListing({ token }));
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="size-4 shrink-0"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18 18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      ) : (
         <button
           type="submit"
           // onClick={handleSearch}
@@ -51,6 +101,7 @@ const Searchbar = ({setSearchResults, closeAllModals}) => {
             <path d="m21 21-4.3-4.3"></path>
           </svg>
         </button>
+      )}
     </form>
   );
 };
