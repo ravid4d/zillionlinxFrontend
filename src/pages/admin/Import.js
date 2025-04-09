@@ -158,7 +158,7 @@ const Import = () => {
                 {({ getRootProps, getInputProps }) => (
                   <div className="w-full flex flex-wrap space-y-4 pb-4">
                     <div
-                      className="cursor-pointer w-full p-12 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600 h-full items-center"
+                      className="cursor-pointer w-full p-12 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl lg:h-full items-center"
                       {...getRootProps()}
                     >
                       <input
@@ -201,7 +201,7 @@ const Import = () => {
                       </div>
                     </div>
                     {uploadedFile && errors === "" ? (
-                      <div className="p-3 bg-white border border-solid border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600">
+                      <div className="w-full p-3 bg-white border border-solid border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600">
                         <div className="mb-1 flex justify-between items-center">
                           <div className="flex items-center gap-x-3">
                             <span

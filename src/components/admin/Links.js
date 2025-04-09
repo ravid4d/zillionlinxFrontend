@@ -45,7 +45,9 @@ const Links = () => {
   };
 
   const handleSelectOneBookmark = (bookmark_id) => {
-    setSelectedBookmarks(prev=>[...prev, bookmark_id])
+    setSelectedBookmarks(prev=> prev.includes(bookmark_id)
+    ? prev.filter((id) => id !== bookmark_id)
+    : [...prev, bookmark_id])
   }
 
   const deleteBookmarkSelected = async (id) => {
@@ -212,6 +214,7 @@ const Links = () => {
                         <React.Fragment  key={link?.id || `bookmark-${index}`}>
 
                         <LinksTableData
+                          showEditOrDelete={true}
                           bookmark={link}
                           deleteSingleBookmark={deleteSingleBookmark}
                           selectedBookmarks={selectedBookmarks}
