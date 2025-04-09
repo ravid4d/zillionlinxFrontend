@@ -13,7 +13,8 @@ export const handleLogin = createAsyncThunk(
         {
           type: "email",
           email: values?.email,
-          password: values?.password
+          password: values?.password,
+          remember_me:false
         }
       );
       // console.log(response, 'aaa');

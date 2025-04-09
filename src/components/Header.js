@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { callTopLinks, clearInstantLink, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import { callTopLinks,  fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import { clearInstantLink } from "../redux/slices/adminSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 

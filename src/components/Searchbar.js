@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearInstantLink,
   disabledTopLinks,
-  linkListing,
   searchBookmarks,
   setPageHeading
 } from "../redux/slices/bookmarkSlice";
+import {
+  clearInstantLink,
+  linkListing,
+} from "../redux/slices/adminSlice";
 
 const Searchbar = ({
   linkSearch = false,
