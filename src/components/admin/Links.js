@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
-  deleteBookmark,
   fetchAllBookmarks,
-  handleBookmarksPagination,
   handleLinksPagination,
   setSearchQuery
 } from "../../redux/slices/adminSlice";
@@ -16,7 +14,7 @@ import LinksTableData from "./LinksTableData";
 const Links = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { links, totalBookmarks, paginationLinks, searchQuery } =
+  const { links, totalLinks, paginationLinks, searchQuery } =
     useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
@@ -42,12 +40,14 @@ const Links = () => {
       setSelectedBookmarks([]);
     }
     else {
-      setSelectedBookmarks(links?.map((bookmark) => bookmark?.bookmark_id));
+      setSelectedBookmarks(links?.map((bookmark) => bookmark?.id));
     }
   };
 
   const handleSelectOneBookmark = (bookmark_id) => {
-    setSelectedBookmarks(prev=>[...prev, bookmark_id])
+    setSelectedBookmarks(prev=> prev.includes(bookmark_id)
+    ? prev.filter((id) => id !== bookmark_id)
+    : [...prev, bookmark_id])
   }
 
   const deleteBookmarkSelected = async (id) => {
@@ -56,14 +56,15 @@ const Links = () => {
       return;
     }
     const confirmDelete = async () => {
-      await dispatch(deleteBookmark({ids:selectedBookmarks}))
+      await dispatch(deleteLink({token, ids:selectedBookmarks}))
         .unwrap()
-        .then(() => {
+        .then((data) => {
+          toast.success(data);
           setSelectedBookmarks([]);
-          dispatch(fetchAllBookmarks(token));
+          dispatch(linkListing({token, title:""}));
         })
         .catch((err) => {
-          console.error("Error deleting bookmark: " + err.message);
+          console.error("Error deleting LinX: " + err.message);
         });
       };
 
@@ -92,7 +93,7 @@ const Links = () => {
       return;
     }
     const confirmDelete = () => {
-      dispatch(deleteLink({ token, ids }))
+      dispatch(deleteLink({token, ids }))
         .unwrap()
         .then(() => {
           toast.success("LinX deleted successfully!");
@@ -213,6 +214,7 @@ const Links = () => {
                         <React.Fragment  key={link?.id || `bookmark-${index}`}>
 
                         <LinksTableData
+                          showEditOrDelete={true}
                           bookmark={link}
                           deleteSingleBookmark={deleteSingleBookmark}
                           selectedBookmarks={selectedBookmarks}
@@ -229,7 +231,7 @@ const Links = () => {
             <div>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
                 <span className="font-semibold text-gray-800 dark:text-neutral-200">
-                  {totalBookmarks}
+                  {totalLinks}
                 </span>{" "}
                 results
               </p>

@@ -307,16 +307,12 @@ export const handleLinksPagination = createAsyncThunk(
 
 export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token, ids},{rejectWithValue})=>{
   try {
-    // console.log(typeof ids, Array.isArray(ids), 'ids');
-    // return false;
    let response = await axiosInstance.post(deleteLinkUrl, {ids}, {
       headers:{
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(response, 'dear baba')
-   // return false;
-    // return response?.data?.data;
+    return response?.data?.message;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,
@@ -344,6 +340,7 @@ const adminSlice = createSlice({
     adminCategories:[],
     adminBookmarks:[],
     links:[],
+    totalLinks: undefined,
     paginationLinks: [],
   },
   reducers: {
@@ -352,10 +349,7 @@ const adminSlice = createSlice({
     },
     setEditingCategory:(state, action)=>{
       state.editingCategory = action.payload;
-    },
-    clearInstantLink:(state)=>{
-      state.links = [];
-    },
+    }
   },
   extraReducers: (builder) => {
     //Fetch Top Links
@@ -531,7 +525,7 @@ const adminSlice = createSlice({
       .addCase(linkListing?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = action.payload.data;
-        state.totalBookmarks = action.payload?.total;
+        state.totalLinks = action.payload?.total;
         state.paginationLinks = action.payload?.links;
       })
       .addCase(linkListing?.rejected, (state, action)=>{
@@ -547,7 +541,7 @@ const adminSlice = createSlice({
       .addCase(handleLinksPagination.fulfilled, (state, action) => {
         state.loading = false;
         state.links = action.payload.data;
-        state.totalBookmarks = action.payload?.total;
+        state.totalLinks = action.payload?.total;
         state.pagination = action.payload?.links;
       })
       .addCase(handleLinksPagination.rejected, (state, action) => {
@@ -563,7 +557,7 @@ const adminSlice = createSlice({
       .addCase(deleteLink?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = state?.links?.filter(
-          (link) => !action.payload.includes(link.id)
+          (link) => link.id !== action.payload
         );
         
       })
@@ -575,5 +569,5 @@ const adminSlice = createSlice({
 
 });
 
-export const { setSearchQuery, setEditingCategory, clearInstantLink } = adminSlice.actions;
+export const { setSearchQuery, setEditingCategory } = adminSlice.actions;
 export default adminSlice.reducer;

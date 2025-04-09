@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   addToBookmarks,
   callTopLinks,
+  clearInstantLink,
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
   orderBookmarks,
@@ -17,10 +18,6 @@ import {
   removeTopLink,
   setPageHeading
 } from "../redux/slices/bookmarkSlice";
-import {
-  clearInstantLink,
-  linkListing,
-} from "../redux/slices/adminSlice";
 import Bookmark from "../components/Bookmark";
 import GoogleSearchbar from "../components/GoogleSearchbar";
 import AddNewBookmarkField from "../components/AddNewBookmarkField";
