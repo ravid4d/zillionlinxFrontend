@@ -315,7 +315,7 @@ export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token,
       }
     });
     console.log(response, 'dear baba')
-    return false;
+   // return false;
     // return response?.data?.data;
   } catch (error) {
     return rejectWithValue({
@@ -563,8 +563,9 @@ const adminSlice = createSlice({
       .addCase(deleteLink?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = state?.links?.filter(
-          (link) => link.id !== action.payload
+          (link) => !action.payload.includes(link.id)
         );
+        
       })
       .addCase(deleteLink?.rejected, (state, action)=>{
         state.loading=false;

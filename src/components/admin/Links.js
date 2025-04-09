@@ -92,7 +92,7 @@ const Links = () => {
       return;
     }
     const confirmDelete = () => {
-      dispatch(deleteLink({ ids:ids }))
+      dispatch(deleteLink({ token, ids }))
         .unwrap()
         .then(() => {
           toast.success("LinX deleted successfully!");
