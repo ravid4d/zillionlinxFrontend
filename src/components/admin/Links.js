@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
-  deleteBookmark,
   fetchAllBookmarks,
-  handleBookmarksPagination,
   handleLinksPagination,
   setSearchQuery
 } from "../../redux/slices/adminSlice";
@@ -16,7 +14,7 @@ import LinksTableData from "./LinksTableData";
 const Links = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { links, totalBookmarks, paginationLinks, searchQuery } =
+  const { links, totalLinks, paginationLinks, searchQuery } =
     useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
@@ -230,7 +228,7 @@ const Links = () => {
             <div>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
                 <span className="font-semibold text-gray-800 dark:text-neutral-200">
-                  {totalBookmarks}
+                  {totalLinks}
                 </span>{" "}
                 results
               </p>

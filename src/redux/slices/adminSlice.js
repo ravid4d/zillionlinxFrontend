@@ -340,6 +340,7 @@ const adminSlice = createSlice({
     adminCategories:[],
     adminBookmarks:[],
     links:[],
+    totalLinks: undefined,
     paginationLinks: [],
   },
   reducers: {
@@ -527,7 +528,7 @@ const adminSlice = createSlice({
       .addCase(linkListing?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = action.payload.data;
-        state.totalBookmarks = action.payload?.total;
+        state.totalLinks = action.payload?.total;
         state.paginationLinks = action.payload?.links;
       })
       .addCase(linkListing?.rejected, (state, action)=>{
@@ -543,7 +544,7 @@ const adminSlice = createSlice({
       .addCase(handleLinksPagination.fulfilled, (state, action) => {
         state.loading = false;
         state.links = action.payload.data;
-        state.totalBookmarks = action.payload?.total;
+        state.totalLinks = action.payload?.total;
         state.pagination = action.payload?.links;
       })
       .addCase(handleLinksPagination.rejected, (state, action) => {

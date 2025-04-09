@@ -146,10 +146,8 @@ const Import = () => {
             </div>
           </div>
           <div className="flex flex-wrap md:h-full w-full flex-col md:flex-row p-6">
-            <div className="w-full md:w-1/2 md:pe-4 import-bookmarks-list h-full">
-            <Links />
-            </div>
-            <div className="flex flex-wrap md:h-full flex-col w-full md:w-1/2 md:ps-4 import-bookmarks-list">
+           
+            <div className="flex flex-wrap lg:h-full lg:flex-col w-full lg:w-1/2 lg:pe-4 import-bookmarks-list">
               <Dropzone
                 accept={{
                   "text/html": [".html"]
@@ -282,7 +280,7 @@ const Import = () => {
                 )}
               </Dropzone>
               <div className="w-full import-bookmarks-list h-full">
-                <div className="w-full p-12 pt-8 bg-white border border-dashed border-gray-300 rounded-xl h-full overflow-auto flex flex-wrap items-center h-[500px] max-h-[calc(100vh-240px)] overflow-auto md:h-full">
+                <div className="w-full p-6 lg:p-12 pt-2 lg:pt-8 bg-white border border-dashed border-gray-300 rounded-xl h-full overflow-auto flex flex-wrap items-center h-[500px] max-h-[calc(100vh-240px)] overflow-auto md:h-full">
                   {htmlContent ? (
                     parse(htmlContent)
                   ) : (
@@ -290,6 +288,9 @@ const Import = () => {
                   )}
                 </div>
               </div>
+            </div>
+            <div className="w-full lg:w-1/2 lg:ps-4 import-bookmarks-list h-full mt-6 lg:mt-0">
+              <Links />
             </div>
           </div>
         </div>
