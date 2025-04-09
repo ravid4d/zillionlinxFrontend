@@ -42,7 +42,7 @@ const Links = () => {
       setSelectedBookmarks([]);
     }
     else {
-      setSelectedBookmarks(links?.map((bookmark) => bookmark?.bookmark_id));
+      setSelectedBookmarks(links?.map((bookmark) => bookmark?.id));
     }
   };
 
@@ -56,14 +56,15 @@ const Links = () => {
       return;
     }
     const confirmDelete = async () => {
-      await dispatch(deleteBookmark({ids:selectedBookmarks}))
+      await dispatch(deleteLink({token, ids:selectedBookmarks}))
         .unwrap()
-        .then(() => {
+        .then((data) => {
+          toast.success(data);
           setSelectedBookmarks([]);
-          dispatch(fetchAllBookmarks(token));
+          dispatch(linkListing({token, title:""}));
         })
         .catch((err) => {
-          console.error("Error deleting bookmark: " + err.message);
+          console.error("Error deleting LinX: " + err.message);
         });
       };
 
@@ -92,7 +93,7 @@ const Links = () => {
       return;
     }
     const confirmDelete = () => {
-      dispatch(deleteLink({ ids:ids }))
+      dispatch(deleteLink({token, ids }))
         .unwrap()
         .then(() => {
           toast.success("LinX deleted successfully!");

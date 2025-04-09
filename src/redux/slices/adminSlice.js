@@ -307,16 +307,12 @@ export const handleLinksPagination = createAsyncThunk(
 
 export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token, ids},{rejectWithValue})=>{
   try {
-    // console.log(typeof ids, Array.isArray(ids), 'ids');
-    // return false;
    let response = await axiosInstance.post(deleteLinkUrl, {ids}, {
       headers:{
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(response, 'dear baba')
-    return false;
-    // return response?.data?.data;
+    return response?.data?.message;
   } catch (error) {
     return rejectWithValue({
       status: error?.response?.data?.status,
@@ -563,7 +559,7 @@ const adminSlice = createSlice({
       .addCase(deleteLink?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = state?.links?.filter(
-          (link) => link.id !== action.payload
+          (link) => action.payload && action.payload?.length >0 && !action.payload.includes(link.id)
         );
       })
       .addCase(deleteLink?.rejected, (state, action)=>{
