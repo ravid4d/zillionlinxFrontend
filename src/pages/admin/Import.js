@@ -115,10 +115,10 @@ const Import = () => {
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
             <div>
               <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                Import Bookmarks
+                Import Instant LinX
               </h2>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
-                Admin can import more bookmarks to search.
+                Admin can import more links to search.
               </p>
             </div>
             <div>

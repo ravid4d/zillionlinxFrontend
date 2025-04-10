@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import PasswordField from "./PasswordField";
 import {  useNavigate } from "react-router-dom";
 import { updateUserPassword } from "../redux/slices/userSlice";
-import { logout } from "../redux/slices/authSlice";
+import { handleLogout } from "../redux/slices/authSlice";
+// import { logout } from "../redux/slices/authSlice";
 
 const ChangePasswordModal = ({ openModal, closeAllModals }) => {
   const dispatch = useDispatch();
@@ -41,7 +42,9 @@ const ChangePasswordModal = ({ openModal, closeAllModals }) => {
         toast.success(result.payload.message || "Password updated successfully!");
         closeModal();
 
-        dispatch(logout()); // Assuming you have a logout action
+        dispatch(handleLogout()).unwrap().then((res)=>{
+          toast.success(res?.message || "Logout funally");
+        }); // Assuming you have a logout action
       } else {
         toast.error(result.payload?.message || "Password update failed!");
       }

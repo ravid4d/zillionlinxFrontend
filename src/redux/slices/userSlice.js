@@ -12,9 +12,12 @@ export const getAllUsers = createAsyncThunk(
     try {
       let token = getState().auth.token;
       let searchQuery = getState().admin?.searchQuery;
-
+      let data = {
+        "sort_by": "total_bookmarks",
+        "sort_order": "desc"
+      }
       let response = await axiosInstance.get(
-        `${allUsersUrl}?search=${searchQuery}`,
+        `${allUsersUrl}?filter=${data}&search=${searchQuery}`,
         {
           headers: {
             Authorization: `Bearer ${token}`

@@ -40,10 +40,10 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
     },
     validationSchema: YUP.object({
       first_name: YUP.string()
-        .min(2, "First Name must be atleast 2 characters")
+        .min(3, "First Name must be atleast 3 characters")
         .required("First Name is required"),
       last_name: YUP.string()
-        .min(2, "Last Name must be atleast 2 characters")
+        .min(3, "Last Name must be atleast 3 characters")
         .required("Last Name is required"),
       email: YUP.string()
         .email("Invalid email format")

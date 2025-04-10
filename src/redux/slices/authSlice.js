@@ -3,6 +3,7 @@ import axiosInstance from "../../axiosInstance";
 import { setUser } from "./userSlice";
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/login`;
 const loginAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/login`;
+const logoutUrl = `${process.env.REACT_APP_API_URL}/api/logout`;
 
 export const handleLogin = createAsyncThunk(
   "auth/login",
@@ -17,7 +18,6 @@ export const handleLogin = createAsyncThunk(
           remember_me: values?.remember_me || false,
         }
       );
-      console.log(response, 'aaa');
       let token = response?.data?.data?.token || null;
       let userRole = response?.data?.data?.user?.role || undefined;
       let message = response?.data?.data?.message || "";
@@ -63,6 +63,23 @@ export const handleGoogleLogin = createAsyncThunk(
   }
 );
 
+export const handleLogout = createAsyncThunk("auth/logout", async(_,{getState, rejectWithValue})=>{
+  try {
+    let token = getState().auth.token;
+    let response = await axiosInstance.post(logoutUrl, {token}, {
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    });
+    return response?.data
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.status,
+      message: error?.response?.data?.message || "Logout failed",
+    });
+  }
+})
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -81,7 +98,6 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
       localStorage.clear();
-      // localStorage.removeItem("persist:auth");
     },
   },
   extraReducers: (builder) => {
@@ -117,6 +133,25 @@ const authSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(handleGoogleLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      });
+
+    builder
+      .addCase(handleLogout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleLogout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = null;
+        state.userRole = null;
+        state.isLoggedIn = false;
+        state.user = null;
+        localStorage.clear();
+      })
+      .addCase(handleLogout.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
