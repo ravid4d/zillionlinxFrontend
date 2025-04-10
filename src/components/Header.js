@@ -3,8 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { handleLogout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { callTopLinks,  fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
+import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 import { clearInstantLink } from "../redux/slices/bookmarkSlice";
+import { clearUser } from "../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -18,11 +19,17 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
 
   const handleUserLogout = async () => {
     try {
-      await dispatch(handleLogout()).unwrap().then((res)=>{
-        navigate("/", {
-          state: { loginMessage: res?.message || "You have been logged out successfully!" }
+      await dispatch(handleLogout())
+        .unwrap()
+        .then(async (res) => {
+          await dispatch(clearUser());
+          navigate("/", {
+            state: {
+              loginMessage:
+                res?.message || "You have been logged out successfully!",
+            },
+          });
         });
-      });
     } catch (error) {
       toast.error("Logout failed! Please try again.");
     }
@@ -31,11 +38,11 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
     if (isLoggedIn && location.pathname === "/bookmarks") {
       setId({ categoryId: null, subCategoryId: null });
       dispatch(callTopLinks());
-      dispatch(clearInstantLink())
+      dispatch(clearInstantLink());
       dispatch(fetchAllTopLinks(token));
     } else if (isLoggedIn && location.pathname !== "/bookmarks") {
       navigate("/bookmarks");
-      dispatch(clearInstantLink())
+      dispatch(clearInstantLink());
     } else {
       if (!isLoggedIn) {
         navigate("/");
@@ -65,7 +72,7 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -74,8 +81,8 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
             {},
             {
               headers: {
-                Authorization: `Bearer ${token}`
-              }
+                Authorization: `Bearer ${token}`,
+              },
             }
           );
           Swal.fire(
@@ -310,9 +317,7 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
                     </svg>
                     <button
                       className="btn dark-btn !hidden 2xl:!inline-flex"
-                      onClick={
-                        redirectTo
-                      }
+                      onClick={redirectTo}
                       // to="/bookmarks"
                     >
                       Home
