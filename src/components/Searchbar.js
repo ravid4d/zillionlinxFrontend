@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearInstantLink,
   disabledTopLinks,
-  linkListing,
+  linkFrontListing,
   searchBookmarks,
-  setPageHeading
+  setPageHeading,
+  clearInstantLink,
 } from "../redux/slices/bookmarkSlice";
 
 const Searchbar = ({
@@ -28,7 +28,7 @@ const Searchbar = ({
         dispatch(clearInstantLink());
       } else {
         setisEmpty(true);
-        dispatch(linkListing({ token, title }));
+        dispatch(linkFrontListing({ token, title }));
       }
       dispatch(setPageHeading("Search Results"));
       setSearchResults(true);
@@ -59,7 +59,7 @@ const Searchbar = ({
           onClick={() => {
             setisEmpty(false);
             setTitle("");
-            dispatch(linkListing({ token }));
+            dispatch(linkFrontListing({ token }));
           }}
         >
           <svg

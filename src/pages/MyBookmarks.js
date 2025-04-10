@@ -13,7 +13,6 @@ import {
   clearInstantLink,
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
-  linkListing,
   orderBookmarks,
   removeFromBookmarks,
   removeTopLink,

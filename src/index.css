@@ -39,6 +39,7 @@ body {
   border-radius: 10px;
 }
 #hs-application-sidebar-backdrop {z-index: 40;}
+.content-area.about,
 .content-area.user-loggedin.instant-links,
 .content-area.user-loggedin.import,
 .content-area.user-loggedin.bookmarks {

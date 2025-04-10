@@ -8,6 +8,8 @@ const deleteBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-Boo
 const updateCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/update-categories`;
 const deleteCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete/categories`;
 const categoryReorderUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories/reorder`;
+const linkAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/listing-admin-bookmark`;
+const deleteLinkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-admin-bookmark`;
 
 export const deleteCategory = createAsyncThunk(
   "admin/delete-categories",
@@ -265,6 +267,61 @@ export const categoryReorder = createAsyncThunk(
   }
 );
 
+export const linkListing = createAsyncThunk("admin/linkListing", async({token, title},{rejectWithValue})=>{
+  try {
+    let url = title ? `${linkAdminUrl}?search=${title}` : linkAdminUrl;
+    let response = await axiosInstance.get(url, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response?.data?.data;
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.data?.status,
+      message: error?.response?.data?.message || "Failed to remove bookmarks from top links"
+    });
+  }
+})
+
+export const handleLinksPagination = createAsyncThunk(
+  "admin/linkPagination",
+  async ({ url, token }, { rejectWithValue }) => {
+    try {
+      let response = await axiosInstance.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While getting the links via pagination."
+      });
+    }
+  }
+);
+
+export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token, ids},{rejectWithValue})=>{
+  try {
+   let response = await axiosInstance.post(deleteLinkUrl, {ids}, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response?.data?.message;
+  } catch (error) {
+    return rejectWithValue({
+      status: error?.response?.data?.status,
+      message: error?.response?.data?.message || "Failed to remove bookmarks from top links"
+    });
+  }
+})
+
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -282,6 +339,9 @@ const adminSlice = createSlice({
     parentCategories: [],
     adminCategories:[],
     adminBookmarks:[],
+    links:[],
+    totalLinks: undefined,
+    paginationLinks: [],
   },
   reducers: {
     setSearchQuery: (state, action) => {
@@ -289,7 +349,7 @@ const adminSlice = createSlice({
     },
     setEditingCategory:(state, action)=>{
       state.editingCategory = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     //Fetch Top Links
@@ -352,6 +412,7 @@ const adminSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
     builder
       .addCase(handleCategoryPagination.pending, (state) => {
         state.loading = true;
@@ -443,6 +504,7 @@ const adminSlice = createSlice({
         state.error = action.payload.message;
         state.status = action.payload.status;
       });
+
       builder
       .addCase(categoryReorder.pending, (state) => {
         state.loading = true;
@@ -454,7 +516,54 @@ const adminSlice = createSlice({
         state.loading = false;
         state.error = action.payload.message;
         state.status = action.payload.status;
-      });
+      })
+
+      builder.addCase(linkListing?.pending, (state, action)=>{
+        state.loading=true;
+        state.error=null;
+      })
+      .addCase(linkListing?.fulfilled, (state, action)=>{
+        state.loading=false;
+        state.links = action.payload.data;
+        state.totalLinks = action.payload?.total;
+        state.paginationLinks = action.payload?.links;
+      })
+      .addCase(linkListing?.rejected, (state, action)=>{
+        state.loading=false;
+        state.error = action.payload;
+        state.status = action.payload.status;
+      })
+
+      builder.addCase(handleLinksPagination.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleLinksPagination.fulfilled, (state, action) => {
+        state.loading = false;
+        state.links = action.payload.data;
+        state.totalLinks = action.payload?.total;
+        state.pagination = action.payload?.links;
+      })
+      .addCase(handleLinksPagination.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message;
+        state.status = action.payload.status;
+      })
+      
+      builder.addCase(deleteLink?.pending, (state, action)=>{
+        state.loading=true;
+        state.error=null;
+      })
+      .addCase(deleteLink?.fulfilled, (state, action)=>{
+        state.loading=false;
+        state.links = state?.links?.filter(
+          (link) => action.payload && action.payload?.length >0 && !action.payload.includes(link.id)
+        );
+      })
+      .addCase(deleteLink?.rejected, (state, action)=>{
+        state.loading=false;
+        state.error = action.payload
+      })
   }
 
 });

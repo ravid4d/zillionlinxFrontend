@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../redux/slices/categorySlice";
-import {clearInstantLink, linkListing, setPageHeading } from "../redux/slices/bookmarkSlice";
+import {linkFrontListing, setPageHeading, clearInstantLink } from "../redux/slices/bookmarkSlice";
 
 const Sidebar = ({ setId, id }) => {
   const dispatch = useDispatch();
@@ -203,7 +203,7 @@ const Sidebar = ({ setId, id }) => {
         </ul>
       </div>
       <div
-        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); dispatch(linkListing({token}));}}
+        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); dispatch(linkFrontListing({token}));}}
         className="cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto"
       >
         <div className="absolute left-2 top-2 w-[85px]">
