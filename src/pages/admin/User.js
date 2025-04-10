@@ -22,6 +22,7 @@ const User = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
   const [userToEditModal, setUserToEditModal] = useState(false);
+  const [filterBy, setFilterBy] = useState({sort_by:"name", sort_order:'desc'});
 
   //Select / Unselect all the users
   const handleSelectAllUsers = () => {
@@ -119,13 +120,17 @@ const User = () => {
   }, [dispatch, debouncedQuery]);
 
   useEffect(() => {
+    filterBy && dispatch(getAllUsers(filterBy));
+  }, [filterBy]);
+
+  useEffect(() => {
     return () => {
       dispatch(setSearchQuery(""));
     };
   }, [dispatch]);
 
   const handlePagination = async (url) => {
-    dispatch(handleUsersPagination({ url, token }));
+    dispatch(handleUsersPagination({ url:`${url}&sort_by=${filterBy?.sort_by}&sort_order=${filterBy?.sort_order}`, token }));
   };
 
   // Open User Edit Modal
@@ -139,6 +144,14 @@ const User = () => {
       setUserToEditModal(true);
     }
   }, [userToEdit]);
+
+  const setUsersByFilter = (filter) => {
+    setFilterBy(prev=>(
+      {
+        sort_by:filter?.sort_by, 
+        sort_order:prev?.sort_by === filter?.sort_by && prev?.sort_order === 'desc' ? 'asc' : 'desc'}
+    ));
+  }
 
   return (
     <div className="w-full lg:ps-64">
@@ -201,7 +214,7 @@ const User = () => {
                     </th>
 
                     <th scope="col" className="px-6 py-3">
-                      <div className="flex items-center gap-x-2">
+                      <div onClick={()=>setUsersByFilter({sort_by:'name'})} className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           <span>Name</span>
                           <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
@@ -210,7 +223,7 @@ const User = () => {
                     </th>
 
                     <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
+                      <div onClick={()=>setUsersByFilter({sort_by:'country'})} className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           <span>Country</span>
                           <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
@@ -219,7 +232,7 @@ const User = () => {
                     </th>
 
                     <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
+                      <div onClick={()=>setUsersByFilter({sort_by:'last_access'})} className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           <span>Last access date</span>
                           <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
@@ -227,7 +240,7 @@ const User = () => {
                       </div>
                     </th>
                     <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
+                      <div onClick={()=>setUsersByFilter({sort_by:'total_bookmarks'})} className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           <span>number of bookmarks</span>
                           <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
@@ -235,7 +248,7 @@ const User = () => {
                       </div>
                     </th>
                     <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
+                      <div onClick={()=>setUsersByFilter({sort_by:'created'})} className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                           <span>Created</span>
                           <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>

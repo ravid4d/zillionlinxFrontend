@@ -90,6 +90,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
             navigate('/bookmarks', {state:{loginMessage:result?.message}})
 
         } catch (error) {
+            toast.error(error?.message || "Login failed!");
             console.error('Error during login process:', error);
         }
     },

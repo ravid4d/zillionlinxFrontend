@@ -8,21 +8,23 @@ const updateUserPasswordUrl = `${process.env.REACT_APP_API_URL}/api/change-passw
 
 export const getAllUsers = createAsyncThunk(
   "users/getAllUsers",
-  async (_, { getState, rejectWithValue }) => {
+  async (filterBy, { getState, rejectWithValue }) => {
     try {
       let token = getState().auth.token;
       let searchQuery = getState().admin?.searchQuery;
-      let data = {
-        "sort_by": "total_bookmarks",
-        "sort_order": "desc"
-      }
+  
       let response = await axiosInstance.get(
-        `${allUsersUrl}?filter=${data}&search=${searchQuery}`,
+        allUsersUrl,
         {
           headers: {
             Authorization: `Bearer ${token}`
-          }
-        }
+          },
+          params: {
+            search: searchQuery,
+            sort_by: filterBy?.sort_by,
+            sort_order: filterBy?.sort_order,
+          },
+        },
       );
 
       return response?.data;

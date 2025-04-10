@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useRef } from 'react'
 
-const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = "", iconPlacement, fieldValue, setFieldValue, setFieldValueOnBlur,autoFocus }, ref) => {
+const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = "", iconPlacement, fieldValue, setFieldValue, setFieldValueOnBlur,autoFocus, readOnly=false }, ref) => {
     const inputRef = useRef(null);
     useEffect(() => {
         if (autoFocus && inputRef.current) {
@@ -24,6 +24,7 @@ const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = 
                     tabIndex={0}
                     ref={ref || inputRef}
                     autoFocus={autoFocus}
+                    readOnly={readOnly}
                     {...(type === "password" && { autoComplete: "new-password" })}
                 />
                 {
