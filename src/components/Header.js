@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { handleLogout } from "../redux/slices/authSlice";
+import { handleLogout, logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 import { clearInstantLink } from "../redux/slices/bookmarkSlice";
@@ -90,8 +90,9 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
             "Deleted!",
             "Your account has been deleted.",
             "success"
-          ).then(async () => {
-            await dispatch(handleLogout());
+          ).then(() => {
+            dispatch(logout());
+            dispatch(clearUser());
             navigate("/good-bye");
           });
         } catch (error) {
