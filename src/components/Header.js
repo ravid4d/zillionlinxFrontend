@@ -5,6 +5,7 @@ import { logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks,  fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
 import { clearInstantLink } from "../redux/slices/bookmarkSlice";
+import { clearUser } from "../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -19,6 +20,7 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
   const handleLogout = async () => {
     try {
       await dispatch(logout());
+      await dispatch(clearUser());
       navigate("/", {
         state: { loginMessage: "You have been logged out successfully!" }
       });

@@ -17,14 +17,16 @@ export const handleLogin = createAsyncThunk(
           remember_me: values?.remember_me || false,
         }
       );
-      console.log(response, 'aaa');
-      let token = response?.data?.data?.token || null;
-      let userRole = response?.data?.data?.user?.role || undefined;
-      let message = response?.data?.data?.message || "";
-      let isLoggedIn = token !== undefined || token !== null ? !!token : false;
-      let user = response?.data?.data?.user;
+      const data = response?.data?.data;
+      const user = data?.user || null;
+      const token = data?.token || null;
+      const userRole = user?.role || undefined;
+      const message = response?.data?.message || "";
+      const isLoggedIn = !!token;
+      
       dispatch(setUser(user));
       return { token, message, userRole, isLoggedIn, user };
+
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
@@ -36,25 +38,24 @@ export const handleLogin = createAsyncThunk(
 
 export const handleGoogleLogin = createAsyncThunk(
   "auth/googleLogin",
-  async ({ accessToken }, { rejectWithValue }) => {
+  async ({ accessToken }, { dispatch, rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(loginUrl, {
         type: "google",
         google_token: accessToken,
       });
-      let token = response?.data?.data?.token || null;
-      let userRole = response?.data?.data?.user?.role || undefined;
-      let message = response?.data?.message || "";
-      let isLoggedIn =
-        response?.data?.data?.token !== undefined ||
-        response?.data?.data?.token !== null
-          ? !!response?.data?.data?.token
-          : false;
-      let user = response?.data?.user;
-      return { token, message, userRole, isLoggedIn, user };
-    } catch (error) {
-      console.log(error, "/error");
 
+      const data = response?.data?.data;
+      const token = data?.token || null;
+      const user = data?.user || null;
+      const userRole = user?.role || undefined;
+      const message = response?.data?.message || "";
+      const isLoggedIn = !!token;
+
+      dispatch(setUser(user));
+      return { token, message, userRole, isLoggedIn, user };
+
+    } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
         message: error?.response?.data?.message || "Login failed",
