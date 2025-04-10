@@ -14,6 +14,7 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { isLoggedIn, userRole, token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const [toggleSettingsDropdown, setToggleSettingsDropdown] = useState(false);
   const menuRef = useRef(null);
 
@@ -90,8 +91,8 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
             "Your account has been deleted.",
             "success"
           ).then(async () => {
-            navigate("/goodbye");
             await dispatch(handleLogout());
+            navigate("/good-bye");
           });
         } catch (error) {
           console.error("Delete failed:", error);
@@ -225,29 +226,31 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
                             </svg>
                             Update User Info
                           </button>
-                          <button
-                            className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                            type="button"
-                            onClick={() => {
-                              setWhichModalOpen("changePassword");
-                            }}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-6"
+                          {!user?.google_id && (
+                            <button
+                              className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                              type="button"
+                              onClick={() => {
+                                setWhichModalOpen("changePassword");
+                              }}
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                              />
-                            </svg>
-                            Change Password
-                          </button>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                                />
+                              </svg>
+                              Change Password
+                            </button>
+                          )}
                           <button
                             className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
                             type="button"

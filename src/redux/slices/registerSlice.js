@@ -26,7 +26,18 @@ export const handleRegister = createAsyncThunk(
         message: response?.data?.message,
       };
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || "Register failed");
+      // return rejectWithValue(error?.response?.data?.message || "Register failed");
+      const errorData = error?.response?.data;
+      const mainMessage = errorData?.message || "Something went wrong";
+
+      if (errorData?.data && typeof errorData.data === "object") {
+        const fieldMessages = Object.entries(errorData.data)
+          .map(([field, messages]) => `${messages.join(", ")}`)
+          .join(" | ");
+
+        return rejectWithValue(`${mainMessage} - ${fieldMessages}`);
+      }
+      return rejectWithValue(mainMessage);
     }
   }
 );
