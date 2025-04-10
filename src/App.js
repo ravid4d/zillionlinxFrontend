@@ -24,6 +24,7 @@ import ChangePassword from './components/admin/ChangePassword';
 import UpdateAdmin from './components/admin/UpdateAdmin';
 import ScrollToTop from './services/ScrollToTop';
 import Import from './pages/admin/Import';
+import GoodBye from './pages/GoodBye';
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
 
                 {/* Reset Password Page */}
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/good-bye" element={<GoodBye />} />
                 
                 {/* Unauthorized Page - Rendered Independently */}
                 <Route path="/unauthorized" element={<Unauthorized />} />

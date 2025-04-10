@@ -112,7 +112,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                                     ) : null}
                                 </div>
                                 <div className="mb-5">
-                                    <PasswordField id="password" setShowPassword={setShowPassword} showPassword={showPassword} name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                    <PasswordField need_icon={true} id="password" setShowPassword={setShowPassword} showPassword={showPassword} name="password" label="Password" type="password" placeholder="" iconPlacement="right" fieldValue={formik.values.password} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                     {formik.touched.password && formik.errors.password ? (
                                         <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
                                     ) : null}
@@ -131,7 +131,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                                         <span className="absolute top-1/2 left-0.5 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out peer-checked:translate-x-full dark:bg-neutral-400 dark:peer-checked:bg-white"></span>
                                     </label>
                                     <label htmlFor="remember_me" className="cursor-pointer text-sm text-gray-700 dark:text-white">
-                                        Remember me
+                                        Remember me for 10 days.
                                     </label>
                                 </div>
                                 <button disabled={loading} type="submit" className={`btn dark-btn w-full justify-center h-12 ${loading ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none' : ''}`}>login</button>

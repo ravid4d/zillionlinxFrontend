@@ -191,12 +191,12 @@ const GoogleCustomSearch = () => {
                     </div>
                   </div>
                   <div className={`w-full lg:w-1/5 rounded-2xl lg:ps-6 h-full`}>
-                    <div className="bg-white rounded-xl p-6 h-full flex flex-wrap flex-col justify-between">
-                      <div className="bg-white rounded-xl border border-light-blue w-full h-[calc(66%-10px)] p-4">
-                        <p className="text-[28px] text-dark-blue capitalize mb-5">
+                    <div className="bg-white rounded-xl p-4 h-full flex flex-wrap flex-col justify-between">
+                      <div className="bg-white rounded-xl border border-light-blue w-full h-[calc(66%-10px)] p-2">
+                        <p className="text-[20px] text-dark-blue capitalize mb-3">
                           Popular Links
                         </p>
-                        <div className="overflow-auto custom-scrollbar h-[calc(100%-62px)] flex flex-wrap flex-col md:flex-row md:block">
+                        <div className="overflow-auto custom-scrollbar h-full flex flex-wrap flex-col md:flex-row md:block">
                           {googleLoading ? (
                             <span className="loader"></span>
                           ) : (
@@ -206,13 +206,13 @@ const GoogleCustomSearch = () => {
                                   target="_blank"
                                   to={amazonStaticLink}
                                   rel="noopener noreferrer"
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
-                                      src="/amazon.svg"
+                                      src="/amazon.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="max-w-full mx-auto"
                                     />
                                   </figure>
@@ -220,16 +220,16 @@ const GoogleCustomSearch = () => {
                               )}
                                {walmartStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={walmartStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
-                                      src="walmart.png"
+                                      src="/walmart.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -237,16 +237,16 @@ const GoogleCustomSearch = () => {
                                )} 
                                  {etsyStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={etsyStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
                                       src="/etsy.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -254,16 +254,16 @@ const GoogleCustomSearch = () => {
                               )}
                                {ebayStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={ebayStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
-                                      src="/ebay.svg"
+                                      src="/ebay.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -271,16 +271,16 @@ const GoogleCustomSearch = () => {
                               )}
                                 {aliexpressStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={aliexpressStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
                                       src="/ali-express.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -292,12 +292,12 @@ const GoogleCustomSearch = () => {
 
                               {/* {wikiStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={wikiStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
                                       src="/wikki.svg"
                                       alt=""
@@ -314,16 +314,16 @@ const GoogleCustomSearch = () => {
                              
                                {neweggStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={neweggStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
-                                      src="/newegg.svg"
+                                      src="/new-egg.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -331,12 +331,12 @@ const GoogleCustomSearch = () => {
                                )} 
                                {/* {mercadolibreStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   to={mercadolibreStaticLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
                                       src="/mercado.jpg"
                                       alt=""
@@ -348,16 +348,16 @@ const GoogleCustomSearch = () => {
                                )}  */}
                                 {youtubeStaticLink && (
                                 <Link
-                                  className="block mb-2 last:mb-0 w-full"
+                                  className="block mb-1 last:mb-0 w-full"
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   to={youtubeStaticLink}
                                 >
-                                  <figure className="border border-[#EFF0FF] rounded-md py-3 w-full">
+                                  <figure className="border border-[#EFF0FF] rounded-md p-1 w-full">
                                     <img
-                                      src="/youtube.svg"
+                                      src="/youtube.png"
                                       alt=""
-                                      width="150"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -367,7 +367,7 @@ const GoogleCustomSearch = () => {
                           )}
                         </div>
                       </div>
-                      <div className="bg-white rounded-xl border border-light-blue h-1/3 p-4 overflow-auto custom-scrollbar text-center">
+                      <div className="bg-white rounded-xl border border-light-blue h-1/3 p-2 text-sm overflow-auto custom-scrollbar text-center">
                         <span className="block">Disclaimer:</span> This site contains affiliate links. As an associate or partner of Amazon, eBay, YouTube, Walmart, Etsy, and AliExpress, I may earn a commission from qualifying purchases made through these links — at no extra cost to you.
                       </div>
                     </div>
