@@ -157,7 +157,7 @@ const GoogleCustomSearch = () => {
                                   <li key={index} className="relative">
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
-                                        className="block aspect-[16/9] overflow-hidden object-cover object-top"
+                                        className="block overflow-hidden object-cover object-top"
                                         // to={result?.website_url}
                                         to={result?.link}
                                         target="_blank"
