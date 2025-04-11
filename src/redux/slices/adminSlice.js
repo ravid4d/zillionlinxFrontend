@@ -557,8 +557,9 @@ const adminSlice = createSlice({
       .addCase(deleteLink?.fulfilled, (state, action)=>{
         state.loading=false;
         state.links = state?.links?.filter(
-          (link) => action.payload && action.payload?.length >0 && !action.payload.includes(link.id)
+          (link) => link.id !== action.payload
         );
+        
       })
       .addCase(deleteLink?.rejected, (state, action)=>{
         state.loading=false;

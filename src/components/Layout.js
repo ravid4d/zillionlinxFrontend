@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import Login from "./Login";
@@ -8,7 +8,7 @@ import ForgotPassword from "./ForgotPassword";
 import AddNewBookmark from "./AddNewBookmark";
 import AddNewCategory from "./AddNewCategory";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
+import { callTopLinks, clearInstantLink, fetchAllTopLinks, fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
 import UpdateUserModal from "./UpdateUserModal";
 import ChangePasswordModal from "./ChangePasswordModal";
 
@@ -22,6 +22,7 @@ const Layout = () => {
   const { user } = useSelector((state) => state.user);
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token && id?.categoryId) {
@@ -88,6 +89,23 @@ const Layout = () => {
   const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
   const [urlToBookmark, setUrlToBookmark] = useState("" || {});
+
+  const redirectTo = () => {
+    if (isLoggedIn && location.pathname === "/bookmarks") {
+      setId({ categoryId: null, subCategoryId: null });
+      dispatch(callTopLinks());
+      dispatch(clearInstantLink());
+      dispatch(fetchAllTopLinks(token));
+    } else if (isLoggedIn && location.pathname !== "/bookmarks") {
+      navigate("/bookmarks");
+      dispatch(clearInstantLink());
+    } else {
+      if (!isLoggedIn) {
+        navigate("/");
+      }
+    }
+  };
+
   return (
     <div className="app-layout">
       <div
@@ -156,6 +174,7 @@ const Layout = () => {
           hideSidebar={hideSidebar}
           id={id}
           setId={setId}
+          redirectTo={redirectTo}
         />
         <div
           className={`w-full content-area ${
@@ -180,7 +199,7 @@ const Layout = () => {
             }}
           />
         </div>
-        <Footer />
+        <Footer redirectTo={redirectTo} />
       </div>
     </div>
   );

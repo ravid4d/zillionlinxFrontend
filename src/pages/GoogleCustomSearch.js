@@ -157,7 +157,7 @@ const GoogleCustomSearch = () => {
                                   <li key={index} className="relative">
                                     <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
                                       <Link
-                                        className="block aspect-[16/9] overflow-hidden object-cover object-top"
+                                        className="block overflow-hidden object-cover object-top"
                                         // to={result?.website_url}
                                         to={result?.link}
                                         target="_blank"
@@ -196,7 +196,7 @@ const GoogleCustomSearch = () => {
                         <p className="text-[20px] text-dark-blue capitalize mb-3">
                           Popular Links
                         </p>
-                        <div className="overflow-auto custom-scrollbar h-full flex flex-wrap flex-col md:flex-row md:block">
+                        <div className="overflow-auto custom-scrollbar h-[calc(100%-45px)] flex flex-wrap flex-col md:flex-row md:block">
                           {googleLoading ? (
                             <span className="loader"></span>
                           ) : (
@@ -212,7 +212,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/amazon.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="max-w-full mx-auto"
                                     />
                                   </figure>
@@ -229,7 +229,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/walmart.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -246,7 +246,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/etsy.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -263,7 +263,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ebay.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -280,7 +280,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ali-express.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -323,7 +323,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/new-egg.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -357,7 +357,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/youtube.png"
                                       alt=""
-                                      width="96"
+                                      width="120"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
