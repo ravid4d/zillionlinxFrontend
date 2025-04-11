@@ -1,16 +1,12 @@
 {
   "short_name": "My PWA",
-  "name": "My Progressive Web App",
+  "name": "ZillionLinX",
+  "description": "Search Smarter, Bookmark Better",
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/app-icon.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/icon-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "100x100"
     }
   ],
   "start_url": "/",
