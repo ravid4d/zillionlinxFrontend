@@ -3,13 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { handleLogout, logout } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { callTopLinks, fetchAllTopLinks } from "../redux/slices/bookmarkSlice";
-import { clearInstantLink } from "../redux/slices/bookmarkSlice";
 import { clearUser } from "../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
+const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -33,21 +31,6 @@ const Header = ({ setWhichModalOpen, id, setId, openModal }) => {
         });
     } catch (error) {
       toast.error("Logout failed! Please try again.");
-    }
-  };
-  const redirectTo = () => {
-    if (isLoggedIn && location.pathname === "/bookmarks") {
-      setId({ categoryId: null, subCategoryId: null });
-      dispatch(callTopLinks());
-      dispatch(clearInstantLink());
-      dispatch(fetchAllTopLinks(token));
-    } else if (isLoggedIn && location.pathname !== "/bookmarks") {
-      navigate("/bookmarks");
-      dispatch(clearInstantLink());
-    } else {
-      if (!isLoggedIn) {
-        navigate("/");
-      }
     }
   };
 

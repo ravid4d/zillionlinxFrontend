@@ -1,17 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const Footer = ({redirectTo}) => {
+ 
   return (
     <footer className="w-full">
       <nav className="w-full mx-auto sm:flex sm:items-center sm:justify-between py-10">
         <div className="px-4 mx-auto transition-all flex gap-3 md:gap-5 mt-5 flex-row flex-wrap items-center justify-center text-base text-light-black uppercase">
-          <Link
+          <button
             className="hover:text-dark-blue focus:outline-none focus:text-dark-blue"
-            to="/"
+            onClick={redirectTo}
           >
             Home
-          </Link>
+          </button>
           <div className="my-2 md:my-0 md:mx-2">
             <div className="h-px w-px h-4 bg-light-black"></div>
           </div>

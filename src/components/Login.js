@@ -107,7 +107,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                         <div className="max-w-[400px] mx-auto">
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="mb-5">
-                                    <Textfield autoFocus={true} id="email" name="email" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
+                                    <Textfield autoFocus={false} id="email" name="email" label="Email" type="email" placeholder="Enter email" iconPlacement="left" fieldValue={formik.values.email} setFieldValue={formik.handleChange} setFieldValueOnBlur={formik.handleBlur} />
                                     {formik.touched.email && formik.errors.email ? (
                                         <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
                                     ) : null}

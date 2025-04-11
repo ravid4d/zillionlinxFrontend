@@ -35,7 +35,8 @@ export const handleRegister = createAsyncThunk(
           .map(([field, messages]) => `${messages.join(", ")}`)
           .join(" | ");
 
-        return rejectWithValue(`${mainMessage} - ${fieldMessages}`);
+          return rejectWithValue(fieldMessages);
+        // return rejectWithValue(`${mainMessage} - ${fieldMessages}`);
       }
       return rejectWithValue(mainMessage);
     }
