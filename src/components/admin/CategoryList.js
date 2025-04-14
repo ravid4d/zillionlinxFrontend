@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import categoryData from "../../json/category.json";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
