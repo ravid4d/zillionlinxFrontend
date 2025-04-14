@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import badgeData from "../../json/badges.json";
-import { useDispatch, useSelector } from "react-redux";
-import { removeTopLink } from "../../redux/slices/bookmarkSlice";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+// import { removeTopLink } from "../../redux/slices/bookmarkSlice";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Home = () => {
   const [badges, setBadges] = useState();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { token } = useSelector((state) => state.auth);
-  const { categories } = useSelector((state) => state.category);
-  const { bookmarks } = useSelector((state) => state.bookmark);
+  // const { token } = useSelector((state) => state.auth);
+  // const { categories } = useSelector((state) => state.category);
+  // const { bookmarks } = useSelector((state) => state.bookmark);
 
   useEffect(() => {
     setBadges(badgeData);
