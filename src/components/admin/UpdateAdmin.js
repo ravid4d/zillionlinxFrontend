@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Textfield from "../Textfield";
+import Textfield from "../elements/Textfield";
 import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser, updateUserCountry } from "../../redux/slices/userSlice";
 import axios from "axios";
-import Dropdown from "../Dropdown";
+import Dropdown from "../elements/Dropdown";
 
 const UpdateAdmin = () => {
     const[countries, setCountry] = useState([]);

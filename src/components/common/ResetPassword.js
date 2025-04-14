@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import PasswordField from "./PasswordField";
+import PasswordField from "../elements/PasswordField";
 import { useDispatch, useSelector } from "react-redux";
 import * as YUP from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import { handleResetPassword } from "../redux/slices/registerSlice";
+import { handleResetPassword } from "../../redux/slices/registerSlice";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();

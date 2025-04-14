@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { handleLogout, logout } from "../redux/slices/authSlice";
+import { handleLogout, logout } from "../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../redux/slices/userSlice";
+import { clearUser } from "../../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 

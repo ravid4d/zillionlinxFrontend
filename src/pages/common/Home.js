@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import badgeData from "../json/badges.json";
+import badgeData from "../../json/badges.json";
 import { useDispatch, useSelector } from "react-redux";
-import { removeTopLink } from "../redux/slices/bookmarkSlice";
+import { removeTopLink } from "../../redux/slices/bookmarkSlice";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 

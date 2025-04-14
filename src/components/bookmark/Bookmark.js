@@ -6,7 +6,7 @@ import {
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
   pinBookmark
-} from "../redux/slices/bookmarkSlice";
+} from "../../redux/slices/bookmarkSlice";
 import { toast } from "react-toastify";
 
 const Bookmark = ({

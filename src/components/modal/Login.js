@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Textfield from './Textfield';
+import Textfield from '../elements/Textfield';
 import { useFormik } from 'formik';
 import * as YUP from "yup";
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleGoogleLogin, handleLogin } from '../redux/slices/authSlice';
+import { handleGoogleLogin, handleLogin } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import PasswordField from './PasswordField';
+import PasswordField from '../elements/PasswordField';
 import { useGoogleLogin } from '@react-oauth/google';
 
 // import CryptoJS from "crypto-js";

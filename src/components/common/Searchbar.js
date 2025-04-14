@@ -6,7 +6,7 @@ import {
   searchBookmarks,
   setPageHeading,
   clearInstantLink,
-} from "../redux/slices/bookmarkSlice";
+} from "../../redux/slices/bookmarkSlice";
 
 const Searchbar = ({
   linkSearch = false,

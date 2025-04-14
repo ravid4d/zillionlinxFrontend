@@ -341,14 +341,15 @@ const Dashboard = () => {
                         </thead>
                         <tbody className="divide-y">
                           {users.map((user, index) => (
-                            <tr>
+                            <tr
+                              key={user?.id || `user-${index}`}
+                            >
                               <UserTableData
                                 showEditOrDelete={true}
                                 user={{
                                   ...user,
                                   country: user.country || "N/A"
                                 }}
-                                key={user?.id || `user-${index}`}
                                 selectedUsers={selectedUsers}
                                 handleSelectOneUser={handleSelectOneUser}
                                 deleteSingleUser={deleteSingleUser}
