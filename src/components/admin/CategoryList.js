@@ -53,61 +53,79 @@ const CategoryList = ({ classes }) => {
     setActiveId((prev) => (prev === activeId ? undefined : activeId));
   };
 
-  const handleCategorySelect = (categoryId, subcategories = []) => {
+  const handleCategorySelect = (categoryId, subcategories = [], allCategories = []) => {
     setSelectedItems((prev) => {
-      const isSelected = prev[categoryId];
-
-      // If selected, remove it and its subcategories
-      if (isSelected) {
-        const updatedSelection = { ...prev };
-        delete updatedSelection[categoryId];
-        subcategories.forEach((sub) => delete updatedSelection[sub.id]);
-        return updatedSelection;
+      const updated = { ...prev };
+  
+      const toggleCategory = (cat, select) => {
+        if (select) {
+          updated[cat.id] = true;
+          cat.adminsubcategories?.forEach((sub) => updated[sub.id] = true);
+        } else {
+          delete updated[cat.id];
+          cat.adminsubcategories?.forEach((sub) => delete updated[sub.id]);
+        }
+      };
+  
+      if (categoryId === 'all') {
+        const allSelected = allCategories.every((cat) => updated[cat.id]);
+        allCategories.forEach((cat) => toggleCategory(cat, !allSelected));
+      } else {
+        const isSelected = !!updated[categoryId];
+        toggleCategory({ id: categoryId, adminsubcategories: subcategories }, !isSelected);
       }
-
-      // Otherwise, select it along with subcategories
-      const newSelection = { ...prev, [categoryId]: true };
-      subcategories.forEach((sub) => (newSelection[sub.id] = true));
-      return newSelection;
+  
+      return updated;
     });
   };
-
+  
   const handleSubcategorySelect = (
     categoryId,
     subcategoryId,
     subcategories
   ) => {
-    setSelectedItems((prev) => {
-      const isSelected = prev[subcategoryId];
+    const updated = { ...selectedItems };
 
-      // If selected, remove it
-      if (isSelected) {
-        const updatedSelection = { ...prev };
-        delete updatedSelection[subcategoryId];
+    // Handle Select All Subcategories
+    if (subcategoryId === "all") {
+      const allSelected = subcategories?.every((sub) => selectedItems[sub.id]);
 
-        // If the category was selected but now all subcategories are unselected, uncheck category
-        const anyRemaining = subcategories.some(
-          (sub) => updatedSelection[sub.id]
-        );
-        if (!anyRemaining) {
-          delete updatedSelection[categoryId];
-        }
-        return updatedSelection;
-      }
-
-      // Otherwise, select the subcategory
-      const newSelection = { ...prev, [subcategoryId]: true };
-
-      // If all subcategories are now selected, select the parent category too
-      const allSelected = subcategories.every((sub) => newSelection[sub.id]);
       if (allSelected) {
-        newSelection[categoryId] = true;
+        // Unselect all subcategories
+        subcategories?.forEach((sub) => {
+          delete updated[sub.id];
+        });
+        delete updated[categoryId];
+      } else {
+        // Select all subcategories
+        subcategories?.forEach((sub) => {
+          updated[sub.id] = true;
+        });
+        updated[categoryId] = true;
       }
 
-      return newSelection;
-    });
-  };
+      setSelectedItems(updated);
+      return;
+    }
 
+    // Toggle individual subcategory
+    if (selectedItems[subcategoryId]) {
+      delete updated[subcategoryId];
+    } else {
+      updated[subcategoryId] = true;
+    }
+
+    // After toggle, determine if parent category should be selected
+    const remainingSelected = subcategories?.every((sub) => updated[sub.id]);
+    if (remainingSelected) {
+      updated[categoryId] = true;
+    } else {
+      delete updated[categoryId];
+    }
+
+    setSelectedItems(updated);
+  };
+  
   const handleEditCategory = (category) => {
     dispatch(setEditingCategory(category));
   };
@@ -135,7 +153,7 @@ const CategoryList = ({ classes }) => {
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#5bc0de",
       confirmButtonText: "Yes, delete!",
-      cancelButtonText: "No, cancel"
+      cancelButtonText: "No, cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         confirmDelete();
@@ -176,7 +194,7 @@ const CategoryList = ({ classes }) => {
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#5bc0de",
       confirmButtonText: "Yes, delete!",
-      cancelButtonText: "No, cancel"
+      cancelButtonText: "No, cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         confirmDelete();
@@ -281,15 +299,12 @@ const CategoryList = ({ classes }) => {
                               type="checkbox"
                               checked={
                                 categories?.length > 0 &&
-                                categories.every((cat) => selectedItems[cat.id])
+                                categories?.every(
+                                  (cat) => selectedItems[cat.id]
+                                )
                               }
                               onChange={() =>
-                                categories.forEach((cat) =>
-                                  handleCategorySelect(
-                                    cat.id,
-                                    cat.subcategories
-                                  )
-                                )
+                                handleCategorySelect('all', [], categories)
                               }
                               className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                               id="hs-at-with-checkboxes-main"
@@ -321,7 +336,10 @@ const CategoryList = ({ classes }) => {
                         </div>
                       </th>
 
-                      <th scope="col" className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
+                      >
                         <div className="flex items-center gap-x-2">
                           <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                             Created
@@ -329,7 +347,10 @@ const CategoryList = ({ classes }) => {
                         </div>
                       </th>
 
-                      <th scope="col" className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
+                      >
                         <div className="flex items-center gap-x-2">
                           <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                             Action
@@ -351,7 +372,7 @@ const CategoryList = ({ classes }) => {
                               onDragOver={handleDragOver}
                               onDrop={() => handleDrop(category.id)}
                               style={{
-                                opacity: draggedItemId === index ? 0.5 : 1
+                                opacity: draggedItemId === index ? 0.5 : 1,
                               }}
                             >
                               <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
@@ -375,7 +396,7 @@ const CategoryList = ({ classes }) => {
                                       onChange={() =>
                                         handleCategorySelect(
                                           category.id,
-                                          category.subcategories
+                                          category.adminsubcategories
                                         )
                                       }
                                       className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
@@ -521,6 +542,21 @@ const CategoryList = ({ classes }) => {
                                             >
                                               <input
                                                 type="checkbox"
+                                                checked={
+                                                  category.adminsubcategories
+                                                    ?.length > 0 &&
+                                                    category.adminsubcategories?.every(
+                                                    (sub) =>
+                                                      selectedItems[sub.id]
+                                                  )
+                                                }
+                                                onChange={() =>
+                                                  handleSubcategorySelect(
+                                                    category.id,
+                                                    "all",
+                                                    category.adminsubcategories
+                                                  )
+                                                }
                                                 className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                                 id="hs-at-with-checkboxes-main"
                                               />
@@ -605,7 +641,7 @@ const CategoryList = ({ classes }) => {
                                                         handleSubcategorySelect(
                                                           category.id,
                                                           sub.id,
-                                                          category.subcategories
+                                                          category.adminsubcategories
                                                         )
                                                       }
                                                       className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
