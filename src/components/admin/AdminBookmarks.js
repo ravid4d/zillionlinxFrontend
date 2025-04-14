@@ -5,7 +5,7 @@ import {
   deleteBookmark,
   fetchAllBookmarks,
   handleBookmarksPagination,
-  setSearchQuery
+  setSearchQuery,
 } from "../../redux/slices/adminSlice";
 import BookmarkTableData from "./BookmarkTableData";
 import Swal from "sweetalert2";
@@ -37,15 +37,22 @@ const AdminBookmarks = () => {
   const handleSelectAllBookmarks = () => {
     if (selectedBookmarks?.length === adminBookmarks?.length) {
       setSelectedBookmarks([]);
-    }
-    else {
-      setSelectedBookmarks(adminBookmarks?.map((bookmark) => bookmark?.bookmark_id));
+    } else {
+      setSelectedBookmarks(
+        adminBookmarks?.map((bookmark) => bookmark?.bookmark_id)
+      );
     }
   };
 
   const handleSelectOneBookmark = (bookmark_id) => {
-    setSelectedBookmarks(prev=>[...prev, bookmark_id])
-  }
+    setSelectedBookmarks((prev) => {
+      if (prev.includes(bookmark_id)) {
+        return prev?.filter((id) => id !== bookmark_id)
+      }else{
+        return [...prev, bookmark_id];
+      }
+    });
+  };
 
   const deleteBookmarkSelected = async (id) => {
     if (!id) {
@@ -53,7 +60,7 @@ const AdminBookmarks = () => {
       return;
     }
     const confirmDelete = async () => {
-      await dispatch(deleteBookmark({ids:selectedBookmarks}))
+      await dispatch(deleteBookmark({ ids: selectedBookmarks }))
         .unwrap()
         .then(() => {
           setSelectedBookmarks([]);
@@ -62,44 +69,9 @@ const AdminBookmarks = () => {
         .catch((err) => {
           console.error("Error deleting bookmark: " + err.message);
         });
-      };
-
-      // Show confirmation toast with Yes/No buttons
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d9534f",
-        cancelButtonColor: "#5bc0de",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, cancel"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          confirmDelete();
-        Swal.fire("Deleted!", "Your item has been deleted.", "success");
-      }
-    });
-  };
-
-  //Delete single user
-  const deleteSingleBookmark = (ids) => {
-    if (!ids || ids.length === 0) {
-      toast.warning("No users selected!");
-      return;
-    }
-    const confirmDelete = () => {
-      dispatch(deleteBookmark({ ids:ids }))
-        .unwrap()
-        .then(() => {
-          toast.success("Bookmark deleted successfully!");
-          dispatch(fetchAllBookmarks(token)); 
-        })
-        .catch((err) => {
-          toast.error("Error deleting Bookmark: " + err.message);
-        });
     };
-  
+
+    // Show confirmation toast with Yes/No buttons
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -115,7 +87,42 @@ const AdminBookmarks = () => {
         Swal.fire("Deleted!", "Your item has been deleted.", "success");
       }
     });
-  };  
+  };
+
+  //Delete single user
+  const deleteSingleBookmark = (ids) => {
+    if (!ids || ids.length === 0) {
+      toast.warning("No users selected!");
+      return;
+    }
+    const confirmDelete = () => {
+      dispatch(deleteBookmark({ ids: ids }))
+        .unwrap()
+        .then(() => {
+          toast.success("Bookmark deleted successfully!");
+          dispatch(fetchAllBookmarks(token));
+        })
+        .catch((err) => {
+          toast.error("Error deleting Bookmark: " + err.message);
+        });
+    };
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      cancelButtonColor: "#5bc0de",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmDelete();
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      }
+    });
+  };
 
   return (
     <div className="w-full lg:ps-64">
@@ -235,15 +242,16 @@ const AdminBookmarks = () => {
                     adminBookmarks?.length > 0 &&
                     adminBookmarks?.map((bookmark, index) => {
                       return (
-                        <React.Fragment  key={bookmark?.id || `bookmark-${index}`}>
-
-                        <BookmarkTableData
-                          bookmark={bookmark}
-                          deleteSingleBookmark={deleteSingleBookmark}
-                          selectedBookmarks={selectedBookmarks}
-                          handleSelectOneBookmark={handleSelectOneBookmark}
+                        <React.Fragment
+                          key={bookmark?.id || `bookmark-${index}`}
+                        >
+                          <BookmarkTableData
+                            bookmark={bookmark}
+                            deleteSingleBookmark={deleteSingleBookmark}
+                            selectedBookmarks={selectedBookmarks}
+                            handleSelectOneBookmark={handleSelectOneBookmark}
                           />
-                          </React.Fragment>
+                        </React.Fragment>
                       );
                     })}
                 </tbody>
