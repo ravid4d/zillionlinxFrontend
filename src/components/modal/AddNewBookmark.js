@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Textfield from "./Textfield";
+import Textfield from "../elements/Textfield";
 import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
-import Dropdown from "../components/Dropdown";
+import Dropdown from "../elements/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewBookmark,
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks
-} from "../redux/slices/bookmarkSlice";
+} from "../../redux/slices/bookmarkSlice";
 import {
   fetchCategories,
   fetchSubCategories,
   resetSubCategories
-} from "../redux/slices/categorySlice";
+} from "../../redux/slices/categorySlice";
 import { useLocation } from "react-router-dom";
 
 const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {

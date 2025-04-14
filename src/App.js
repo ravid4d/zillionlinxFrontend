@@ -1,30 +1,30 @@
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
-import Home from './pages/Home';
-import MyBookmarks from './pages/MyBookmarks';
-import About from './pages/About';
-import UserAgreement from './pages/UserAgreement';
-import PrivacyPolicy from './pages/PrivacyPolicy';
+import Home from './pages/common/Home';
+import MyBookmarks from './pages/user/MyBookmarks';
+import About from './pages/common/About';
+import UserAgreement from './pages/common/UserAgreement';
+import PrivacyPolicy from './pages/common/PrivacyPolicy';
 import Dashboard from './pages/admin/Dashboard';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './routes/ProtectedRoute';
-import Unauthorized from './components/Unauthorized';
-import NotFound from './components/NotFound';
+import Unauthorized from './components/common/Unauthorized';
+import NotFound from './components/common/NotFound';
 import Category from './pages/admin/Category';
 import AdminLogin from './components/admin/AdminLogin';
 import NonProtectedAdminRoutes from './routes/NonProtectedAdminRoutes';
 import User from './pages/admin/User';
-import GoogleCustomSearch from './pages/GoogleCustomSearch';
+import GoogleCustomSearch from './pages/user/GoogleCustomSearch';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminBookmarks from './components/admin/AdminBookmarks';
-import ImportBookmarks from './pages/ImportBookmarks';
-import ResetPassword from './components/ResetPassword';
+import ImportBookmarks from './pages/user/ImportBookmarks';
+import ResetPassword from './components/common/ResetPassword';
 import ChangePassword from './components/admin/ChangePassword';
 import UpdateAdmin from './components/admin/UpdateAdmin';
 import ScrollToTop from './services/ScrollToTop';
 import Import from './pages/admin/Import';
-import GoodBye from './pages/GoodBye';
+import GoodBye from './pages/user/GoodBye';
 
 function App() {
     return (

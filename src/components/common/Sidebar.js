@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories } from "../redux/slices/categorySlice";
-import {linkFrontListing, setPageHeading, clearInstantLink } from "../redux/slices/bookmarkSlice";
+import { fetchCategories } from "../../redux/slices/categorySlice";
+import {linkFrontListing, setPageHeading, clearInstantLink } from "../../redux/slices/bookmarkSlice";
 
 const Sidebar = ({ setId, id }) => {
   const dispatch = useDispatch();

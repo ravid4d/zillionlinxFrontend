@@ -172,17 +172,17 @@ const Dashboard = () => {
       }
     });
   };
-    // Open User Edit Modal
-    useEffect(() => {
-      if (
-        typeof userToEdit === "object" &&
-        userToEdit !== null &&
-        !Array.isArray(userToEdit) &&
-        Object.keys(userToEdit).length > 0
-      ) {
-        setUserToEditModal(true);
-      }
-    }, [userToEdit]);
+  // Open User Edit Modal
+  useEffect(() => {
+    if (
+      typeof userToEdit === "object" &&
+      userToEdit !== null &&
+      !Array.isArray(userToEdit) &&
+      Object.keys(userToEdit).length > 0
+    ) {
+      setUserToEditModal(true);
+    }
+  }, [userToEdit]);
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
@@ -264,103 +264,109 @@ const Dashboard = () => {
                   </div>
                   {users.length > 0 ? (
                     <>
-                    <div
-                className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
-                  userToEditModal
-                    ? "visible opacity-100"
-                    : "invisible opacity-0"
-                }`}
-                id="updateUser-backdrop"
-              ></div>
-                    <table className="min-w-full divide-y">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-start">
-                            <label
-                              htmlFor="hs-at-with-checkboxes-main"
-                              className="flex"
-                            >
-                              <input
-                                type="checkbox"
-                                onChange={handleSelectAllUsers}
-                                checked={
-                                  selectedUsers.length === users.length &&
-                                  users.length > 0
-                                }
-                                className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                id="hs-at-with-checkboxes-main"
-                              />
-                              {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                      <div
+                        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+                          userToEditModal
+                            ? "visible opacity-100"
+                            : "invisible opacity-0"
+                        }`}
+                        id="updateUser-backdrop"
+                      ></div>
+                      <table className="min-w-full divide-y">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <label
+                                htmlFor="hs-at-with-checkboxes-main"
+                                className="flex"
+                              >
+                                <input
+                                  type="checkbox"
+                                  onChange={handleSelectAllUsers}
+                                  checked={
+                                    selectedUsers.length === users.length &&
+                                    users.length > 0
+                                  }
+                                  className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                  id="hs-at-with-checkboxes-main"
+                                />
+                                {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                           ID
                         </span>  */}
-                            </label>
-                          </th>
-                          <th scope="col" className="px-6 py-3">
-                            <div className="flex items-center gap-x-2">
-                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                Name
-                              </span>
-                            </div>
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-start">
-                            <div className="flex items-center gap-x-2">
-                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                Country
-                              </span>
-                            </div>
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          Last access date
-                        </span>
-                      </div>
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          number of bookmarks
-                        </span>
-                      </div>
-                    </th>
-                          <th scope="col" className="px-6 py-3 text-start">
-                            <div className="flex items-center gap-x-2">
-                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                Created
-                              </span>
-                            </div>
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-start">
-                            <div className="flex items-center gap-x-2">
-                              <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                Action
-                              </span>
-                            </div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        {users.map((user, index) => (
-                          <UserTableData
-                            showEditOrDelete={true}
-                            user={{ ...user, country: user.country || "N/A" }}
-                            key={user?.id || `user-${index}`}
-                            selectedUsers={selectedUsers}
-                            handleSelectOneUser={handleSelectOneUser}
-                            deleteSingleUser={deleteSingleUser}
-                            setUserToEdit={setUserToEdit}
-                          />
-                        ))}
-                      </tbody>
-                    </table>
-                    {userToEditModal && (
-                      <UpdateUser
-                        userToEditModal={userToEditModal}
-                        setUserToEditModal={setUserToEditModal}
-                        userToEdit={userToEdit}
-                      />
-                    )}
-                   </>
+                              </label>
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                  Name
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                  Country
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                  Last access date
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                  number of bookmarks
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                  Created
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div className="flex items-center gap-x-2">
+                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                  Action
+                                </span>
+                              </div>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                          {users.map((user, index) => (
+                            <tr
+                              key={user?.id || `user-${index}`}
+                            >
+                              <UserTableData
+                                showEditOrDelete={true}
+                                user={{
+                                  ...user,
+                                  country: user.country || "N/A"
+                                }}
+                                selectedUsers={selectedUsers}
+                                handleSelectOneUser={handleSelectOneUser}
+                                deleteSingleUser={deleteSingleUser}
+                                setUserToEdit={setUserToEdit}
+                              />
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {userToEditModal && (
+                        <UpdateUser
+                          userToEditModal={userToEditModal}
+                          setUserToEditModal={setUserToEditModal}
+                          userToEdit={userToEdit}
+                        />
+                      )}
+                    </>
                   ) : (
                     <p className="p-4 text-center text-gray-500">
                       No users found.

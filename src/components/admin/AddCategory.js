@@ -1,13 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import "@preline/select";
-import Input from "./elements/Input";
-import { getToken } from "../../services/authService";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as YUP from "yup";
-import Dropdown from "../Dropdown";
-import Textfield from "../Textfield";
+import Dropdown from "../elements/Dropdown";
+import Textfield from "../elements/Textfield";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewCategory,

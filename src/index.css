@@ -11,7 +11,7 @@ body {
 }
 
 .btn {
-  @apply py-1.5 px-5 inline-flex items-center font-medium text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
+  @apply py-1.5 px-3 sm:px-5 inline-flex items-center font-medium text-sm sm:text-lg rounded-xl border shadow-sm transition-all disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100;
 }
 
 .btn.light-btn {

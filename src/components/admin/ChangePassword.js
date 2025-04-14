@@ -1,5 +1,5 @@
 import React from "react";
-import PasswordField from "../PasswordField";
+import PasswordField from "../elements/PasswordField";
 import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";

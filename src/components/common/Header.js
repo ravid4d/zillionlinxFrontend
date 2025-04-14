@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { handleLogout, logout } from "../redux/slices/authSlice";
+import { handleLogout, logout } from "../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../redux/slices/userSlice";
+import { clearUser } from "../../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -25,8 +25,8 @@ const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
           navigate("/", {
             state: {
               loginMessage:
-                res?.message || "You have been logged out successfully!",
-            },
+                res?.message || "You have been logged out successfully!"
+            }
           });
         });
     } catch (error) {
@@ -56,7 +56,7 @@ const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, delete it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -65,8 +65,8 @@ const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
             {},
             {
               headers: {
-                Authorization: `Bearer ${token}`,
-              },
+                Authorization: `Bearer ${token}`
+              }
             }
           );
           Swal.fire(
@@ -99,11 +99,15 @@ const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
             className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 max-w-72 h-14 xl:h-16 cursor-pointer"
             aria-label="Brand"
           >
-            <img
+            {/* <img
               src="/logo.svg"
               alt=""
               className="max-w-full max-h-full block"
-            />
+            /> */}
+            <picture>
+              <source srcset="/app-icon.svg" media="(max-width: 640px)" className="max-w-full max-h-[60px] block" />
+              <img src="/logo.svg" alt="Logo" className="max-w-full max-h-[60px] block" />
+            </picture>
           </div>
         </div>
 

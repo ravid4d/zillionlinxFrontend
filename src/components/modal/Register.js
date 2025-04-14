@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Textfield from "./Textfield";
+import Textfield from "../elements/Textfield";
 import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
-import { handleRegister } from "../redux/slices/registerSlice";
+import { handleRegister } from "../../redux/slices/registerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import PasswordField from "./PasswordField";
-import CountryDropdown from "./CountryDropdown";
+import PasswordField from "../elements/PasswordField";
+// import CountryDropdown from "../CountryDropdown";
 import { Link, useNavigate } from "react-router-dom";
-import Dropdown from "./Dropdown";
+import Dropdown from "../elements/Dropdown";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
-import { handleGoogleLogin } from "../redux/slices/authSlice";
+import { handleGoogleLogin } from "../../redux/slices/authSlice";
 
 const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
   const [countries, setCountry] = useState([]);

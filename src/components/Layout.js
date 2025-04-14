@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Header from "./Header";
-import Footer from "./Footer";
-import Login from "./Login";
-import Register from "./Register";
-import ForgotPassword from "./ForgotPassword";
-import AddNewBookmark from "./AddNewBookmark";
-import AddNewCategory from "./AddNewCategory";
+import Header from "./common/Header";
+import Footer from "./common/Footer";
+import Login from "./modal/Login";
+import Register from "./modal/Register";
+import ForgotPassword from "./modal/ForgotPassword";
+import AddNewBookmark from "./modal/AddNewBookmark";
+// import AddNewCategory from "./modal/AddNewCategory";
 import { useDispatch, useSelector } from "react-redux";
 import { callTopLinks, clearInstantLink, fetchAllTopLinks, fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
-import UpdateUserModal from "./UpdateUserModal";
-import ChangePasswordModal from "./ChangePasswordModal";
+import UpdateUserModal from "./modal/UpdateUserModal";
+import ChangePasswordModal from "./modal/ChangePasswordModal";
 
 const Layout = () => {
   const dispatch = useDispatch();
@@ -147,12 +147,14 @@ const Layout = () => {
                 openModal={openModal}
                 id={id}
               />
-            ) : openModal?.newCategory ? (
-              <AddNewCategory
-                closeAllModals={closeAllModals}
-                openModal={openModal}
-              />
-            ) : openModal?.updateUser ? (
+            ) 
+            // : openModal?.newCategory ? (
+            //   <AddNewCategory
+            //     closeAllModals={closeAllModals}
+            //     openModal={openModal}
+            //   />
+            // )
+             : openModal?.updateUser ? (
               <UpdateUserModal
                 user={user}
                 closeAllModals={closeAllModals}

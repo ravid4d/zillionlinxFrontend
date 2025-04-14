@@ -1,18 +1,14 @@
-import React, {useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import PasswordField from "./PasswordField";
-import {  useNavigate } from "react-router-dom";
-import { updateUserPassword } from "../redux/slices/userSlice";
-import { handleLogout } from "../redux/slices/authSlice";
-// import { logout } from "../redux/slices/authSlice";
+import PasswordField from "../elements/PasswordField";
+import { updateUserPassword } from "../../redux/slices/userSlice";
+import { handleLogout } from "../../redux/slices/authSlice";
 
 const ChangePasswordModal = ({ openModal, closeAllModals }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  
   const { loading } = useSelector((state) => state.user);
   const { token } = useSelector((state) => state.auth);
 

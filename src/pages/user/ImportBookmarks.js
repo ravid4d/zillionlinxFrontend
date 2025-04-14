@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import {
   clearImportBookmarksMessage,
-  importBookmarks
-} from "../redux/slices/bookmarkSlice";
+} from "../../redux/slices/bookmarkSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import parse from "html-react-parser";
 import { useOutletContext } from "react-router-dom";
-import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
+import BookmarkGoogleResultContext from "../../components/bookmark/BookmarkGoogleResultContext";
 
 const ImportBookmarks = () => {
   const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();

@@ -17,14 +17,14 @@ import {
   removeFromBookmarks,
   removeTopLink,
   setPageHeading
-} from "../redux/slices/bookmarkSlice";
-import Bookmark from "../components/Bookmark";
-import GoogleSearchbar from "../components/GoogleSearchbar";
-import AddNewBookmarkField from "../components/AddNewBookmarkField";
-import Sidebar from "../components/Sidebar";
-import Searchbar from "../components/Searchbar";
-import AddRemoveBookmarkContext from "../components/AddRemoveBookmarkContext";
-import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
+} from "../../redux/slices/bookmarkSlice";
+import Bookmark from "../../components/bookmark/Bookmark";
+import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
+import AddNewBookmarkField from "../../components/elements/AddNewBookmarkField";
+import Sidebar from "../../components/common/Sidebar";
+import Searchbar from "../../components/common/Searchbar";
+import AddRemoveBookmarkContext from "../../components/bookmark/AddRemoveBookmarkContext";
+import BookmarkGoogleResultContext from "../../components/bookmark/BookmarkGoogleResultContext";
 
 const MyBookmarks = () => {
   const dispatch = useDispatch();

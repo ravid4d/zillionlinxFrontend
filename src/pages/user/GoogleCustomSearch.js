@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import GoogleSearchbar from "../components/GoogleSearchbar";
+import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
 import {
   Link,
   useLocation,
   useOutletContext
 } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { googleSearch } from "../redux/slices/bookmarkSlice";
-import BookmarkGoogleResultContext from "../components/BookmarkGoogleResultContext";
+import { googleSearch } from "../../redux/slices/bookmarkSlice";
+import BookmarkGoogleResultContext from "../../components/bookmark/BookmarkGoogleResultContext";
 
 const GoogleCustomSearch = () => {
   const { setUrlToBookmark, setWhichModalOpen } = useOutletContext();
@@ -18,17 +18,14 @@ const GoogleCustomSearch = () => {
 
   const {
     googleResults,
-    bookmarks,
     googleLoading,
     youtubeStaticLink,
-    wikiStaticLink,
     ebayStaticLink,
     amazonStaticLink,
     walmartStaticLink,
     aliexpressStaticLink,
     etsyStaticLink,
     neweggStaticLink,
-    mercadolibreStaticLink
   } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
   const location = useLocation();

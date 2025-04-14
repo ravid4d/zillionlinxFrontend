@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Textfield from "./Textfield";
+import Textfield from "../elements/Textfield";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
-import { handleForgotPassword } from "../redux/slices/registerSlice";
+import { handleForgotPassword } from "../../redux/slices/registerSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
