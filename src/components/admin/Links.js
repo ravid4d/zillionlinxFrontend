@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
-  fetchAllBookmarks,
   handleLinksPagination,
   setSearchQuery
 } from "../../redux/slices/adminSlice";
@@ -21,11 +20,10 @@ const Links = () => {
   const [selectedBookmarks, setSelectedBookmarks] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchAllBookmarks(token));
-  }, [dispatch, token, debouncedQuery]);
+    dispatch(linkListing({token, isAdmin:true}))
+  }, [dispatch, debouncedQuery]);
 
   useEffect(() => {
-    dispatch(linkListing({token, title:'', isAdmin:true}))
     return () => {
       dispatch(setSearchQuery(""));
     };
@@ -61,7 +59,7 @@ const Links = () => {
         .then((data) => {
           toast.success(data);
           setSelectedBookmarks([]);
-          dispatch(linkListing({token, title:""}));
+          dispatch(linkListing({token}));
         })
         .catch((err) => {
           console.error("Error deleting LinX: " + err.message);
@@ -97,7 +95,7 @@ const Links = () => {
         .unwrap()
         .then(() => {
           toast.success("LinX deleted successfully!");
-          dispatch(linkListing({token, title:""})); 
+          dispatch(linkListing({token})); 
         })
         .catch((err) => {
           toast.error("Error deleting LinX: " + err.message);
