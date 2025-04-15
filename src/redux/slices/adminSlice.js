@@ -267,8 +267,10 @@ export const categoryReorder = createAsyncThunk(
   }
 );
 
-export const linkListing = createAsyncThunk("admin/linkListing", async({token, title},{rejectWithValue})=>{
+export const linkListing = createAsyncThunk("admin/linkListing", async({token},{getState, rejectWithValue})=>{
   try {
+    let title = getState().admin?.searchQuery;
+    
     let url = title ? `${linkAdminUrl}?search=${title}` : linkAdminUrl;
     let response = await axiosInstance.get(url, {
       headers:{
