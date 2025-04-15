@@ -361,6 +361,7 @@ const bookmarkSlice = createSlice({
         state.bookmarks = action.payload.bookmarks;
         state.status = action.payload.status;
         state.isTopLink = true;
+        state.error = null;
       })
       .addCase(fetchAllTopLinks.rejected, (state, action) => {
         state.loading = false;
@@ -391,6 +392,7 @@ const bookmarkSlice = createSlice({
         // state.message =  action.payload?.bookmarks?.length === 0 && action.payload?.message
         state.isTopLink = false;
         state.message = action.payload.message;
+        state.error = null;
       })
       .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
         state.loading = false;

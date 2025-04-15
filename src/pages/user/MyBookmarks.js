@@ -350,7 +350,7 @@ const MyBookmarks = () => {
                       </li>
                     ))}
                   </ul>
-                ) : bookmarks?.length > 0 && !error ? (
+                ) : bookmarks?.length > 0 ? (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
                       {bookmarks && bookmarks?.length > 0 ? (
