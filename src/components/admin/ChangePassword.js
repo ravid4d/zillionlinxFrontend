@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAdminPassword } from "../../redux/slices/userSlice";
+import { clearUser, updateAdminPassword } from "../../redux/slices/userSlice";
 import { logout } from "../../redux/slices/authSlice";
 
 const ChangePassword = () => {
@@ -39,6 +39,7 @@ const ChangePassword = () => {
           result.payload.message || "Password updated successfully!"
         );
         dispatch(logout());
+        dispatch(clearUser());
       } else {
         toast.error(result.payload?.message || "Password update failed!");
       }

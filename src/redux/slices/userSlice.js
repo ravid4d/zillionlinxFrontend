@@ -138,7 +138,7 @@ export const updateUserPassword = createAsyncThunk(
           }
         }
       );
-      console.log("Password update response:", response);
+      // console.log("Password update response:", response);
       return response?.data;
     } catch (error) {
       const errorMessage =

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { logout } from "./redux/slices/authSlice";
+import { clearUser } from "./redux/slices/userSlice";
 
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -26,6 +27,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !apiPath?.includes("/login") &&  !apiPath?.includes("/change-password")) {
       import("./redux/store").then(({ store }) => {
         store.dispatch(logout());
+        // store.dispatch(clearUser())
         window.location.href = "/";
       });
     }
