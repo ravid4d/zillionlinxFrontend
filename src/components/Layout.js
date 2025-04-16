@@ -175,6 +175,7 @@ const Layout = () => {
           sidebar={sidebar}
           hideSidebar={hideSidebar}
           id={id}
+          setUrlToBookmark={setUrlToBookmark}
           setId={setId}
           redirectTo={redirectTo}
         />

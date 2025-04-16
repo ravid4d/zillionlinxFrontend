@@ -53,7 +53,7 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
     option: (baseStyles, state) => ({
       ...baseStyles,
       fontFamily: "Roboto, serif",
-      fontSize: "14px",
+      fontSize: "16px",
       color: state.isSelected ? "#ffffff" : "#1f2937",
       backgroundColor: state.isSelected ? "#2131e5" : "#E3E6FF",
       borderRadius: "8px",
@@ -95,7 +95,6 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
       </div>
     );
   };
-
   return (
     <>
       <label htmlFor={id} className="block text-base text-light-black mb-3">
@@ -103,6 +102,7 @@ const Dropdown = ({ id, name, label, fieldValue, setFieldValue, items, placehold
       </label>
       <Select
         name={name}
+        // value={formattedOptions.find((option) => typeof option.value === "Object" && option?.value!=="" ? option?.value.startsWith("US"):option?.value===fieldValue)}
         value={formattedOptions.find((option) => option.value === fieldValue)}
         onChange={(selectedOption) => setFieldValue(selectedOption)}
         // onBlur={(selectedOption) => setFieldValue(selectedOption)}

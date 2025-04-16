@@ -28,7 +28,6 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const { token } = useSelector((state) => state.auth);
   const { categories, subCategories } = useSelector((state) => state.category);
   const { addBookmarkLoading } = useSelector((state) => state.bookmark);
-
   useEffect(() => {
     const fetchData = async () => {
       let result = await dispatch(fetchCategories(token));
@@ -287,10 +286,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       />
                       <span
                         title="Add new sub category"
-                        className="capitalize absolute top-0.5 right-0 cursor-pointer group"
+                        className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
                         onClick={() => setShowNewSubCategory(true)}
                       >
-                        <svg
+                        Add Sub Category
+                        {/* <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -303,7 +303,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                             strokeLinejoin="round"
                             d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                           />
-                        </svg>
+                        </svg> */}
                       </span>
                       {formik.touched.sub_category_id &&
                       formik.errors.sub_category_id ? (
@@ -428,8 +428,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       "Add New Bookmark"
                     )}
                   </button>
-                  {addBookmarkLoading &&(<div className="mt-3">
-                    <p className="text-gray-700 text-sm text-center">
+                  {addBookmarkLoading &&(
+                    <div className="mt-3">
+                    <p className="text-gray-700 text-md text-center">
                       Please be patient for about 5 seconds while we are generating a high quality screenshot. Thank you!
                     </p>
                   </div>)}

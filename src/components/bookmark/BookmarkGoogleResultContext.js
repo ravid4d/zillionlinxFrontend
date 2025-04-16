@@ -20,7 +20,8 @@ const BookmarkGoogleResultContext = ({contextMenu, setContextMenu, handleOptionC
     style={{
       position: "fixed",
       top: contextMenu.y,
-      left: contextMenu.x
+      left: contextMenu.x,
+      "zIndex":"9"
     }}
     ref={menuRef}
   >
@@ -34,7 +35,7 @@ const BookmarkGoogleResultContext = ({contextMenu, setContextMenu, handleOptionC
           <button
             type="button"
             onClick={()=>handleOptionClick('bookmark')}
-            className="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            className="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[16px] text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +56,7 @@ const BookmarkGoogleResultContext = ({contextMenu, setContextMenu, handleOptionC
           <button
             type="button"
             onClick={() => handleOptionClick("top_link")}
-            className="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[13px] text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            className="w-full flex items-center gap-x-3 py-1.5 px-3 rounded-lg text-[16px] text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -53,7 +53,7 @@ const User = () => {
         .then(() => {
           toast.success("User deleted successfully!");
           setSelectedUsers([]); // Clear selection
-          dispatch(getAllUsers());
+          dispatch(getAllUsers(filterBy));
         })
         .catch((err) => {
           toast.error("Error deleting user: " + err.message);
@@ -90,7 +90,7 @@ const User = () => {
         .unwrap()
         .then(() => {
           setSelectedUsers([]); // Clear selection after deletion
-          dispatch(getAllUsers());
+          dispatch(getAllUsers(filterBy));
         })
         .catch((err) => {
           console.error("Error deleting users: " + err.message);
@@ -116,7 +116,7 @@ const User = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllUsers());
+    dispatch(getAllUsers(filterBy));
   }, [dispatch, debouncedQuery]);
 
   useEffect(() => {

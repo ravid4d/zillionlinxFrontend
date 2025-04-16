@@ -35,7 +35,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
       email: "",
       password: "",
       password_confirmation: "",
-      country: "",
+      country: "US",
       terms_condition: false
     },
     validationSchema: YUP.object({
@@ -256,8 +256,8 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                     formik={formik}
                     fieldValue={formik.values.country}
                     setFieldValue={(selectedOption) => {
-                        formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:"");
-                      }}
+                      formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:"");
+                    }}
                     items={countries ? countries : []}
                   />
                   {/* <CountryDropdown fieldValue={formik.values.country} setFieldValue={formik.handleChange} /> */}

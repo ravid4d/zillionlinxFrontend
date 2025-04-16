@@ -37,6 +37,10 @@ const Dashboard = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
   const [userToEditModal, setUserToEditModal] = useState(false);
+  const [filterBy, setFilterBy] = useState({
+    sort_by: "name",
+    sort_order: "desc"
+  });
 
   useEffect(() => {
     dispatch(getDashboardData()).catch((err) => {
@@ -45,7 +49,7 @@ const Dashboard = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getAllUsers());
+    dispatch(getAllUsers(filterBy));
   }, [dispatch, debouncedQuery]);
 
   useEffect(() => {
@@ -62,8 +66,27 @@ const Dashboard = () => {
     dispatch(getSixMonthBookmarkCount());
   }, [dispatch]);
 
+  useEffect(() => {
+    filterBy && dispatch(getAllUsers(filterBy));
+  }, [filterBy]);
+
   const handlePagination = (url) => {
-    if (url) dispatch(handleUsersPagination({ url, token }));
+    if (url)
+      dispatch(
+        handleUsersPagination({
+          url: `${url}&sort_by=${filterBy?.sort_by}&sort_order=${filterBy?.sort_order}`,
+          token
+        })
+      );
+  };
+  const setUsersByFilter = (filter) => {
+    setFilterBy((prev) => ({
+      sort_by: filter?.sort_by,
+      sort_order:
+        prev?.sort_by === filter?.sort_by && prev?.sort_order === "desc"
+          ? "asc"
+          : "desc"
+    }));
   };
 
   const userStats = sixMonthUserCount?.six_months_user
@@ -110,7 +133,7 @@ const Dashboard = () => {
         .unwrap()
         .then(() => {
           setSelectedUsers([]); // Clear selection after deletion
-          dispatch(getAllUsers());
+          dispatch(getAllUsers(filterBy));
         })
         .catch((err) => {
           console.error("Error deleting users: " + err.message);
@@ -148,7 +171,7 @@ const Dashboard = () => {
         .then(() => {
           toast.success("User deleted successfully!");
           setSelectedUsers([]); // Clear selection
-          dispatch(getAllUsers());
+          dispatch(getAllUsers(filterBy));
         })
         .catch((err) => {
           toast.error("Error deleting user: " + err.message);
@@ -290,49 +313,148 @@ const Dashboard = () => {
                                   className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                   id="hs-at-with-checkboxes-main"
                                 />
-                                {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                          ID
-                        </span>  */}
                               </label>
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                  Name
+                              <div
+                                onClick={() =>
+                                  setUsersByFilter({ sort_by: "name" })
+                                }
+                                className="flex items-center gap-x-2"
+                              >
+                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                  <span>Name</span>
+                                  <svg
+                                    className="shrink-0 size-3.5 text-gray-800"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="m7 15 5 5 5-5"></path>
+                                    <path d="m7 9 5-5 5 5"></path>
+                                  </svg>
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div
+                                onClick={() =>
+                                  setUsersByFilter({ sort_by: "country" })
+                                }
+                                className="flex items-center gap-x-2"
+                              >
+                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                  <span>Country</span>
+                                  <svg
+                                    className="shrink-0 size-3.5 text-gray-800"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="m7 15 5 5 5-5"></path>
+                                    <path d="m7 9 5-5 5 5"></path>
+                                  </svg>
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div
+                                onClick={() =>
+                                  setUsersByFilter({ sort_by: "last_access" })
+                                }
+                                className="flex items-center gap-x-2"
+                              >
+                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                  <span>Last access date</span>
+                                  <svg
+                                    className="shrink-0 size-3.5 text-gray-800"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="m7 15 5 5 5-5"></path>
+                                    <path d="m7 9 5-5 5 5"></path>
+                                  </svg>
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div
+                                onClick={() =>
+                                  setUsersByFilter({
+                                    sort_by: "total_bookmarks"
+                                  })
+                                }
+                                className="flex items-center gap-x-2"
+                              >
+                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                  <span>number of bookmarks</span>
+                                  <svg
+                                    className="shrink-0 size-3.5 text-gray-800"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="m7 15 5 5 5-5"></path>
+                                    <path d="m7 9 5-5 5 5"></path>
+                                  </svg>
+                                </span>
+                              </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-start">
+                              <div
+                                onClick={() =>
+                                  setUsersByFilter({ sort_by: "created" })
+                                }
+                                className="flex items-center gap-x-2"
+                              >
+                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                  <span>Created</span>
+                                  <svg
+                                    className="shrink-0 size-3.5 text-gray-800"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="m7 15 5 5 5-5"></path>
+                                    <path d="m7 9 5-5 5 5"></path>
+                                  </svg>
                                 </span>
                               </div>
                             </th>
                             <th scope="col" className="px-6 py-3 text-start">
                               <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                  Country
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                  Last access date
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                  number of bookmarks
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                                  Created
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                                   Action
                                 </span>
                               </div>
@@ -340,10 +462,8 @@ const Dashboard = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y">
-                          {users.map((user, index) => (
-                            <tr
-                              key={user?.id || `user-${index}`}
-                            >
+                          {users && users?.map((user, index) => (
+                            <tr key={user?.id || `user-${index}`}>
                               <UserTableData
                                 showEditOrDelete={true}
                                 user={{
@@ -374,7 +494,7 @@ const Dashboard = () => {
                   )}
                   <div className="px-6 py-4 flex justify-between border-t">
                     <div className="inline-flex gap-x-2">
-                      {pagination.map((page, index) => (
+                      {pagination && pagination?.map((page, index) => (
                         <button
                           key={index}
                           type="button"

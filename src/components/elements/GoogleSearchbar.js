@@ -36,8 +36,8 @@ const GoogleSearchbar = () => {
                 <img src="/google-searchbar-icon.svg" alt="" />
             </span>
 
-            <input type="text" value={googleFormik.values?.title} onChange={googleFormik.handleChange} placeholder='Search the web' id="searchTitle" name="title" className="h-[48px] py-3 pl-4 pr-14 block w-full border-0 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" />
-            <button type="subimit" className="absolute z-20 right-2 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-dark-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+            <input type="text" value={googleFormik.values?.title} onChange={googleFormik.handleChange} placeholder='Search the web' id="searchTitle" name="title" className="h-[48px] py-3 pl-4 pr-14 block w-full border-0 rounded-xl focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none placeholder:text-lg placeholder:text-light-black/48" />
+            <button type="subimit" className="absolute z-20 right-2 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-md font-semibold rounded-xl border border-transparent bg-dark-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                 <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <path d="m21 21-4.3-4.3"></path>

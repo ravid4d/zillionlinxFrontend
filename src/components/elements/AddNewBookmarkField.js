@@ -58,7 +58,7 @@ const AddNewBookmarkField = ({ setWhichModalOpen, setUrlToBookmark }) => {
             placeholder="Add an URL to Your Bookmarks"
             id="url"
             name="url"
-            className="h-[48px] py-3 pl-[68px] pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            className="h-[48px] py-3 pl-[68px] pr-14 block w-full border-gray-200 rounded-xl text-md placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
           />
           <div className="absolute inset-y-0 start-0 text-gray-600 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
             https://
