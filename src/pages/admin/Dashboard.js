@@ -31,7 +31,13 @@ const Dashboard = () => {
   const { dashboardData, sixMonthUserCount, sixMonthBookmarkCount } =
     useSelector((state) => state.dashboard);
   const { token } = useSelector((state) => state.auth);
-  const { users = [], pagination } = useSelector((state) => state.user);
+  const {
+    users = [],
+    loading,
+    totalUsers,
+    error,
+    pagination
+  } = useSelector((state) => state.user);
   const { searchQuery } = useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -285,7 +291,11 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                  {users.length > 0 ? (
+                  {loading?.getAllUsers ? (
+                    <div className="flex flex-wrap justify-center w-full py-10">
+                      <span className="loader"></span>
+                    </div>
+                  ) : users.length > 0 ? (
                     <>
                       <div
                         className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
@@ -462,21 +472,22 @@ const Dashboard = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y">
-                          {users && users?.map((user, index) => (
-                            <tr key={user?.id || `user-${index}`}>
-                              <UserTableData
-                                showEditOrDelete={true}
-                                user={{
-                                  ...user,
-                                  country: user.country || "N/A"
-                                }}
-                                selectedUsers={selectedUsers}
-                                handleSelectOneUser={handleSelectOneUser}
-                                deleteSingleUser={deleteSingleUser}
-                                setUserToEdit={setUserToEdit}
-                              />
-                            </tr>
-                          ))}
+                          {users &&
+                            users?.map((user, index) => (
+                              <tr key={user?.id || `user-${index}`}>
+                                <UserTableData
+                                  showEditOrDelete={true}
+                                  user={{
+                                    ...user,
+                                    country: user.country || "N/A"
+                                  }}
+                                  selectedUsers={selectedUsers}
+                                  handleSelectOneUser={handleSelectOneUser}
+                                  deleteSingleUser={deleteSingleUser}
+                                  setUserToEdit={setUserToEdit}
+                                />
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
                       {userToEditModal && (
@@ -488,29 +499,41 @@ const Dashboard = () => {
                       )}
                     </>
                   ) : (
-                    <p className="p-4 text-center text-gray-500">
-                      No users found.
-                    </p>
+                    <div className=" flex justify-center items-center">
+                      <img src="/no-data-concept.jpeg" alt="No Data Found!" />
+                    </div>
                   )}
                   <div className="px-6 py-4 flex justify-between border-t">
+                    {totalUsers > 0 && (
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-neutral-400">
+                          <span className="font-semibold text-gray-800">
+                            {totalUsers}
+                          </span>{" "}
+                          results
+                        </p>
+                      </div>
+                    )}
                     <div className="inline-flex gap-x-2">
-                      {pagination && pagination?.map((page, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          disabled={!page.url}
-                          onClick={() => handlePagination(page.url)}
-                          className={`${
-                            page.active ? "bg-gray-100" : "bg-white"
-                          } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50`}
-                        >
-                          {index === 0
-                            ? "<"
-                            : index === pagination.length - 1
-                            ? ">"
-                            : page.label}
-                        </button>
-                      ))}
+                      {pagination &&
+                        pagination?.length > 3 &&
+                        pagination?.map((page, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            disabled={!page.url}
+                            onClick={() => handlePagination(page.url)}
+                            className={`${
+                              page.active ? "bg-gray-100" : "bg-white"
+                            } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50`}
+                          >
+                            {index === 0
+                              ? "<"
+                              : index === pagination.length - 1
+                              ? ">"
+                              : page.label}
+                          </button>
+                        ))}
                     </div>
                   </div>
                 </div>

@@ -9,10 +9,11 @@ import axios from "axios";
 import { getAllUsers, updateUser } from "../../redux/slices/userSlice";
 // import preline from "preline/plugin";
 
-const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }) => {
+const UpdateUser = ({ userToEditModal, setUserToEditModal, userToEdit }) => {
   const dispatch = useDispatch();
   const[countries, setCountry] = useState([]);
   const {token} = useSelector(state=>state.auth);
+  const {loading} = useSelector(state=>state.user);
 
   useEffect(()=>{
     const getCountryList = async() => {
@@ -22,7 +23,6 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
     getCountryList()
   }, []);
 
-  
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -55,7 +55,8 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
           toast.error(result.payload || "User Updation failed!");
         }
       }
-    });
+  });
+
   return (
     <div
       id="updateUser"
@@ -158,8 +159,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                       {formik.errors.email}
                     </div>
                   ) : null}
-                </div>
-               
+                </div>               
                 <div className="mb-5">
                   <Dropdown
                     isDisabled={countries?.length===0}
@@ -179,18 +179,21 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                       {formik.errors.country}
                     </div>
                   ) : null}
-                </div>
-                
+                </div>                
                 <button
-                  disabled={loading}
+                  disabled={loading?.updateUser}
                   type="submit"
                   className={`btn dark-btn w-full justify-center h-12 ${
-                    loading
+                    loading?.updateUser
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   }`}
                 >
-                  sign up
+                   {loading?.updateUser ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Update Information"
+                  )}
                 </button>
               </form>
             </div>

@@ -125,15 +125,19 @@ const ChangePassword = () => {
               </div>
               <div>
                 <button
-                  disabled={loading}
+                  disabled={loading?.updateAdminPassword}
                   type="submit"
-                  className={`btn dark-btn justify-center h-12 ${
-                    loading
+                  className={`btn dark-btn justify-center w-full h-12 ${
+                    loading?.updateAdminPassword
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   }`}
                 >
-                  Update Password
+                  {loading?.updateAdminPassword ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Update Password"
+                  )}
                 </button>
               </div>
             </form>

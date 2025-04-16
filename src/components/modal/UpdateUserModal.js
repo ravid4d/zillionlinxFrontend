@@ -9,9 +9,10 @@ import axios from "axios";
 import Dropdown from "../elements/Dropdown";
 
 const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
-  const[countries, setCountry] = useState([]);
+  const [countries, setCountry] = useState([]);
   const dispatch = useDispatch();
-  const { loading, token } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -30,12 +31,12 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
       email: YUP.string()
         .email("Invalid email format")
         .required("Email is required"),
-      
+
       country: YUP.string().required("Please select a country")
     }),
     onSubmit: async (values) => {
-        let userId = user?.id;
-      const result = await dispatch(updateFrontUser({token, values, userId}));
+      let userId = user?.id;
+      const result = await dispatch(updateFrontUser({ token, values, userId }));
       if (updateFrontUser.fulfilled.match(result)) {
         toast.success(result.payload.message || "Registered successfully!");
         closeModal();
@@ -48,12 +49,14 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
     formik.resetForm();
     closeAllModals();
   };
-  useEffect(()=>{
-    const getCountryList = async() => {
-      let response = await axios.get("https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code");
+  useEffect(() => {
+    const getCountryList = async () => {
+      let response = await axios.get(
+        "https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code"
+      );
       setCountry(response?.data?.countries);
-    }
-    getCountryList()
+    };
+    getCountryList();
   }, []);
   return (
     <div
@@ -74,7 +77,7 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
                 id="updateModal-label"
                 className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
               >
-               Edit User
+                Edit User
               </h3>
               <button
                 type="button"
@@ -160,19 +163,22 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
                   ) : null}
                 </div>
                 <div className="mb-5">
-                <Dropdown
-                    isDisabled={countries?.length===0}
+                  <Dropdown
+                    isDisabled={countries?.length === 0}
                     id="country"
                     name="country"
                     label="Country"
                     placeholder="Select an option"
                     fieldValue={formik.values.country}
                     setFieldValue={(selectedOption) => {
-                      formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:user);
+                      formik.setFieldValue(
+                        "country",
+                        selectedOption?.value ? selectedOption?.value : user
+                      );
                     }}
                     items={countries}
                     formik={formik}
-                    />
+                  />
                   {formik.touched.country && formik.errors.country ? (
                     <div className="text-red-500 text-sm mt-1">
                       {formik.errors.country}
@@ -181,15 +187,19 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
                 </div>
 
                 <button
-                  disabled={loading}
+                  disabled={loading?.updateFrontUser}
                   type="submit"
                   className={`btn dark-btn w-full justify-center h-12 ${
-                    loading
+                    loading?.updateFrontUser
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   }`}
                 >
-                    Update Information
+                  {loading?.updateFrontUser ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Update Information"
+                  )}
                 </button>
               </form>
             </div>

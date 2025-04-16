@@ -13,7 +13,7 @@ import LinksTableData from "./LinksTableData";
 const Links = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { links, totalLinks, paginationLinks, searchQuery } =
+  const { links, totalLinks, paginationLinks, searchQuery, loading } =
     useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
@@ -144,8 +144,13 @@ const Links = () => {
               </div>
             </div>
           </div>
-          {links && links?.length > 0 ? (
-            <>
+          {
+            loading?.linkListing ?
+            <div className="flex flex-wrap justify-center w-full py-10">
+                <span className="loader"></span>
+              </div>
+            :
+          links && links?.length > 0 ? (            
               <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead className="bg-gray-50 dark:bg-neutral-800">
                   <tr>
@@ -223,9 +228,11 @@ const Links = () => {
                     })}
                 </tbody>
               </table>
-            </>
+            
           ) : null}
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+            {
+              totalLinks >0 &&
             <div>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
                 <span className="font-semibold text-gray-800 dark:text-neutral-200">
@@ -234,11 +241,13 @@ const Links = () => {
                 results
               </p>
             </div>
+            }
 
             {/* Counter Pagination */}
+            {console.log(paginationLinks, 'paginationLinks')}
             <div className="inline-flex gap-x-2">
               {paginationLinks &&
-                paginationLinks?.length > 0 &&
+                paginationLinks?.length > 3 &&
                 paginationLinks.map((pageNumber, index) => {
                   return (
                     <button

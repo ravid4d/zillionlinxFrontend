@@ -329,9 +329,9 @@ const adminSlice = createSlice({
   initialState: {
     status: "",
     searchQuery: "",
-    loading: false,
+    loading:{},
+    error: {},
     categoryLoading: false,
-    error: null,
     editingCategory: null,
     totalCategories: undefined,
     paginationCategories: [],
@@ -354,218 +354,235 @@ const adminSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    //Fetch Top Links
+    // Delete Category
+    builder
+      .addCase(deleteCategory.pending, (state, action) => {
+        state.loading.getAdminCategory = true;
+        state.error.getAdminCategory = null;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.loading.getAdminCategory = false;
+        state.adminCategories = state.adminCategories.filter((cat) => !action.payload.ids?.includes(cat.id));
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.loading.getAdminCategory = false;
+        state.error.getAdminCategory = action.payload.message;
+        state.status = action.payload.status;
+      });
+    
+    // Get Parent Categories
     builder
       .addCase(getParentCategories.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.getParentCategories = true;
+        state.error.getParentCategories = null;
       })
       .addCase(getParentCategories.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getParentCategories = false;
         state.parentCategories = action.payload;
       })
       .addCase(getParentCategories.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.getParentCategories = false;
+        state.error.getParentCategories = action.payload.message;
         state.status = action.payload.status;
       });
 
+    // Delete User
+    builder
+      .addCase(deleteUser.pending, (state) => {
+        state.loading.deleteUser = true;
+        state.error.deleteUser = null;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading.deleteUser = false;
+        state.users = state.users.filter((user) => !action.payload.ids?.includes(user.id)); // Remove deleted users
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading.deleteUser = false;
+        state.error.deleteUser = action.payload.message;
+      });
+
+    // Add New Category
     builder
       .addCase(addNewCategory.pending, (state) => {
-        state.categoryLoading = true;
-        state.error = null;
+        state.loading.addNewCategory = true;
+        state.error.addNewCategory = null;
       })
       .addCase(addNewCategory.fulfilled, (state, action) => {
-        state.categoryLoading = false;
+        state.loading.addNewCategory = false;
       })
       .addCase(addNewCategory.rejected, (state, action) => {
-        state.categoryLoading = false;
-        state.error = action.payload.message;
+        state.loading.addNewCategory = false;
+        state.error.addNewCategory = action.payload.message;
         state.status = action.payload.status;
       });
 
-      builder
+    // Update Category
+    builder
       .addCase(updateCategory.pending, (state) => {
-        state.categoryLoading = true;
-        state.error = null;
+        state.loading.addNewCategory = true;
+        state.error.addNewCategory = null;
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
-        state.categoryLoading = false;
+        state.loading.addNewCategory = false;
       })
       .addCase(updateCategory.rejected, (state, action) => {
-        state.categoryLoading = false;
-        state.error = action.payload.message;
+        state.loading.addNewCategory = false;
+        state.error.addNewCategory = action.payload.message;
         state.status = action.payload.status;
       });
 
+    // Get Admin Categories
     builder
       .addCase(getAdminCategory.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.getAdminCategory = true;
+        state.error.getAdminCategory = null;
       })
       .addCase(getAdminCategory.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getAdminCategory = false;
         state.adminCategories = action.payload.data;
         state.totalCategories = action.payload?.total;
         state.paginationCategories = action.payload?.links;
       })
       .addCase(getAdminCategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.getAdminCategory = false;
+        state.error.getAdminCategory = action.payload.message;
         state.status = action.payload.status;
       });
 
+    // Handle Category Pagination
     builder
       .addCase(handleCategoryPagination.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.getAdminCategory = true;
+        state.error.getAdminCategory = null;
       })
       .addCase(handleCategoryPagination.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getAdminCategory = false;
         state.adminCategories = action.payload.data;
         state.totalCategories = action.payload?.total;
         state.paginationCategories = action.payload?.links;
       })
       .addCase(handleCategoryPagination.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.getAdminCategory = false;
+        state.error.getAdminCategory = action.payload.message;
         state.status = action.payload.status;
       });
-
-      builder
-      .addCase(deleteUser.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(deleteUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.users = state.users.filter((user) => !action.payload.ids?.includes(user.id)); // Remove deleted users
-      })
-      .addCase(deleteUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
-      });
       
-      builder
+    // Fetch All Bookmarks
+    builder
       .addCase(fetchAllBookmarks.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.fetchAllBookmarks = true;
+        state.error.fetchAllBookmarks = null;
       })
       .addCase(fetchAllBookmarks.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.fetchAllBookmarks = false;
         state.adminBookmarks = action.payload.data;
         state.totalBookmarks = action.payload?.total;
         state.pagination = action.payload?.links;
       })
       .addCase(fetchAllBookmarks.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.fetchAllBookmarks = false;
+        state.error.fetchAllBookmarks = action.payload.message;
         state.status = action.payload.status;
       });
       
+    // Bookmark Pagination
       builder
       .addCase(handleBookmarksPagination.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.fetchAllBookmarks = true;
+        state.error.fetchAllBookmarks = null;
       })
       .addCase(handleBookmarksPagination.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.fetchAllBookmarks = false;
         state.adminBookmarks = action.payload.data;
         state.totalBookmarks = action.payload?.total;
         state.pagination = action.payload?.links;
       })
       .addCase(handleBookmarksPagination.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.fetchAllBookmarks = false;
+        state.error.fetchAllBookmarks = action.payload.message;
         state.status = action.payload.status;
       });
 
-      builder
+    // Delete Bookmark
+    builder
       .addCase(deleteBookmark.pending, (state) => {
-        state.loading = true;
+        state.loading.fetchAllBookmarks = true;
+        state.error.fetchAllBookmarks = null;
       })
       .addCase(deleteBookmark.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.fetchAllBookmarks = false;
         state.adminBookmarks = state.adminBookmarks.filter((book) => action.payload.id !== book.bookmark_id); // Remove deleted bookmark
       })
       .addCase(deleteBookmark.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.fetchAllBookmarks = false;
+        state.error.fetchAllBookmarks = action.payload.message;
       });
 
-      builder
-      .addCase(deleteCategory.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.loading = false;
-        state.adminCategories = state.adminCategories.filter((cat) => !action.payload.ids?.includes(cat.id));
-      })
-      .addCase(deleteCategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
-        state.status = action.payload.status;
-      });
-
-      builder
+    // Category Re-Order
+    builder
       .addCase(categoryReorder.pending, (state) => {
-        state.loading = true;
+        state.loading.getAdminCategory = true;
+        state.error.getAdminCategory = null;
       })
       .addCase(categoryReorder.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getAdminCategory = false;
       })
       .addCase(categoryReorder.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.getAdminCategory = false;
+        state.error.getAdminCategory = action.payload.message;
         state.status = action.payload.status;
       })
 
-      builder.addCase(linkListing?.pending, (state, action)=>{
-        state.loading=true;
-        state.error=null;
+    // Instant Links
+    builder
+      .addCase(linkListing?.pending, (state, action)=>{
+        state.loading.linkListing=true;
+        state.error.linkListing=null;
       })
       .addCase(linkListing?.fulfilled, (state, action)=>{
-        state.loading=false;
+        state.loading.linkListing=false;
         state.links = action.payload.data;
         state.totalLinks = action.payload?.total;
         state.paginationLinks = action.payload?.links;
       })
       .addCase(linkListing?.rejected, (state, action)=>{
-        state.loading=false;
-        state.error = action.payload;
+        state.loading.linkListing=false;
+        state.error.linkListing = action.payload;
         state.status = action.payload.status;
       })
 
-      builder.addCase(handleLinksPagination.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
+    // Instant Links Pagination
+    builder
+      .addCase(handleLinksPagination.pending, (state, action) => {
+        state.loading.linkListing = true;
+        state.error.linkListing = null;
       })
       .addCase(handleLinksPagination.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.linkListing = false;
         state.links = action.payload.data;
         state.totalLinks = action.payload?.total;
         state.pagination = action.payload?.links;
       })
       .addCase(handleLinksPagination.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.linkListing = false;
+        state.error.linkListing = action.payload.message;
         state.status = action.payload.status;
       })
       
+    // Delete Instant Link
       builder.addCase(deleteLink?.pending, (state, action)=>{
-        state.loading=true;
-        state.error=null;
+        state.loading.linkListing=true;
+        state.error.linkListing=null;
       })
       .addCase(deleteLink?.fulfilled, (state, action)=>{
-        state.loading=false;
+        state.loading.linkListing=false;
         state.links = state?.links?.filter(
           (link) => link.id !== action.payload
-        );
-        
+        );        
       })
       .addCase(deleteLink?.rejected, (state, action)=>{
-        state.loading=false;
-        state.error = action.payload
+        state.loading.linkListing=false;
+        state.error.linkListing = action.payload
       })
   }
 

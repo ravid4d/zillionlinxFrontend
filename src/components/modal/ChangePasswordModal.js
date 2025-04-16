@@ -16,7 +16,7 @@ const ChangePasswordModal = ({ openModal, closeAllModals }) => {
     initialValues: {
       currentPassword: "",
       newPassword: "",
-      confirmPassword: "",
+      confirmPassword: ""
     },
     validationSchema: YUP.object({
       currentPassword: YUP.string().required("Current password is required"),
@@ -30,21 +30,25 @@ const ChangePasswordModal = ({ openModal, closeAllModals }) => {
         .required("New password is required"),
       confirmPassword: YUP.string()
         .oneOf([YUP.ref("newPassword"), null], "Passwords must match")
-        .required("Confirm Password is required"),
+        .required("Confirm Password is required")
     }),
     onSubmit: async (values) => {
-      const result = await dispatch(updateUserPassword({token, values} ));
+      const result = await dispatch(updateUserPassword({ token, values }));
       if (updateUserPassword.fulfilled.match(result)) {
-        toast.success(result.payload.message || "Password updated successfully!");
+        toast.success(
+          result.payload.message || "Password updated successfully!"
+        );
         closeModal();
 
-        dispatch(handleLogout()).unwrap().then((res)=>{
-          toast.success(res?.message || "Logout funally");
-        }); // Assuming you have a logout action
+        dispatch(handleLogout())
+          .unwrap()
+          .then((res) => {
+            toast.success(res?.message || "Logout funally");
+          }); // Assuming you have a logout action
       } else {
         toast.error(result.payload?.message || "Password update failed!");
       }
-    },
+    }
   });
   const closeModal = () => {
     formik.resetForm();
@@ -160,15 +164,19 @@ const ChangePasswordModal = ({ openModal, closeAllModals }) => {
                 </div>
 
                 <button
-                  disabled={loading}
+                  disabled={loading?.updateUserPassword}
                   type="submit"
                   className={`btn dark-btn w-full justify-center h-12 ${
-                    loading
-                     ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
-                    : ""
+                    loading?.updateUserPassword
+                      ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                      : ""
                   }`}
                 >
-                  Update Password
+                  {loading?.updateUserPassword ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Update Password"
+                  )}
                 </button>
               </form>
             </div>

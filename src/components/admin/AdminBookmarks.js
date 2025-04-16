@@ -14,7 +14,7 @@ import useDebounce from "../../hooks/useDebounce";
 const AdminBookmarks = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { adminBookmarks, totalBookmarks, pagination, searchQuery } =
+  const { adminBookmarks, totalBookmarks, pagination, searchQuery, loading } =
     useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
 
@@ -123,7 +123,7 @@ const AdminBookmarks = () => {
       }
     });
   };
-
+console.log(adminBookmarks, 'adminBookmarks')
   return (
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -149,7 +149,13 @@ const AdminBookmarks = () => {
               </div>
             </div>
           </div>
-          {adminBookmarks && adminBookmarks?.length > 0 ? (
+             {
+             loading?.fetchAllBookmarks ? (
+              <div className="flex flex-wrap justify-center w-full py-10">
+                <span className="loader"></span>
+              </div>
+            ) :
+          adminBookmarks && adminBookmarks?.length > 0 ? (
             <>
               <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead className="bg-gray-50 dark:bg-neutral-800">
@@ -259,6 +265,8 @@ const AdminBookmarks = () => {
             </>
           ) : null}
           <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+            {
+              totalBookmarks >0 &&
             <div>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
                 <span className="font-semibold text-gray-800 dark:text-neutral-200">
@@ -267,11 +275,12 @@ const AdminBookmarks = () => {
                 results
               </p>
             </div>
+            }
 
             {/* Counter Pagination */}
             <div className="inline-flex gap-x-2">
               {pagination &&
-                pagination?.length > 0 &&
+                pagination?.length > 3 &&
                 pagination.map((pageNumber, index) => {
                   return (
                     <button
