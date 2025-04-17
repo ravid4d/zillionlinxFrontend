@@ -5,7 +5,7 @@ const About = () => {
 const {isLoggedIn} = useSelector(state=>state.auth);
   return (
     <>
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
         <div className={`${isLoggedIn ? "sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px]" : "rounded-[20px]"} bg-white p-4 xl:p-8 h-full`}>
           <div className="flex flex-wrap h-full w-full text-black flex-col">
             <h1 className="text-2xl mb-4 font-bold">About ZillionLinX</h1>
