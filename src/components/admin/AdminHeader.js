@@ -267,7 +267,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                     } 
                     absolute right-0 top-full transition-[opacity,margin] duration min-w-60 bg-white shadow-md rounded-lg mt-2`}
                   >
-                    <div className="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
+                    {/* <div className="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
                       <p className="text-sm text-gray-500 dark:text-neutral-500">
                         Signed in as :{" "}
                         <span className="capitalize">{user?.role}</span>
@@ -277,9 +277,36 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                           <span className="me-1">{user?.first_name}</span>
                           <span className="">{user?.last_name}</span>
                         </span>
+                      </p>
+                    </div> */}
+                    <div className="py-3 px-3 bg-gray-100 rounded-t-lg dark:bg-neutral-700 flex items-center ">
+                    <div className="me-3">
+                      <img
+                        className="shrink-0 size-9 rounded-full"
+                        src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                        alt="Avatar"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                        {/* Signed in as :{" "} */}
+                        <span className="capitalize ">
+                          {user?.role}
+                        </span>
+                      </p>
+                      <p className="grid grid-cols-2 text-sm font-medium text-gray-800 dark:text-neutral-200">
+                        <span className="col-span-2">
+                          <span className="me-1">
+                            {user?.first_name}
+                          </span>
+                          <span className="">
+                            {user?.last_name}
+                          </span>
+                        </span>
                         {/* <span className="col-span-2">{user?.email}</span> */}
                       </p>
                     </div>
+                  </div>
                     <div className="p-1.5 space-y-0.5">
                       <Link
                         className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
