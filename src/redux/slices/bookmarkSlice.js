@@ -190,7 +190,7 @@ export const searchBookmarks = createAsyncThunk(
           "Content-Type": "multipart/form-data"
         }
       });
-      // console.log(response, 'search results')
+      console.log(response, 'search results')
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
