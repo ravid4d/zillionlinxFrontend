@@ -244,7 +244,6 @@ const Links = () => {
             }
 
             {/* Counter Pagination */}
-            {console.log(paginationLinks, 'paginationLinks')}
             <div className="inline-flex gap-x-2">
               {paginationLinks &&
                 paginationLinks?.length > 3 &&

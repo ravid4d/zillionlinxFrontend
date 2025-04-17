@@ -561,7 +561,7 @@ const adminSlice = createSlice({
         state.loading.linkListing = false;
         state.links = action.payload.data;
         state.totalLinks = action.payload?.total;
-        state.pagination = action.payload?.links;
+        state.paginationLinks = action.payload?.links;
       })
       .addCase(handleLinksPagination.rejected, (state, action) => {
         state.loading.linkListing = false;
