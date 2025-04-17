@@ -15,7 +15,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
   const searchRef = useRef(null);
   const profileDropdownRef = useRef(null);
   const [searchField, setSearchField] = useState(false);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const { searchQuery } = useSelector((state) => state.admin);
 
   const handleSearchChange = async (e) => {
@@ -267,7 +267,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                     } 
                     absolute right-0 top-full transition-[opacity,margin] duration min-w-60 bg-white shadow-md rounded-lg mt-2`}
                   >
-                    <div className="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
+                    {/* <div className="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
                       <p className="text-sm text-gray-500 dark:text-neutral-500">
                         Signed in as :{" "}
                         <span className="capitalize">{user?.role}</span>
@@ -277,23 +277,50 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                           <span className="me-1">{user?.first_name}</span>
                           <span className="">{user?.last_name}</span>
                         </span>
+                      </p>
+                    </div> */}
+                    <div className="py-3 px-3 bg-gray-100 rounded-t-lg dark:bg-neutral-700 flex items-center ">
+                    <div className="me-3">
+                      <img
+                        className="shrink-0 size-9 rounded-full"
+                        src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                        alt="Avatar"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                        {/* Signed in as :{" "} */}
+                        <span className="capitalize ">
+                          {user?.role}
+                        </span>
+                      </p>
+                      <p className="grid grid-cols-2 text-sm font-medium text-gray-800 dark:text-neutral-200">
+                        <span className="col-span-2">
+                          <span className="me-1">
+                            {user?.first_name}
+                          </span>
+                          <span className="">
+                            {user?.last_name}
+                          </span>
+                        </span>
                         {/* <span className="col-span-2">{user?.email}</span> */}
                       </p>
                     </div>
+                  </div>
                     <div className="p-1.5 space-y-0.5">
-                      <Link
-                        className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                        to="/admin/change-password"
-                      >
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"></path></svg>
-                        Change Password
-                      </Link>
                       <Link
                         className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                         to="/admin/update-user"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"></path></svg>
                         Update User Info
+                      </Link>
+                      <Link
+                        className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                        to="/admin/change-password"
+                      >
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"></path></svg>
+                        Change Password
                       </Link>
                       <button
                         className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"

@@ -24,7 +24,7 @@ const Sidebar = ({ setId, id }) => {
     if (token) {
       fetchData();
     }
-  }, [dispatch, token]);
+  }, [dispatch, token, id]);
 
   const toggleAccordion = (id, hasDropdown) => {
     if (!hasDropdown) return;
@@ -49,11 +49,11 @@ const Sidebar = ({ setId, id }) => {
         </p>
         <ul
           className={`${
-            loading ? "" : ""
+            loading?.fetchCategories ? "" : ""
           } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
         >
-          {loading ? (
-            <span className="loader"></span>
+          {loading?.fetchCategories ? (
+            <div className="flex flex-wrap items-center justify-center h-full"><span className="loader"></span></div>
           ) : (
             categories &&
             categories?.length > 0 &&
@@ -71,9 +71,9 @@ const Sidebar = ({ setId, id }) => {
                 >
                   <button
                     onClick={() => {
+                        setId({ categoryId: category?.id, subCategoryId: "" });
                         dispatch(clearInstantLink())
                         dispatch(setPageHeading(category?.title))
-                        setId({ categoryId: category?.id, subCategoryId: "" });
                         toggleAccordion(
                             `users-accordion_${category?.id}`,
                             hasDropdown

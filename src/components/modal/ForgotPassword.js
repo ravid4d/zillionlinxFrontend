@@ -8,22 +8,21 @@ import { toast } from "react-toastify";
 import { handleForgotPassword } from "../../redux/slices/registerSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const ForgotPassword = ({ closeAllModals, openModal }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.register);
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: ""
     },
     validationSchema: YUP.object({
       email: YUP.string()
         .email("Invalid email format")
-        .required("Email is required"),
+        .required("Email is required")
     }),
     onSubmit: (values) => {
       forgotPasswordHandler(values);
-    },
+    }
   });
 
   const forgotPasswordHandler = async (values) => {
@@ -66,8 +65,9 @@ const ForgotPassword = ({ closeAllModals, openModal }) => {
               </h3>
               <button
                 type="button"
+                disabled={loading?.handleForgotPassword}
                 onClick={closeModal}
-                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                className={`${loading?.handleForgotPassword ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none':''} absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue`}
                 aria-label="Close"
                 data-hs-overlay="#forgot-password"
               >
@@ -110,15 +110,19 @@ const ForgotPassword = ({ closeAllModals, openModal }) => {
                   ) : null}
                 </div>
                 <button
-                  disabled={loading}
+                  disabled={loading?.handleForgotPassword}
                   type="submit"
                   className={`btn dark-btn w-full justify-center h-12 ${
-                    loading
+                    loading?.handleForgotPassword
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   }`}
                 >
-                  Recover Password
+                  {loading?.handleForgotPassword ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Recover Password"
+                  )}
                 </button>
               </form>
             </div>

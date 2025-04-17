@@ -9,10 +9,11 @@ import axios from "axios";
 import { getAllUsers, updateUser } from "../../redux/slices/userSlice";
 // import preline from "preline/plugin";
 
-const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }) => {
+const UpdateUser = ({ userToEditModal, setUserToEditModal, userToEdit }) => {
   const dispatch = useDispatch();
   const[countries, setCountry] = useState([]);
   const {token} = useSelector(state=>state.auth);
+  const {loading} = useSelector(state=>state.user);
 
   useEffect(()=>{
     const getCountryList = async() => {
@@ -22,7 +23,6 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
     getCountryList()
   }, []);
 
-  
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -55,7 +55,8 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
           toast.error(result.payload || "User Updation failed!");
         }
       }
-    });
+  });
+
   return (
     <div
       id="updateUser"
@@ -80,7 +81,13 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
               <button
                 type="button"
                 onClick={() => setUserToEditModal(false)}
-                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                // className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                className={`${
+                  loading?.updateUser
+                    ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                    : ""
+                } absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none`}
+                disabled={loading?.updateUser}
                 aria-label="Close"
                 data-hs-overlay="#updateUser"
               >
@@ -158,8 +165,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                       {formik.errors.email}
                     </div>
                   ) : null}
-                </div>
-               
+                </div>               
                 <div className="mb-5">
                   <Dropdown
                     isDisabled={countries?.length===0}
@@ -179,18 +185,21 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, loading, userToEdit }
                       {formik.errors.country}
                     </div>
                   ) : null}
-                </div>
-                
+                </div>                
                 <button
-                  disabled={loading}
+                  disabled={loading?.updateUser}
                   type="submit"
                   className={`btn dark-btn w-full justify-center h-12 ${
-                    loading
+                    loading?.updateUser
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   }`}
                 >
-                  sign up
+                   {loading?.updateUser ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Update Information"
+                  )}
                 </button>
               </form>
             </div>

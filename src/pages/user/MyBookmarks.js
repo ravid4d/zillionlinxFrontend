@@ -272,7 +272,7 @@ const MyBookmarks = () => {
   }, [openModal?.sidebar]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
@@ -332,7 +332,7 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
-                {loading ? (
+                {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
                 ) : links && links?.length > 0 ? (
                   <ul className="list-disc ps-6">
@@ -373,6 +373,7 @@ const MyBookmarks = () => {
                               categoryId={id?.categoryId}
                               subCategoryId={id?.subCategoryId}
                               setId={setId}
+                              searchResults={searchResults}
                             />
                           </li>
                         ))

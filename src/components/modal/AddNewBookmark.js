@@ -27,7 +27,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
 
   const { token } = useSelector((state) => state.auth);
   const { categories, subCategories } = useSelector((state) => state.category);
-  const { addBookmarkLoading } = useSelector((state) => state.bookmark);
+  const { loading } = useSelector((state) => state.bookmark);
   useEffect(() => {
     const fetchData = async () => {
       let result = await dispatch(fetchCategories(token));
@@ -172,11 +172,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                   type="button"
                   onClick={closeModal}
                   className={`${
-                    addBookmarkLoading
+                    loading.addNewBookmark
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   } absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none`}
-                  disabled={addBookmarkLoading}
+                  disabled={loading.addNewBookmark}
                   aria-label="Close"
                   data-hs-overlay="#hs-slide-down-animation-modal"
                 >
@@ -415,20 +415,20 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                   </div>
                   <button
                     type="submit"
-                    disabled={addBookmarkLoading}
+                    disabled={loading?.addNewBookmark}
                     className={`btn dark-btn w-full justify-center h-12 ${
-                      addBookmarkLoading
+                      loading?.addNewBookmark
                         ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                         : ""
                     }`}
                   >
-                    {addBookmarkLoading ? (
+                    {loading?.addNewBookmark ? (
                       <span className="loader"></span>
                     ) : (
                       "Add New Bookmark"
                     )}
                   </button>
-                  {addBookmarkLoading &&(
+                  {loading?.addNewBookmark &&(
                     <div className="mt-3">
                     <p className="text-gray-700 text-md text-center">
                       Please be patient for about 5 seconds while we are generating a high quality screenshot. Thank you!

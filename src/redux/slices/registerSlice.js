@@ -84,46 +84,46 @@ export const handleResetPassword = createAsyncThunk(
 const registerSlice = createSlice({
   name: "register",
   initialState: {
-    loading: false,
-    error: null,
+    loading: {},
+    error: {},
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
     .addCase(handleRegister.pending, (state) => {
-      state.loading = true;
-      state.error = null;
+      state.loading.handleRegister = true;
+      state.error.handleRegister = null;
     })
     .addCase(handleRegister.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.handleRegister = false;
     })
     .addCase(handleRegister.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.loading.handleRegister = false;
+      state.error.handleRegister = action.payload;
     });
 
     builder.addCase(handleForgotPassword.pending, (state) => {
-      state.loading = true;
-      state.error = null;
+      state.loading.handleForgotPassword = true;
+      state.error.handleForgotPassword = null;
     })
     .addCase(handleForgotPassword.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.handleForgotPassword = false;
     })
     .addCase(handleForgotPassword.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.loading.handleForgotPassword = false;
+      state.error.handleForgotPassword = action.payload;
     });
 
     builder.addCase(handleResetPassword.pending, (state) => {
-      state.loading = true;
-      state.error = null;
+      state.loading.handleResetPassword = true;
+      state.error.handleResetPassword = null;
     })
     .addCase(handleResetPassword.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.handleResetPassword = false;
     })
     .addCase(handleResetPassword.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.loading.handleResetPassword = false;
+      state.error.handleResetPassword = action.payload;
     });
   }
 });

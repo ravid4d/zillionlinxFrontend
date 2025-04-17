@@ -51,9 +51,9 @@ const categorySlice = createSlice({
     subCategories: [],
     status: "",
     categories: [],
-    loading: false,
+    loading: {},
     subloading: false,
-    error: null,
+    error: {},
   },
   reducers: {
     resetSubCategories: (state) => {
@@ -65,30 +65,31 @@ const categorySlice = createSlice({
       //Fetch Categories
       builder
       .addCase(fetchCategories.pending, (state) => {
-        state.loading = true;
+        state.loading.fetchCategories = true;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.fetchCategories = false;
         state.categories = action.payload;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
+        state.loading.fetchCategories = false;
+        state.error.fetchCategories = action.payload.message;
         state.status = action.payload.status;
       })
     
       //Fetch Sub Categories
       builder
       .addCase(fetchSubCategories.pending, (state) => {
-        state.subloading = true;
+        state.loading.fetchSubCategories = true;
+        state.error.fetchSubCategories = null;
       })
       .addCase(fetchSubCategories.fulfilled, (state, action) => {
-        state.subloading = false;
+        state.loading.fetchSubCategories = false;
         state.subCategories = action.payload;
       })
       .addCase(fetchSubCategories.rejected, (state, action) => {
-        state.subloading = false;
-        state.error = action.payload.message;
+        state.loading.fetchSubCategories = false;
+        state.error.fetchSubCategories = action.payload.message;
         state.status = action.payload.status;
       });
   }

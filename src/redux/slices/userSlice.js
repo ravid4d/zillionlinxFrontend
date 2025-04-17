@@ -190,6 +190,8 @@ const userSlice = createSlice({
     totalUsers: undefined,
     user: {},
     pagination: [],
+    loading:{},
+    error:{},
     userLoading: false,
     userError: null
   },
@@ -204,93 +206,101 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAllUsers.pending, (state, action) => {
-        state.userLoading = true;
-        state.error = null;
+        state.loading.getAllUsers = true;
+        state.error.getAllUsers = null;
+        // state.userLoading = true;
+        // state.error = null;
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.userLoading = false;
+        // state.userLoading = false;
+        state.loading.getAllUsers = false;
         state.users = action.payload.data?.data;
         state.totalUsers = action.payload.data?.total;
         state.pagination = action.payload.data?.links;
       })
       .addCase(getAllUsers.rejected, (state, action) => {
-        state.userLoading = false;
-        state.error = action.payload.message;
+        // state.userLoading = false;
+        state.loading.getAllUsers = false;
+        state.error.getAllUsers = action.payload.message;
         state.status = action.payload.status;
       });
 
     builder
       .addCase(handleUsersPagination.pending, (state, action) => {
-        state.userLoading = true;
-        state.error = null;
+        state.loading.getAllUsers = true;
+        state.error.getAllUsers = null;
+        // state.userLoading = true;
+        // state.error = null;
       })
       .addCase(handleUsersPagination.fulfilled, (state, action) => {
-        state.userLoading = false;
+        // state.userLoading = false;
+        state.loading.getAllUsers = false;
         state.users = action.payload.data?.data;
         state.totalUsers = action.payload.data?.total;
         state.pagination = action.payload.data?.links;
       })
       .addCase(handleUsersPagination.rejected, (state, action) => {
-        state.userLoading = false;
-        state.error = action.payload.message;
+        // state.userLoading = false;
+        state.loading.getAllUsers = false;
+        state.error.getAllUsers = action.payload.message;
         state.status = action.payload.status;
       });
 
     builder
       .addCase(updateUser.pending, (state, action) => {
-        state.userLoading = true;
-        state.error = null;
+        state.loading.updateUser = true;
+        state.error.updateUser = null;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.userLoading = false;
+        state.loading.updateUser = false;
         state.user = action.payload.user;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.userLoading = false;
-        state.error = action.payload.message;
+        state.loading.updateUser = false;
+        state.error.updateUser = action.payload.message;
         state.status = action.payload.status;
       });
 
     builder
       .addCase(updateFrontUser.pending, (state, action) => {
-        state.userLoading = true;
-        state.error = null;
+        state.loading.updateFrontUser = true;
+        state.error.updateFrontUser = null;
       })
       .addCase(updateFrontUser.fulfilled, (state, action) => {
-        state.userLoading = false;
+        state.loading.updateFrontUser = false;
         state.user = action.payload.user;
       })
       .addCase(updateFrontUser.rejected, (state, action) => {
-        state.userLoading = false;
-        state.error = action.payload.message;
+        state.loading.updateFrontUser = false;
+        state.error.updateFrontUser = action.payload.message;
         state.status = action.payload.status;
       });
 
     builder
       .addCase(updateUserPassword.pending, (state, action) => {
-        state.userLoading = true;
-        state.error = null;
+        state.loading.updateUserPassword = true;
+        state.error.updateUserPassword = null;
       })
       .addCase(updateUserPassword.fulfilled, (state, action) => {
-        state.userLoading = false;
+        state.loading.updateUserPassword = false;
       })
       .addCase(updateUserPassword.rejected, (state, action) => {
-        state.userLoading = false;
-        state.error = action.payload.message;
+        state.loading.updateUserPassword = false;
+        state.error.updateUserPassword = action.payload.message;
         state.status = action.payload.status;
       });
 
     builder
       .addCase(updateAdminPassword.pending, (state, action) => {
-        state.userLoading = true;
-        state.error = null;
+        state.loading.updateAdminPassword = true;
+        state.error.updateAdminPassword = null;
       })
       .addCase(updateAdminPassword.fulfilled, (state, action) => {
-        state.userLoading = false;
+        state.loading.updateAdminPassword = false;
       })
       .addCase(updateAdminPassword.rejected, (state, action) => {
-        state.userLoading = false;
-        state.error = action.payload.message;
+        state.loading.updateAdminPassword = false;
+        state.error.updateAdminPassword = action.payload.message;
         state.status = action.payload.status;
       });
   }
