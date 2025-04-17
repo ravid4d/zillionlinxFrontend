@@ -43,10 +43,10 @@ body {
 .content-area.user-loggedin.instant-links,
 .content-area.user-loggedin.import,
 .content-area.user-loggedin.bookmarks {
-  @apply md:h-[calc(100vh-128px)] xl:h-[calc(100vh-68px)] md:max-h-[1024px]
+  @apply md:h-[calc(90vh-128px)] xl:h-[calc(90vh-68px)] md:max-h-[1024px]
 }
 .content-area.user-loggedin.result {
-  @apply lg:h-[calc(100vh-128px)] xl:h-[calc(100vh-68px)] lg:max-h-[1024px]
+  @apply lg:h-[calc(90vh-128px)] xl:h-[calc(90vh-68px)] lg:max-h-[1024px]
 }
 
 .bookmark-sidebar-wrapper {

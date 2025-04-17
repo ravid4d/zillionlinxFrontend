@@ -7,7 +7,7 @@ import { clearUser } from "../../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
+const Header = ({ setWhichModalOpen, setUrlToBookmark, id, setId, openModal, redirectTo }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -355,6 +355,7 @@ const Header = ({ setWhichModalOpen, id, setId, openModal, redirectTo }) => {
                     <button
                       type="button"
                       onClick={() => {
+                        setUrlToBookmark("");
                         setWhichModalOpen("newBookmark");
                       }}
                       className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"

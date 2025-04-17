@@ -5,6 +5,7 @@ import { logout } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import { setSearchQuery } from "../../redux/slices/adminSlice";
 import { clearImportBookmarksMessage } from "../../redux/slices/bookmarkSlice";
+import { clearUser } from "../../redux/slices/userSlice";
 
 const AdminHeader = ({setOpenSidebar, openSidebar}) => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
     try {
       // localStorage.removeItem("token"); // Remove token from local storage
       dispatch(logout()); // Dispatch a logout action if using Redux
+      dispatch(clearUser());
       toast.success("You have been logged out successfully!");
       navigate("/"); // Redirect to home or login page
     } catch (error) {

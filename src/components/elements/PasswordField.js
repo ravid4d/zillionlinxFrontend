@@ -27,7 +27,7 @@ const PasswordField = ({
           name={name}
           className={`py-3 px-4 ${
             iconPlacement === "left" ? "ps-11" : "pe-11"
-          } h-12 block bg-transparent w-full border-dark-blue rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500`}
+          } h-12 block bg-transparent w-full border-dark-blue rounded-lg text-md focus:border-blue-500 focus:ring-blue-500`}
           placeholder={placeholder}
           autoFocus=""
           value={fieldValue}

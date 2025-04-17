@@ -94,6 +94,7 @@ export const updateFrontUser = createAsyncThunk(
   "users/updateFrontUser",
   async ({ token, values, userId }, { rejectWithValue }) => {
     try {
+      console.log(values?.country, 'values?.country')
       // console.log(token, values, userId, "data are");
       let response = await axiosInstance.post(
         `${updateFrontUserUrl}${userId}`,
@@ -138,7 +139,7 @@ export const updateUserPassword = createAsyncThunk(
           }
         }
       );
-      console.log("Password update response:", response);
+      // console.log("Password update response:", response);
       return response?.data;
     } catch (error) {
       const errorMessage =
