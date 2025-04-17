@@ -16,7 +16,7 @@ const AdminBookmarks = () => {
   const { token } = useSelector((state) => state.auth);
   const { adminBookmarks, totalBookmarks, pagination, searchQuery, loading } =
     useSelector((state) => state.admin);
-  const debouncedQuery = useDebounce(searchQuery, 500);
+  const debouncedQuery = useDebounce(searchQuery, 500);  
 
   const [selectedBookmarks, setSelectedBookmarks] = useState([]);
 
@@ -184,6 +184,13 @@ console.log(adminBookmarks, 'adminBookmarks')
                       <div className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                           Thumbnail
+                        </span>
+                      </div>
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                          Title
                         </span>
                       </div>
                     </th>
