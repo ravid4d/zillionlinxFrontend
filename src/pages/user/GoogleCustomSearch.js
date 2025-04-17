@@ -188,8 +188,8 @@ const GoogleCustomSearch = () => {
                     </div>
                   </div>
                   <div className={`w-full lg:w-1/5 rounded-2xl lg:ps-6 h-full`}>
-                    <div className="bg-white rounded-xl p-4 h-full flex flex-wrap flex-col justify-between">
-                      <div className="bg-white rounded-xl border border-light-blue w-full h-[calc(66%-10px)] p-2">
+                    <div className="bg-white rounded-xl p-4 h-full flex flex-wrap flex-col justify-between space-y-5">
+                      <div className="bg-white rounded-xl border border-light-blue w-full overflow-auto flex-1 p-2">
                         <p className="text-[20px] text-dark-blue capitalize mb-3">
                           Popular Links
                         </p>
@@ -209,7 +209,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/amazon.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="max-w-full mx-auto"
                                     />
                                   </figure>
@@ -226,7 +226,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/walmart.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -243,7 +243,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/etsy.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -260,7 +260,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ebay.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -277,7 +277,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ali-express.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -320,7 +320,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/new-egg.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -354,7 +354,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/youtube.png"
                                       alt=""
-                                      width="120"
+                                      width="96"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -364,7 +364,7 @@ const GoogleCustomSearch = () => {
                           )}
                         </div>
                       </div>
-                      <div className="bg-white rounded-xl border border-light-blue h-1/3 p-2 text-sm overflow-auto custom-scrollbar text-center">
+                      <div className="bg-white rounded-xl border border-light-blue h-fit p-2 text-sm overflow-auto custom-scrollbar text-center">
                         <span className="block">Disclaimer:</span> This site contains affiliate links. As an associate or partner of Amazon, eBay, YouTube, Walmart, Etsy, and AliExpress, I may earn a commission from qualifying purchases made through these links — at no extra cost to you.
                       </div>
                     </div>
