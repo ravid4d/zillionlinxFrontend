@@ -69,7 +69,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
       const result = await dispatch(handleRegister(values));
       if (handleRegister.fulfilled.match(result)) {
         toast.success(result.payload.message || "Registered successfully!");
-        setWhichModalOpen('login');
+        setWhichModalOpen("login");
       } else {
         toast.error(result.payload || "Register failed!");
       }
@@ -82,24 +82,24 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-        try {
-            const accessToken = tokenResponse?.access_token;
-            const result = await dispatch(handleGoogleLogin({ accessToken })).unwrap();
+      try {
+        const accessToken = tokenResponse?.access_token;
+        const result = await dispatch(
+          handleGoogleLogin({ accessToken })
+        ).unwrap();
 
-            closeModal();    
-            navigate('/bookmarks', {state:{loginMessage:result?.message}})
-
-        } catch (error) {
-            toast.error(error?.message || "Login failed!");
-            console.error('Error during login process:', error);
-        }
+        closeModal();
+        navigate("/bookmarks", { state: { loginMessage: result?.message } });
+      } catch (error) {
+        toast.error(error?.message || "Login failed!");
+        console.error("Error during login process:", error);
+      }
     },
     onError: (error) => {
-        toast.error(error?.message || "Login failed!");
-        console.error('Google login failed:', error);
-    },
+      toast.error(error?.message || "Login failed!");
+      console.error("Google login failed:", error);
+    }
   });
-
 
   return (
     <div
@@ -126,7 +126,8 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
               <button
                 type="button"
                 onClick={closeModal}
-                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                disabled={loading?.handleRegister}
+                className={`${loading?.handleRegister ? 'disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none':''} absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue`}
                 aria-label="Close"
                 data-hs-overlay="#register"
               >
@@ -154,7 +155,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                   <Textfield
                     id="first_name"
                     name="first_name"
-                    autoFocus={false} 
+                    autoFocus={false}
                     icon="title"
                     fieldValue={formik.values.first_name}
                     setFieldValue={formik.handleChange}
@@ -256,7 +257,10 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                     formik={formik}
                     fieldValue={formik.values.country}
                     setFieldValue={(selectedOption) => {
-                      formik.setFieldValue("country", selectedOption?.value?selectedOption?.value:"");
+                      formik.setFieldValue(
+                        "country",
+                        selectedOption?.value ? selectedOption?.value : ""
+                      );
                     }}
                     items={countries ? countries : []}
                   />
@@ -285,13 +289,13 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                       <span className="block text-base text-light-black">
                         I have read and accept the{" "}
                         <Link
-                        to='/user-agreement'
-                        target="_blank"
-                        rel="noopener noreferrer"
+                          to="/user-agreement"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="text-dark-blue hover:underline inline-block"
                         >
                           User Agreement
-                        </Link> {' '}
+                        </Link>{" "}
                         and
                         <Link
                           to="/privacy-policy"
@@ -313,15 +317,19 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                   ) : null}
                 </div>
                 <button
-                  disabled={loading}
+                  disabled={loading?.handleRegister}
                   type="submit"
                   className={`btn dark-btn w-full justify-center h-12 ${
-                    loading
+                    loading?.handleRegister
                       ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                       : ""
                   }`}
                 >
-                  sign up
+                  {loading?.handleRegister ? (
+                    <span className="loader"></span>
+                  ) : (
+                    " Sign up"
+                  )}
                 </button>
                 <button
                   type="button"

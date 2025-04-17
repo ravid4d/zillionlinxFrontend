@@ -14,6 +14,7 @@ const Bookmark = ({
   handleRemoveItem,
   categoryId,
   subCategoryId,
+  searchResults,
   setId
 }) => {
   const { token } = useSelector((state) => state.auth);
@@ -43,7 +44,7 @@ const Bookmark = ({
         className={`bg-whtie relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30`}
       >
         <span
-          className={`pin-icon w-6 h-6 rounded-full z-30 ${
+          className={`${searchResults?'hidden':''} pin-icon w-6 h-6 rounded-full z-30 ${
             item?.pinned ? "bg-dark-blue" : "bg-light-blue"
           } flex flex-wrap items-center justify-center cursor-pointer absolute left-2 top-2`}
         >

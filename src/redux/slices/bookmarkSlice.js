@@ -309,7 +309,7 @@ const bookmarkSlice = createSlice({
     bookmark_subcategory: "",
     bookmark_message: "",
     isTopLink: true,
-    loading: false,
+    loading: {},
     status: "",
     addBookmarkLoading: false,
     googleLoading: false,
@@ -326,7 +326,7 @@ const bookmarkSlice = createSlice({
     etsyStaticLink: "",
     neweggStaticLink: "",
     mercadolibreStaticLink: "",
-    error: null,
+    error: {},
     importError: null,
     importBookmarkMessage: "",
     pageHeading: "",
@@ -354,59 +354,67 @@ const bookmarkSlice = createSlice({
     //Fetch Top Links
     builder
     .addCase(fetchAllTopLinks.pending, (state) => {
-      state.loading = true;
+      state.loading.fetchCategoryWiseBookmarks = true;
+      state.error.fetchAllTopLinks = {};
     })
     .addCase(fetchAllTopLinks.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.fetchCategoryWiseBookmarks = false;
+      // state.error.fetchAllTopLinks = null;
       state.bookmarks = action.payload.bookmarks;
       state.status = action.payload.status;
       state.isTopLink = true;
-      state.error = null;
     })
     .addCase(fetchAllTopLinks.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload.message;
+      state.loading.fetchCategoryWiseBookmarks = false;
+      state.error.fetchAllTopLinks = action.payload.message;
       state.status = action.payload.status;
       state.bookmarks = [];
     })
     
     //Remove Top Links
+    .addCase(removeTopLink.pending, (state, action) => {
+      state.loading.fetchCategoryWiseBookmarks = false;
+      state.error.removeTopLink = null;
+    })
     .addCase(removeTopLink.fulfilled, (state, action) => {
+      state.loading.fetchCategoryWiseBookmarks = true;
       state.bookmarks = state?.bookmarks?.bookmarks?.filter(
         (bookmark) => bookmark.id !== action.payload
       );
     })
     .addCase(removeTopLink.rejected, (state, action) => {
-      state.error = action.payload.message;
+      state.loading.fetchCategoryWiseBookmarks = false;
+      state.error.removeTopLink = action.payload.message;
       state.status = action.payload.status;
     });
     
     //Fetch category wise bookmarks
     builder
     .addCase(fetchCategoryWiseBookmarks.pending, (state) => {
-      state.loading = true;
+      state.loading.fetchCategoryWiseBookmarks = true;
     })
     .addCase(fetchCategoryWiseBookmarks.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.fetchCategoryWiseBookmarks = false;
       state.bookmarks = action.payload?.bookmarks;
       // state.message =  action.payload?.bookmarks?.length === 0 && action.payload?.message
       state.isTopLink = false;
       state.message = action.payload.message;
-      state.error = null;
+      // state.error.fetchCategoryWiseBookmarks = null;
     })
     .addCase(fetchCategoryWiseBookmarks.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload.message;
+      state.loading.fetchCategoryWiseBookmarks = false;
+      state.error.fetchCategoryWiseBookmarks = action.payload.message;
       state.status = action.payload.status;
     });
     
     //Add New Bookmarks
     builder
     .addCase(addNewBookmark.pending, (state) => {
-      state.addBookmarkLoading = true;
+      state.loading.addNewBookmark = true;
+      state.error.addNewBookmark = null;
     })
     .addCase(addNewBookmark.fulfilled, (state, action) => {
-      state.addBookmarkLoading = false;
+      state.loading.addNewBookmark = false;
       state.bookmark_addto = action.payload.add_to;
       state.bookmark_category = action.payload.category_id;
       state.bookmark_subcategory = action.payload.sub_category_id;
@@ -414,58 +422,62 @@ const bookmarkSlice = createSlice({
       // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
     })
     .addCase(addNewBookmark.rejected, (state, action) => {
-      state.addBookmarkLoading = false;
-      state.bookmarkError = action.payload.message;
+      state.loading.addNewBookmark = false;
+      state.error.addNewBookmark = action.payload.message;
       state.status = action.payload.status;
     });
     
     builder
     .addCase(pinBookmark.pending, (state) => {
-      state.addBookmarkLoading = true;
+      // state.loading.pinBookmark = true;
+      state.error.pinBookmark = null;
     })
     .addCase(pinBookmark.fulfilled, (state, action) => {
-      state.addBookmarkLoading = false;
+      // state.loading.pinBookmark = false;
       // state.bookmarks.push(action.payload.bookmark); It is not working because we are not getting data from backend
     })
     .addCase(pinBookmark.rejected, (state, action) => {
-      state.addBookmarkLoading = false;
-      state.error = action.payload.message;
+      // state.loading.pinBookmark = false;
+      state.error.pinBookmark = action.payload.message;
       state.status = action.payload.status;
     });
     
     builder
     .addCase(orderBookmarks.pending, (state) => {
-      state.loading = true;
+      // state.loading.orderBookmarks = true;
+      state.error.orderBookmarks = null;
     })
     .addCase(orderBookmarks.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.orderBookmarks = false;
     })
     .addCase(orderBookmarks.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload.message;
+      // state.loading.orderBookmarks = false;
+      state.error.orderBookmarks = action.payload.message;
       state.status = action.payload.status;
     });
     
     builder
     .addCase(searchBookmarks.pending, (state) => {
-      state.loading = true;
+      state.loading.fetchCategoryWiseBookmarks = true;
+      state.error.searchBookmarks = null;
     })
     .addCase(searchBookmarks.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.fetchCategoryWiseBookmarks = false;
       state.bookmarks = action.payload.bookmarks;
     })
     .addCase(searchBookmarks.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload.message;
+      state.loading.fetchCategoryWiseBookmarks = false;
+      state.error.searchBookmarks = action.payload.message;
       state.status = action.payload.status;
     });
     
     builder
     .addCase(googleSearch.pending, (state) => {
-      state.googleLoading = true;
+      state.loading.googleSearch = true;
+      state.error.googleSearch = null;
     })
     .addCase(googleSearch.fulfilled, (state, action) => {
-      state.googleLoading = false;
+      state.loading.googleSearch = false;
       state.googleResults = action.payload?.google_search_results?.original;
       state.wikkiResults = action.payload?.wikimedia_search_results;
       state.ebayResults = action.payload?.ebay_search_results;
@@ -485,51 +497,53 @@ const bookmarkSlice = createSlice({
       state.bookmarks = action.payload?.bookmarks;
     })
     .addCase(googleSearch.rejected, (state, action) => {
-      state.googleLoading = false;
-      state.error = action.payload.message;
+      state.loading.googleSearch = false;
+      state.error.googleSearch = action.payload.message;
       state.status = action.payload.status;
     });
     builder
     .addCase(importBookmarks.pending, (state, action) => {
-      state.loading = true;
+      state.loading.importBookmarks = true;
+      state.error.importBookmarks = null;
     })
     .addCase(importBookmarks.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.importBookmarks = false;
       state.importBookmarkMessage = action.payload;
       // state.error = action.payload;
     })
     .addCase(importBookmarks.rejected, (state, action) => {
-      state.loading = false;
-      state.importError = action.payload?.message;
+      state.loading.importBookmarks = false;
+      state.error.importBookmarks = action.payload?.message;
     });
     builder
     .addCase(addToBookmarks.pending, (state, action) => {
-      state.loading = true;
+      state.loading.addToBookmarks = true;
+      state.error.addToBookmarks = null;
     })
     .addCase(addToBookmarks.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading.addToBookmarks = false;
       // state.addToRemoveFromMessage = action.payload;
       // state.importBookmarkMessage = action.payload
       // state.error = action.payload;
     })
     .addCase(addToBookmarks.rejected, (state, action) => {
-      state.loading = false;
-      // state.importError = action.payload?.message;
+      state.loading.addToBookmarks = false;
+      state.error.addToBookmarks = action.payload?.message;
     });
     
     builder.addCase(linkFrontListing?.pending, (state, action)=>{
-      state.loading=true;
-      state.error=null;
+      state.loading.fetchCategoryWiseBookmarks=true;
+      state.error.linkFrontListing=null;
     })
     .addCase(linkFrontListing?.fulfilled, (state, action)=>{
-      state.loading=false;
+      state.loading.fetchCategoryWiseBookmarks=false;
       state.links = action.payload.data;
       state.totalLinks = action.payload?.total;
       state.paginationLinks = action.payload?.links;
     })
     .addCase(linkFrontListing?.rejected, (state, action)=>{
-      state.loading=false;
-      state.error = action.payload;
+      state.loading.fetchCategoryWiseBookmarks=false;
+      state.error.linkFrontListing = action.payload;
       state.status = action.payload.status;
     })
   }

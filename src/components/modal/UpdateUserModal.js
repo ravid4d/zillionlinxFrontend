@@ -78,11 +78,17 @@ const UpdateUserModal = ({ openModal, closeAllModals, user }) => {
                 className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
               >
                 Edit User
-              </h3>
+              </h3> 
               <button
                 type="button"
                 onClick={closeModal}
-                className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                // className="absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none"
+                className={`${
+                  loading?.updateFrontUser
+                    ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
+                    : ""
+                } absolute top-5 right-5 size-9 inline-flex justify-center items-center rounded-full border border-transparent bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue focus:outline-none focus:bg-light-blue focus:text-dark-blue disabled:opacity-50 disabled:pointer-events-none`}
+                disabled={loading?.updateFrontUser}
                 aria-label="Close"
                 data-hs-overlay="#updateModal"
               >

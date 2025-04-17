@@ -18,7 +18,7 @@ const GoogleCustomSearch = () => {
 
   const {
     googleResults,
-    googleLoading,
+    loading,
     youtubeStaticLink,
     ebayStaticLink,
     amazonStaticLink,
@@ -99,7 +99,7 @@ const GoogleCustomSearch = () => {
                         <p>Google Custom Search</p>
                       </div>
                       <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)] max-h-96 lg:max-h-full">
-                        {googleLoading ? (
+                        {loading?.googleSearch ? (
                           <span className="loader"></span>
                         ) : (
                           mainContent &&
@@ -144,7 +144,7 @@ const GoogleCustomSearch = () => {
                         />
                         <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
                           <ul className="grid grid-cols-1 gap-4">
-                            {googleLoading ? (
+                            {loading?.googleSearch ? (
                               <span className="loader"></span>
                             ) : (
                               googleResults &&
@@ -194,7 +194,7 @@ const GoogleCustomSearch = () => {
                           Popular Links
                         </p>
                         <div className="overflow-auto custom-scrollbar h-[calc(100%-45px)] flex flex-wrap flex-col md:flex-row md:block">
-                          {googleLoading ? (
+                          {loading?.googleSearch ? (
                             <span className="loader"></span>
                           ) : (
                             <>

@@ -28,30 +28,53 @@ import UpdateUser from "../../components/admin/UpdateUser";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { dashboardData, sixMonthUserCount, sixMonthBookmarkCount } =
-    useSelector((state) => state.dashboard);
+  const {
+    dashboardData,
+    sixMonthUserCount,
+    sixMonthBookmarkCount
+    // loading: dashboardLoading
+  } = useSelector((state) => state.dashboard);
   const { token } = useSelector((state) => state.auth);
   const {
     users = [],
-    loading,
+    loading:userLoading,
     totalUsers,
-    error,
+    // error,
     pagination
   } = useSelector((state) => state.user);
   const { searchQuery } = useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
+
   const [userToEditModal, setUserToEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filterBy, setFilterBy] = useState({
     sort_by: "name",
     sort_order: "desc"
   });
 
+  // const isLoading =
+  //   dashboardLoading?.getDashboardData ||
+  //   dashboardLoading?.getSixMonthUserCount ||
+  //   dashboardLoading?.getSixMonthBookmarkCount;
+
   useEffect(() => {
-    dispatch(getDashboardData()).catch((err) => {
-      toast.error("Error fetching dashboard data: " + err.message);
-    });
+    const fetchAllData = async () => {
+      try {
+        await Promise.all([
+          dispatch(getDashboardData()),
+          dispatch(getSixMonthUserCount()),
+          dispatch(getSixMonthBookmarkCount())
+        ]);
+      } catch (err) {
+        toast.error("Error fetching dashboard data: " + err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
   }, [dispatch]);
 
   useEffect(() => {
@@ -62,14 +85,6 @@ const Dashboard = () => {
     return () => {
       dispatch(setSearchQuery(""));
     };
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getSixMonthUserCount());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getSixMonthBookmarkCount());
   }, [dispatch]);
 
   useEffect(() => {
@@ -212,335 +227,342 @@ const Dashboard = () => {
       setUserToEditModal(true);
     }
   }, [userToEdit]);
-
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
       <div className="w-full lg:ps-64">
-        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <div className="flex flex-col bg-white border shadow rounded-xl p-4 md:p-5">
-              <p className="text-xs uppercase text-gray-500">Total Users</p>
-              <h3 className="text-xl font-medium text-gray-800">
-                {dashboardData?.total_users ?? "Loading..."}
-              </h3>
-            </div>
-            <div className="flex flex-col bg-white border shadow rounded-xl p-4 md:p-5">
-              <p className="text-xs uppercase text-gray-500">Total Bookmarks</p>
-              <h3 className="text-xl font-medium text-gray-800">
-                {dashboardData?.totalBookmark ?? "Loading..."}
-              </h3>
-            </div>
+        {loading ? (
+          <div className="flex flex-wrap justify-center h-screen items-center">
+            <span className="loader"></span>
           </div>
-
-          <div className="flex justify-between items-center flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/2">
-              <h3 className="text-md font-semibold mb-2 text-center">
-                User Registrations
-              </h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={userStats}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="count" stroke="#8884d8" />
-                </LineChart>
-              </ResponsiveContainer>
+        ) : (
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="flex flex-col bg-white border shadow rounded-xl p-4 md:p-5">
+                <p className="text-xs uppercase text-gray-500">Total Users</p>
+                <h3 className="text-xl font-medium text-gray-800">
+                  {dashboardData?.total_users}
+                </h3>
+              </div>
+              <div className="flex flex-col bg-white border shadow rounded-xl p-4 md:p-5">
+                <p className="text-xs uppercase text-gray-500">
+                  Total Bookmarks
+                </p>
+                <h3 className="text-xl font-medium text-gray-800">
+                  {dashboardData?.totalBookmark}
+                </h3>
+              </div>
             </div>
 
-            <div className="w-full md:w-1/2">
-              <h3 className="text-md font-semibold mb-2 text-center">
-                Bookmarks Created
-              </h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={bookmarkStats}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="count" stroke="#82ca9d" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+            <div className="flex justify-between items-center flex-col md:flex-row gap-4">
+              <div className="w-full md:w-1/2">
+                <h3 className="text-md font-semibold mb-2 text-center">
+                  User Registrations
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={userStats}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="count" stroke="#8884d8" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
 
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="min-w-full inline-block align-middle">
-                <div className="bg-white border rounded-xl shadow overflow-hidden">
-                  <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
-                    <div>
-                      <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                        Users
-                      </h2>
-                      <p className="text-sm text-gray-600 dark:text-neutral-400">
-                        Edit and delete users.
-                      </p>
-                    </div>
-                    <div>
-                      <div className="inline-flex gap-x-2">
-                        <button
-                          onClick={handleDeleteSelected}
-                          className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
-                          disabled={
-                            selectedUsers.length === 0 ? "disabled" : ""
-                          }
-                        >
-                          Delete all ({selectedUsers.length})
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  {loading?.getAllUsers ? (
-                    <div className="flex flex-wrap justify-center w-full py-10">
-                      <span className="loader"></span>
-                    </div>
-                  ) : users.length > 0 ? (
-                    <>
-                      <div
-                        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
-                          userToEditModal
-                            ? "visible opacity-100"
-                            : "invisible opacity-0"
-                        }`}
-                        id="updateUser-backdrop"
-                      ></div>
-                      <table className="min-w-full divide-y">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <label
-                                htmlFor="hs-at-with-checkboxes-main"
-                                className="flex"
-                              >
-                                <input
-                                  type="checkbox"
-                                  onChange={handleSelectAllUsers}
-                                  checked={
-                                    selectedUsers.length === users.length &&
-                                    users.length > 0
-                                  }
-                                  className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                  id="hs-at-with-checkboxes-main"
-                                />
-                              </label>
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                              <div
-                                onClick={() =>
-                                  setUsersByFilter({ sort_by: "name" })
-                                }
-                                className="flex items-center gap-x-2"
-                              >
-                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
-                                  <span>Name</span>
-                                  <svg
-                                    className="shrink-0 size-3.5 text-gray-800"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="m7 15 5 5 5-5"></path>
-                                    <path d="m7 9 5-5 5 5"></path>
-                                  </svg>
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div
-                                onClick={() =>
-                                  setUsersByFilter({ sort_by: "country" })
-                                }
-                                className="flex items-center gap-x-2"
-                              >
-                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
-                                  <span>Country</span>
-                                  <svg
-                                    className="shrink-0 size-3.5 text-gray-800"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="m7 15 5 5 5-5"></path>
-                                    <path d="m7 9 5-5 5 5"></path>
-                                  </svg>
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div
-                                onClick={() =>
-                                  setUsersByFilter({ sort_by: "last_access" })
-                                }
-                                className="flex items-center gap-x-2"
-                              >
-                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
-                                  <span>Last access date</span>
-                                  <svg
-                                    className="shrink-0 size-3.5 text-gray-800"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="m7 15 5 5 5-5"></path>
-                                    <path d="m7 9 5-5 5 5"></path>
-                                  </svg>
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div
-                                onClick={() =>
-                                  setUsersByFilter({
-                                    sort_by: "total_bookmarks"
-                                  })
-                                }
-                                className="flex items-center gap-x-2"
-                              >
-                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
-                                  <span>number of bookmarks</span>
-                                  <svg
-                                    className="shrink-0 size-3.5 text-gray-800"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="m7 15 5 5 5-5"></path>
-                                    <path d="m7 9 5-5 5 5"></path>
-                                  </svg>
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div
-                                onClick={() =>
-                                  setUsersByFilter({ sort_by: "created" })
-                                }
-                                className="flex items-center gap-x-2"
-                              >
-                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
-                                  <span>Created</span>
-                                  <svg
-                                    className="shrink-0 size-3.5 text-gray-800"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="m7 15 5 5 5-5"></path>
-                                    <path d="m7 9 5-5 5 5"></path>
-                                  </svg>
-                                </span>
-                              </div>
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-start">
-                              <div className="flex items-center gap-x-2">
-                                <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
-                                  Action
-                                </span>
-                              </div>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                          {users &&
-                            users?.map((user, index) => (
-                              <tr key={user?.id || `user-${index}`}>
-                                <UserTableData
-                                  showEditOrDelete={true}
-                                  user={{
-                                    ...user,
-                                    country: user.country || "N/A"
-                                  }}
-                                  selectedUsers={selectedUsers}
-                                  handleSelectOneUser={handleSelectOneUser}
-                                  deleteSingleUser={deleteSingleUser}
-                                  setUserToEdit={setUserToEdit}
-                                />
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                      {userToEditModal && (
-                        <UpdateUser
-                          userToEditModal={userToEditModal}
-                          setUserToEditModal={setUserToEditModal}
-                          userToEdit={userToEdit}
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <div className=" flex justify-center items-center">
-                      <img src="/no-data-concept.jpeg" alt="No Data Found!" />
-                    </div>
-                  )}
-                  <div className="px-6 py-4 flex justify-between border-t">
-                    {totalUsers > 0 && (
+              <div className="w-full md:w-1/2">
+                <h3 className="text-md font-semibold mb-2 text-center">
+                  Bookmarks Created
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={bookmarkStats}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="count" stroke="#82ca9d" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <div className="overflow-x-auto">
+                <div className="min-w-full inline-block align-middle">
+                  <div className="bg-white border rounded-xl shadow overflow-hidden">
+                    <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                       <div>
+                        <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                          Users
+                        </h2>
                         <p className="text-sm text-gray-600 dark:text-neutral-400">
-                          <span className="font-semibold text-gray-800">
-                            {totalUsers}
-                          </span>{" "}
-                          results
+                          Edit and delete users.
                         </p>
                       </div>
-                    )}
-                    <div className="inline-flex gap-x-2">
-                      {pagination &&
-                        pagination?.length > 3 &&
-                        pagination?.map((page, index) => (
+                      <div>
+                        <div className="inline-flex gap-x-2">
                           <button
-                            key={index}
-                            type="button"
-                            disabled={!page.url}
-                            onClick={() => handlePagination(page.url)}
-                            className={`${
-                              page.active ? "bg-gray-100" : "bg-white"
-                            } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50`}
+                            onClick={handleDeleteSelected}
+                            className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
+                            disabled={
+                              selectedUsers.length === 0 ? "disabled" : ""
+                            }
                           >
-                            {index === 0
-                              ? "<"
-                              : index === pagination.length - 1
-                              ? ">"
-                              : page.label}
+                            Delete all ({selectedUsers.length})
                           </button>
-                        ))}
+                        </div>
+                      </div>
+                    </div>
+                    {userLoading?.getAllUsers ? (
+                      <div className="flex flex-wrap justify-center w-full py-10">
+                        <span className="loader"></span>
+                      </div>
+                    ) : users.length > 0 ? (
+                      <>
+                        <div
+                          className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+                            userToEditModal
+                              ? "visible opacity-100"
+                              : "invisible opacity-0"
+                          }`}
+                          id="updateUser-backdrop"
+                        ></div>
+                        <table className="min-w-full divide-y">
+                          <thead className="bg-gray-50">
+                            <tr>
+                              <th scope="col" className="px-6 py-3 text-start">
+                                <label
+                                  htmlFor="hs-at-with-checkboxes-main"
+                                  className="flex"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    onChange={handleSelectAllUsers}
+                                    checked={
+                                      selectedUsers.length === users.length &&
+                                      users.length > 0
+                                    }
+                                    className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                    id="hs-at-with-checkboxes-main"
+                                  />
+                                </label>
+                              </th>
+                              <th scope="col" className="px-6 py-3">
+                                <div
+                                  onClick={() =>
+                                    setUsersByFilter({ sort_by: "name" })
+                                  }
+                                  className="flex items-center gap-x-2"
+                                >
+                                  <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                    <span>Name</span>
+                                    <svg
+                                      className="shrink-0 size-3.5 text-gray-800"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="m7 15 5 5 5-5"></path>
+                                      <path d="m7 9 5-5 5 5"></path>
+                                    </svg>
+                                  </span>
+                                </div>
+                              </th>
+                              <th scope="col" className="px-6 py-3 text-start">
+                                <div
+                                  onClick={() =>
+                                    setUsersByFilter({ sort_by: "country" })
+                                  }
+                                  className="flex items-center gap-x-2"
+                                >
+                                  <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                    <span>Country</span>
+                                    <svg
+                                      className="shrink-0 size-3.5 text-gray-800"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="m7 15 5 5 5-5"></path>
+                                      <path d="m7 9 5-5 5 5"></path>
+                                    </svg>
+                                  </span>
+                                </div>
+                              </th>
+                              <th scope="col" className="px-6 py-3 text-start">
+                                <div
+                                  onClick={() =>
+                                    setUsersByFilter({ sort_by: "last_access" })
+                                  }
+                                  className="flex items-center gap-x-2"
+                                >
+                                  <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                    <span>Last access date</span>
+                                    <svg
+                                      className="shrink-0 size-3.5 text-gray-800"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="m7 15 5 5 5-5"></path>
+                                      <path d="m7 9 5-5 5 5"></path>
+                                    </svg>
+                                  </span>
+                                </div>
+                              </th>
+                              <th scope="col" className="px-6 py-3 text-start">
+                                <div
+                                  onClick={() =>
+                                    setUsersByFilter({
+                                      sort_by: "total_bookmarks"
+                                    })
+                                  }
+                                  className="flex items-center gap-x-2"
+                                >
+                                  <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                    <span>number of bookmarks</span>
+                                    <svg
+                                      className="shrink-0 size-3.5 text-gray-800"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="m7 15 5 5 5-5"></path>
+                                      <path d="m7 9 5-5 5 5"></path>
+                                    </svg>
+                                  </span>
+                                </div>
+                              </th>
+                              <th scope="col" className="px-6 py-3 text-start">
+                                <div
+                                  onClick={() =>
+                                    setUsersByFilter({ sort_by: "created" })
+                                  }
+                                  className="flex items-center gap-x-2"
+                                >
+                                  <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                    <span>Created</span>
+                                    <svg
+                                      className="shrink-0 size-3.5 text-gray-800"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="m7 15 5 5 5-5"></path>
+                                      <path d="m7 9 5-5 5 5"></path>
+                                    </svg>
+                                  </span>
+                                </div>
+                              </th>
+                              <th scope="col" className="px-6 py-3 text-start">
+                                <div className="flex items-center gap-x-2">
+                                  <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                                    Action
+                                  </span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y">
+                            {users &&
+                              users?.map((user, index) => (
+                                <tr key={user?.id || `user-${index}`}>
+                                  <UserTableData
+                                    showEditOrDelete={true}
+                                    user={{
+                                      ...user,
+                                      country: user.country || "N/A"
+                                    }}
+                                    selectedUsers={selectedUsers}
+                                    handleSelectOneUser={handleSelectOneUser}
+                                    deleteSingleUser={deleteSingleUser}
+                                    setUserToEdit={setUserToEdit}
+                                  />
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                        {userToEditModal && (
+                          <UpdateUser
+                            userToEditModal={userToEditModal}
+                            setUserToEditModal={setUserToEditModal}
+                            userToEdit={userToEdit}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <div className=" flex justify-center items-center">
+                        <img src="/no-data-concept.jpeg" alt="No Data Found!" />
+                      </div>
+                    )}
+                    <div className="px-6 py-4 flex justify-between border-t">
+                      {totalUsers > 0 && (
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-neutral-400">
+                            <span className="font-semibold text-gray-800">
+                              {totalUsers}
+                            </span>{" "}
+                            results
+                          </p>
+                        </div>
+                      )}
+                      <div className="inline-flex gap-x-2">
+                        {pagination &&
+                          pagination?.length > 3 &&
+                          pagination?.map((page, index) => (
+                            <button
+                              key={index}
+                              type="button"
+                              disabled={!page.url}
+                              onClick={() => handlePagination(page.url)}
+                              className={`${
+                                page.active ? "bg-gray-100" : "bg-white"
+                              } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50`}
+                            >
+                              {index === 0
+                                ? "<"
+                                : index === pagination.length - 1
+                                ? ">"
+                                : page.label}
+                            </button>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

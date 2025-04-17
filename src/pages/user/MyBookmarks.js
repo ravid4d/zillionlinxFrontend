@@ -332,7 +332,7 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
-                {loading ? (
+                {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
                 ) : links && links?.length > 0 ? (
                   <ul className="list-disc ps-6">
@@ -373,6 +373,7 @@ const MyBookmarks = () => {
                               categoryId={id?.categoryId}
                               subCategoryId={id?.subCategoryId}
                               setId={setId}
+                              searchResults={searchResults}
                             />
                           </li>
                         ))

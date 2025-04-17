@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import PasswordField from "../elements/PasswordField";
 import { useDispatch, useSelector } from "react-redux";
@@ -114,15 +113,19 @@ const ResetPassword = () => {
               ) : null}
             </div>
             <button
-              disabled={loading}
+              disabled={loading?.handleResetPassword}
               type="submit"
               className={`btn dark-btn w-full justify-center h-12 ${
-                loading
+                loading?.handleResetPassword
                   ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                   : ""
               }`}
             >
-              Reset Password
+              {loading?.handleResetPassword ? (
+                    <span className="loader"></span>
+                  ) : (
+                    "Reset Password"
+                  )}              
             </button>
           </form>
         </div>
