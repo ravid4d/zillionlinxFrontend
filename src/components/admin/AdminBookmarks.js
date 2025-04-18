@@ -40,11 +40,13 @@ const AdminBookmarks = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchsubCategories({category_id: selectedCategory}));
+    if(selectedCategory) {  
+      dispatch(fetchsubCategories({category_id: selectedCategory}));
+    }
   }, [dispatch, selectedCategory]);
 
   useEffect(() => {
-    dispatch(fetchAllBookmarks({ token, category_id: selectedCategory, sub_category_id: selectedSubCategory }));
+    dispatch(fetchAllBookmarks({ token, category_id: selectedCategory || undefined, sub_category_id: selectedSubCategory || undefined }));
   }, [dispatch, token, debouncedQuery, selectedCategory, selectedSubCategory]);
   
 
