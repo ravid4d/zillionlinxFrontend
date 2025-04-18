@@ -6,6 +6,8 @@ import {
   fetchAllBookmarks,
   handleBookmarksPagination,
   setSearchQuery,
+  fetchmainCategories,
+  fetchsubCategories
 } from "../../redux/slices/adminSlice";
 import BookmarkTableData from "./BookmarkTableData";
 import Swal from "sweetalert2";
@@ -14,21 +16,46 @@ import useDebounce from "../../hooks/useDebounce";
 const AdminBookmarks = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { adminBookmarks, totalBookmarks, pagination, searchQuery, loading } =
+  const { mainCategories, subCategories, adminBookmarks, totalBookmarks, pagination, searchQuery, loading } =
     useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);  
 
-  const [selectedBookmarks, setSelectedBookmarks] = useState([]);
+  const [selectedBookmarks, setSelectedBookmarks] = useState([]);  
+  const [selectedCategory, setSelectedCategory] = useState(''); 
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
+
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedCategory(selectedValue);
+    setSelectedSubCategory('');
+  };
+
+  const handleSelectChangesubCategory = (e) => {
+    const selectedValued = e.target.value;
+    setSelectedSubCategory(selectedValued);
+  };
+  
+  useEffect(() => {
+    dispatch(fetchmainCategories());
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchAllBookmarks(token));
-  }, [dispatch, token, debouncedQuery]);
+    if(selectedCategory) {  
+      dispatch(fetchsubCategories({category_id: selectedCategory}));
+    }
+  }, [dispatch, selectedCategory]);
+
+  useEffect(() => {
+    dispatch(fetchAllBookmarks({ token, category_id: selectedCategory || undefined, sub_category_id: selectedSubCategory || undefined }));
+  }, [dispatch, token, debouncedQuery, selectedCategory, selectedSubCategory]);
+  
 
   useEffect(() => {
     return () => {
       dispatch(setSearchQuery(""));
     };
   }, [dispatch]);
+
 
   const handlePagination = async (url) => {
     dispatch(handleBookmarksPagination({ url, token }));
@@ -136,6 +163,36 @@ console.log(adminBookmarks, 'adminBookmarks')
               <p className="text-sm text-gray-600 dark:text-neutral-400">
                 List all the bookmarks.
               </p>
+            </div>
+            <div className="w-full flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-end sm:mr-4">
+             
+            <select id="main-category"
+              name="main-category"
+              className="block w-full sm:w-auto px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-0 focus:border-gray-400 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
+
+              value={selectedCategory}
+              onChange={handleSelectChange}>
+              <option value="">Select a category</option>
+              {mainCategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.title}
+                </option>
+              ))}
+            </select>
+          
+            <select id="sub-category"
+              name="sub-category"
+              className="block w-full sm:w-auto px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200"
+              onChange={handleSelectChangesubCategory}
+             >
+              <option>Sub Category</option>
+              {subCategories.map((subcategory) => (
+                <option key={subcategory.id} value={subcategory.id}>
+                  {subcategory.title}
+                </option>
+              ))}
+              </select>
+
             </div>
             <div>
               <div className="inline-flex gap-x-2">
