@@ -38,11 +38,13 @@ const MyBookmarks = () => {
     id,
     setId,
     openModal,
-    closeAllModals
+    closeAllModals,
+    setSearchResults,
+    searchResults
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
   const [draggedItemId, setDraggedItemId] = useState(null);
-  const [searchResults, setSearchResults] = useState(false);
+
 
   const {
     bookmarks,
@@ -296,7 +298,7 @@ const MyBookmarks = () => {
               closeAllModals={closeAllModals}
               setSearchResults={setSearchResults}
             />
-            <Sidebar setId={setId} id={id} />
+            <Sidebar setId={setId} id={id} setSearchResults={setSearchResults} />
           </div>
 
           <div className="bookmark-content-wrapper h-full">
