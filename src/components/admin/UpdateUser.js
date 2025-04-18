@@ -159,6 +159,7 @@ const UpdateUser = ({ userToEditModal, setUserToEditModal, userToEdit }) => {
                     fieldValue={formik.values.email}
                     setFieldValue={formik.handleChange}
                     setFieldValueOnBlur={formik.handleBlur}
+                    readOnly={true}
                   />
                   {formik.touched.email && formik.errors.email ? (
                     <div className="text-red-500 text-sm mt-1">

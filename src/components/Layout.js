@@ -8,7 +8,7 @@ import ForgotPassword from "./modal/ForgotPassword";
 import AddNewBookmark from "./modal/AddNewBookmark";
 // import AddNewCategory from "./modal/AddNewCategory";
 import { useDispatch, useSelector } from "react-redux";
-import { callTopLinks, clearInstantLink, fetchAllTopLinks, fetchCategoryWiseBookmarks } from "../redux/slices/bookmarkSlice";
+import { callTopLinks, clearInstantLink, fetchAllTopLinks, fetchCategoryWiseBookmarks, updateListingtype } from "../redux/slices/bookmarkSlice";
 import UpdateUserModal from "./modal/UpdateUserModal";
 import ChangePasswordModal from "./modal/ChangePasswordModal";
 
@@ -104,6 +104,7 @@ const Layout = () => {
         navigate("/");
       }
     }
+    dispatch(updateListingtype('bookmark'));
   };
 
   return (

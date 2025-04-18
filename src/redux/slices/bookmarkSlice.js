@@ -288,6 +288,7 @@ export const linkFrontListing = createAsyncThunk(
           }
         }
       );
+      console.log(response, 'aaa')
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
@@ -332,6 +333,7 @@ const bookmarkSlice = createSlice({
     pageHeading: "",
     links:[],
     paginationLinks: [],
+    listingType:'bookmark'
   },
   reducers: {
     callTopLinks: (state) => {
@@ -348,6 +350,9 @@ const bookmarkSlice = createSlice({
     },
     clearInstantLink:(state)=>{
       state.links = [];
+    },
+    updateListingtype:(state, action)=>{
+      state.listingType = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -543,6 +548,7 @@ const bookmarkSlice = createSlice({
     })
     .addCase(linkFrontListing?.rejected, (state, action)=>{
       state.loading.fetchCategoryWiseBookmarks=false;
+      state.links = [];
       state.error.linkFrontListing = action.payload;
       state.status = action.payload.status;
     })
@@ -553,6 +559,7 @@ export const {
   disabledTopLinks,
   clearImportBookmarksMessage,
   setPageHeading,
-  clearInstantLink
+  clearInstantLink,
+  updateListingtype
 } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;
