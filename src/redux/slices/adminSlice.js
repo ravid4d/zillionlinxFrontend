@@ -10,6 +10,10 @@ const deleteCategoryUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete/cat
 const categoryReorderUrl = `${process.env.REACT_APP_API_URL}/api/admin/categories/reorder`;
 const linkAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/listing-admin-bookmark`;
 const deleteLinkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-admin-bookmark`;
+const mainCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/main/categories`;
+const subCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/sub/categories`;
+
+
 
 export const deleteCategory = createAsyncThunk(
   "admin/delete-categories",
@@ -184,24 +188,31 @@ export const handleCategoryPagination = createAsyncThunk(
 
 export const fetchAllBookmarks = createAsyncThunk(
   "admin/fetchAllBookmarks",
-  async (token, { getState, rejectWithValue }) => {
+  async ({ token, category_id, sub_category_id }, { getState, rejectWithValue }) => {
     try {
-      let searchQuery = getState().admin?.searchQuery;
+      const searchQuery = getState().admin?.searchQuery;
 
-      const response = await axiosInstance.get(`${fetchBookmarkUrl}?search=${searchQuery}`, {
+      const response = await axiosInstance.get(fetchBookmarkUrl, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          search: searchQuery,
+          category_id, 
+          sub_category_id,
+        },
       });
+
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.status,
-        message: error?.response?.data?.message || "Failed to fetch Top Links"
+        message: error?.response?.data?.message || "Failed to fetch Top Links",
       });
     }
   }
 );
+
 
 export const handleBookmarksPagination = createAsyncThunk(
   "admin/pagination",
@@ -324,6 +335,52 @@ export const deleteLink = createAsyncThunk("bookmarks/deleteLink", async({token,
 })
 
 
+export const fetchmainCategories = createAsyncThunk(
+  "admin/fetchmainCategories",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      let response = await axiosInstance.post(mainCategoriesUrl,{}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While getting category."
+      });
+    }
+  }
+);
+
+export const fetchsubCategories = createAsyncThunk(
+  "admin/fetchsubCategories",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      let response = await axiosInstance.post(subCategoriesUrl,{
+        category_id: id
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response?.data?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While getting sub category."
+      });
+    }
+  }
+); 
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -341,6 +398,8 @@ const adminSlice = createSlice({
     parentCategories: [],
     adminCategories:[],
     adminBookmarks:[],
+    mainCategories: [],
+    subCategories: [],
     links:[],
     totalLinks: undefined,
     paginationLinks: [],
@@ -567,6 +626,35 @@ const adminSlice = createSlice({
         state.loading=false;
         state.error = action.payload
       })
+
+      builder
+      .addCase(fetchmainCategories.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchmainCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.mainCategories  = action.payload; 
+      })
+      .addCase(fetchmainCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+      builder
+      .addCase(fetchsubCategories.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchsubCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.subCategories  = action.payload; 
+      })
+      .addCase(fetchsubCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    
   }
 
 });
