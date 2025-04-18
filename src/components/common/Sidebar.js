@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/slices/categorySlice";
-import {linkFrontListing, setPageHeading, clearInstantLink } from "../../redux/slices/bookmarkSlice";
+import {linkFrontListing, setPageHeading, clearInstantLink, updateListingtype } from "../../redux/slices/bookmarkSlice";
 
 const Sidebar = ({ setId, id }) => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Sidebar = ({ setId, id }) => {
     if (token) {
       fetchData();
     }
-  }, [dispatch, token]);
+  }, [dispatch, token, id]);
 
   const toggleAccordion = (id, hasDropdown) => {
     if (!hasDropdown) return;
@@ -49,11 +49,11 @@ const Sidebar = ({ setId, id }) => {
         </p>
         <ul
           className={`${
-            loading ? "" : ""
+            loading?.fetchCategories ? "" : ""
           } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
         >
-          {loading ? (
-            <span className="loader"></span>
+          {loading?.fetchCategories ? (
+            <div className="flex flex-wrap items-center justify-center h-full"><span className="loader"></span></div>
           ) : (
             categories &&
             categories?.length > 0 &&
@@ -71,9 +71,10 @@ const Sidebar = ({ setId, id }) => {
                 >
                   <button
                     onClick={() => {
+                        dispatch(updateListingtype('bookmark'));
+                        setId({ categoryId: category?.id, subCategoryId: "" });
                         dispatch(clearInstantLink())
                         dispatch(setPageHeading(category?.title))
-                        setId({ categoryId: category?.id, subCategoryId: "" });
                         toggleAccordion(
                             `users-accordion_${category?.id}`,
                             hasDropdown
@@ -144,6 +145,7 @@ const Sidebar = ({ setId, id }) => {
                               <button
                                 onClick={() =>
                                 {
+                                    dispatch(updateListingtype('bookmark'));
                                     dispatch(clearInstantLink())
                                     dispatch(setPageHeading(`${category?.title} | ${subCat?.title}`))
                                     setId({
@@ -203,7 +205,7 @@ const Sidebar = ({ setId, id }) => {
         </ul>
       </div>
       <div
-        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); dispatch(linkFrontListing({token}));}}
+        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); dispatch(linkFrontListing({token})); dispatch(updateListingtype('link'))}}
         className="cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto"
       >
         <div className="absolute left-2 top-2 w-[85px]">

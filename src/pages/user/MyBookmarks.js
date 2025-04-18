@@ -16,7 +16,7 @@ import {
   orderBookmarks,
   removeFromBookmarks,
   removeTopLink,
-  setPageHeading
+  setPageHeading,
 } from "../../redux/slices/bookmarkSlice";
 import Bookmark from "../../components/bookmark/Bookmark";
 import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
@@ -52,7 +52,8 @@ const MyBookmarks = () => {
     bookmark_category,
     bookmark_subcategory,
     pageHeading,
-    links
+    links,
+    listingType
   } = useSelector((state) => state.bookmark);
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
@@ -272,7 +273,7 @@ const MyBookmarks = () => {
   }, [openModal?.sidebar]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
+    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
@@ -321,6 +322,8 @@ const MyBookmarks = () => {
                 </div>
               </div>
             )}
+
+
             <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
                 {pageHeading}
@@ -331,10 +334,11 @@ const MyBookmarks = () => {
                   </span>
                 ) : null}
               </p>
+              
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
-                {loading ? (
+                {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
-                ) : links && links?.length > 0 ? (
+                ) : listingType === 'link' && links && links?.length > 0 ? (
                   <ul className="list-disc ps-6">
                     {links?.map((link) => (
                       <li
@@ -350,7 +354,9 @@ const MyBookmarks = () => {
                       </li>
                     ))}
                   </ul>
-                ) : bookmarks?.length > 0 ? (
+                ) : 
+                
+                listingType === 'bookmark' && bookmarks?.length > 0 ? (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
                       {bookmarks && bookmarks?.length > 0 ? (
@@ -373,6 +379,7 @@ const MyBookmarks = () => {
                               categoryId={id?.categoryId}
                               subCategoryId={id?.subCategoryId}
                               setId={setId}
+                              searchResults={searchResults}
                             />
                           </li>
                         ))

@@ -97,53 +97,53 @@ const dashboardSlice = createSlice({
     dashboardData: null,
     sixMonthUserCount: null,
     sixMonthBookmarkCount: null,
-    loading: false,
-    error: null,
+    loading: {},
+    error: {},
     status: "",
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getDashboardData.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.getDashboardData = true;
+        state.error.getDashboardData = null;
       })
       .addCase(getDashboardData.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getDashboardData = false;
         state.dashboardData = action.payload;
         state.status = "success";
       })
       .addCase(getDashboardData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload?.message || "An error occurred";
+        state.loading.getDashboardData = false;
+        state.error.getDashboardData = action.payload?.message || "An error occurred";
         state.status = action.payload?.status || 500;
       })
       .addCase(getSixMonthUserCount.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.getSixMonthUserCount = true;
+        state.error.getSixMonthUserCount = null;
       })
       .addCase(getSixMonthUserCount.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getSixMonthUserCount = false;
         state.sixMonthUserCount = action.payload;
         state.status = "success";
       })
       .addCase(getSixMonthUserCount.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload?.message || "An error occurred";
+        state.loading.getSixMonthUserCount = false;
+        state.error.getSixMonthUserCount = action.payload?.message || "An error occurred";
         state.status = action.payload?.status || 500;
       })
       .addCase(getSixMonthBookmarkCount.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.getSixMonthBookmarkCount = true;
+        state.error.getSixMonthBookmarkCount = null;
       })
       .addCase(getSixMonthBookmarkCount.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.getSixMonthBookmarkCount = false;
         state.sixMonthBookmarkCount = action.payload;
         state.status = "success";
       })
       .addCase(getSixMonthBookmarkCount.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload?.message || "An error occurred";
+        state.loading.getSixMonthBookmarkCount = false;
+        state.error.getSixMonthBookmarkCount = action.payload?.message || "An error occurred";
         state.status = action.payload?.status || 500;
       });
   },

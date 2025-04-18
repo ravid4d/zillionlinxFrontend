@@ -7,7 +7,14 @@ import { clearUser } from "../../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const Header = ({ setWhichModalOpen, setUrlToBookmark, id, setId, openModal, redirectTo }) => {
+const Header = ({
+  setWhichModalOpen,
+  setUrlToBookmark,
+  id,
+  setId,
+  openModal,
+  redirectTo
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -92,7 +99,7 @@ const Header = ({ setWhichModalOpen, setUrlToBookmark, id, setId, openModal, red
 
   return (
     <header className="flex flex-wrap flex-col xl:flex-row  md:justify-start md:flex-nowrap z-[38] w-full">
-      <nav className="relative max-w-screen-2xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
+      <nav className="relative max-w-screen-xl w-full mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-2">
         <div className="flex justify-between items-end gap-x-1">
           <div
             onClick={redirectTo}
@@ -105,8 +112,16 @@ const Header = ({ setWhichModalOpen, setUrlToBookmark, id, setId, openModal, red
               className="max-w-full max-h-full block"
             /> */}
             <picture>
-              <source srcset="/app-icon.svg" media="(max-width: 640px)" className="max-w-full max-h-[60px] block" />
-              <img src="/logo.svg" alt="Logo" className="max-w-full max-h-[60px] block" />
+              <source
+                srcSet="/app-icon.svg"
+                media="(max-width: 640px)"
+                className="max-w-full max-h-[60px] block"
+              />
+              <img
+                src="/logo.svg"
+                alt="Logo"
+                className="max-w-full max-h-[60px] block"
+              />
             </picture>
           </div>
         </div>
@@ -306,13 +321,14 @@ const Header = ({ setWhichModalOpen, setUrlToBookmark, id, setId, openModal, red
                         d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                       />
                     </svg>
-                    <button
-                      className="btn dark-btn !hidden 2xl:!inline-flex"
-                      onClick={redirectTo}
-                      // to="/bookmarks"
-                    >
-                      Home
-                    </button>
+                    {isLoggedIn && userRole === "user" && (
+                      <button
+                        className="btn dark-btn !hidden 2xl:!inline-flex"
+                        onClick={redirectTo}
+                      >
+                        Home
+                      </button>
+                    )}
                     {userRole === "admin" ? (
                       <Link className="btn dark-btn" to="/admin">
                         Dashboard
