@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Textfield from "../elements/Textfield";
 import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
-import Dropdown from "../elements/Dropdown";
+// import Dropdown from "../elements/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewBookmark,
@@ -15,19 +15,24 @@ import {
   fetchSubCategories,
   resetSubCategories
 } from "../../redux/slices/categorySlice";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import useClickAway from "../../services/useClickAway";
 
 const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
   const [resetKey, setResetKey] = useState(0);
-  const [selectedCategoryId, setSelectedCategoryId] = useState([]);
-  const [showNewSubCategory, setShowNewSubCategory] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(undefined);
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(undefined);
+  const [showNewSubCategory, setShowNewSubCategory] = useState(undefined);
 
   const { token } = useSelector((state) => state.auth);
   const { categories, subCategories } = useSelector((state) => state.category);
   const { loading } = useSelector((state) => state.bookmark);
+  const [isCategoryDropdownOpen, setCategoryDropdown] = useState(false);
+
+  const categoryRef = useRef(null);
   useEffect(() => {
     const fetchData = async () => {
       let result = await dispatch(fetchCategories(token));
@@ -72,17 +77,24 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       sub_category_id: YUP.number().typeError(
         "Sub Category Id must be a number"
       ),
-      sub_category_name: YUP.string().when("sub_category_id", {
-        is: () => showNewSubCategory,
-        then: (schema) => schema.required("New Sub Category Name is required"),
-        otherwise: (schema) => schema.notRequired()
-      }),
+      // sub_category_name: YUP.string().when("sub_category_id", {
+      //   is: () => showNewSubCategory !== undefined && showNewSubCategory!=='remove',
+      //   then: (schema) => schema.required("New Sub Category Name is required"),
+      //   otherwise: (schema) => schema.notRequired()
+      // }),
       add_to: YUP.string().required("Add To is required")
     }),
+    validate:(values) => {
+      const errors = {};
+      if (showNewSubCategory === 'remove' && !values.sub_category_name) {
+        errors.sub_category_name = 'hola dear is required';
+      }
+      return errors;
+    },
     onSubmit: (values) => {
       const updatedValues = {
         ...values,
-        ...(showNewSubCategory ? {} : { sub_category_name: "" }) // Remove sub_category_name if not needed
+        ...(showNewSubCategory!==undefined && showNewSubCategory==='remove' ? {} : { sub_category_name: "" }) // Remove sub_category_name if not needed
       };
       handleAddNewBookmark(updatedValues);
     }
@@ -146,6 +158,32 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       formik.setFieldValue("add_to", record?.type);
     }
   }, [urlToBookmark?.record?.title]);
+
+  useClickAway(categoryRef, isCategoryDropdownOpen, () => {
+    setCategoryDropdown(false);
+  });
+
+  useEffect(() => {
+    if(selectedCategoryId === undefined && selectedSubCategoryId === undefined) {
+      setShowNewSubCategory(undefined);
+    }
+    else if(selectedCategoryId !== undefined && selectedSubCategoryId === undefined) {
+      setShowNewSubCategory(true);
+    }
+    else {
+      setShowNewSubCategory(undefined);
+    }
+  }, [selectedCategoryId, selectedSubCategoryId]);
+
+useEffect(()=>{
+  if(showNewSubCategory === 'remove'){
+    formik.setFieldError('sub_category_name', 'Sub Category Name is required');
+  }
+  else {
+    formik.setFieldError('sub_category_name', '');
+  }
+},[showNewSubCategory])
+
   return (
     <>
       {/* {urlToBookmark?.link} */}
@@ -242,7 +280,139 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                   {categories ? (
                     <>
                       <div className="mb-5">
-                        <Dropdown
+                        <div className="relative flex flex-col">
+                          <label
+                            htmlFor=""
+                            className="block text-base text-light-black mb-3"
+                          >
+                            Category / Sub Category
+                            {
+                              showNewSubCategory && showNewSubCategory!==undefined && showNewSubCategory!=='remove' && (
+                                  <span
+                                    title="Add new sub category"
+                                    className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
+                                    onClick={() => setShowNewSubCategory('remove')}
+                                  >
+                                    Add Sub Category
+                                  </span>
+                                ) 
+                              }
+                              {
+                                showNewSubCategory === "remove" && showNewSubCategory!==undefined && 
+                                (
+                                  <div className="flex justify-end items-center">
+                                    <span
+                                      title="Don't add new sub category?"
+                                      className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
+                                      onClick={() => setShowNewSubCategory(true)}
+                                    >
+                                      Remove Sub Category
+                                    </span>
+                                  </div>
+                                )
+                              }
+                          </label>
+                          <button
+                            onClick={() =>
+                              setCategoryDropdown(!isCategoryDropdownOpen)
+                            }
+                            type="button"
+                            className="w-full py-3 px-4 inline-flex items-center justify-between gap-x-2 text-md rounded-lg border border-dark-blue bg-transparent text-gray-800 shadow-2xs focus:outline-hidden"
+                          >
+                            {selectedCategoryId
+                              ? `${selectedCategoryId} ${
+                                  selectedSubCategoryId ?
+                                  `| ${selectedSubCategoryId}` : ''
+                                }`
+                              : "Select an option"}
+                            <svg
+                              className="hs-dropdown-open:rotate-180 size-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          </button>
+
+                          <div
+                            ref={categoryRef}
+                            className={`transition-[opacity,margin] duration ${
+                              isCategoryDropdownOpen
+                                ? "opacity-100 visible"
+                                : "opacity-0 hidden"
+                            }  min-w-60 bg-lighter-blue shadow-md rounded-lg mt-2`}
+                          >
+                            <div className="p-1 space-y-0.5">
+                              {categories &&
+                                categories?.length > 0 &&
+                                categories?.map((category) => {
+                                  return (
+                                    <div
+                                      className="cursor-pointer flex relative group items-center gap-x-3.5 py-2 px-3 rounded-lg text-md text-gray-800 hover:bg-white focus:outline-hidden focus:bg-gray-100"
+                                      key={category?.id}
+                                      onClick={() => {
+                                        formik.setFieldValue(
+                                          "category_id",
+                                          category?.id
+                                        );
+                                        setSelectedCategoryId(category?.title);
+                                        setSelectedSubCategoryId(undefined);
+                                      }}
+                                    >
+                                      {category?.title}
+                                      <div className="p-1 space-y-0.5 absolute invisible opacity-0 group-hover:opacity-100 group-hover:visible top-[-4px] w-1/2 rounded-lg bg-lighter-blue start-full overflow-auto height-full">
+                                        {category?.subcategories &&
+                                          category?.subcategories?.length > 0 &&
+                                          category?.subcategories?.map(
+                                            (subCategory) => {
+                                              return (
+                                                <div
+                                                  key={subCategory?.id}
+                                                  onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    formik.setFieldValue(
+                                                      "category_id",
+                                                      category?.id
+                                                    );
+                                                    setSelectedCategoryId(
+                                                      category?.title
+                                                    );
+                                                    formik.setFieldValue(
+                                                      "sub_category_id",
+                                                      subCategory?.id
+                                                    );
+                                                    setSelectedSubCategoryId(
+                                                      subCategory?.title
+                                                    );
+                                                  }}
+                                                  className="cursor-pointer flex relative group items-center gap-x-3.5 py-2 px-3 rounded-lg text-md text-gray-800 hover:bg-white focus:outline-hidden focus:bg-gray-100"
+                                                >
+                                                  {subCategory?.title}
+                                                </div>
+                                              );
+                                            }
+                                          )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                          </div>
+                          {formik.touched.category_id &&
+                          formik.errors.category_id ? (
+                            <div className="text-red-500 text-sm mt-1">
+                              {formik.errors.category_id}
+                            </div>
+                          ) : null}
+                        </div>
+                        {/* <Dropdown
                           id="category_id"
                           name="category_id"
                           label="Category"
@@ -256,18 +426,18 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                           }}
                           formik={formik}
                           items={categories}
-                        />
-                        {formik.touched.category_id &&
+                        /> */}
+                        {/* {formik.touched.category_id &&
                         formik.errors.category_id ? (
                           <div className="text-red-500 text-sm mt-1">
                             {formik.errors.category_id}
                           </div>
-                        ) : null}
+                        ) : null} */}
                       </div>
                     </>
                   ) : null}
 
-                  {!showNewSubCategory && (
+                  {/* {!showNewSubCategory && (
                     <div className="mb-5 relative">
                       <Dropdown
                         key={resetKey}
@@ -284,27 +454,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         formik={formik}
                         items={subCategories}
                       />
-                      <span
-                        title="Add new sub category"
-                        className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
-                        onClick={() => setShowNewSubCategory(true)}
-                      >
-                        Add Sub Category
-                        {/* <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="#1b1b1b"
-                          className="group-hover:stroke-dark-blue size-5 shrink-0"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                          />
-                        </svg> */}
-                      </span>
+
                       {formik.touched.sub_category_id &&
                       formik.errors.sub_category_id ? (
                         <div className="text-red-500 text-sm mt-1">
@@ -312,56 +462,34 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                         </div>
                       ) : null}
                     </div>
-                  )}
+                  )} */}
 
-                  {showNewSubCategory && (
-                    <div className="mb-5 relative">
-                      <div className="flex justify-end items-center">
-                        <span
-                          title="Don't add new sub category?"
-                          className="capitalize absolute top-0.5 right-0 cursor-pointer group"
-                          onClick={() => setShowNewSubCategory(false)}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="#1b1b1b"
-                            className="group-hover:stroke-dark-blue size-5 shrink-0"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                          </svg>
-                        </span>
+                  {showNewSubCategory && showNewSubCategory !== undefined && showNewSubCategory === 'remove' && (
+                      <div className="mb-5 relative">
+                        <Textfield
+                          id="sub_category_name"
+                          name="sub_category_name"
+                          label="New Sub Category"
+                          type="text"
+                          placeholder="New Sub Category"
+                          fieldValue={formik.values.sub_category_name}
+                          setFieldValue={formik.handleChange}
+                          setFieldValueOnBlur={formik.handleBlur}
+                        />
+                        {formik.touched.sub_category_name &&
+                        formik.errors?.sub_category_name ? (
+                          <div className="text-red-500 text-sm mt-1">
+                            {formik.errors.sub_category_name}
+                          </div>
+                        ) : null}
                       </div>
-                      <Textfield
-                        id="sub_category_name"
-                        name="sub_category_name"
-                        label="New Sub Category"
-                        type="text"
-                        placeholder="New Sub Category"
-                        fieldValue={formik.values.sub_category_name}
-                        setFieldValue={formik.handleChange}
-                        setFieldValueOnBlur={formik.handleBlur}
-                      />
-                      {formik.touched.sub_category_name &&
-                      formik.errors?.sub_category_name ? (
-                        <div className="text-red-500 text-sm mt-1">
-                          {formik.errors.sub_category_name}
-                        </div>
-                      ) : null}
-                    </div>
                   )}
 
                   {/* <div className="mb-5">
-                    <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>
-                     <span className="capitalize"> + New Sub Category</span>
-                    </button>
-                  </div> */}
+              <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>
+              <span className="capitalize"> + New Sub Category</span>
+              </button>
+              </div> */}
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"
@@ -428,12 +556,14 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                       "Add New Bookmark"
                     )}
                   </button>
-                  {loading?.addNewBookmark &&(
+                  {loading?.addNewBookmark && (
                     <div className="mt-3">
-                    <p className="text-gray-700 text-md text-center">
-                      Please be patient for about 5 seconds while we are generating a high quality screenshot. Thank you!
-                    </p>
-                  </div>)}
+                      <p className="text-gray-700 text-md text-center">
+                        Please be patient for about 5 seconds while we are
+                        generating a high quality screenshot. Thank you!
+                      </p>
+                    </div>
+                  )}
                 </form>
               </div>
             </div>

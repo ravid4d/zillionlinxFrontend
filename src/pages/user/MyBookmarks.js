@@ -300,7 +300,7 @@ const MyBookmarks = () => {
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            {links && links?.length === 0 ? (
+            {listingType !== 'link' && links && links?.length === 0 ? (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
                 <div className="flex flex-wrap items-center gap-2">
                   <AddNewBookmarkField
