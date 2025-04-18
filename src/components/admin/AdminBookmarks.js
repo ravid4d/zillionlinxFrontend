@@ -16,7 +16,7 @@ import useDebounce from "../../hooks/useDebounce";
 const AdminBookmarks = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { adminBookmarks, totalBookmarks, pagination, searchQuery, loading } =
+  const { mainCategories, subCategories, adminBookmarks, totalBookmarks, pagination, searchQuery, loading } =
     useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);  
 
