@@ -16,7 +16,7 @@ const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = 
                     type={type}
                     id={id}
                     name={name}
-                    className={`py-3 px-4 ${iconPlacement === "left" ? 'ps-11' : 'pe-11'} h-12 block bg-transparent w-full border-dark-blue rounded-lg text-md focus:border-blue-500 focus:ring-blue-500`}
+                    className={`py-3 px-4 ${readOnly ? 'bg-gray-200 text-gray-400 border-gray-400 pointer-events-none' : 'bg-transparent border-dark-blue focus:border-blue-500 focus:ring-blue-500'} ${iconPlacement === "left" ? 'ps-11' : 'pe-11'} h-12 block  w-full rounded-lg text-md `}
                     placeholder={placeholder} 
                     value={fieldValue}
                     onChange={setFieldValue}
@@ -31,8 +31,8 @@ const Textfield = forwardRef(({ label, type, id, icon = "", name, placeholder = 
                     type === "email" ?
                         <div className={`absolute inset-y-0 ${iconPlacement === "left" ? 'start-0 ps-4' : 'end-0 pe-4'} flex items-center pointer-events-none z-20`}>
                             <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.46281 10.5212C8.31169 10.6157 8.14168 10.6535 7.99056 10.6535C7.83943 10.6535 7.66942 10.6157 7.5183 10.5212L0 5.93091V12.0324C0 13.3359 1.05785 14.3937 2.36128 14.3937H13.6387C14.9421 14.3937 16 13.3359 16 12.0324V5.93091L8.46281 10.5212Z" fill="#2131E5" />
-                                <path d="M13.6386 2.60626H2.36115C1.24663 2.60626 0.302122 3.39965 0.0754395 4.4575L8.00932 9.29339L15.9243 4.4575C15.6976 3.39965 14.7531 2.60626 13.6386 2.60626Z" fill="#2131E5" />
+                                <path d="M8.46281 10.5212C8.31169 10.6157 8.14168 10.6535 7.99056 10.6535C7.83943 10.6535 7.66942 10.6157 7.5183 10.5212L0 5.93091V12.0324C0 13.3359 1.05785 14.3937 2.36128 14.3937H13.6387C14.9421 14.3937 16 13.3359 16 12.0324V5.93091L8.46281 10.5212Z" fill={`${readOnly ? '#9ca3af' : '#2131E5'}`} />
+                                <path d="M13.6386 2.60626H2.36115C1.24663 2.60626 0.302122 3.39965 0.0754395 4.4575L8.00932 9.29339L15.9243 4.4575C15.6976 3.39965 14.7531 2.60626 13.6386 2.60626Z" fill={`${readOnly ? '#9ca3af' : '#2131E5'}`} />
                             </svg>
                         </div>
                         : null

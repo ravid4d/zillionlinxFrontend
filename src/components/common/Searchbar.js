@@ -6,6 +6,7 @@ import {
   searchBookmarks,
   setPageHeading,
   clearInstantLink,
+  updateListingtype,
 } from "../../redux/slices/bookmarkSlice";
 
 const Searchbar = ({
@@ -22,6 +23,7 @@ const Searchbar = ({
     e.preventDefault();
     if (title.trim() !== "") {
       if (!linkSearch) {
+        dispatch(updateListingtype('bookmark'))
         let formData = new FormData();
         formData.append("title", title);
         dispatch(searchBookmarks({ token, formData }));

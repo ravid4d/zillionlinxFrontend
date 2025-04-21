@@ -16,7 +16,7 @@ import {
   orderBookmarks,
   removeFromBookmarks,
   removeTopLink,
-  setPageHeading
+  setPageHeading,
 } from "../../redux/slices/bookmarkSlice";
 import Bookmark from "../../components/bookmark/Bookmark";
 import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
@@ -38,11 +38,13 @@ const MyBookmarks = () => {
     id,
     setId,
     openModal,
-    closeAllModals
+    closeAllModals,
+    setSearchResults,
+    searchResults
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
   const [draggedItemId, setDraggedItemId] = useState(null);
-  const [searchResults, setSearchResults] = useState(false);
+
 
   const {
     bookmarks,
@@ -52,7 +54,8 @@ const MyBookmarks = () => {
     bookmark_category,
     bookmark_subcategory,
     pageHeading,
-    links
+    links,
+    listingType
   } = useSelector((state) => state.bookmark);
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
@@ -295,11 +298,11 @@ const MyBookmarks = () => {
               closeAllModals={closeAllModals}
               setSearchResults={setSearchResults}
             />
-            <Sidebar setId={setId} id={id} />
+            <Sidebar setId={setId} id={id} setSearchResults={setSearchResults} />
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            {links && links?.length === 0 ? (
+            {listingType !== 'link' && links && links?.length === 0 ? (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
                 <div className="flex flex-wrap items-center gap-2">
                   <AddNewBookmarkField
@@ -321,6 +324,8 @@ const MyBookmarks = () => {
                 </div>
               </div>
             )}
+
+
             <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
                 {pageHeading}
@@ -331,10 +336,11 @@ const MyBookmarks = () => {
                   </span>
                 ) : null}
               </p>
+              
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
                 {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
-                ) : links && links?.length > 0 ? (
+                ) : listingType === 'link' && links && links?.length > 0 ? (
                   <ul className="list-disc ps-6">
                     {links?.map((link) => (
                       <li
@@ -350,7 +356,9 @@ const MyBookmarks = () => {
                       </li>
                     ))}
                   </ul>
-                ) : bookmarks?.length > 0 ? (
+                ) : 
+                
+                listingType === 'bookmark' && bookmarks?.length > 0 ? (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
                       {bookmarks && bookmarks?.length > 0 ? (

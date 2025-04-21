@@ -16,7 +16,7 @@ const BookmarkTableData = ({
             htmlFor={`hs-at-with-checkboxes-${bookmark.id}`}
             className="flex"
           >
-            <input
+            <input 
               type="checkbox"
               className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
               id={`hs-at-with-checkboxes-${bookmark?.bookmark_id}`}
@@ -55,6 +55,13 @@ const BookmarkTableData = ({
               />
             )}
           </Link>
+        </div>
+      </td>
+      <td className="h-px w-48 whitespace-nowrap">
+        <div className="px-6 py-3">
+          <span className="text-sm text-gray-500 dark:text-neutral-500">
+            {bookmark?.title}
+          </span>
         </div>
       </td>
       <td className="h-px min-w-48 w-48 xl:max-w-72">

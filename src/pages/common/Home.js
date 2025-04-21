@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import badgeData from "../../json/badges.json";
 // import { useDispatch, useSelector } from "react-redux";
 // import { removeTopLink } from "../../redux/slices/bookmarkSlice";
-import {  useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Home = () => {
@@ -19,7 +19,9 @@ const Home = () => {
     setBadges(badgeData);
   }, []);
 
-  let loginMessage = location?.state?.loginMessage ? location?.state?.loginMessage : "";
+  let loginMessage = location?.state?.loginMessage
+    ? location?.state?.loginMessage
+    : "";
 
   useEffect(() => {
     if (loginMessage) {
@@ -28,32 +30,32 @@ const Home = () => {
     }
   }, [loginMessage]);
 
-    // useEffect(() => {
-    //   if (bookmarks && bookmarks?.length > 0) {
-    //     const rmTopLinks = async () => {
-    //       bookmarks &&
-    //         bookmarks?.length > 0 &&
-    //         bookmarks?.map((bookmark) => {
-    //           let topLinkId = bookmark?.id;
-    //           dispatch(removeTopLink({ token, topLinkId }));
-    //           return false;
-    //         });
-    //     };
-    //     rmTopLinks();
-    //   }
-    //   if (categories && categories?.length > 0) {
-    //     const rmBookmarks = async () => {
-    //       categories &&
-    //         categories?.length > 0 &&
-    //         categories?.map((category) => {
-    //           let topLinkId = category?.id;
-    //           dispatch(removeTopLink({ token, topLinkId }));
-    //           return false;
-    //         });
-    //     };
-    //     rmBookmarks();
-    //   }
-    // }, [categories, bookmarks, dispatch, token]);
+  // useEffect(() => {
+  //   if (bookmarks && bookmarks?.length > 0) {
+  //     const rmTopLinks = async () => {
+  //       bookmarks &&
+  //         bookmarks?.length > 0 &&
+  //         bookmarks?.map((bookmark) => {
+  //           let topLinkId = bookmark?.id;
+  //           dispatch(removeTopLink({ token, topLinkId }));
+  //           return false;
+  //         });
+  //     };
+  //     rmTopLinks();
+  //   }
+  //   if (categories && categories?.length > 0) {
+  //     const rmBookmarks = async () => {
+  //       categories &&
+  //         categories?.length > 0 &&
+  //         categories?.map((category) => {
+  //           let topLinkId = category?.id;
+  //           dispatch(removeTopLink({ token, topLinkId }));
+  //           return false;
+  //         });
+  //     };
+  //     rmBookmarks();
+  //   }
+  // }, [categories, bookmarks, dispatch, token]);
 
   return (
     <>
@@ -71,6 +73,24 @@ const Home = () => {
               Search the Internet and get real answers.
             </p>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 mx-auto max-w-3xl gap-6 p-6 lg:p-0 items-center mb-16">
+              {/* Second Column (Single Large Image) */}
+              <div className="lg:row-span-2">
+                <img
+                  src="/homepage.png"
+                  className="shadow-home-bookmark border border-dark-blue/30 rounded-xl w-full"
+                  alt="Middle Large"
+                />
+              </div>
+              <div className="lg:row-span-2">
+                <img
+                  src="/bookmark-1.jpg"
+                  className="shadow-home-bookmark border border-dark-blue/30 rounded-xl w-full"
+                  alt="Middle Large"
+                />
+              </div>
+            </div>
+
             <div className="space-y-4 md:space-x-4">
               {badges &&
                 badges?.length > 0 &&
@@ -85,7 +105,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 lg:p-0 items-center">
+      <div className="hidden grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 lg:p-0 items-center">
         {/* First Column */}
         <div className="grid lg:grid-rows-2 gap-6 3xl:gap-10 lg:grid-flow-col">
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-4">
