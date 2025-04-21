@@ -91,8 +91,7 @@ const Bookmark = ({
           </span>
         </Link>
       </span>
-      {/* {item?.id} */}
-      <span
+      {/* <span
         onClick={() => handleRemoveItem(item?.id)}
         className="cross-icon w-6 h-6 rounded-full bg-dark-blue flex flex-wrap items-center justify-center cursor-pointer absolute -right-2 -top-2 transition-all hover:bg-red-500"
       >
@@ -110,7 +109,7 @@ const Bookmark = ({
             d="M6 18 18 6M6 6l12 12"
           />
         </svg>
-      </span>
+      </span> */}
     </>
   );
 };
