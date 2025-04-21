@@ -32,7 +32,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const { loading } = useSelector((state) => state.bookmark);
   const [isCategoryDropdownOpen, setCategoryDropdown] = useState(false);
 
+  const controllerRef = useRef(null);
   const categoryRef = useRef(null);
+
   useEffect(() => {
     const fetchData = async () => {
       let result = await dispatch(fetchCategories(token));
@@ -101,7 +103,8 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   });
 
   const handleAddNewBookmark = async (values) => {
-    const result = await dispatch(addNewBookmark({ values, token }));
+    controllerRef.current = new AbortController();
+    const result = await dispatch(addNewBookmark({ values, token, controller: controllerRef?.current }));
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
       let categoryId = result?.payload?.category_id;
@@ -138,6 +141,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
     formik.resetForm();
     closeAllModals();
   };
+
+  const handleCancel = () => {
+    controllerRef.current?.abort(); // Cancels the request
+    closeModal();
+  }
 
   useEffect(() => {
     if (urlToBookmark?.link) {
@@ -183,6 +191,7 @@ useEffect(()=>{
     formik.setFieldError('sub_category_name', '');
   }
 },[showNewSubCategory])
+
 
   return (
     <>
@@ -561,10 +570,7 @@ useEffect(()=>{
                       <button
                         className={`text-gray-900 hover:underline inline-block d-flex w-full justify-center h-12 mt-2`}
                         type="button"
-                        onClick={() => {
-                          formik.resetForm(); // Reset to the form fields
-                          window.location.reload(); // This reloads the page
-                        }}
+                        onClick={handleCancel}
                       >
                         Cancel
                       </button>

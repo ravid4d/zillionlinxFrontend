@@ -83,7 +83,7 @@ export const fetchCategoryWiseBookmarks = createAsyncThunk(
 
 export const addNewBookmark = createAsyncThunk(
   "bookmark/addNewBookmark",
-  async ({ values, token }, { rejectWithValue }) => {
+  async ({ values, token, controller }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
         addNewBookmarkUrl,
@@ -98,11 +98,16 @@ export const addNewBookmark = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${token}`
-          }
+          },
+          signal: controller?.signal
         }
       );
       return response?.data;
     } catch (error) {
+      if (error.code === "ERR_CANCELED") {
+        console.log("Request cancelled");
+        return rejectWithValue({ message: "Request cancelled" });
+      }
       return rejectWithValue({
         status: error?.response?.status,
         message: error?.response?.data?.message || "Failed to add bookmark"
