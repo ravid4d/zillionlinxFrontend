@@ -21,13 +21,13 @@ const BookmarkGoogleResultContext = ({contextMenu, setContextMenu, handleOptionC
       position: "fixed",
       top: contextMenu.y,
       left: contextMenu.x,
-      "zIndex":"9"
+      "zIndex":"99"
     }}
     ref={menuRef}
   >
     <div className="relative z-20">
       <div
-        className="hs-dropdown-menu min-w-60 bg-white shadow-md rounded-lg mt-2"
+        className="hs-dropdown-menu min-w-60 bg-lighter-blue border border-navy shadow-md rounded-lg mt-2"
         role="menu"
         aria-orientation="vertical"
       >

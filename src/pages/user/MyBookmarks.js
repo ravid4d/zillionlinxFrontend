@@ -38,11 +38,13 @@ const MyBookmarks = () => {
     id,
     setId,
     openModal,
-    closeAllModals
+    closeAllModals,
+    setSearchResults,
+    searchResults
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
   const [draggedItemId, setDraggedItemId] = useState(null);
-  const [searchResults, setSearchResults] = useState(false);
+
 
   const {
     bookmarks,
@@ -296,11 +298,11 @@ const MyBookmarks = () => {
               closeAllModals={closeAllModals}
               setSearchResults={setSearchResults}
             />
-            <Sidebar setId={setId} id={id} />
+            <Sidebar setId={setId} id={id} setSearchResults={setSearchResults} />
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            {links && links?.length === 0 ? (
+            {listingType !== 'link' && links && links?.length === 0 ? (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
                 <div className="flex flex-wrap items-center gap-2">
                   <AddNewBookmarkField

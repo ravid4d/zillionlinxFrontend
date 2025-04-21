@@ -85,6 +85,7 @@ const Layout = () => {
   const getOpenModalName = () => {
     return Object.keys(openModal).find((key) => openModal[key]) || "";
   };
+  const [searchResults, setSearchResults] = useState(false);
 
   const isAnyModalOpen = Object.values(openModal).some((value) => value);
 
@@ -105,6 +106,7 @@ const Layout = () => {
       }
     }
     dispatch(updateListingtype('bookmark'));
+    setSearchResults(false);
   };
 
   return (
@@ -199,7 +201,9 @@ const Layout = () => {
               setSelectedCategory,
               setSelectedSubCategory,
               setId,
-              id
+              id,
+              searchResults,
+              setSearchResults
             }}
           />
         </div>

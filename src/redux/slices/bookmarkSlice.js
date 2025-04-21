@@ -288,7 +288,6 @@ export const linkFrontListing = createAsyncThunk(
           }
         }
       );
-      console.log(response, 'aaa')
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
