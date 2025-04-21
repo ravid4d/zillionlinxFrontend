@@ -557,12 +557,24 @@ useEffect(()=>{
                     )}
                   </button>
                   {loading?.addNewBookmark && (
-                    <div className="mt-3">
-                      <p className="text-gray-700 text-md text-center">
-                        Please be patient for about 5 seconds while we are
-                        generating a high quality screenshot. Thank you!
-                      </p>
-                    </div>
+                    <>
+                      <button
+                        className={`text-gray-900 hover:underline inline-block d-flex w-full justify-center h-12 mt-2`}
+                        type="button"
+                        onClick={() => {
+                          formik.resetForm(); // Reset to the form fields
+                          window.location.reload(); // This reloads the page
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <div className="mt-2">
+                        <p className="text-gray-700 text-sm text-center">
+                          Please be patient for about 5 seconds while we are
+                          generating a high quality screenshot. Thank you!
+                        </p>
+                      </div>
+                    </>
                   )}
                 </form>
               </div>
