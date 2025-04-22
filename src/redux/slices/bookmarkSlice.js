@@ -282,8 +282,9 @@ export const removeFromBookmarks = createAsyncThunk(
 
 export const linkFrontListing = createAsyncThunk(
   "bookmarks/linkListing",
-  async ({ token, title }, { rejectWithValue }) => {
+  async ({ token, title, category }, { rejectWithValue }) => {
     try {
+      console.log(category, 'aaasddsd')
       let url = title ? `${linkUrl}?search=${title}` : linkUrl;     
       let response = await axiosInstance.get(
         url,
@@ -293,7 +294,8 @@ export const linkFrontListing = createAsyncThunk(
           }
         }
       );
-      return response?.data?.data;
+      console.log(response?.data?.data, 'dd');
+      return response?.data?.data?.data;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.data?.status,
@@ -546,7 +548,7 @@ const bookmarkSlice = createSlice({
     })
     .addCase(linkFrontListing?.fulfilled, (state, action)=>{
       state.loading.fetchCategoryWiseBookmarks=false;
-      state.links = action.payload.data;
+      state.links = action.payload;
       state.totalLinks = action.payload?.total;
       state.paginationLinks = action.payload?.links;
     })

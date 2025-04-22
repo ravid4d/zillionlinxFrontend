@@ -207,7 +207,9 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
         </ul>
       </div>
       <div
-        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); dispatch(linkFrontListing({token})); dispatch(updateListingtype('link'))}}
+        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); 
+          dispatch(linkFrontListing({token})); 
+          dispatch(updateListingtype('link'))}}
         className="cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto"
       >
         <div className="absolute left-2 top-2 w-[85px]">

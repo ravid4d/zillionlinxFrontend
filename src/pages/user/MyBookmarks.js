@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Link,
   useLocation,
@@ -13,10 +13,11 @@ import {
   clearInstantLink,
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
+  linkFrontListing,
   orderBookmarks,
   removeFromBookmarks,
   removeTopLink,
-  setPageHeading,
+  setPageHeading
 } from "../../redux/slices/bookmarkSlice";
 import Bookmark from "../../components/bookmark/Bookmark";
 import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
@@ -45,11 +46,9 @@ const MyBookmarks = () => {
   const [contextMenu, setContextMenu] = useState(null);
   const [draggedItemId, setDraggedItemId] = useState(null);
 
-
   const {
     bookmarks,
     loading,
-    error,
     bookmark_addto,
     bookmark_category,
     bookmark_subcategory,
@@ -59,6 +58,9 @@ const MyBookmarks = () => {
   } = useSelector((state) => state.bookmark);
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
+  const [category, setCategory] = useState([]);
+  const [selectedCat, setSelectedCat] = useState("" | null);
+  const hasFetchedRef = useRef(false);
 
   const loginMessage = location?.state?.loginMessage
     ? location?.state?.loginMessage
@@ -274,6 +276,40 @@ const MyBookmarks = () => {
     }
   }, [openModal?.sidebar]);
 
+  useEffect(() => {
+    if (links && links.length > 0) {
+      const uniqueCategories = [
+        ...new Set(links.map((link) => link.category).filter(Boolean))
+      ];
+      if (JSON.stringify(uniqueCategories) !== JSON.stringify(category)) {
+        setCategory(uniqueCategories);
+        setSelectedCat(uniqueCategories[0]); // auto-select first
+      }
+    }
+  }, [links]);
+
+  useEffect(() => {
+    if (!hasFetchedRef.current) {
+      dispatch(linkFrontListing({ token }));
+      hasFetchedRef.current = true;
+    }
+  }, []);
+
+  const getSubCategoryGroups = () => {
+    const filteredLinks = links.filter((link) => link.category === selectedCat);
+
+    const grouped = filteredLinks.reduce((acc, link) => {
+      const subCategory = link.sub_category || "Uncategorized";
+      if (!acc[subCategory]) {
+        acc[subCategory] = [];
+      }
+      acc[subCategory].push(link);
+      return acc;
+    }, {});
+
+    return grouped;
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
@@ -298,11 +334,15 @@ const MyBookmarks = () => {
               closeAllModals={closeAllModals}
               setSearchResults={setSearchResults}
             />
-            <Sidebar setId={setId} id={id} setSearchResults={setSearchResults} />
+            <Sidebar
+              setId={setId}
+              id={id}
+              setSearchResults={setSearchResults}
+            />
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            {listingType !== 'link' && links && links?.length === 0 ? (
+            {listingType !== "link" && links && links?.length === 0 ? (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
                 <div className="flex flex-wrap items-center gap-2">
                   <AddNewBookmarkField
@@ -325,7 +365,6 @@ const MyBookmarks = () => {
               </div>
             )}
 
-
             <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
                 {pageHeading}
@@ -336,29 +375,111 @@ const MyBookmarks = () => {
                   </span>
                 ) : null}
               </p>
-              
+
               <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
                 {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
-                ) : listingType === 'link' && links && links?.length > 0 ? (
-                  <ul className="list-disc ps-6">
-                    {links?.map((link) => (
-                      <li
-                        key={link?.title}
-                        onContextMenu={(e) => linkHandleRightClick(e, link)}
-                        className="relative mb-2"
-                      >
+                ) : listingType === "link" && links && links?.length > 0 ? (
+                  <div className="flex flex-wrap h-full">
+                    <aside className="w-1/3 border-e border-light-blue h-full pe-6">
+                      <ul>
+                        {category &&
+                          category?.length > 0 &&
+                          category?.map((cat) => {
+                            return (
+                              <li
+                                key={cat}
+                                className="relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-base text-light-black w-full focus:outline-none cursor-pointer"
+                                onClick={() => setSelectedCat(cat)}
+                              >
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="absolute hs-accordion-toggle"
+                                >
+                                  <path
+                                    d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
+                                    stroke="#2131E5"
+                                    strokeWidth="0.625"
+                                    stroke-miterlimit="10"
+                                    strokeLinecap="round"
+                                    className="circle"
+                                  ></path>
+                                  {selectedCat !== cat && (
+                                    <path
+                                      d="M8 4.1875V11.8125"
+                                      stroke="#2131E5"
+                                      strokeWidth="0.625"
+                                      stroke-miterlimit="10"
+                                      strokeLinecap="round"
+                                      class="plus"
+                                    ></path>
+                                  )}
+                                  <path
+                                    d="M4.1875 8H11.8125"
+                                    stroke="#2131E5"
+                                    strokeWidth="0.625"
+                                    stroke-miterlimit="10"
+                                    strokeLinecap="round"
+                                    className="minus"
+                                  ></path>
+                                </svg>
+                                <span className="block pl-6 text-start w-full">
+                                  {cat}
+                                </span>
+                              </li>
+                            );
+                          })}
+                      </ul>
+                    </aside>
+                    <ul className="list-disc ps-6 w-2/3">
+                      {Object.entries(getSubCategoryGroups()).map(
+                        ([subCat, links]) => (
+                          <div key={subCat} className="mb-6">
+                            <h3 className="flex flex-wrap flex-col gap-x-4 text-lg md:text-xl text-dark-blue capitalize mb-2">
+                              {subCat}
+                            </h3>
+                            <ul className="">
+                              {links.map((link) => (
+                                <li
+                                  key={link.id}
+                                  onContextMenu={(e) =>
+                                    linkHandleRightClick(e, link)
+                                  }
+                                >
+                                  <a
+                                    href={link.website_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-light-black hover:underline"
+                                  >
+                                    {link.title}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )
+                      )}
+                      {/* {links?.filter(link => link.category === selectedCat)?.map((link) => (
+                        <li
+                          key={link?.title}
+                          onContextMenu={(e) => linkHandleRightClick(e, link)}
+                          className="relative mb-2"
+                        >
                           <Link target="_blank" to={link?.website_url}>
                             <span className="text-sm font-semibold hover:text-dark-blue">
                               {link?.title}
                             </span>
                           </Link>
-                      </li>
-                    ))}
-                  </ul>
-                ) : 
-                
-                listingType === 'bookmark' && bookmarks?.length > 0 ? (
+                        </li>
+                      ))} */}
+                    </ul>
+                  </div>
+                ) : listingType === "bookmark" && bookmarks?.length > 0 ? (
                   <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-3 gap-7">
                       {bookmarks && bookmarks?.length > 0 ? (

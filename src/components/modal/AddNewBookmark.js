@@ -376,7 +376,7 @@ useEffect(()=>{
                                       }}
                                     >
                                       {category?.title}
-                                      <div className="p-1 space-y-0.5 absolute invisible opacity-0 group-hover:opacity-100 group-hover:visible top-[-4px] w-1/2 rounded-lg bg-lighter-blue start-full overflow-auto height-full">
+                                      <div className="p-1 space-y-0.5 absolute invisible opacity-0 group-hover:opacity-100 group-hover:visible top-[-4px] w-1/2 rounded-lg bg-lighter-blue start-[150px] sm:start-[200px] md:start-full overflow-auto height-full">
                                         {category?.subcategories &&
                                           category?.subcategories?.length > 0 &&
                                           category?.subcategories?.map(
