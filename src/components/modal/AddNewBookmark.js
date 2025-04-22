@@ -32,7 +32,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   const { loading } = useSelector((state) => state.bookmark);
   const [isCategoryDropdownOpen, setCategoryDropdown] = useState(false);
 
+  const controllerRef = useRef(null);
   const categoryRef = useRef(null);
+
   useEffect(() => {
     const fetchData = async () => {
       let result = await dispatch(fetchCategories(token));
@@ -101,7 +103,8 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   });
 
   const handleAddNewBookmark = async (values) => {
-    const result = await dispatch(addNewBookmark({ values, token }));
+    controllerRef.current = new AbortController();
+    const result = await dispatch(addNewBookmark({ values, token, controller: controllerRef?.current }));
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
       let categoryId = result?.payload?.category_id;
@@ -138,6 +141,11 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
     formik.resetForm();
     closeAllModals();
   };
+
+  const handleCancel = () => {
+    controllerRef.current?.abort(); // Cancels the request
+    closeModal();
+  }
 
   useEffect(() => {
     if (urlToBookmark?.link) {
@@ -183,6 +191,7 @@ useEffect(()=>{
     formik.setFieldError('sub_category_name', '');
   }
 },[showNewSubCategory])
+
 
   return (
     <>
@@ -557,12 +566,21 @@ useEffect(()=>{
                     )}
                   </button>
                   {loading?.addNewBookmark && (
-                    <div className="mt-3">
-                      <p className="text-gray-700 text-md text-center">
-                        Please be patient for about 5 seconds while we are
-                        generating a high quality screenshot. Thank you!
-                      </p>
-                    </div>
+                    <>
+                      <button
+                        className={`text-gray-900 hover:underline inline-block d-flex w-full justify-center h-12 mt-2`}
+                        type="button"
+                        onClick={handleCancel}
+                      >
+                        Cancel
+                      </button>
+                      <div className="mt-2">
+                        <p className="text-gray-700 text-sm text-center">
+                          Please be patient for about 5 seconds while we are
+                          generating a high quality screenshot. Thank you!
+                        </p>
+                      </div>
+                    </>
                   )}
                 </form>
               </div>
