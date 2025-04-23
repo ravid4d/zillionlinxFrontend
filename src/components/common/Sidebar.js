@@ -42,15 +42,15 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
   }, [id?.categoryId, bookmark_addto]);
 
   return (
-    <div className="rounded-2xl bg-white xl:p-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
-      <div className="min-h-4/6 h-[calc(100%-150px)] ">
+    <div className="rounded-2xl bg-white xl:py-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
+      <div className="min-h-4/6 h-[calc(100%-100px)] ">
         <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
           My Bookmarks
         </p>
         <ul
           className={`${
             loading?.fetchCategories ? "" : ""
-          } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] xl:h-[calc(100%-15px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
+          } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] xl:h-[calc(100%-50px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
         >
           {loading?.fetchCategories ? (
             <div className="flex flex-wrap items-center justify-center h-full"><span className="loader"></span></div>
@@ -210,12 +210,12 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
         onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); 
           dispatch(linkFrontListing({token})); 
           dispatch(updateListingtype('link'))}}
-        className="cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-8 xl:left-6 xl:right-6 mx-auto"
+        className="cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto h-[100px]"
       >
         <div className="absolute left-2 top-2 w-[85px]">
           <img src="/search-bookmark-icon.png" alt="" className="w-full" />
         </div>
-        <div className="">Search for Pre-populated Bookmark Collections.</div>
+        <div className="">Search for Pre-<br />populated Bookmark Collections.</div>
       </div>
     </div>
   );
