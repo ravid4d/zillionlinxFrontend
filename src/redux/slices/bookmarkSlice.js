@@ -282,9 +282,8 @@ export const removeFromBookmarks = createAsyncThunk(
 
 export const linkFrontListing = createAsyncThunk(
   "bookmarks/linkListing",
-  async ({ token, title, category }, { rejectWithValue }) => {
+  async ({ token, title }, { rejectWithValue }) => {
     try {
-      console.log(category, 'aaasddsd')
       let url = title ? `${linkUrl}?search=${title}` : linkUrl;     
       let response = await axiosInstance.get(
         url,
@@ -295,7 +294,7 @@ export const linkFrontListing = createAsyncThunk(
         }
       );
       console.log(response?.data?.data, 'dd');
-      return response?.data?.data?.data;
+      return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
         status: error?.response?.data?.status,
