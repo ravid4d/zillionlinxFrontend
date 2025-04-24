@@ -23,7 +23,7 @@ const AddNewBookmarkField = ({ setWhichModalOpen, setUrlToBookmark }) => {
         .required("URL is required.")
     }),
     onSubmit: (values) => {
-      const formattedUrl = `https://${values.url}`;
+      const formattedUrl = `${values.url}`;
       setUrlToBookmark({ link: formattedUrl });
       addBookmarkViaUrl();
     }

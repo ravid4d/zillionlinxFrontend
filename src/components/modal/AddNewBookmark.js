@@ -72,7 +72,18 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
         .required("Title is required")
         .min(3, "Must be at least 3 characters"),
       // .max(50, "Cannot exceed 50 characters"),
-      url: YUP.string().url("Invalid URL format").required("URL is required"),
+      url: YUP.string()
+  .required("URL is required")
+  .test("is-valid-url", "Invalid URL format", (value) => {
+    if (!value) return false;
+    try {
+      // Add https:// back before validation
+      new URL("https://" + value);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }),
       category_id: YUP.number()
         .required("Category Id is required")
         .typeError("Category Id must be a number"),
@@ -86,17 +97,20 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       // }),
       add_to: YUP.string().required("Add To is required")
     }),
-    validate:(values) => {
+    validate: (values) => {
       const errors = {};
-      if (showNewSubCategory === 'remove' && !values.sub_category_name) {
-        errors.sub_category_name = 'hola dear is required';
+      if (showNewSubCategory === "remove" && !values.sub_category_name) {
+        errors.sub_category_name = "hola dear is required";
       }
       return errors;
     },
     onSubmit: (values) => {
       const updatedValues = {
         ...values,
-        ...(showNewSubCategory!==undefined && showNewSubCategory==='remove' ? {} : { sub_category_name: "" }) // Remove sub_category_name if not needed
+        url: `https://${values.url}`,
+        ...(showNewSubCategory !== undefined && showNewSubCategory === "remove"
+          ? {}
+          : { sub_category_name: "" }) // Remove sub_category_name if not needed
       };
       handleAddNewBookmark(updatedValues);
     }
@@ -104,7 +118,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
 
   const handleAddNewBookmark = async (values) => {
     controllerRef.current = new AbortController();
-    const result = await dispatch(addNewBookmark({ values, token, controller: controllerRef?.current }));
+    const result = await dispatch(
+      addNewBookmark({ values, token, controller: controllerRef?.current })
+    );
     if (addNewBookmark.fulfilled.match(result)) {
       toast.success(result.payload.message || "Bookmark added successfully!");
       let categoryId = result?.payload?.category_id;
@@ -122,31 +138,31 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       } else {
         // navigate("/bookmarks", {
         //   state: {
-        //     categoryId: result?.payload?.category_id,
+          //     categoryId: result?.payload?.category_id,
         //     subCategoryId: result?.payload?.sub_category_id,
         //     addTo: result?.payload?.addto
         //   }
         // });
       }
       await dispatch(fetchCategories(token));
-
+      
       closeModal();
       setShowNewSubCategory(false);
     } else {
       toast.error(result.payload?.message || "Failed to add bookmark.");
     }
   };
-
+  
   const closeModal = () => {
     formik.resetForm();
     closeAllModals();
   };
-
+  
   const handleCancel = () => {
     controllerRef.current?.abort(); // Cancels the request
     closeModal();
-  }
-
+  };
+  
   useEffect(() => {
     if (urlToBookmark?.link) {
       formik.setFieldValue("url", urlToBookmark?.link);
@@ -155,9 +171,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
 
   useEffect(() => {
     let record =
-      typeof urlToBookmark === "object" &&
-      urlToBookmark !== null &&
-      !Array.isArray(urlToBookmark)
+    typeof urlToBookmark === "object" &&
+    urlToBookmark !== null &&
+    !Array.isArray(urlToBookmark)
         ? urlToBookmark?.record
         : urlToBookmark;
     if (record) {
@@ -170,29 +186,41 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
   useClickAway(categoryRef, isCategoryDropdownOpen, () => {
     setCategoryDropdown(false);
   });
-
+  
   useEffect(() => {
-    if(selectedCategoryId === undefined && selectedSubCategoryId === undefined) {
+    if (
+      selectedCategoryId === undefined &&
+      selectedSubCategoryId === undefined
+    ) {
       setShowNewSubCategory(undefined);
-    }
-    else if(selectedCategoryId !== undefined && selectedSubCategoryId === undefined) {
+    } else if (
+      selectedCategoryId !== undefined &&
+      selectedSubCategoryId === undefined
+    ) {
       setShowNewSubCategory(true);
-    }
-    else {
+    } else {
       setShowNewSubCategory(undefined);
     }
   }, [selectedCategoryId, selectedSubCategoryId]);
+  
+  useEffect(() => {
+    if (showNewSubCategory === "remove") {
+      formik.setFieldError(
+        "sub_category_name",
+        "Sub Category Name is required"
+      );
+    } else {
+      formik.setFieldError("sub_category_name", "");
+    }
+  }, [showNewSubCategory]);
 
-useEffect(()=>{
-  if(showNewSubCategory === 'remove'){
-    formik.setFieldError('sub_category_name', 'Sub Category Name is required');
-  }
-  else {
-    formik.setFieldError('sub_category_name', '');
-  }
-},[showNewSubCategory])
-
-
+  const handleChange = (e) => {
+    let value = e.target.value;
+    if (value.startsWith("https://")) {
+      value = value.replace("https://", ""); // Remove https://
+    }
+    formik.setFieldValue("url", value);
+  };
   return (
     <>
       {/* {urlToBookmark?.link} */}
@@ -204,7 +232,7 @@ useEffect(()=>{
         role="dialog"
         tabIndex="-1"
         aria-labelledby="add-new-bookmark-modal-label"
-      >
+        >
         <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
           <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
             <div className="w-full py-20 px-10">
@@ -212,7 +240,7 @@ useEffect(()=>{
                 <h3
                   id="add-new-bookmark-modal-label"
                   className="uppercase text-dark-blue text-center w-full text-3xl xl:text-5xl mb-6"
-                >
+                  >
                   Add Bookmark
                 </h3>
                 <button
@@ -268,18 +296,27 @@ useEffect(()=>{
                     ) : null}
                   </div>
                   <div className="mb-5">
-                    <Textfield
-                      id="url"
-                      name="url"
-                      label="Website"
-                      type="url"
-                      placeholder=""
-                      icon="url"
-                      iconPlacement="left"
-                      fieldValue={formik.values.url}
-                      setFieldValue={formik.handleChange}
-                      setFieldValueOnBlur={formik.handleBlur}
-                    />
+                    <label
+                      htmlFor="url"
+                      className="block text-base text-light-black mb-3"
+                    >
+                      Website
+                    </label>
+                    <div className="relative w-full">
+                      <input
+                        type="text"
+                        value={formik.values.url}
+                        onChange={handleChange}
+                        onBlur={formik.handleBlur}
+                        placeholder=""
+                        id="url"
+                        name="url"
+                        className="py-3 px-4 bg-transparent border-dark-blue focus:border-blue-500 focus:ring-blue-500 ps-[66px] h-12 block  w-full rounded-lg text-md"
+                      />
+                      <div className="absolute inset-y-0 start-0 text-gray-600 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
+                        https://
+                      </div>
+                    </div>
                     {formik.touched.url && formik.errors.url ? (
                       <div className="text-red-500 text-sm mt-1">
                         {formik.errors.url}
@@ -295,31 +332,31 @@ useEffect(()=>{
                             className="block text-base text-light-black mb-3"
                           >
                             Category / Sub Category
-                            {
-                              showNewSubCategory && showNewSubCategory!==undefined && showNewSubCategory!=='remove' && (
+                            {showNewSubCategory &&
+                              showNewSubCategory !== undefined &&
+                              showNewSubCategory !== "remove" && (
+                                <span
+                                  title="Add new sub category"
+                                  className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
+                                  onClick={() =>
+                                    setShowNewSubCategory("remove")
+                                  }
+                                >
+                                  Add Sub Category
+                                </span>
+                              )}
+                            {showNewSubCategory === "remove" &&
+                              showNewSubCategory !== undefined && (
+                                <div className="flex justify-end items-center">
                                   <span
-                                    title="Add new sub category"
+                                    title="Don't add new sub category?"
                                     className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
-                                    onClick={() => setShowNewSubCategory('remove')}
+                                    onClick={() => setShowNewSubCategory(true)}
                                   >
-                                    Add Sub Category
+                                    Remove Sub Category
                                   </span>
-                                ) 
-                              }
-                              {
-                                showNewSubCategory === "remove" && showNewSubCategory!==undefined && 
-                                (
-                                  <div className="flex justify-end items-center">
-                                    <span
-                                      title="Don't add new sub category?"
-                                      className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
-                                      onClick={() => setShowNewSubCategory(true)}
-                                    >
-                                      Remove Sub Category
-                                    </span>
-                                  </div>
-                                )
-                              }
+                                </div>
+                              )}
                           </label>
                           <button
                             onClick={() =>
@@ -330,8 +367,9 @@ useEffect(()=>{
                           >
                             {selectedCategoryId
                               ? `${selectedCategoryId} ${
-                                  selectedSubCategoryId ?
-                                  `| ${selectedSubCategoryId}` : ''
+                                  selectedSubCategoryId
+                                    ? `| ${selectedSubCategoryId}`
+                                    : ""
                                 }`
                               : "Select an option"}
                             <svg
@@ -473,7 +511,9 @@ useEffect(()=>{
                     </div>
                   )} */}
 
-                  {showNewSubCategory && showNewSubCategory !== undefined && showNewSubCategory === 'remove' && (
+                  {showNewSubCategory &&
+                    showNewSubCategory !== undefined &&
+                    showNewSubCategory === "remove" && (
                       <div className="mb-5 relative">
                         <Textfield
                           id="sub_category_name"
@@ -492,7 +532,7 @@ useEffect(()=>{
                           </div>
                         ) : null}
                       </div>
-                  )}
+                    )}
 
                   {/* <div className="mb-5">
               <button className="btn dark-btn justify-center h-12 " type="button" onClick={() => setShowNewSubCategory(true)}>

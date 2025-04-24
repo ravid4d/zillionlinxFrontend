@@ -342,7 +342,7 @@ const MyBookmarks = () => {
           </div>
 
           <div className="bookmark-content-wrapper h-full">
-            {listingType !== "link" && links && links?.length === 0 ? (
+            {listingType !== "link" ? (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
                 <div className="flex flex-wrap items-center gap-2">
                   <AddNewBookmarkField
@@ -525,7 +525,7 @@ const MyBookmarks = () => {
                   </div>
                 )}
 
-                {links && links?.length > 0 && contextMenu && listingType !== "link" && listingType !== "bookmark" (
+                {links && links?.length > 0 && contextMenu && listingType !== "link" && listingType !== "bookmark" && (
                   <BookmarkGoogleResultContext
                     setContextMenu={setContextMenu}
                     contextMenu={contextMenu}
