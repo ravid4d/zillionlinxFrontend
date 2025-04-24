@@ -286,7 +286,7 @@ const Header = ({
                 {isLoggedIn ? (
                   <>
                     <button
-                      className="btn dark-btn !hidden 2xl:!inline-flex"
+                      className="btn navy-btn !hidden 2xl:!inline-flex"
                       onClick={handleUserLogout}
                     >
                       Logout
@@ -323,14 +323,14 @@ const Header = ({
                     </svg>
                     {isLoggedIn && userRole === "user" && (
                       <button
-                        className="btn dark-btn !hidden 2xl:!inline-flex"
+                        className="btn navy-btn !hidden 2xl:!inline-flex"
                         onClick={redirectTo}
                       >
                         Home
                       </button>
                     )}
                     {userRole === "admin" ? (
-                      <Link className="btn dark-btn" to="/admin">
+                      <Link className="btn navy-btn" to="/admin">
                         Dashboard
                       </Link>
                     ) : null}
@@ -364,7 +364,7 @@ const Header = ({
                   <nav className="justify-end ml-3 hidden xl:flex flex-wrap">
                     <button
                       onClick={redirectTo}
-                      className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+                      className="px-4 xl:px-6 py-4 xl:py-5 text-black text-base xl:text-lg bg-white tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       My Bookmarks
                     </button>
@@ -374,13 +374,13 @@ const Header = ({
                         setUrlToBookmark("");
                         setWhichModalOpen("newBookmark");
                       }}
-                      className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+                      className="px-4 xl:px-6 py-4 xl:py-5 text-black text-base xl:text-lg bg-white tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       Add New Bookmark
                     </button>
                     <Link
                       to="/import"
-                      className="px-4 xl:px-6 py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+                      className="px-4 xl:px-6 py-4 xl:py-5 text-black text-base xl:text-lg bg-white tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
                     >
                       Import Bookmarks
                     </Link>
@@ -393,10 +393,10 @@ const Header = ({
       </nav>
       {isLoggedIn && userRole === "user" ? (
         <div className="px-4 sm:px-6 xl:px-2 xl:hidden">
-          <nav className="pt-4 bg-navy sm:bg-transparent rounded-tl-[20px] rounded-tr-[20px] flex flex-wrap sm:justify-end xl:hidden">
+          <nav className="pt-4 bg-white sm:bg-transparent rounded-tl-[20px] rounded-tr-[20px] flex flex-wrap sm:justify-end xl:hidden">
             <Link
               to="/bookmarks"
-              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-black text-base xl:text-lg bg-white tracking-wide rounded-tl-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
             >
               My Bookmarks
             </Link>
@@ -406,13 +406,13 @@ const Header = ({
               onClick={() => {
                 setWhichModalOpen("newBookmark");
               }}
-              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-black text-base xl:text-lg bg-white tracking-wide inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
             >
               Add New Bookmark
             </button>
             <Link
               to="/import"
-              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-tabs text-base xl:text-lg bg-navy tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
+              className="px-4 xl:px-6 py-2 sm:py-4 xl:py-5 text-black text-base xl:text-lg bg-white tracking-wide rounded-tr-[20px] inline-flex items-center hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600"
             >
               Import Bookmarks
             </Link>

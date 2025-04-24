@@ -22,6 +22,10 @@ body {
   @apply uppercase bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue;
 }
 
+.btn.navy-btn {
+  @apply uppercase bg-light-blue text-dark-blue border border-dark-blue hover:bg-dark-blue hover:text-light-blue;
+}
+
 .btn.badge-btn {
   @apply bg-light-blue text-light-black;
 }

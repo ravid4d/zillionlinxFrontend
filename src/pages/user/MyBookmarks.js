@@ -312,7 +312,7 @@ const MyBookmarks = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
-      <div className="bg-navy sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
+      <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
             id="hs-application-sidebar"
@@ -398,13 +398,13 @@ const MyBookmarks = () => {
                                   viewBox="0 0 16 16"
                                   fill="none"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  class="absolute hs-accordion-toggle"
+                                  className="absolute hs-accordion-toggle"
                                 >
                                   <path
                                     d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
                                     stroke="#2131E5"
                                     strokeWidth="0.625"
-                                    stroke-miterlimit="10"
+                                    strokeMiterlimit="10"
                                     strokeLinecap="round"
                                     className="circle"
                                   ></path>
@@ -413,16 +413,16 @@ const MyBookmarks = () => {
                                       d="M8 4.1875V11.8125"
                                       stroke="#2131E5"
                                       strokeWidth="0.625"
-                                      stroke-miterlimit="10"
+                                      strokeMiterlimit="10"
                                       strokeLinecap="round"
-                                      class="plus"
+                                      className="plus"
                                     ></path>
                                   )}
                                   <path
                                     d="M4.1875 8H11.8125"
                                     stroke="#2131E5"
                                     strokeWidth="0.625"
-                                    stroke-miterlimit="10"
+                                    strokeMiterlimit="10"
                                     strokeLinecap="round"
                                     className="minus"
                                   ></path>
