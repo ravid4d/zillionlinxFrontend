@@ -4,6 +4,7 @@ import badgeData from "../../json/badges.json";
 // import { removeTopLink } from "../../redux/slices/bookmarkSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Cookies from "./Cookies";
 
 const Home = () => {
   const [badges, setBadges] = useState();
@@ -174,6 +175,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <Cookies />
     </>
   );
 };

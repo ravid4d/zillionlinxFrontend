@@ -525,7 +525,7 @@ const MyBookmarks = () => {
                   </div>
                 )}
 
-                {links && links?.length > 0 && contextMenu && (
+                {links && links?.length > 0 && contextMenu && listingType !== "link" && listingType !== "bookmark" (
                   <BookmarkGoogleResultContext
                     setContextMenu={setContextMenu}
                     contextMenu={contextMenu}

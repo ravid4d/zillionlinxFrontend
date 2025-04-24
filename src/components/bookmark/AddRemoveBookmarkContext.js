@@ -18,6 +18,7 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, [setContextMenu]);
+console.log(contextMenu, 'sdg');
   return (
     <div
       style={{
