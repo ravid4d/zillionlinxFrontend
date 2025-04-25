@@ -118,7 +118,7 @@ const Header = ({
                 className="max-w-full max-h-[60px] block"
               />
               <img
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Logo"
                 className="max-w-full max-h-[60px] block"
               />

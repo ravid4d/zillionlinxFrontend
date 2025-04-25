@@ -48,7 +48,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
 
   return (
     <div className="rounded-2xl bg-white xl:py-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
-      <div className="min-h-4/6 h-[calc(100%-60px)] ">
+      <div className="min-h-4/6 h-[calc(100%-80px)]">
         <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
           My Bookmarks
         </p>
@@ -215,7 +215,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
           )}
         </ul>
       </div>
-      <div className="rounded-xl border border-light-blue px-4 py-2 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto">
+      <div className="rounded-xl border border-light-blue px-4 py-2 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto w-full">
         <button
           onClick={() => {
             dispatch(
@@ -225,7 +225,8 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
             dispatch(updateListingtype("link"));
           }}
           // cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center py-2 px-3 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto
-          className="btn dark-btn !normal-case !text-white hover:!text-dark-blue !rounded-xl"
+          // !text-sm xl:!text-lg 
+          className="btn dark-btn !normal-case !text-white hover:!text-dark-blue !rounded-xl w-full !px-5 !text-lg"
         >
           Instant LinX - Bookmark Collections
         </button>
