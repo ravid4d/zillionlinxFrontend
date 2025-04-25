@@ -191,7 +191,7 @@ const GoogleCustomSearch = () => {
                     <div className="bg-white rounded-xl p-4 h-full flex flex-wrap flex-col justify-between space-y-5">
                       <div className="bg-white rounded-xl border border-light-blue w-full overflow-auto flex-1 p-2">
                         <p className="text-[20px] text-dark-blue capitalize mb-3">
-                          Popular Links
+                        Find it here
                         </p>
                         <div className="overflow-auto custom-scrollbar h-[calc(100%-45px)] flex flex-wrap flex-col md:flex-row md:block">
                           {loading?.googleSearch ? (

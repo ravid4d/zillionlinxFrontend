@@ -30,6 +30,7 @@ module.exports = {
       },
       colors: {
         'lighter-blue': '#E3E6FF',
+        'icon-blue': '#004aad',
         'light-blue': '#C0C6FF',
         'mid-blue': '#9199F0',
         'dark-blue': '#2131E5',

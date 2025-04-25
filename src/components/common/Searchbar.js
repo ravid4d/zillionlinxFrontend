@@ -50,14 +50,14 @@ const Searchbar = ({
           setTitle(e.target.value);
         }}
         type="text"
-        placeholder="Search my Bookmarks"
+        placeholder="Search"
         id="hs-trailing-button-add-on-with-icon"
         name="hs-trailing-button-add-on-with-icon"
         className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
       />
       {isEmpty ? (
         <button
-          className="absolute z-20 right-2 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-dark-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+          className="absolute z-20 right-1 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-icon-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
           onClick={() => {
             setisEmpty(false);
             setTitle("");
@@ -70,7 +70,7 @@ const Searchbar = ({
             viewBox="0 0 24 24"
             strokeWidth={2}
             stroke="currentColor"
-            className="size-4 shrink-0"
+            className="size-6 shrink-0"
           >
             <path
               strokeLinecap="round"
@@ -83,10 +83,10 @@ const Searchbar = ({
         <button
           type="submit"
           // onClick={handleSearch}
-          className="absolute z-20 right-2 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-dark-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+          className="absolute z-20 right-1 top-1 w-[40px] h-[40px] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-icon-blue text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
         >
           <svg
-            className="shrink-0 size-4"
+            className="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"

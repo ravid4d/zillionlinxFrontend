@@ -69,6 +69,7 @@ const MyBookmarks = () => {
   const linkHandleRightClick = (event, record) => {
     event.preventDefault();
     let newRecord = { ...record, link: record?.website_url };
+    console.log(newRecord, "object");
     setContextMenu({
       x: event.clientX,
       y: event.clientY,
@@ -101,6 +102,7 @@ const MyBookmarks = () => {
         ).unwrap();
         if (result !== "") {
           toast.success(result);
+          dispatch(fetchAllTopLinks(token));
         }
       } catch (error) {
         console.log(error, "Error while adding bookmark to top links");
@@ -224,6 +226,7 @@ const MyBookmarks = () => {
         await dispatch(
           fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
         );
+        setContextMenu({});
       } else {
         await dispatch(fetchAllTopLinks(token));
       }
@@ -366,7 +369,7 @@ const MyBookmarks = () => {
             )}
 
             <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
-              <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
+              <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
                 {pageHeading}
                 {pageHeading === "Top Links" ? (
                   <span className="text-base text-light-black inline-block">
@@ -443,11 +446,14 @@ const MyBookmarks = () => {
                               {subCat}
                             </h3>
                             <ul className="">
-                              {links.map((link) => (
-                                <li
+                              {links.map((link) => {
+                                // console.log(link, "link");
+                                return (
+                                  <li
                                   key={link.id}
-                                  onContextMenu={(e) =>
-                                    linkHandleRightClick(e, link)
+                                  onContextMenu={(e) =>{
+                                    // {console.log(link, "link")}
+                                    linkHandleRightClick(e, link)}
                                   }
                                 >
                                   <a
@@ -459,7 +465,9 @@ const MyBookmarks = () => {
                                     {link.title}
                                   </a>
                                 </li>
-                              ))}
+                                  )
+                                }
+                              )}
                             </ul>
                           </div>
                         )
@@ -525,7 +533,7 @@ const MyBookmarks = () => {
                   </div>
                 )}
 
-                {links && links?.length > 0 && contextMenu && listingType !== "link" && listingType !== "bookmark" && (
+                {links && links?.length > 0 && contextMenu && listingType === "link" && (
                   <BookmarkGoogleResultContext
                     setContextMenu={setContextMenu}
                     contextMenu={contextMenu}

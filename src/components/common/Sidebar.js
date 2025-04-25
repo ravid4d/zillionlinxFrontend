@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/slices/categorySlice";
-import {linkFrontListing, setPageHeading, clearInstantLink, updateListingtype } from "../../redux/slices/bookmarkSlice";
+import {
+  linkFrontListing,
+  setPageHeading,
+  clearInstantLink,
+  updateListingtype
+} from "../../redux/slices/bookmarkSlice";
 
 const Sidebar = ({ setId, id, setSearchResults }) => {
   const dispatch = useDispatch();
@@ -43,8 +48,8 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
 
   return (
     <div className="rounded-2xl bg-white xl:py-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
-      <div className="min-h-4/6 h-[calc(100%-100px)] ">
-        <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5">
+      <div className="min-h-4/6 h-[calc(100%-60px)] ">
+        <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
           My Bookmarks
         </p>
         <ul
@@ -53,7 +58,9 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
           } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] xl:h-[calc(100%-50px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
         >
           {loading?.fetchCategories ? (
-            <div className="flex flex-wrap items-center justify-center h-full"><span className="loader"></span></div>
+            <div className="flex flex-wrap items-center justify-center h-full">
+              <span className="loader"></span>
+            </div>
           ) : (
             categories &&
             categories?.length > 0 &&
@@ -71,15 +78,15 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                 >
                   <button
                     onClick={() => {
-                        dispatch(updateListingtype('bookmark'));
-                        setSearchResults(false);
-                        setId({ categoryId: category?.id, subCategoryId: "" });
-                        dispatch(clearInstantLink())
-                        dispatch(setPageHeading(category?.title))
-                        toggleAccordion(
-                            `users-accordion_${category?.id}`,
-                            hasDropdown
-                        );
+                      dispatch(updateListingtype("bookmark"));
+                      setSearchResults(false);
+                      setId({ categoryId: category?.id, subCategoryId: "" });
+                      dispatch(clearInstantLink());
+                      dispatch(setPageHeading(category?.title));
+                      toggleAccordion(
+                        `users-accordion_${category?.id}`,
+                        hasDropdown
+                      );
                     }}
                     type="button"
                     className={`relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-base text-light-black w-full focus:outline-none ${
@@ -144,18 +151,20 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                               key={subIndex}
                             >
                               <button
-                                onClick={() =>
-                                {
-                                    setSearchResults(false);
-                                    dispatch(updateListingtype('bookmark'));
-                                    dispatch(clearInstantLink())
-                                    dispatch(setPageHeading(`${category?.title} | ${subCat?.title}`))
-                                    setId({
-                                        categoryId: subCat?.parent_id,
-                                        subCategoryId: subCat?.id
-                                    })
-                                }
-                                }
+                                onClick={() => {
+                                  setSearchResults(false);
+                                  dispatch(updateListingtype("bookmark"));
+                                  dispatch(clearInstantLink());
+                                  dispatch(
+                                    setPageHeading(
+                                      `${category?.title} | ${subCat?.title}`
+                                    )
+                                  );
+                                  setId({
+                                    categoryId: subCat?.parent_id,
+                                    subCategoryId: subCat?.id
+                                  });
+                                }}
                                 type="button"
                                 className="rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base text-light-black w-full focus:outline-none"
                                 aria-expanded="true"
@@ -206,16 +215,20 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
           )}
         </ul>
       </div>
-      <div
-        onClick={()=>{dispatch(setPageHeading("Instant LinX - The Helpful Link Collections")); 
-          dispatch(linkFrontListing({token})); 
-          dispatch(updateListingtype('link'))}}
-        className="cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center pl-[120px] py-2 pr-3 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto h-[100px]"
-      >
-        <div className="absolute left-2 top-2 w-[85px]">
-          <img src="/search-bookmark-icon.png" alt="" className="w-full" />
-        </div>
-        <div className="">Search for Pre-<br />populated Bookmark Collections.</div>
+      <div className="rounded-xl border border-light-blue px-4 py-2 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto">
+        <button
+          onClick={() => {
+            dispatch(
+              setPageHeading("Instant LinX - The Helpful Link Collections")
+            );
+            dispatch(linkFrontListing({ token }));
+            dispatch(updateListingtype("link"));
+          }}
+          // cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center py-2 px-3 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto
+          className="btn dark-btn !normal-case !text-white hover:!text-dark-blue !rounded-xl"
+        >
+          Instant LinX - Bookmark Collections
+        </button>
       </div>
     </div>
   );
