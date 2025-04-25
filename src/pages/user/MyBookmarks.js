@@ -226,10 +226,10 @@ const MyBookmarks = () => {
         await dispatch(
           fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
         );
-        setContextMenu({});
       } else {
         await dispatch(fetchAllTopLinks(token));
       }
+      setContextMenu(null);
     } else {
       toast.error(result.payload || "Failed to remove top link.");
     }
