@@ -257,7 +257,12 @@ const MyBookmarks = () => {
       dispatch(
         fetchCategoryWiseBookmarks({ token, categoryId, subCategoryId })
       );
-      dispatch(setPageHeading(`${category?.title} | ${subCategry?.title}`));
+      dispatch(setPageHeading(
+        subCategry?.title 
+          ? `${category?.title} | ${subCategry.title}` 
+          : `${category?.title}`
+      ));
+      // dispatch(setPageHeading(`${category?.title} | ${subCategry?.title}`));
     }
     dispatch(clearInstantLink());
   }, [bookmark_addto]);
