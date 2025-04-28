@@ -177,7 +177,13 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
         ? urlToBookmark?.record
         : urlToBookmark;
     if (record) {
-      formik.setFieldValue("url", record?.link);
+      let value = record?.link;
+      if (value.startsWith("https://")) {
+        value = value.replace("https://", ""); // Remove https://
+      }
+      formik.setFieldValue("url", value);
+
+      // formik.setFieldValue("url", record?.link);
       formik.setFieldValue("title", record?.title);
       formik.setFieldValue("add_to", record?.type);
     }
