@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
-import {
-  Link,
-  useLocation,
-  useOutletContext
-} from "react-router-dom";
+import { Link, useLocation, useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { googleSearch } from "../../redux/slices/bookmarkSlice";
 import BookmarkGoogleResultContext from "../../components/bookmark/BookmarkGoogleResultContext";
@@ -14,8 +10,8 @@ const GoogleCustomSearch = () => {
   const { token } = useSelector((state) => state.auth);
   const [noContent, setNoContent] = useState(false);
   const [mainContent, setMainContent] = useState([]);
-  const [contextMenu, setContextMenu] = useState(null); 
-
+  const [contextMenu, setContextMenu] = useState(null);
+  const googleRef = useRef(null);
   const {
     googleResults,
     loading,
@@ -25,7 +21,7 @@ const GoogleCustomSearch = () => {
     walmartStaticLink,
     aliexpressStaticLink,
     etsyStaticLink,
-    neweggStaticLink,
+    neweggStaticLink
   } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -57,20 +53,20 @@ const GoogleCustomSearch = () => {
   }, [googleResults]);
 
   const handleRightClick = (event, record) => {
-          event.preventDefault(); // Prevent default browser context menu
-          setContextMenu({
-              x: event.clientX,
-              y: event.clientY,
-              record: record, // Save clicked record
-          });
+    event.preventDefault(); // Prevent default browser context menu
+    setContextMenu({
+      x: event.clientX,
+      y: event.clientY,
+      record: record // Save clicked record
+    });
   };
 
-    const handleOptionClick = (option) => {
-      contextMenu.record = { ...contextMenu.record, type:option };
-      setUrlToBookmark(contextMenu)
-      // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
-      setContextMenu(null); // Close context menu
-      setWhichModalOpen("newBookmark"); // Show second modal
+  const handleOptionClick = (option) => {
+    contextMenu.record = { ...contextMenu.record, type: option };
+    setUrlToBookmark(contextMenu);
+    // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
+    setContextMenu(null); // Close context menu
+    setWhichModalOpen("newBookmark"); // Show second modal
   };
 
   return (
@@ -82,7 +78,7 @@ const GoogleCustomSearch = () => {
               <div className="bg-white rounded-xl p-3 mb-4 w-full md:w-[calc(50%-25px)]">
                 Hint: Right Click on any URL / Title below to Bookmark that Link
               </div>
-              <GoogleSearchbar />
+              <GoogleSearchbar googleRef={googleRef} />
             </div>
             <div className="rounded-2xl lg:h-[calc(100%-64px)] flex flex-wrap">
               {noContent ? (
@@ -94,8 +90,8 @@ const GoogleCustomSearch = () => {
                 <>
                   <div className="bg-white w-full lg:w-4/5 rounded-xl border border-light-blue p-6 flex flex-wrap h-full mb-5 lg:mb-0">
                     <div className="w-full lg:w-4/6 h-full">
-                      <div className="flex flex-wrap items-center space-x-5 mb-2">
-                        <img src="/google.svg" alt="" width="160" />
+                      <div className="flex flex-wrap items-center space-x-3 mb-2 text-sm">
+                        <img src="/google.png" alt="" width="100" />
                         <p>Google Custom Search</p>
                       </div>
                       <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)] max-h-96 lg:max-h-full">
@@ -106,12 +102,14 @@ const GoogleCustomSearch = () => {
                           mainContent?.length > 0 &&
                           mainContent?.map((result, index) => {
                             return (
+                              <div className="mb-4 last:mb-0" key={index}>
                                 <Link
-                                  key={index}
                                   to={result?.link}
-                                  className={`block mb-4 last:mb-0 google_result google_result_${index}`}
+                                  className={`block google_result google_result_${index}`}
                                   target="_blank"
-                                  onContextMenu={(e) => handleRightClick(e, result)}
+                                  onContextMenu={(e) =>
+                                    handleRightClick(e, result)
+                                  }
                                 >
                                   {result?.thumbnail ? (
                                     <img
@@ -119,29 +117,42 @@ const GoogleCustomSearch = () => {
                                       alt={result?.title}
                                     />
                                   ) : null}
-                                  <div className="text-dark-blue text-xl font-medium text-ellipsis overflow-hidden text-nowrap">
+                                  <div className="text-dark-blue text-md text-ellipsis overflow-hidden text-nowrap">
                                     {result?.title}
                                   </div>
-                                  <p className="text-base text-light-black">
-                                    {result?.snippet}
-                                  </p>
                                 </Link>
+                                <p className="text-[13px] text-light-black">
+                                  {result?.snippet}
+                                </p>
+                                <span className="block text-[13px] text-[#009933]">
+                                  {result?.breadcrumb}
+                                </span>
+                              </div>
                             );
                           })
                         )}
-                        {contextMenu && 
-                          <BookmarkGoogleResultContext  setContextMenu={setContextMenu}  contextMenu={contextMenu} handleOptionClick={handleOptionClick} />
-                        }
+                        {contextMenu && (
+                          <BookmarkGoogleResultContext
+                            setContextMenu={setContextMenu}
+                            contextMenu={contextMenu}
+                            handleOptionClick={handleOptionClick}
+                          />
+                        )}
                       </div>
                     </div>
-                    <div className={`w-full lg:w-2/6 rounded-2xl lg:ps-6 h-full`}>
+                    <div
+                      className={`w-full lg:w-2/6 rounded-2xl lg:ps-6 h-full`}
+                    >
                       <div className="bg-white h-full">
-                        <img
-                          src="/google-image.png"
-                          alt=""
-                          width="200"
-                          className="mt-5 lg:mt-0 lg:mx-auto block mb-2"
-                        />
+                        <div className="flex flex-wrap items-center space-x-3 mb-0 text-sm">
+                          <img
+                            src="/google.png"
+                            alt=""
+                            width="100"
+                            className="mt-5 lg:mt-0 block mb-2"
+                          />
+                          <p>Images</p>
+                        </div>
                         <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
                           <ul className="grid grid-cols-1 gap-4">
                             {loading?.googleSearch ? (
@@ -191,7 +202,7 @@ const GoogleCustomSearch = () => {
                     <div className="bg-white rounded-xl p-4 h-full flex flex-wrap flex-col justify-between space-y-5">
                       <div className="bg-white rounded-xl border border-light-blue w-full overflow-auto flex-1 p-2">
                         <p className="text-[20px] text-dark-blue mb-3">
-                        Find it here
+                          Find it here
                         </p>
                         <div className="overflow-auto custom-scrollbar h-[calc(100%-45px)] flex flex-wrap flex-col md:flex-row md:block">
                           {loading?.googleSearch ? (
@@ -215,7 +226,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                               {walmartStaticLink && (
+                              {walmartStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={walmartStaticLink}
@@ -231,8 +242,8 @@ const GoogleCustomSearch = () => {
                                     />
                                   </figure>
                                 </Link>
-                               )} 
-                                 {etsyStaticLink && (
+                              )}
+                              {etsyStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={etsyStaticLink}
@@ -249,7 +260,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                               {ebayStaticLink && (
+                              {ebayStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={ebayStaticLink}
@@ -266,7 +277,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}
-                                {aliexpressStaticLink && (
+                              {aliexpressStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={aliexpressStaticLink}
@@ -282,10 +293,7 @@ const GoogleCustomSearch = () => {
                                     />
                                   </figure>
                                 </Link>
-                               )} 
-
-
-
+                              )}
 
                               {/* {wikiStaticLink && (
                                 <Link
@@ -304,12 +312,8 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                               )}                         */}
-                            
-                             
-                              
-                             
-                             
-                               {neweggStaticLink && (
+
+                              {neweggStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={neweggStaticLink}
@@ -325,8 +329,8 @@ const GoogleCustomSearch = () => {
                                     />
                                   </figure>
                                 </Link>
-                               )} 
-                               {/* {mercadolibreStaticLink && (
+                              )}
+                              {/* {mercadolibreStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={mercadolibreStaticLink}
@@ -343,7 +347,7 @@ const GoogleCustomSearch = () => {
                                   </figure>
                                 </Link>
                                )}  */}
-                                {youtubeStaticLink && (
+                              {youtubeStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   target="_blank"
@@ -365,7 +369,11 @@ const GoogleCustomSearch = () => {
                         </div>
                       </div>
                       <div className="bg-white rounded-xl border border-light-blue h-fit p-2 text-sm overflow-auto custom-scrollbar text-center">
-                        <span className="block">Disclaimer:</span> This site contains affiliate links. As an associate or partner of Amazon, eBay, YouTube, Walmart, Etsy, and AliExpress, I may earn a commission from qualifying purchases made through these links — at no extra cost to you.
+                        <span className="block">Disclaimer:</span> This site
+                        contains affiliate links. As an associate or partner of
+                        Amazon, eBay, YouTube, Walmart, Etsy, and AliExpress, I
+                        may earn a commission from qualifying purchases made
+                        through these links — at no extra cost to you.
                       </div>
                     </div>
                   </div>

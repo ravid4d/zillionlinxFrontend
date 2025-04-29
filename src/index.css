@@ -101,3 +101,9 @@ body {
 .import-bookmarks-list dl:first-child {@apply -mt-4;}
 .import-bookmarks-list a {@apply text-sm mb-2 inline-block hover:text-dark-blue;}
 /* border-gray-200 bg-white text-gray-800 hover:bg-gray-50 */
+.google-search {
+  background: url("/public/branding.png");
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+}

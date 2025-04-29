@@ -61,6 +61,7 @@ const MyBookmarks = () => {
   const [category, setCategory] = useState([]);
   const [selectedCat, setSelectedCat] = useState("" | null);
   const hasFetchedRef = useRef(false);
+  const googleRef = useRef(null);
 
   const loginMessage = location?.state?.loginMessage
     ? location?.state?.loginMessage
@@ -358,7 +359,7 @@ const MyBookmarks = () => {
                     setUrlToBookmark={setUrlToBookmark}
                   />
                 </div>
-                <GoogleSearchbar />
+                <GoogleSearchbar  googleRef={googleRef} />
               </div>
             ) : (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
