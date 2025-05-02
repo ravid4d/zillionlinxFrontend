@@ -6,23 +6,23 @@ const GoodBye = () => {
     <div className="max-w-3xl flex flex-wrap items-center justify-center h-screen mx-auto size-full">
       <main id="content">
         <div className="text-center py-10 px-4 sm:px-6 lg:px-8">
-          <h1 className="block text-7xl font-bold text-gray-800 sm:text-9xl dark:text-white">
+          <h1 className="block text-7xl font-bold text-gray-800 sm:text-9xl ">
            GOOD BYE
           </h1>
-          <p className="mt-3 text-gray-600 dark:text-neutral-400 mb-3">
+          <p className="mt-3 text-gray-600  mb-3">
             We’re sad to see you go, but we respect your decision.
           </p>
-          <p className="text-gray-600 dark:text-neutral-400 mb-3">
+          <p className="text-gray-600  mb-3">
             Thank you for being a part of our journey. Whether you were with us
             for a short while or a long time, your presence meant a lot. Your
             account has been successfully deleted, and all your data has been
             removed from our systems.
           </p>
-          <p className="text-gray-600 dark:text-neutral-400 mb-3">
+          <p className="text-gray-600  mb-3">
             If you ever change your mind, we’ll be right here — ready to welcome
             you back with open arms.
           </p>
-          <p className="text-gray-600 dark:text-neutral-400">
+          <p className="text-gray-600 ">
             Until then, take care and all the best on your next adventure! 💙
           </p>
           <div className="mt-10 flex flex-col justify-center items-center gap-2 sm:flex-row sm:gap-3">

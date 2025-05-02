@@ -122,13 +122,13 @@ const Links = () => {
   return (
     <div className="w-full">
       <div className="">
-        <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
-          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+        <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden">
+          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+              <h2 className="text-xl font-semibold text-gray-800">
                 Instant LinX
               </h2>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-sm text-gray-600 ">
                 List all the Instant LinX.
               </p>
             </div>
@@ -151,8 +151,8 @@ const Links = () => {
               </div>
             :
           links && links?.length > 0 ? (            
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                <thead className="bg-gray-50 dark:bg-neutral-800">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 ">
                   <tr>
                   <th scope="col" className="px-6 py-3 text-start">
                       <label
@@ -166,10 +166,10 @@ const Links = () => {
                             links?.length > 0 &&
                             selectedBookmarks?.length === links?.length
                           }
-                          className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                          className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                           id="hs-at-with-checkboxes-main"
                         />
-                        {/* <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        {/* <span className="text-xs font-semibold uppercase text-gray-800 ">
                         ID
                       </span> */}
                       </label>
@@ -177,7 +177,7 @@ const Links = () => {
                     
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        <span className="text-xs font-semibold uppercase text-gray-800 ">
                           Title
                         </span>
                       </div>
@@ -185,7 +185,7 @@ const Links = () => {
 
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        <span className="text-xs font-semibold uppercase text-gray-800 ">
                           Website Url
                         </span>
                       </div>
@@ -193,7 +193,7 @@ const Links = () => {
                    
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        <span className="text-xs font-semibold uppercase text-gray-800 ">
                           Created
                         </span>
                       </div>
@@ -201,7 +201,7 @@ const Links = () => {
 
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                        <span className="text-xs font-semibold uppercase text-gray-800 ">
                           Action
                         </span>
                       </div>
@@ -209,7 +209,7 @@ const Links = () => {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
+                <tbody className="divide-y divide-gray-200 ">
                   {links &&
                     links?.length > 0 &&
                     links?.map((link, index) => {
@@ -230,12 +230,12 @@ const Links = () => {
               </table>
             
           ) : null}
-          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 ">
             {
               totalLinks >0 &&
             <div>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
-                <span className="font-semibold text-gray-800 dark:text-neutral-200">
+              <p className="text-sm text-gray-600 ">
+                <span className="font-semibold text-gray-800 ">
                   {totalLinks}
                 </span>{" "}
                 results
@@ -256,7 +256,7 @@ const Links = () => {
                       onClick={() => handlePagination(pageNumber?.url)}
                       className={`${
                         pageNumber?.active ? "bg-gray-100" : "bg-white"
-                      } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
+                      } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50`}
                     >
                       {index === 0
                         ? "<"

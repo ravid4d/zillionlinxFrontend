@@ -57,13 +57,13 @@ const UpdateAdmin = () => {
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         <div className="bg-white border border-gray-200 rounded-xl shadow-2xs">
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-800 dark:border-neutral-700">
-            <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+          <div className="bg-white border border-gray-200 rounded-xl shadow-sm ">
+            <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 ">
               <div>
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                <h2 className="text-xl font-semibold text-gray-800 ">
                   Update Admin Information
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-neutral-400">
+                <p className="text-sm text-gray-600 ">
                   Update basic your information.
                 </p>
               </div>

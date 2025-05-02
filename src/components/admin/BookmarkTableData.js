@@ -18,12 +18,12 @@ const BookmarkTableData = ({
           >
             <input 
               type="checkbox"
-              className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+              className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none"
               id={`hs-at-with-checkboxes-${bookmark?.bookmark_id}`}
               checked={selectedBookmarks?.includes(bookmark?.bookmark_id)}
               onChange={() => handleSelectOneBookmark(bookmark?.bookmark_id)}
             />
-            {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
+            {/* <span className="block text-sm text-gray-500 ">
               {bookmark?.bookmark_id}
             </span> */}
           </label>
@@ -35,7 +35,7 @@ const BookmarkTableData = ({
             to={bookmark?.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-gray-500 dark:text-neutral-500 group overflow-hidden inline-block"
+            className="text-sm text-gray-500  group overflow-hidden inline-block"
           >
             {bookmark?.icon_path ? (
               <img
@@ -59,7 +59,7 @@ const BookmarkTableData = ({
       </td>
       <td className="h-px w-48 whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500">
             {bookmark?.title}
           </span>
         </div>
@@ -70,7 +70,7 @@ const BookmarkTableData = ({
             to={bookmark?.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block break-all text-sm text-gray-500 dark:text-neutral-500 group-hover:text-blue-500 text-truncate"
+            className="block break-all text-sm text-gray-500 group-hover:text-blue-500 text-truncate"
           >
             {bookmark?.website_url}
           </Link>
@@ -78,21 +78,21 @@ const BookmarkTableData = ({
       </td>
       <td className="h-px w-48 whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500">
             {bookmark?.user_name}
           </span>
         </div>
       </td>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500 ">
             {moment(bookmark?.created_at).format("MMMM Do YYYY")}
           </span>
         </div>
       </td>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500 ">
             {bookmark?.add_to === "top_link" ? "Top Link" : "Bookmark"}
           </span>
         </div>
@@ -101,7 +101,7 @@ const BookmarkTableData = ({
         <div className="px-6 py-3 text-start">
           <div className="flex items-center gap-x-3">
             <div className="grow">
-              <span className="text-sm text-gray-500 dark:text-neutral-500">
+              <span className="text-sm text-gray-500 ">
                 {bookmark?.category_name}
               </span>
             </div>
@@ -110,7 +110,7 @@ const BookmarkTableData = ({
       </td>
       <td className="h-px w-48 whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500 ">
             {bookmark?.sub_category_name}
           </span>
         </div>
@@ -118,7 +118,7 @@ const BookmarkTableData = ({
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-1.5">
           <button
-            className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
+            className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium "
             onClick={() => deleteSingleBookmark([bookmark?.bookmark_id])}
           >
             <svg

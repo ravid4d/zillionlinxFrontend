@@ -111,13 +111,13 @@ const Import = () => {
   return (
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-        <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
-          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+        <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden ">
+          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+              <h2 className="text-xl font-semibold text-gray-800 ">
                 Import Instant LinX
               </h2>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-sm text-gray-600 ">
                 Admin can import more links to search.
               </p>
             </div>
@@ -167,7 +167,7 @@ const Import = () => {
                         onChange={handleFileUpload}
                       />
                       <div className="text-center">
-                        <span className="inline-flex justify-center items-center size-16 bg-gray-100 text-gray-800 rounded-full dark:bg-neutral-700 dark:text-neutral-200">
+                        <span className="inline-flex justify-center items-center size-16 bg-gray-100 text-gray-800 rounded-full ">
                           <svg
                             className="shrink-0 size-6"
                             xmlns="http://www.w3.org/2000/svg"
@@ -187,25 +187,25 @@ const Import = () => {
                         </span>
 
                         <div className="mt-4 flex flex-wrap justify-center text-sm/6 text-gray-600">
-                          <span className="pe-1 font-medium text-gray-800 dark:text-neutral-200">
+                          <span className="pe-1 font-medium text-gray-800 ">
                             Drop your file here or
                           </span>
-                          <span className="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-hidden focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 dark:bg-neutral-800 dark:text-blue-500 dark:hover:text-blue-600">
+                          <span className="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-hidden focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 ">
                             browse
                           </span>
                         </div>
 
-                        <p className="mt-1 text-xs text-gray-400 dark:text-neutral-400">
+                        <p className="mt-1 text-xs text-gray-400 ">
                           Pick a file up to 2MB.
                         </p>
                       </div>
                     </div>
                     {uploadedFile && errors === "" ? (
-                      <div className="w-full p-3 bg-white border border-solid border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600">
+                      <div className="w-full p-3 bg-white border border-solid border-gray-300 rounded-xl ">
                         <div className="mb-1 flex justify-between items-center">
                           <div className="flex items-center gap-x-3">
                             <span
-                              className="size-10 flex justify-center items-center border border-gray-200 text-gray-500 rounded-lg dark:border-neutral-700 dark:text-neutral-500"
+                              className="size-10 flex justify-center items-center border border-gray-200 text-gray-500 rounded-lg "
                               data-hs-file-upload-file-icon=""
                             >
                               <svg
@@ -225,7 +225,7 @@ const Import = () => {
                               </svg>
                             </span>
                             <div>
-                              <p className="text-sm font-medium text-gray-800 dark:text-white">
+                              <p className="text-sm font-medium text-gray-800 ">
                                 <span className="truncate inline-block max-w-75 align-bottom">
                                   {uploadedFile?.name}
                                 </span>
@@ -235,7 +235,7 @@ const Import = () => {
                               )}
 
                               <p
-                                className="text-xs text-gray-500 dark:text-neutral-500"
+                                className="text-xs text-gray-500"
                                 data-hs-file-upload-file-size=""
                               >
                                 {!isNaN(uploadedFile?.size)
@@ -249,7 +249,7 @@ const Import = () => {
                           <div className="flex items-center gap-x-2">
                             <button
                               type="button"
-                              className="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+                              className="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 "
                               data-hs-file-upload-remove=""
                               onClick={() => setUploadedFile(null)}
                             >

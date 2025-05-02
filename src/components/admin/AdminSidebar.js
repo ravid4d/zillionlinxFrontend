@@ -24,7 +24,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
   return (
     <>
       <div
-        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+        className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 ${
           openSidebar ? "visible opacity-100" : "invisible opacity-0"
         }`}
         id="updateUser-backdrop"
@@ -62,7 +62,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
             </Link>
           </div>
 
-          <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+          <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
             <nav
               className="hs-accordion-group p-3 w-full flex flex-col flex-wrap"
               data-hs-accordion-always-open
@@ -73,7 +73,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                     to="/admin"
                     className={`${
                       isActive("/admin") ? "bg-gray-100" : ""
-                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
+                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                     to="category"
                     className={`${
                       isActive("/admin/category") ? "bg-gray-100" : ""
-                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
+                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                     to="admin-bookmarks"
                     className={`${
                       isActive("/admin/admin-bookmarks") ? "bg-gray-100" : ""
-                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
+                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +145,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                     to="user"
                     className={`${
                       isActive("/admin/user") ? "bg-gray-100" : ""
-                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
+                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +169,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                     to="import"
                     className={`${
                       isActive("/admin/import") ? "bg-gray-100" : ""
-                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-white`}
+                    } flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +190,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                 </li>
 
                 {/* <li className="hs-accordion" id="users-accordion">
-              <button type="button" className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200" aria-expanded="true" aria-controls="users-accordion-child">
+              <button type="button" className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 " aria-expanded="true" aria-controls="users-accordion-child">
                 <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
@@ -211,7 +211,7 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
               <div id="users-accordion-child" className="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden" role="region" aria-labelledby="users-accordion">
                 <ul className="hs-accordion-group ps-8 pt-1 space-y-1" data-hs-accordion-always-open>
                   <li className="hs-accordion" id="users-accordion-sub-1">
-                    <button type="button" className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200" aria-expanded="true" aria-controls="users-accordion-sub-1-child">
+                    <button type="button" className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 " aria-expanded="true" aria-controls="users-accordion-sub-1-child">
                       Sub Menu 1
 
                       <svg className="hs-accordion-active:block ms-auto hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -226,17 +226,17 @@ const AdminSidebar = ({ setOpenSidebar, openSidebar }) => {
                     <div id="users-accordion-sub-1-child" className="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden" role="region" aria-labelledby="users-accordion-sub-1">
                       <ul className="pt-1 space-y-1">
                         <li>
-                          <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200" href="#">
+                          <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100" href="#">
                             Link 1
                           </a>
                         </li>
                         <li>
-                          <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200" href="#">
+                          <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100" href="#">
                             Link 2
                           </a>
                         </li>
                         <li>
-                          <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:text-neutral-200" href="#">
+                          <a className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100" href="#">
                             Link 3
                           </a>
                         </li>

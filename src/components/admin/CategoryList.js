@@ -260,13 +260,13 @@ const CategoryList = ({ classes }) => {
       <div className="flex flex-col">
         <div className="overflow-x-auto">
           <div className="min-w-full inline-block align-middle">
-            <div className="bg-white border overflow-x-auto border-gray-200 rounded-md shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
-              <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+            <div className="bg-white border overflow-x-auto border-gray-200 rounded-md shadow-sm overflow-hidden">
+              <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                  <h2 className="text-xl font-semibold text-gray-800 ">
                     Categories
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-neutral-400">
+                  <p className="text-sm text-gray-600 ">
                     Update and delete categories.
                   </p>
                 </div>
@@ -287,7 +287,7 @@ const CategoryList = ({ classes }) => {
                   </div>
                 ) : (
                   <table className="min-w-full divide-y divide-gray-200 w-56 table-auto md:table-fixed">
-                    <thead className="bg-gray-50 dark:bg-neutral-800">
+                    <thead className="bg-gray-50">
                       <tr>
                         <th
                           scope="col"
@@ -318,7 +318,7 @@ const CategoryList = ({ classes }) => {
                                 onChange={() =>
                                   handleCategorySelect("all", [], categories)
                                 }
-                                className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                                 id="hs-at-with-checkboxes-main"
                               />
                               <span className="sr-only">Checkbox</span>
@@ -331,7 +331,7 @@ const CategoryList = ({ classes }) => {
                           className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                         >
                           <div className="flex items-center gap-x-2">
-                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800">
                               Title
                             </span>
                           </div>
@@ -353,7 +353,7 @@ const CategoryList = ({ classes }) => {
                           className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                         >
                           <div className="flex items-center gap-x-2">
-                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800">
                               Created
                             </span>
                           </div>
@@ -364,7 +364,7 @@ const CategoryList = ({ classes }) => {
                           className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                         >
                           <div className="flex items-center gap-x-2">
-                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                            <span className="text-xs font-semibold uppercase tracking-wide text-gray-800">
                               Action
                             </span>
                           </div>
@@ -413,7 +413,7 @@ const CategoryList = ({ classes }) => {
                                             category.adminsubcategories
                                           )
                                         }
-                                        className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                        className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                                         id="hs-at-with-checkboxes-1"
                                       />
                                       <span className="sr-only">Checkbox</span>
@@ -423,7 +423,7 @@ const CategoryList = ({ classes }) => {
 
                                 <td className=" whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                   <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                    <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                    <span className="block text-sm font-semibold text-gray-800">
                                       {category?.title}
                                     </span>
                                   </div>
@@ -437,7 +437,7 @@ const CategoryList = ({ classes }) => {
 
                                 <td className=" whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                   <div className="px-6 py-3">
-                                    <span className="text-sm text-gray-500 dark:text-neutral-500">
+                                    <span className="text-sm text-gray-500">
                                       {moment(category?.created_at).format(
                                         "MMMM Do YYYY"
                                       )}
@@ -448,7 +448,7 @@ const CategoryList = ({ classes }) => {
                                 <td className=" whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                   <div className="px-6 py-1.5">
                                     <button
-                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium "
                                       onClick={() =>
                                         handleEditCategory(category)
                                       }
@@ -469,7 +469,7 @@ const CategoryList = ({ classes }) => {
                                       </svg>
                                     </button>
                                     <button
-                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium "
                                       onClick={() =>
                                         handlesingleDelete(category.id)
                                       }
@@ -494,7 +494,7 @@ const CategoryList = ({ classes }) => {
                                       <button
                                         type="button"
                                         onClick={() => activeTab(category?.id)}
-                                        className="hs-collapse-toggle inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:outline-hidden focus:underline focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600"
+                                        className="hs-collapse-toggle inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:outline-hidden focus:underline focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none "
                                         id={`hs-show-hide-collapse_${category?.id}`}
                                         aria-expanded="false"
                                         aria-controls={`hs-show-hide-collapse-heading_${category?.id}`}
@@ -536,7 +536,7 @@ const CategoryList = ({ classes }) => {
                                       } overflow-hidden transition-[height] duration-300 divide-y divide-gray-200 min-w-full table-auto md:table-fixed`}
                                       aria-labelledby={`hs-show-hide-collapse_${category?.id}`}
                                     >
-                                      <thead className="bg-gray-200 dark:bg-neutral-800">
+                                      <thead className="bg-gray-200">
                                         <tr>
                                           <th
                                             scope="col"
@@ -573,7 +573,7 @@ const CategoryList = ({ classes }) => {
                                                       category.adminsubcategories
                                                     )
                                                   }
-                                                  className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                  className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                                                   id="hs-at-with-checkboxes-main"
                                                 />
                                                 <span className="sr-only">
@@ -588,7 +588,7 @@ const CategoryList = ({ classes }) => {
                                             className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                           >
                                             <div className="flex items-center gap-x-2">
-                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 ">
                                                 Title
                                               </span>
                                             </div>
@@ -599,7 +599,7 @@ const CategoryList = ({ classes }) => {
                                             className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                           >
                                             <div className="flex items-center gap-x-2">
-                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 ">
                                                 Parent Category
                                               </span>
                                             </div>
@@ -610,7 +610,7 @@ const CategoryList = ({ classes }) => {
                                             className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                           >
                                             <div className="flex items-center gap-x-2">
-                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 ">
                                                 Created
                                               </span>
                                             </div>
@@ -621,7 +621,7 @@ const CategoryList = ({ classes }) => {
                                             className="px-6 py-3 text-start whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48"
                                           >
                                             <div className="flex items-center gap-x-2">
-                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                              <span className="text-xs font-semibold uppercase tracking-wide text-gray-800 ">
                                                 Action
                                               </span>
                                             </div>
@@ -662,7 +662,7 @@ const CategoryList = ({ classes }) => {
                                                             category.adminsubcategories
                                                           )
                                                         }
-                                                        className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                        className="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                                                         id="hs-at-with-checkboxes-1"
                                                       />
                                                       <span className="sr-only">
@@ -674,7 +674,7 @@ const CategoryList = ({ classes }) => {
 
                                                 <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                   <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                                    <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                                    <span className="block text-sm font-semibold text-gray-800 ">
                                                       {sub?.title}
                                                     </span>
                                                   </div>
@@ -682,7 +682,7 @@ const CategoryList = ({ classes }) => {
 
                                                 <td className="h-px whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                   <div className="px-6 py-3">
-                                                    <span className="block text-sm text-gray-500 dark:text-neutral-500">
+                                                    <span className="block text-sm text-gray-500 ">
                                                       {sub?.parent_id}
                                                     </span>
                                                   </div>
@@ -690,7 +690,7 @@ const CategoryList = ({ classes }) => {
 
                                                 <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                   <div className="px-6 py-3">
-                                                    <span className="text-sm text-gray-500 dark:text-neutral-500">
+                                                    <span className="text-sm text-gray-500 ">
                                                       {moment(
                                                         category?.created_at
                                                       ).format("MMMM Do YYYY")}
@@ -701,7 +701,7 @@ const CategoryList = ({ classes }) => {
                                                 <td className="whitespace-nowrap md:whitespace-wrap min-w-48 max-w-48 w-48">
                                                   <div className="px-6 py-1.5">
                                                     <button
-                                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium "
                                                       onClick={() =>
                                                         handleEditCategory(sub)
                                                       }
@@ -722,7 +722,7 @@ const CategoryList = ({ classes }) => {
                                                       </svg>
                                                     </button>
                                                     <button
-                                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                                                      className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium "
                                                       onClick={() =>
                                                         handlesingleDelete(
                                                           sub.id
@@ -762,12 +762,12 @@ const CategoryList = ({ classes }) => {
                   </table>
                 )}
               </div>
-              <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+              <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 ">
                 {
                   totalCategories>0 &&
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-neutral-400">
-                    <span className="font-semibold text-gray-800 dark:text-neutral-200">
+                  <p className="text-sm text-gray-600 ">
+                    <span className="font-semibold text-gray-800 ">
                       {totalCategories}
                     </span>{" "}
                     results
@@ -789,7 +789,7 @@ const CategoryList = ({ classes }) => {
                             onClick={() => handlePagination(pageNumber?.url)}
                             className={`${
                               pageNumber?.active ? "bg-gray-100" : "bg-white"
-                            } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
+                            } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 `}
                           >
                             {index === 0
                               ? "<"

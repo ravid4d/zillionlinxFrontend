@@ -18,7 +18,7 @@ const LinksTableData = ({
           >
             <input
               type="checkbox"
-              className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+              className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none"
               id={`hs-at-with-checkboxes-${bookmark?.id}`}
               checked={selectedBookmarks?.includes(bookmark?.id)}
               onChange={() => handleSelectOneBookmark(bookmark?.id)}
@@ -43,7 +43,7 @@ const LinksTableData = ({
             to={bookmark?.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block break-all text-sm text-gray-500 dark:text-neutral-500 group-hover:text-blue-500 text-truncate"
+            className="block break-all text-sm text-gray-500  group-hover:text-blue-500 text-truncate"
           >
             {bookmark?.website_url}
           </Link>
@@ -51,7 +51,7 @@ const LinksTableData = ({
       </td>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500 ">
             {moment(bookmark?.created_at).format("MMMM Do YYYY")}
           </span>
         </div>
@@ -60,7 +60,7 @@ const LinksTableData = ({
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-1.5">
           <button
-            className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
+            className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium "
             onClick={() => deleteSingleBookmark([bookmark?.id])}
           >
             <svg

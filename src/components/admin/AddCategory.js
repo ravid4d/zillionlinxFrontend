@@ -95,13 +95,13 @@ const AddCategory = () => {
   });
 
   return (
-    <div className="cols-span-1 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-800 dark:border-neutral-700">
-      <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+    <div className="cols-span-1 bg-white border border-gray-200 rounded-xl shadow-sm">
+      <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
         <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+          <h2 className="text-xl font-semibold text-gray-800">
             Category
           </h2>
-          <p className="text-sm text-gray-600 dark:text-neutral-400">
+          <p className="text-sm text-gray-600">
             Add and update category.
           </p>
         </div>

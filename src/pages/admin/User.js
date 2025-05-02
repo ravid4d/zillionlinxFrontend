@@ -168,11 +168,11 @@ const User = () => {
   return (
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-        <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
-          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+        <div className="bg-white border border-gray-200 overflow-x-auto rounded-xl shadow-2xs overflow-hidden ">
+          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
             <div>
               <h2 className="text-xl font-semibold text-gray-800">Users</h2>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-sm text-gray-600 ">
                 Edit and delete users.
               </p>
             </div>
@@ -194,15 +194,15 @@ const User = () => {
           ) : users && users?.length > 0 ? (
             <>
               <div
-                className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+                className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50  ${
                   userToEditModal
                     ? "visible opacity-100"
                     : "invisible opacity-0"
                 }`}
                 id="updateUser-backdrop"
               ></div>
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                <thead className="bg-gray-50 dark:bg-neutral-800">
+              <table className="min-w-full divide-y divide-gray-200 ">
+                <thead className="bg-gray-50 ">
                   <tr>
                     <th scope="col" className="px-6 py-3 text-start">
                       <label
@@ -216,7 +216,7 @@ const User = () => {
                             selectedUsers.length === users.length &&
                             users.length > 0
                           }
-                          className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                          className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                           id="hs-at-with-checkboxes-main"
                         />
                         {/* <span className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
@@ -366,7 +366,7 @@ const User = () => {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
+                <tbody className="divide-y divide-gray-200 ">
                   {users?.map((user, index) => {
                     return (
                       <tr key={user?.id || `user-${index}`}>
@@ -396,11 +396,11 @@ const User = () => {
               <img src="/no-data-concept.jpeg" alt="No Data Found!" />
             </div>
           )}
-          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+          <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
             {
               totalUsers >0  &&
             <div>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-sm text-gray-600 ">
                 <span className="font-semibold text-gray-800">
                   {totalUsers}
                 </span>{" "}
@@ -422,7 +422,7 @@ const User = () => {
                       onClick={() => handlePagination(pageNumber?.url)}
                       className={`${
                         pageNumber?.active ? "bg-gray-100" : "bg-white"
-                      } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800`}
+                      } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50 `}
                     >
                       {index === 0
                         ? "<"

@@ -123,7 +123,7 @@ const ImportBookmarks = () => {
           >
             {({ getRootProps, getInputProps }) => (
               <div className="w-full md:w-1/2 h-full flex flex-wrap flex-col space-y-4 pb-4 md:pb-0 md:pe-4">
-                <div className="p-8 flex flex-col justify-between bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600 h-full items-center gap-4">
+                <div className="p-8 flex flex-col justify-between bg-white border border-dashed border-gray-300 rounded-xl  h-full items-center gap-4">
                   <div className="text-sm overflow-auto h-full">
                     <h1 className="font-medium text-lg leading-5 text-dark-blue mb-1">How to Export Your Existing Bookmarks from your Browser to save them selectively in ZillionLinX.</h1>
                     <p className="mb-3">(Right click on the bookmarks after importing them in the panel on the right)</p>
@@ -173,7 +173,7 @@ const ImportBookmarks = () => {
                     </ul>
                   </div>
                   <div
-                    className="cursor-pointer w-full p-6 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600 items-center"
+                    className="cursor-pointer w-full p-6 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl  items-center"
                     {...getRootProps()}
                   >
                     <input
@@ -202,25 +202,25 @@ const ImportBookmarks = () => {
                       </span>
 
                       <div className="mt-4 flex flex-wrap justify-center text-sm/6 text-gray-600">
-                        <span className="pe-1 font-medium text-gray-800 dark:text-neutral-200">
+                        <span className="pe-1 font-medium text-gray-800 ">
                           Drop your file here or
                         </span>
-                        <span className="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-hidden focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 dark:bg-neutral-800 dark:text-blue-500 dark:hover:text-blue-600">
+                        <span className="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-hidden focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 ">
                           browse
                         </span>
                       </div>
 
-                      <p className="mt-1 text-xs text-gray-400 dark:text-neutral-400">
+                      <p className="mt-1 text-xs text-gray-400 ">
                         Pick a file up to 2MB.
                       </p>
                     </div>
                   </div>
                   {uploadedFile && errors === "" ? (
-                    <div className="p-3 bg-white border border-solid border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600">
+                    <div className="p-3 bg-white border border-solid border-gray-300 rounded-xl ">
                       <div className="mb-1 flex justify-between items-center">
                         <div className="flex items-center gap-x-3">
                           <span
-                            className="size-10 flex justify-center items-center border border-gray-200 text-gray-500 rounded-lg dark:border-neutral-700 dark:text-neutral-500"
+                            className="size-10 flex justify-center items-center border border-gray-200 text-gray-500 rounded-lg "
                             data-hs-file-upload-file-icon=""
                           >
                             <svg
@@ -240,7 +240,7 @@ const ImportBookmarks = () => {
                             </svg>
                           </span>
                           <div>
-                            <p className="text-sm font-medium text-gray-800 dark:text-white">
+                            <p className="text-sm font-medium text-gray-800">
                               <span className="truncate inline-block max-w-75 align-bottom">
                                 {uploadedFile?.name}
                               </span>
@@ -250,7 +250,7 @@ const ImportBookmarks = () => {
                             )}
 
                             <p
-                              className="text-xs text-gray-500 dark:text-neutral-500"
+                              className="text-xs text-gray-500 "
                               data-hs-file-upload-file-size=""
                             >
                               {!isNaN(uploadedFile?.size)
@@ -264,7 +264,7 @@ const ImportBookmarks = () => {
                         <div className="flex items-center gap-x-2">
                           <button
                             type="button"
-                            className="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+                            className="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 "
                             data-hs-file-upload-remove=""
                             onClick={() => setUploadedFile(null)}
                           >

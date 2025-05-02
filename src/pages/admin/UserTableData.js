@@ -18,14 +18,14 @@ const UserTableData = ({
               <>
                 <input
                   type="checkbox"
-                  className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                  className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   id={`hs-at-with-checkboxes-${user.id}`}
                   checked={selectedUsers?.includes(user.id)}
                   onChange={() => handleSelectOneUser(user.id)}
                 />
               </>
             )}
-            {/* <span className="block text-sm text-gray-500 dark:text-neutral-500">
+            {/* <span className="block text-sm text-gray-500 ">
               {user?.id}
             </span>  */}
           </label>
@@ -35,14 +35,14 @@ const UserTableData = ({
         <div className="px-6 py-3">
           <div className="flex items-center gap-x-3">
             <div className="grow">
-              <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+              <span className="block text-sm font-semibold text-gray-800 ">
                 {user?.first_name?.trim() || user?.last_name?.trim()
                   ? `${user?.first_name?.trim() || ""}${
                       user?.first_name && user?.last_name ? " " : ""
                     }${user?.last_name?.trim() || ""}`
                   : "N/A"}
               </span>
-              <span className="block text-sm text-gray-500 dark:text-neutral-500">
+              <span className="block text-sm text-gray-500 ">
                 {user?.email}
               </span>
             </div>
@@ -51,14 +51,14 @@ const UserTableData = ({
       </td>
       <td className="h-px w-72 whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+          <span className="block text-sm font-semibold text-gray-800 ">
             {user?.country || "N/A"}
           </span>
         </div>
       </td>
       <td className="h-px w-72 whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+          <span className="block text-sm font-semibold text-gray-800 ">
             {user?.last_login_at
               ? moment(user.last_login_at).format("MMMM Do YYYY")
               : "N/A"}
@@ -67,14 +67,14 @@ const UserTableData = ({
       </td>
       <td className="h-px w-72 whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+          <span className="block text-sm font-semibold text-gray-800 ">
             {user?.total_bookmarks_count}
           </span>
         </div>
       </td>
       <td className="size-px whitespace-nowrap">
         <div className="px-6 py-3">
-          <span className="text-sm text-gray-500 dark:text-neutral-500">
+          <span className="text-sm text-gray-500 ">
             {moment(user?.created_at).format("MMMM Do YYYY")}
           </span>
         </div>
@@ -83,7 +83,7 @@ const UserTableData = ({
         <td className="size-px whitespace-nowrap">
           <div className="px-6 py-1.5">
             <button
-              className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
+              className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium "
               onClick={() => setUserToEdit(user)}
             >
               <svg
@@ -102,7 +102,7 @@ const UserTableData = ({
               </svg>
             </button>
             <button
-              className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
+              className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium"
               onClick={() => deleteSingleUser(user.id)}
             >
               <svg

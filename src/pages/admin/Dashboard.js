@@ -289,12 +289,12 @@ const Dashboard = () => {
               <div className="overflow-x-auto">
                 <div className="min-w-full inline-block align-middle">
                   <div className="bg-white border rounded-xl shadow overflow-hidden">
-                    <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                    <div className="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 ">
                       <div>
-                        <h2 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                        <h2 className="text-xl font-semibold text-gray-800 ">
                           Users
                         </h2>
-                        <p className="text-sm text-gray-600 dark:text-neutral-400">
+                        <p className="text-sm text-gray-600 ">
                           Edit and delete users.
                         </p>
                       </div>
@@ -319,7 +319,7 @@ const Dashboard = () => {
                     ) : users.length > 0 ? (
                       <>
                         <div
-                          className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900 ${
+                          className={`overlay z-50 hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 ${
                             userToEditModal
                               ? "visible opacity-100"
                               : "invisible opacity-0"
@@ -341,7 +341,7 @@ const Dashboard = () => {
                                       selectedUsers.length === users.length &&
                                       users.length > 0
                                     }
-                                    className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                    className="me-2 shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                                     id="hs-at-with-checkboxes-main"
                                   />
                                 </label>
@@ -527,7 +527,7 @@ const Dashboard = () => {
                     <div className="px-6 py-4 flex justify-between border-t">
                       {totalUsers > 0 && (
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-neutral-400">
+                          <p className="text-sm text-gray-600 ">
                             <span className="font-semibold text-gray-800">
                               {totalUsers}
                             </span>{" "}

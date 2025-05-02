@@ -189,12 +189,12 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                       checked={formik.values.remember_me}
                       className="peer sr-only"
                     />
-                    <span className="absolute inset-0 bg-gray-400 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-dark-blue dark:bg-neutral-700 dark:peer-checked:bg-dark-blue peer-disabled:opacity-50 peer-disabled:pointer-events-none"></span>
-                    <span className="absolute top-1/2 left-0.5 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out peer-checked:translate-x-full dark:bg-neutral-400 dark:peer-checked:bg-white"></span>
+                    <span className="absolute inset-0 bg-gray-400 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-dark-blue  peer-disabled:opacity-50 peer-disabled:pointer-events-none"></span>
+                    <span className="absolute top-1/2 left-0.5 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out peer-checked:translate-x-full "></span>
                   </label>
                   <label
                     htmlFor="remember_me"
-                    className="cursor-pointer text-base xl:text-lg text-dark-blue font-medium dark:text-white"
+                    className="cursor-pointer text-base xl:text-lg text-dark-blue font-medium "
                   >
                     Remember me for 10 days.
                   </label>

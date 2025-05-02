@@ -65,7 +65,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
   }, [profileDropdownRef]);
   return (
     <>
-      <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-64 dark:bg-neutral-800 dark:border-neutral-700">
+      <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-64">
         <nav className="px-4 sm:px-6 flex basis-full items-center w-full mx-auto">
           <div className="me-5 lg:me-0 lg:hidden flex items-center">
             <Link
@@ -86,7 +86,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
             <div className=""  ref={searchRef}>
               <button
                 type="button"
-                className="md:hidden size-9 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                className="md:hidden size-9 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
                 onClick={() => setSearchField((prev) => !prev)}
               >
                 <svg
@@ -117,7 +117,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
                     <svg
-                      className="shrink-0 size-4 text-gray-400 dark:text-white/60"
+                      className="shrink-0 size-4 text-gray-400"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
@@ -134,7 +134,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                   </div>
                   <input
                     type="text"
-                    className="py-2 ps-10 pe-16 block w-full bg-white border-gray-200 rounded-lg text-sm focus:outline-hidden focus:border-blue-500 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder:text-neutral-400 dark:focus:ring-neutral-600"
+                    className="py-2 ps-10 pe-16 block w-full bg-white border-gray-200 rounded-lg text-sm focus:outline-hidden focus:border-blue-500 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                     placeholder="Search"
                     onChange={handleSearchChange}
                     value={searchQuery}
@@ -142,7 +142,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                   <div className="hidden absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-1">
                     <button
                       type="button"
-                      className="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-blue-600 focus:outline-hidden focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
+                      className="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-blue-600 focus:outline-hidden focus:text-blue-600"
                       aria-label="Close"
                     >
                       <span className="sr-only">Close</span>
@@ -166,7 +166,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                   </div>
                   <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
                     <svg
-                      className="shrink-0 size-3 text-gray-400 dark:text-white/60"
+                      className="shrink-0 size-3 text-gray-400"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
@@ -181,7 +181,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                     </svg>
                     <span className="mx-1">
                       <svg
-                        className="shrink-0 size-3 text-gray-400 dark:text-white/60"
+                        className="shrink-0 size-3 text-gray-400"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -204,7 +204,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
             <div className="flex flex-row items-center justify-end gap-1">
               <button
                 type="button"
-                className="size-9 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                className="size-9 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
               >
                 <svg
                   className="shrink-0 size-4"
@@ -226,7 +226,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
 
               <button
                 type="button"
-                className="size-9 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                className="size-9 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
               >
                 <svg
                   className="shrink-0 size-4"
@@ -267,19 +267,19 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                     } 
                     absolute right-0 top-full transition-[opacity,margin] duration min-w-60 bg-white shadow-md rounded-lg mt-2`}
                   >
-                    {/* <div className="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
-                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                    {/* <div className="py-3 px-5 bg-gray-100 rounded-t-lg">
+                      <p className="text-sm text-gray-500">
                         Signed in as :{" "}
                         <span className="capitalize">{user?.role}</span>
                       </p>
-                      <p className="grid grid-cols-2 text-sm font-medium text-gray-800 dark:text-neutral-200">
+                      <p className="grid grid-cols-2 text-sm font-medium text-gray-800">
                         <span className="col-span-2">
                           <span className="me-1">{user?.first_name}</span>
                           <span className="">{user?.last_name}</span>
                         </span>
                       </p>
                     </div> */}
-                    <div className="py-3 px-3 bg-gray-100 rounded-t-lg dark:bg-neutral-700 flex items-center ">
+                    <div className="py-3 px-3 bg-gray-100 rounded-t-lg flex items-center ">
                     <div className="me-3">
                       <img
                         className="shrink-0 size-9 rounded-full"
@@ -288,13 +288,13 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                       />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                      <p className="text-sm text-gray-500">
                         {/* Signed in as :{" "} */}
                         <span className="capitalize ">
                           {user?.role}
                         </span>
                       </p>
-                      <p className="grid grid-cols-2 text-sm font-medium text-gray-800 dark:text-neutral-200">
+                      <p className="grid grid-cols-2 text-sm font-medium text-gray-800">
                         <span className="col-span-2">
                           <span className="me-1">
                             {user?.first_name}
@@ -309,21 +309,21 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
                   </div>
                     <div className="p-1.5 space-y-0.5">
                       <Link
-                        className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                        className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
                         to="/admin/update-user"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"></path></svg>
                         Update User Info
                       </Link>
                       <Link
-                        className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                        className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
                         to="/admin/change-password"
                       >
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"></path></svg>
                         Change Password
                       </Link>
                       <button
-                        className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                        className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
                         onClick={handleLogout}
                       >
                         <svg
@@ -349,12 +349,12 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
           </div>
         </nav>
       </header>
-      <div className="sticky top-0 inset-x-0 z-20 bg-white border-y border-gray-200 px-4 sm:px-6 lg:px-8 lg:hidden dark:bg-neutral-800 dark:border-neutral-700">
+      <div className="sticky top-0 inset-x-0 z-20 bg-white border-y border-gray-200 px-4 sm:px-6 lg:px-8 lg:hidden">
         <div className="flex items-center py-2">
           <button
             type="button"
             onClick={()=>setOpenSidebar(!openSidebar)}
-            className="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-hidden focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+            className="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-hidden focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none"
             // aria-haspopup="dialog"
             // aria-expanded="false"
             // aria-controls="hs-application-sidebar"
@@ -381,10 +381,10 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
           </button>
 
           <ol className="ms-3 flex items-center whitespace-nowrap">
-            <li className="flex items-center text-sm text-gray-800 dark:text-neutral-400">
+            <li className="flex items-center text-sm text-gray-800">
               Application Layout
               <svg
-                className="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-neutral-500"
+                className="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400"
                 width="16"
                 height="16"
                 viewBox="0 0 16 16"
@@ -400,7 +400,7 @@ const AdminHeader = ({setOpenSidebar, openSidebar}) => {
               </svg>
             </li>
             <li
-              className="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400"
+              className="text-sm font-semibold text-gray-800 truncate"
               aria-current="page"
             >
               Dashboard
