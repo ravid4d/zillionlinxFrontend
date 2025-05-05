@@ -189,9 +189,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
     }
   }, [urlToBookmark?.record?.title]);
 
-  useClickAway(categoryRef, isCategoryDropdownOpen, () => {
-    setCategoryDropdown(false);
-  });
+  // useClickAway(categoryRef, isCategoryDropdownOpen, () => {
+  //   setCategoryDropdown(false);
+  // });
   
   useEffect(() => {
     if (
@@ -345,7 +345,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                                   title="Add new sub category"
                                   className="capitalize absolute top-0.5 right-0 text-sm !leading-[24px] font-medium text-dark-blue cursor-pointer group"
                                   onClick={() =>
+                                   { setCategoryDropdown(false);
                                     setShowNewSubCategory("remove")
+                                   }
                                   }
                                 >
                                   Add Sub Category
@@ -395,7 +397,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                           </button>
 
                           <div
-                            ref={categoryRef}
+                            // ref={categoryRef}
                             className={`transition-[opacity,margin] duration ${
                               isCategoryDropdownOpen
                                 ? "opacity-100 visible"
@@ -444,6 +446,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                                                     setSelectedSubCategoryId(
                                                       subCategory?.title
                                                     );
+                                                    setCategoryDropdown(false)
                                                   }}
                                                   className="cursor-pointer flex relative group items-center gap-x-3.5 py-2 px-3 rounded-lg text-md text-gray-800 hover:bg-white focus:outline-hidden focus:bg-gray-100"
                                                 >
