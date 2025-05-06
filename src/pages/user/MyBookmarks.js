@@ -374,7 +374,7 @@ const MyBookmarks = () => {
               </div>
             )}
 
-            <div className="rounded-2xl bg-white p-6 md:h-[calc(100%-66px)]">
+            <div className="rounded-2xl bg-white md:h-[calc(100%-66px)]">
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
                 {pageHeading}
                 {pageHeading === "Top Links" ? (
@@ -385,7 +385,7 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
 
-              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-62px)]">
+              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)]">
                 {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
                 ) : listingType === "link" && links && links?.length > 0 ? (

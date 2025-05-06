@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getCookie, setCookie } from "../../cookieUtils";
+import { over } from "lodash";
 
 const Cookies = () => {
   const [visible, setVisible] = useState(false);
@@ -17,23 +18,30 @@ const Cookies = () => {
   const rejectCookies = () => {
     setCookie("cookieConsent", "rejected", 30); // store for 30 days
     setVisible(false);
-    window.location.href="/"
+    window.location.href = "/";
   };
 
   if (!visible) return null;
   return (
-    <div
-      id="cookie-banner"
-      className="fixed bottom-0 left-0 right-0 bg-white p-10 text-center z-50 w-full"
-    >
-      <p className="mb-4 text-lg">
-        We use cookies to improve your experience. You can accept or reject non-essential cookies.
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-2">
-      <button  onClick={acceptCookies} className="btn dark-btn">Accept All</button>
-      <button onClick={rejectCookies} className="btn navy-btn">Reject All</button>
+    <>
+      <div className="cookies-overlay fixed bg-white/95 top-0 start-0 end-0 bottom-0 z-50"></div>
+      <div
+        id="cookie-banner"
+        className="fixed bottom-0 left-0 right-0 bg-white p-10 text-center z-50 w-full shadow-cookie-banner"
+      >
+        <p className="mb-4 text-lg">
+          We use cookies to improve your experience.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <button onClick={acceptCookies} className="btn dark-btn">
+            Accept
+          </button>
+          <button onClick={rejectCookies} className="btn navy-btn">
+            Reject
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

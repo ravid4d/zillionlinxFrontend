@@ -47,15 +47,15 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
   }, [id?.categoryId, bookmark_addto]);
 
   return (
-    <div className="rounded-2xl bg-white xl:py-6 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
-      <div className="min-h-4/6 h-[calc(100%-80px)]">
+    <div className="rounded-2xl bg-white xl:py-0 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
+      <div className="min-h-4/6 h-[calc(100%-60px)]">
         <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
           My Bookmarks
         </p>
         <ul
           className={`${
             loading?.fetchCategories ? "" : ""
-          } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] xl:h-[calc(100%-50px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
+          } rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] xl:h-[calc(100%-60px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto`}
         >
           {loading?.fetchCategories ? (
             <div className="flex flex-wrap items-center justify-center h-full">
@@ -89,7 +89,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                       );
                     }}
                     type="button"
-                    className={`relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-base text-light-black w-full focus:outline-none ${
+                    className={`group relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-sm text-light-black w-full focus:outline-none ${
                       isActive ? "" : ""
                     }`}
                     aria-expanded={isActive}
@@ -101,7 +101,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                       viewBox="0 0 16 16"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="absolute hs-accordion-toggle"
+                      className="group absolute hs-accordion-toggle"
                     >
                       <path
                         d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
@@ -132,6 +132,21 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                     <span className="block pl-6 text-start w-full">
                       {category?.title}
                     </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="size-4 shrink-0 absolute end-2 hover:text-red-600 opacity-0 invisible transition-all group-hover:opacity-100 group-hover:visible"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                      />
+                    </svg>
                   </button>
                   {hasDropdown && (
                     <div
@@ -166,7 +181,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                                   });
                                 }}
                                 type="button"
-                                className="rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base text-light-black w-full focus:outline-none"
+                                className="group rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base text-light-black w-full focus:outline-none"
                                 aria-expanded="true"
                                 aria-controls="users-accordion-sub-1-collapse-1"
                               >
@@ -202,6 +217,21 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
                                   />
                                 </svg>
                                 <span>{subCat?.title}</span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={2}
+                                  stroke="currentColor"
+                                  className="size-4 shrink-0 absolute end-2 hover:text-red-600 transition-all opacity-0 invisible group-hover:opacity-100 group-hover:visible"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                  />
+                                </svg>
                               </button>
                             </li>
                           );
@@ -215,7 +245,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
           )}
         </ul>
       </div>
-      <div className="rounded-xl border border-light-blue px-4 py-2 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto w-full">
+      <div className="rounded-xl border border-light-blue px-4 py-2 absolute bottom-0 xl:left-0 xl:right-0 mx-auto w-full">
         <button
           onClick={() => {
             dispatch(
@@ -225,7 +255,7 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
             dispatch(updateListingtype("link"));
           }}
           // cursor-pointer bg-dark-blue rounded-xl text-xl text-white gap-2 items-center py-2 px-3 absolute bottom-0 xl:bottom-4 xl:left-0 xl:right-0 mx-auto
-          // !text-sm xl:!text-lg 
+          // !text-sm xl:!text-lg
           className="btn dark-btn !normal-case !text-white hover:!text-dark-blue !rounded-xl w-full !px-5 !text-lg"
         >
           Instant LinX - Bookmark Collections

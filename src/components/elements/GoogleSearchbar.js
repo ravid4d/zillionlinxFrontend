@@ -54,7 +54,7 @@ useEffect(()=>{
   return (
     <form
       onSubmit={googleFormik.handleSubmit}
-      className={`flex items-center justify-end gap-4 mb-4 relative  ${
+      className={`flex items-start justify-end gap-4 mb-4 relative  ${
         location.pathname === "/bookmarks"
           ? "max-w-full xl:w-[calc(100%-375px)]"
           : "w-full md:w-[calc(50%-25px)]"
@@ -63,6 +63,8 @@ useEffect(()=>{
       {/* <span className="absolute left-3 top-0 bottom-0 my-auto flex items-center">
                 <img src="/google-searchbar-icon.svg" alt="" />
             </span> */}
+
+      <div className="flex flex-wrap items-start flex-col">
       <div className="px-3 bg-white border border-gray-200">
         <input
           type="text"
@@ -71,11 +73,14 @@ useEffect(()=>{
           // placeholder='Search the web'
           id="searchTitle"
           name="title"
+          autoComplete="off"
           ref={googleRef}
           onFocus={handleFocus}
           onBlur={handleBlur}
           className="google-search py-1 px-0 block w-full border-0 focus:z-10 focus:border-0 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none placeholder:text-lg placeholder:text-light-black/48"
         />
+      </div>
+      <label className="px-2 pt-1 text-xs font-medium text-light-black/75 italic">Search the web</label>
       </div>
       <button
         type="subimit"

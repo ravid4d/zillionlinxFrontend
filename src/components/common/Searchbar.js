@@ -50,7 +50,7 @@ const Searchbar = ({
           setTitle(e.target.value);
         }}
         type="text"
-        placeholder="Search"
+        placeholder="Search my bookmarks"
         id="hs-trailing-button-add-on-with-icon"
         name="hs-trailing-button-add-on-with-icon"
         className="h-[48px] py-3 pl-4 pr-14 block w-full border-gray-200 rounded-xl text-sm placeholder:text-lg placeholder:text-light-black/48 focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"

@@ -313,7 +313,7 @@ const GoogleCustomSearch = () => {
                                 </Link>
                               )}                         */}
 
-                              {neweggStaticLink && (
+                              {/* {neweggStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"
                                   to={neweggStaticLink}
@@ -329,7 +329,7 @@ const GoogleCustomSearch = () => {
                                     />
                                   </figure>
                                 </Link>
-                              )}
+                              )} */}
                               {/* {mercadolibreStaticLink && (
                                 <Link
                                   className="block mb-1 last:mb-0 w-full"

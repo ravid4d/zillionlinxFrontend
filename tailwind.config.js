@@ -20,7 +20,8 @@ module.exports = {
         'sidebar': '0 0 24px 2px rgba(20,25,38,.05)',
         'normal': '0 4px 24px 2px rgba(20,25,38,.05)',
         'bookmark': '0 0 12px 0 #A3ABFE',
-        'home-bookmark': '0px 4px 44px 0px #2131E533'
+        'home-bookmark': '0px 4px 44px 0px #2131E533',
+        'cookie-banner': '-10px -15px 21px -13px rgba(33,49,229,0.5)',
       },
       backgroundImage: {
         'pattern': "url('/public/background.svg')",

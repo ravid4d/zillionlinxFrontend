@@ -37,6 +37,10 @@ const Bookmark = ({
       await dispatch(fetchAllTopLinks(token));
     }
   };
+  const doNotClick = [
+    "https://zillionlinx.com/bookmark-tips3.html",
+    "https://zillionlinx.com/Instant-LinX-Help3.html"
+  ];
 
   return (
     <>
@@ -44,7 +48,9 @@ const Bookmark = ({
         className={`bg-whtie relative overflow-hidden rounded-xl block shadow-bookmark border border-dark-blue/30`}
       >
         <span
-          className={`${searchResults?'hidden':''} pin-icon w-6 h-6 rounded-full z-30 ${
+          className={`${
+            searchResults ? "hidden" : ""
+          } pin-icon w-6 h-6 rounded-full z-30 ${
             item?.pinned ? "bg-dark-blue" : "bg-light-blue"
           } flex flex-wrap items-center justify-center cursor-pointer absolute left-2 top-2`}
         >
@@ -74,16 +80,33 @@ const Bookmark = ({
             </svg>
           </label>
         </span>
-        
-        <Link
-          target="_blank"
-          to={item?.website_url}
-          className="relative w-full block"
-        >
-          <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
-          <img src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`} alt="" className="w-full rounded-lg" />
+        {doNotClick?.includes(item?.website_url) ? (
+          <div
+            className="relative w-full block"
+          >
+            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
+              <img
+                src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
+                alt=""
+                className="w-full rounded-lg"
+              />
+            </div>
           </div>
-        </Link>
+        ) : (
+          <Link
+            target="_blank"
+            to={item?.website_url}
+            className="relative w-full block"
+          >
+            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
+              <img
+                src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
+                alt=""
+                className="w-full rounded-lg"
+              />
+            </div>
+          </Link>
+        )}
 
         <Link target="_blank" to={item?.website_url}>
           <span className="block bg-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
@@ -91,25 +114,6 @@ const Bookmark = ({
           </span>
         </Link>
       </span>
-      {/* <span
-        onClick={() => handleRemoveItem(item?.id)}
-        className="cross-icon w-6 h-6 rounded-full bg-dark-blue flex flex-wrap items-center justify-center cursor-pointer absolute -right-2 -top-2 transition-all hover:bg-red-500"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="#C0C6FF"
-          className="size-4"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18 18 6M6 6l12 12"
-          />
-        </svg>
-      </span> */}
     </>
   );
 };

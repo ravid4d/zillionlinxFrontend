@@ -61,20 +61,20 @@ const Home = () => {
   return (
     <>
       <div className="relative overflow-hidden max-w-screen-3xl mx-auto">
-        <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-24">
+        <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
           <div className="text-center">
-            <h1 className="text-[5.7vw] leading-[6.1vw] font-medium uppercase text-dark-blue">
+            <h1 className="text-[4.5vw] leading-[5.1vw] font-medium uppercase text-dark-blue">
               Find <span className="font-light">&</span> Bookmark <br />
               the good stuff
             </h1>
 
-            <p className="text-[18px] text-gray-600 max-w-xl mx-auto my-16">
+            <p className="text-[18px] text-gray-600 max-w-xl mx-auto mb-16 mt-10">
               Online Bookmarks, Online Favorites. Store and organize your
               Bookmarks in one place. Access your Bookmarks from every computer.
               Search the Internet and get real answers.
             </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 mx-auto max-w-3xl gap-6 p-6 lg:p-0 items-center mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 mx-auto max-w-3xl gap-6 p-6 lg:p-0 items-center mb-10">
               {/* Second Column (Single Large Image) */}
               <div className="lg:row-span-2">
                 <img
