@@ -81,9 +81,7 @@ const Bookmark = ({
           </label>
         </span>
         {doNotClick?.includes(item?.website_url) ? (
-          <div
-            className="relative w-full block"
-          >
+          <div className="relative w-full block">
             <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
               <img
                 src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
@@ -107,12 +105,19 @@ const Bookmark = ({
             </div>
           </Link>
         )}
-
-        <Link target="_blank" to={item?.website_url}>
-          <span className="block bg-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
-            {item?.title}
-          </span>
-        </Link>
+        {doNotClick?.includes(item?.website_url) ? (
+          <div className="relative w-full block">
+            <span className="block bg-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
+              {item?.title}
+            </span>
+          </div>
+        ) : (
+          <Link target="_blank" to={item?.website_url}>
+            <span className="block bg-white text-center text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden font-semibold">
+              {item?.title}
+            </span>
+          </Link>
+        )}
       </span>
     </>
   );
