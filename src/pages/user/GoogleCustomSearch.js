@@ -220,7 +220,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/amazon.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="max-w-full mx-auto"
                                     />
                                   </figure>
@@ -237,7 +237,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/walmart.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -254,7 +254,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/etsy.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -271,7 +271,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ebay.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -288,7 +288,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/ali-express.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -324,7 +324,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/new-egg.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>
@@ -358,7 +358,7 @@ const GoogleCustomSearch = () => {
                                     <img
                                       src="/youtube.png"
                                       alt=""
-                                      width="120"
+                                      width="140"
                                       className="mx-auto max-w-full"
                                     />
                                   </figure>

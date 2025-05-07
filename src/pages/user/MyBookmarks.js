@@ -390,7 +390,7 @@ const MyBookmarks = () => {
                   <span className="loader"></span>
                 ) : listingType === "link" && links && links?.length > 0 ? (
                   <div className="flex flex-wrap h-full">
-                    <aside className="w-1/3 border-e border-light-blue h-full pe-6">
+                    <aside className="w-2/5 border-e border-light-blue h-full pe-6">
                       <ul>
                         {category &&
                           category?.length > 0 &&
@@ -444,7 +444,8 @@ const MyBookmarks = () => {
                           })}
                       </ul>
                     </aside>
-                    <ul className="list-disc ps-6 w-2/3">
+                    <ul className="list-none ps-6 w-3/5">
+                      <li className="font-medium text-xl mb-6">{selectedCat}</li>
                       {Object.entries(getSubCategoryGroups()).map(
                         ([subCat, links]) => (
                           <div key={subCat} className="mb-6">
