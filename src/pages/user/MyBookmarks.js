@@ -385,58 +385,24 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
 
-              <div className="rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)]">
+              <div className="rounded-xl border border-light-blue p-6 h-[calc(100%-75px)]">
                 {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
                 ) : listingType === "link" && links && links?.length > 0 ? (
                   <div className="flex flex-wrap h-full">
-                    <aside className="w-2/5 border-e border-light-blue h-full pe-6">
+                    <aside className="w-2/5 border-e border-light-blue h-full pe-6 sticky top-0">
                       <ul>
                         {category &&
                           category?.length > 0 &&
                           category?.map((cat) => {
                             return (
+                              // relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-base text-light-black w-full focus:outline-none cursor-pointer
                               <li
                                 key={cat}
-                                className="relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-base text-light-black w-full focus:outline-none cursor-pointer"
+                                className={`mb-2 text-base cursor-pointer hover:text-black hover:underline ${selectedCat === cat ? 'text-black' : 'text-dark-blue'}`}
                                 onClick={() => setSelectedCat(cat)}
                               >
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="absolute hs-accordion-toggle"
-                                >
-                                  <path
-                                    d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
-                                    stroke="#2131E5"
-                                    strokeWidth="0.625"
-                                    strokeMiterlimit="10"
-                                    strokeLinecap="round"
-                                    className="circle"
-                                  ></path>
-                                  {selectedCat !== cat && (
-                                    <path
-                                      d="M8 4.1875V11.8125"
-                                      stroke="#2131E5"
-                                      strokeWidth="0.625"
-                                      strokeMiterlimit="10"
-                                      strokeLinecap="round"
-                                      className="plus"
-                                    ></path>
-                                  )}
-                                  <path
-                                    d="M4.1875 8H11.8125"
-                                    stroke="#2131E5"
-                                    strokeWidth="0.625"
-                                    strokeMiterlimit="10"
-                                    strokeLinecap="round"
-                                    className="minus"
-                                  ></path>
-                                </svg>
-                                <span className="block pl-6 text-start w-full">
+                                <span className="block text-start w-full">
                                   {cat}
                                 </span>
                               </li>
@@ -444,12 +410,12 @@ const MyBookmarks = () => {
                           })}
                       </ul>
                     </aside>
-                    <ul className="list-none ps-6 w-3/5">
-                      <li className="font-medium text-xl mb-6">{selectedCat}</li>
+                    <ul className="list-none ps-6 w-3/5 overflow-auto custom-scrollbar h-full">
+                      <li className="font-bold text-lg mb-3">{selectedCat}</li>
                       {Object.entries(getSubCategoryGroups()).map(
                         ([subCat, links]) => (
                           <div key={subCat} className="mb-6">
-                            <h3 className="flex flex-wrap flex-col gap-x-4 text-lg md:text-xl text-dark-blue capitalize mb-2">
+                            <h3 className="flex flex-wrap flex-col gap-x-4 text-lg text-black font-medium capitalize mb-2">
                               {subCat}
                             </h3>
                             <ul className="">
@@ -458,6 +424,7 @@ const MyBookmarks = () => {
                                 return (
                                   <li
                                   key={link.id}
+                                  className="pl-4"
                                   onContextMenu={(e) =>{
                                     // {console.log(link, "link")}
                                     linkHandleRightClick(e, link)}
@@ -467,7 +434,7 @@ const MyBookmarks = () => {
                                     href={link.website_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-light-black hover:underline"
+                                    className="mb-2 text-base text-dark-blue cursor-pointer hover:text-black hover:underline"
                                   >
                                     {link.title}
                                   </a>

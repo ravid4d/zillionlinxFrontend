@@ -293,7 +293,7 @@ export const linkFrontListing = createAsyncThunk(
           }
         }
       );
-      console.log(response?.data?.data, 'dd');
+      // console.log(response?.data?.data, 'dd');
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue({
