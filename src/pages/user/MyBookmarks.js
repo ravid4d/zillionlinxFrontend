@@ -41,7 +41,8 @@ const MyBookmarks = () => {
     openModal,
     closeAllModals,
     setSearchResults,
-    searchResults
+    searchResults,
+    redirectTo
   } = useOutletContext();
   const [contextMenu, setContextMenu] = useState(null);
   const [draggedItemId, setDraggedItemId] = useState(null);
@@ -346,6 +347,7 @@ const MyBookmarks = () => {
             <Sidebar
               setId={setId}
               id={id}
+              redirectTo={redirectTo}
               setSearchResults={setSearchResults}
             />
           </div>
@@ -394,7 +396,7 @@ const MyBookmarks = () => {
                       <ul>
                         {category &&
                           category?.length > 0 &&
-                          category?.map((cat) => {
+                          category?.sort()?.map((cat) => {
                             return (
                               // relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-base text-light-black w-full focus:outline-none cursor-pointer
                               <li
