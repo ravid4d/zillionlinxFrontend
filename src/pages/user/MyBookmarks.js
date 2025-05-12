@@ -322,7 +322,7 @@ const MyBookmarks = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
-      <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
+      <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 xl:pb-5 h-full">
         <div className="flex flex-wrap xl:space-x-8 h-full">
           <div
             id="hs-application-sidebar"
@@ -376,7 +376,7 @@ const MyBookmarks = () => {
               </div>
             )}
 
-            <div className="rounded-2xl bg-white md:h-[calc(100%-66px)]">
+            <div className={`rounded-2xl bg-white md:h-[calc(100%-66px)]`}>
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
                 {pageHeading}
                 {pageHeading === "Top Links" ? (
@@ -387,7 +387,7 @@ const MyBookmarks = () => {
                 ) : null}
               </p>
 
-              <div className="rounded-xl border border-light-blue p-6 h-[calc(100%-75px)]">
+              <div className={`rounded-xl border border-light-blue p-6 h-[calc(100%-75px)] ${listingType === "link" && links && links?.length > 0 ? '' : 'overflow-auto custom-scrollbar'}`}>
                 {loading?.fetchCategoryWiseBookmarks ? (
                   <span className="loader"></span>
                 ) : listingType === "link" && links && links?.length > 0 ? (
