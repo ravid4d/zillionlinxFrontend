@@ -53,6 +53,7 @@ useEffect(()=>{
   return (
     <form
       onSubmit={googleFormik.handleSubmit}
+      autoComplete="off"
       className={`flex items-start justify-end gap-4 mb-4 relative  ${
         location.pathname === "/bookmarks"
           ? "max-w-full xl:w-[calc(100%-375px)]"

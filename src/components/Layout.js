@@ -202,6 +202,7 @@ const Layout = () => {
               setSelectedSubCategory,
               setId,
               id,
+              redirectTo,
               searchResults,
               setSearchResults
             }}

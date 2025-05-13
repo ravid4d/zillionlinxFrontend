@@ -9,7 +9,7 @@ import {
   updateListingtype
 } from "../../redux/slices/bookmarkSlice";
 
-const Sidebar = ({ setId, id, setSearchResults }) => {
+const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { categories, loading } = useSelector((state) => state.category);
@@ -49,8 +49,11 @@ const Sidebar = ({ setId, id, setSearchResults }) => {
   return (
     <div className="rounded-2xl bg-white xl:py-0 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
       <div className="min-h-4/6 h-[calc(100%-60px)]">
-        <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
+        <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6" >
+          <span onClick={redirectTo} className="cursor-pointer">
+
           My Bookmarks
+          </span>
         </p>
         <ul
           className={`${
