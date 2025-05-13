@@ -7,7 +7,6 @@ const GoogleSearchbar = ({googleRef}) => {
   const navigate = useNavigate();
   const location = useLocation();
  
-console.log(googleRef?.current?.value, 'baby')
 const handleFocus = () => {
   if(googleRef?.current) {
       googleRef.current.style.backgroundImage = "url('')";
@@ -30,19 +29,19 @@ useEffect(()=>{
 
   const googleFormik = useFormik({
     initialValues: {
-      title: new URLSearchParams(location.search).get("query") || "" // Preserve query param on reload
+      search: new URLSearchParams(location.search).get("query") || "" // Preserve query param on reload
     },
     validationSchema: YUP.object({
-      title: YUP.string().required("Search query is required")
+      search: YUP.string().required("Search query is required")
     }),
     onSubmit: async (values) => {
       let formData = new FormData();
-      formData.append("title", values?.title);
+      formData.append("search", values?.search);
 
-      if (!values.title.trim()) return; // Prevent empty search
+      if (!values.search.trim()) return; // Prevent empty search
 
       // Update URL with query params
-      const queryParam = `?query=${encodeURIComponent(values.title)}`;
+      const queryParam = `?query=${encodeURIComponent(values.search)}`;
 
       if (location.pathname !== "/result") {
         navigate(`/result${queryParam}`); // Redirect to /result with query param
@@ -68,11 +67,11 @@ useEffect(()=>{
       <div className="px-3 bg-white border border-gray-200">
         <input
           type="text"
-          value={googleFormik.values?.title}
+          value={googleFormik.values?.search}
           onChange={googleFormik.handleChange}
           // placeholder='Search the web'
           id="searchTitle"
-          name="title"
+          name="search"
           autoComplete="off"
           ref={googleRef}
           onFocus={handleFocus}

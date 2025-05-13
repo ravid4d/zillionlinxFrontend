@@ -35,7 +35,7 @@ const GoogleCustomSearch = () => {
     }
 
     let formData = new FormData();
-    formData.append("title", query);
+    formData.append("search", query);
 
     dispatch(googleSearch({ token, formData })).then((result) => {
       if (!result.payload || result.payload?.length === 0) {
