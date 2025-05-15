@@ -162,34 +162,38 @@ const GoogleCustomSearch = () => {
                               googleResults?.length > 0 &&
                               googleResults?.map((result, index) => {
                                 return (
-                                  <li key={index} className="relative">
-                                    <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
-                                      <Link
-                                        className="block overflow-hidden object-cover object-top"
-                                        // to={result?.website_url}
-                                        to={result?.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        <img
-                                          alt=""
-                                          className="w-full"
-                                          // src={`${process.env.REACT_APP_API_URL}/storage/${result.image}`}
-                                          src={result.image}
-                                        />
-                                      </Link>
-                                      <Link
-                                        // to={result?.website_url}
-                                        to={result?.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        <span className="block g-white text-center underline text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
-                                          {result?.title}
+                                  <>
+                                    {result.image && (
+                                      <li key={index} className="relative">
+                                        <span className="bg-whtie relative overflow-hidden rounded-xl block border border-dark-blue/30">
+                                          <Link
+                                            className="block overflow-hidden object-cover object-top"
+                                            // to={result?.website_url}
+                                            to={result?.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            <img
+                                              alt=""
+                                              className="w-full"
+                                              // src={`${process.env.REACT_APP_API_URL}/storage/${result.image}`}
+                                              src={result.image}
+                                            />
+                                          </Link>
+                                          <Link
+                                            // to={result?.website_url}
+                                            to={result?.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            <span className="block g-white text-center underline text-[16px] py-2 px-4 whitespace-nowrap text-ellipsis overflow-hidden">
+                                              {result?.title}
+                                            </span>
+                                          </Link>
                                         </span>
-                                      </Link>
-                                    </span>
-                                  </li>
+                                      </li>
+                                    )}
+                                  </>
                                 );
                               })
                             )}

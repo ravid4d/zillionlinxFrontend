@@ -12,6 +12,7 @@ const importBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/admin/import-boo
 const addToBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/add-toplink-bookmark`;
 const removeFromBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/remove-toplink-bookmark`;
 const linkUrl = `${process.env.REACT_APP_API_URL}/api/listing-bookmark`;
+const moveBookmarkUrl = `${process.env.REACT_APP_API_URL}/api/bookmarks/`;
 
 // Fetch All Top Links
 export const fetchAllTopLinks = createAsyncThunk(
@@ -305,6 +306,22 @@ export const linkFrontListing = createAsyncThunk(
     }
   }
 );
+
+export const moveBookmarkToCategory = createAsyncThunk("bookmark/moveBookmarkToCategory", async({bookmarkId, category_id, sub_category_id}, {getState, rejectWithValue})=>{
+  try {
+    let token = getState().auth.token;
+    let response = await axiosInstance.post(`${moveBookmarkUrl}${bookmarkId}/move`, {category_id:category_id, sub_category_id:sub_category_id},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return response?.data;
+  } catch (error) {
+    return rejectWithValue(error.message || "Getting error while changing the category");
+  }
+});
 
 const bookmarkSlice = createSlice({
   name: "bookmark",

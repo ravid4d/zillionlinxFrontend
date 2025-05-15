@@ -86,7 +86,9 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+svg.selected-cat path {
+  stroke: white;
+}
 
 @keyframes rotation {
   0% {

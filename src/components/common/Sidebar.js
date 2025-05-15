@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/slices/categorySlice";
@@ -9,12 +9,21 @@ import {
   updateListingtype
 } from "../../redux/slices/bookmarkSlice";
 
-const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
+const Sidebar = ({
+  setId,
+  id,
+  setSearchResults,
+  redirectTo,
+  onDropCategory
+}) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { categories, loading } = useSelector((state) => state.category);
   const { bookmark_addto } = useSelector((state) => state.bookmark);
   const [openAccordion, setOpenAccordion] = useState({});
+
+  const [dragCategoryId, setDragCategoryId] = useState(null);
+  const dragCounter = useRef({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,13 +55,29 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
     }
   }, [id?.categoryId, bookmark_addto]);
 
+  const handleDrop = (e, id, subCatId, type = "category") => {
+    e.preventDefault();
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+    if (type === "category") {
+      onDropCategory({
+        bookmarkId: data,
+        category_id: id,
+        sub_category_id: ""
+      });
+    } else if (type === "subcategory") {
+      onDropCategory({
+        bookmarkId: data,
+        category_id: id,
+        sub_category_id: subCatId
+      });
+    }
+  };
   return (
     <div className="rounded-2xl bg-white xl:py-0 min-h-[calc(100%-64px)] h-[calc(100%-64px)] relative">
       <div className="min-h-4/6 h-[calc(100%-60px)]">
-        <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6" >
+        <p className="md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
           <span onClick={redirectTo} className="cursor-pointer">
-
-          My Bookmarks
+            My Bookmarks
           </span>
         </p>
         <ul
@@ -74,10 +99,31 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
               return (
                 <li
                   key={category?.id}
-                  className={`${
+                  className={`
+                  ${
                     isActive ? "active" : ""
-                  } hs-accordion-group hs-accordion last:mb-0 relative`}
+                  } hs-accordion-group hs-accordion last:mb-0 relative
+                 
+                  `}
                   id={`users-accordion_${category?.id}`}
+                  onDragEnter={(e) => {
+                    e.preventDefault();
+                    dragCounter.current[category.id] =
+                      (dragCounter.current[category.id] || 0) + 1;
+                    setDragCategoryId(String(category.id));
+                  }}
+                  onDragLeave={(e) => {
+                    dragCounter.current[category.id] -= 1;
+                    if (dragCounter.current[category.id] === 0) {
+                      setDragCategoryId(null);
+                    }
+                  }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    dragCounter.current[category.id] = 0;
+                    setDragCategoryId(null);
+                    handleDrop(e, category.id, "", "category");
+                  }}
                 >
                   <button
                     onClick={() => {
@@ -92,9 +138,15 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                       );
                     }}
                     type="button"
-                    className={`group relative rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-sm text-light-black w-full focus:outline-none ${
-                      isActive ? "" : ""
-                    }`}
+                    className={`
+                       ${
+                         dragCategoryId === String(category.id)
+                           ? "bg-dark-blue text-white"
+                           : "bg-lighter-blue text-light-black"
+                       }
+                      group relative rounded-lg mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-sm w-full focus:outline-none ${
+                        isActive ? "" : ""
+                      }`}
                     aria-expanded={isActive}
                     aria-controls={`users-accordion-collapse-${category?.id}`}
                   >
@@ -104,12 +156,14 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                       viewBox="0 0 16 16"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="group absolute hs-accordion-toggle"
+                      className={`group absolute hs-accordion-toggle ${
+                        dragCategoryId === String(category.id) ? "selected-cat" : ""
+                      }`}
                     >
                       <path
                         d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
                         stroke="#2131E5"
-                        strokeWidth="0.625"
+                        strokeWidth="2"
                         strokeMiterlimit="10"
                         strokeLinecap="round"
                         className="circle"
@@ -117,7 +171,7 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                       <path
                         d="M8 4.1875V11.8125"
                         stroke="#2131E5"
-                        strokeWidth="0.625"
+                        strokeWidth="2"
                         strokeMiterlimit="10"
                         strokeLinecap="round"
                         className="plus"
@@ -125,7 +179,7 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                       <path
                         d="M4.1875 8H11.8125"
                         stroke="#2131E5"
-                        strokeWidth="0.625"
+                        strokeWidth="2"
                         strokeMiterlimit="10"
                         strokeLinecap="round"
                         className="minus"
@@ -167,6 +221,31 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                               className="hs-accordion-group hs-accordion relative"
                               id={`users-accordion-sub-${subIndex}`}
                               key={subIndex}
+                              onDragEnter={(e) => {
+                                e.preventDefault();
+                                dragCounter.current[subCat.id] =
+                                  (dragCounter.current[subCat.id] || 0) + 1;
+                                  setTimeout(() => setDragCategoryId(String(subCat.id)), 0);
+                                // setDragCategoryId(String(subCat.id));
+                              }}
+                              onDragLeave={(e) => {
+                                dragCounter.current[subCat.id] -= 1;
+                                if (dragCounter.current[subCat.id] === 0) {
+                                  setDragCategoryId(null);
+                                }
+                              }}
+                              onDragOver={(e) => e.preventDefault()}
+                              onDrop={(e) => {
+                                e.stopPropagation();
+                                dragCounter.current[subCat.id] = 0;
+                                setDragCategoryId(null);
+                                handleDrop(
+                                  e,
+                                  category?.id,
+                                  subCat.id,
+                                  "subcategory"
+                                );
+                              }}
                             >
                               <button
                                 onClick={() => {
@@ -184,7 +263,13 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                                   });
                                 }}
                                 type="button"
-                                className="group rounded-lg bg-lighter-blue mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base text-light-black w-full focus:outline-none"
+                                className={`
+                                   ${
+                                     dragCategoryId === String(subCat.id)
+                                       ? "bg-dark-blue text-white"
+                                       : "bg-lighter-blue text-light-black"
+                                   }
+                                  group rounded-lg mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-base w-full focus:outline-none`}
                                 aria-expanded="true"
                                 aria-controls="users-accordion-sub-1-collapse-1"
                               >
@@ -194,12 +279,16 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                                   viewBox="0 0 16 16"
                                   fill="none"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  className="hs-accordion-toggle"
+                                  className={`hs-accordion-toggle  ${
+                                    dragCategoryId === String(subCat.id)
+                                      ? "selected-cat"
+                                      : ""
+                                  }`}
                                 >
                                   <path
                                     d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
                                     stroke="#2131E5"
-                                    strokeWidth="0.625"
+                                    strokeWidth="2"
                                     strokeMiterlimit="10"
                                     strokeLinecap="round"
                                     className="circle"
@@ -207,14 +296,14 @@ const Sidebar = ({ setId, id, setSearchResults, redirectTo }) => {
                                   <path
                                     d="M8 4.1875V11.8125"
                                     stroke="#2131E5"
-                                    strokeWidth="0.625"
+                                    strokeWidth="2"
                                     strokeMiterlimit="10"
                                     strokeLinecap="round"
                                   />
                                   <path
                                     d="M4.1875 8H11.8125"
                                     stroke="#2131E5"
-                                    strokeWidth="0.625"
+                                    strokeWidth="2"
                                     strokeMiterlimit="10"
                                     strokeLinecap="round"
                                   />

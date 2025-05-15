@@ -14,6 +14,7 @@ import {
   fetchAllTopLinks,
   fetchCategoryWiseBookmarks,
   linkFrontListing,
+  moveBookmarkToCategory,
   orderBookmarks,
   removeFromBookmarks,
   removeTopLink,
@@ -63,7 +64,7 @@ const MyBookmarks = () => {
   const [selectedCat, setSelectedCat] = useState("" | null);
   const hasFetchedRef = useRef(false);
   const googleRef = useRef(null);
-
+  
   const loginMessage = location?.state?.loginMessage
     ? location?.state?.loginMessage
     : "";
@@ -71,7 +72,6 @@ const MyBookmarks = () => {
   const linkHandleRightClick = (event, record) => {
     event.preventDefault();
     let newRecord = { ...record, link: record?.website_url };
-    console.log(newRecord, "object");
     setContextMenu({
       x: event.clientX,
       y: event.clientY,
@@ -147,8 +147,9 @@ const MyBookmarks = () => {
   }, [dispatch, token, bookmark_addto]);
 
   // When drag starts, store the item's index
-  const handleDragStart = (itemId) => {
+  const handleDragStart = (e, itemId) => {
     setDraggedItemId(itemId);
+    e.dataTransfer.setData('text/plain', itemId);
   };
 
   const handleDragOver = (event) => {
@@ -320,6 +321,21 @@ const MyBookmarks = () => {
     return grouped;
   };
 
+const handleDropToCategory = async(data) => {
+  try {
+    let result = await dispatch(moveBookmarkToCategory(data));
+    dispatch(fetchAllTopLinks(token));
+    if (result.payload.message) {
+      toast.success(result?.payload?.message);
+    }
+  } catch (error) {
+    console.log(error, "Error while changing bookmark category");
+    toast.error(
+      error.message || "Failed to changing bookmark category"
+    );
+  }
+};
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 xl:pb-5 h-full">
@@ -349,6 +365,7 @@ const MyBookmarks = () => {
               id={id}
               redirectTo={redirectTo}
               setSearchResults={setSearchResults}
+              onDropCategory={handleDropToCategory}
             />
           </div>
 
@@ -422,13 +439,11 @@ const MyBookmarks = () => {
                             </h3>
                             <ul className="">
                               {links.map((link) => {
-                                // console.log(link, "link");
                                 return (
                                   <li
                                   key={link.id}
                                   className="pl-4"
                                   onContextMenu={(e) =>{
-                                    // {console.log(link, "link")}
                                     linkHandleRightClick(e, link)}
                                   }
                                 >
@@ -448,19 +463,6 @@ const MyBookmarks = () => {
                           </div>
                         )
                       )}
-                      {/* {links?.filter(link => link.category === selectedCat)?.map((link) => (
-                        <li
-                          key={link?.title}
-                          onContextMenu={(e) => linkHandleRightClick(e, link)}
-                          className="relative mb-2"
-                        >
-                          <Link target="_blank" to={link?.website_url}>
-                            <span className="text-sm font-semibold hover:text-dark-blue">
-                              {link?.title}
-                            </span>
-                          </Link>
-                        </li>
-                      ))} */}
                     </ul>
                   </div>
                 ) : listingType === "bookmark" && bookmarks?.length > 0 ? (
@@ -471,7 +473,7 @@ const MyBookmarks = () => {
                           <li
                             key={bookmark?.id}
                             draggable
-                            onDragStart={() => handleDragStart(bookmark?.id)}
+                            onDragStart={(e) => handleDragStart(e, bookmark?.bookmark_id)}
                             onDragOver={handleDragOver}
                             onDrop={() => handleDrop(bookmark.id)}
                             onContextMenu={(e) => handleRightClick(e, bookmark)}
