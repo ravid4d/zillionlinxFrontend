@@ -194,6 +194,20 @@ const Links = () => {
                     <th scope="col" className="px-6 py-3 text-start">
                       <div className="flex items-center gap-x-2">
                         <span className="text-xs font-semibold uppercase text-gray-800 ">
+                          Category
+                        </span>
+                      </div>
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 ">
+                          Sub Category
+                        </span>
+                      </div>
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-start">
+                      <div className="flex items-center gap-x-2">
+                        <span className="text-xs font-semibold uppercase text-gray-800 ">
                           Created
                         </span>
                       </div>

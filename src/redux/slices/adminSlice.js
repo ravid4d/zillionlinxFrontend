@@ -12,8 +12,7 @@ const linkAdminUrl = `${process.env.REACT_APP_API_URL}/api/admin/listing-admin-b
 const deleteLinkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-admin-bookmark`;
 const mainCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/main/categories`;
 const subCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/sub/categories`;
-
-
+const instantCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/instant-linx-category`;
 
 export const deleteCategory = createAsyncThunk(
   "admin/delete-categories",
@@ -186,9 +185,6 @@ export const handleCategoryPagination = createAsyncThunk(
   }
 );
 
-
-
-
 export const handleBookmarksPagination = createAsyncThunk(
   "admin/pagination",
   async ({ url, token }, { rejectWithValue }) => {
@@ -253,11 +249,17 @@ export const categoryReorder = createAsyncThunk(
   }
 );
 
-export const linkListing = createAsyncThunk("admin/linkListing", async({token},{getState, rejectWithValue})=>{
+export const linkListing = createAsyncThunk("admin/linkListing", async({ category, sub_category},{getState, rejectWithValue})=>{
   try {
     let title = getState().admin?.searchQuery;
+    const token = getState().auth.token;
     
-    let url = title ? `${linkAdminUrl}?search=${title}` : linkAdminUrl;
+     const params = new URLSearchParams();
+      if (title) params.append("search", title);
+      if (category) params.append("category", category);
+      if (sub_category) params.append("sub_category", sub_category);
+
+      const url = `${linkAdminUrl}${params.toString() ? "?" + params.toString() : ""}`;
     let response = await axiosInstance.get(url, {
       headers:{
         Authorization: `Bearer ${token}`
@@ -363,7 +365,7 @@ export const fetchsubCategories = createAsyncThunk(
   async (id, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      let response = await axiosInstance.post(subCategoriesUrl,{
+      let response = await axiosInstance.post(subCategoriesUrl, {
         category_id: id
       }, {
         headers: {
@@ -382,17 +384,41 @@ export const fetchsubCategories = createAsyncThunk(
   }
 ); 
 
+export const getInstantCategories = createAsyncThunk(
+  "admin/getInstantCategories",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      
+      const response = await axiosInstance.get(instantCategoriesUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data?.data?.categories;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
     status: "",
     searchQuery: "",
-    loading:{  fetchAllBookmarks: false,
+    instantCategories:[],
+    loading:{  
+      fetchAllBookmarks: false,
       fetchMainCategories: false,
-      fetchSubCategories: false,},
-    error: {  fetchAllBookmarks: null,
+      fetchSubCategories: false
+    },
+    error: {  
+      fetchAllBookmarks: null,
       fetchMainCategories: null,
-      fetchSubCategories: null,},
+      fetchSubCategories: null
+    },
     categoryLoading: false,
     editingCategory: null,
     totalCategories: undefined,
@@ -678,6 +704,21 @@ const adminSlice = createSlice({
         .addCase(fetchsubCategories.rejected, (state, action) => {
           state.loading.fetchSubCategories = false;
           state.error.fetchSubCategories = action.payload?.message || action.error?.message || 'Error while fetching subcategories';
+        });
+
+      // Instant Categories
+      builder
+        .addCase(getInstantCategories.pending, (state) => {
+          state.loading.getInstantCategories = true; // Ensure loading state is specific for getInstantCategories
+          state.error.getInstantCategories = null; // reset specific error for getInstantCategories
+        })
+        .addCase(getInstantCategories.fulfilled, (state, action) => {
+          state.loading.getInstantCategories = false;
+          state.instantCategories = action.payload;
+        })
+        .addCase(getInstantCategories.rejected, (state, action) => {
+          state.loading.getInstantCategories = false;
+          state.error.getInstantCategories = action.payload?.message || action.error?.message || 'Error while fetching subcategories';
         });
     
     

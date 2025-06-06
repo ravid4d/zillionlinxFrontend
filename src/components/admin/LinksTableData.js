@@ -27,7 +27,7 @@ const LinksTableData = ({
         </div>
       </td>
      
-      <td className="h-px min-w-48 w-48 xl:max-w-72">
+      <td className="h-px min-w-40 w-40 xl:max-w-72">
         <div className="px-6 py-3 flex flex-wrap flex-col">
           <span
             className="block break-all text-sm text-gray-500 text-truncate"
@@ -37,7 +37,7 @@ const LinksTableData = ({
         </div>
       </td>
 
-      <td className="h-px min-w-48 w-48 xl:max-w-72">
+      <td className="h-px min-w-36 w-36 xl:max-w-72">
         <div className="px-6 py-3 flex flex-wrap flex-col">
           <Link
             to={bookmark?.website_url}
@@ -49,7 +49,21 @@ const LinksTableData = ({
           </Link>
         </div>
       </td>
-      <td className="size-px whitespace-nowrap">
+      <td className="h-px min-w-36 w-36 xl:max-w-72">
+        <div className="px-6 py-3">
+          <span className="text-sm text-gray-500 ">
+             {bookmark?.category}
+          </span>
+        </div>
+      </td>
+      <td className="h-px min-w-36 w-36 xl:max-w-72">
+        <div className="px-6 py-3">
+          <span className="text-sm text-gray-500 ">
+             {bookmark?.sub_category}
+          </span>
+        </div>
+      </td>
+      <td className="h-px min-w-36 w-36 xl:max-w-72">
         <div className="px-6 py-3">
           <span className="text-sm text-gray-500 ">
             {moment(bookmark?.created_at).format("MMMM Do YYYY")}
@@ -57,7 +71,7 @@ const LinksTableData = ({
         </div>
       </td>
      
-      <td className="size-px whitespace-nowrap">
+      <td className="size-px">
         <div className="px-6 py-1.5">
           <button
             className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium "

@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import parse from "html-react-parser";
 import Links from "../../components/admin/Links";
+import { getInstantCategories, linkListing } from '../../redux/slices/adminSlice';
 
 const Import = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,10 @@ const Import = () => {
   const { importError, importBookmarkMessage } = useSelector(
     (state) => state.bookmark
   );
+  const [openAccordion, setOpenAccordion] = useState({});
+
+  const { instantCategories } = useSelector((state) => state.admin);
+  // console.log(instantCategories, 'instantCategories')
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -108,6 +113,24 @@ const Import = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(getInstantCategories());
+  }, [dispatch])
+
+  const toggleAccordion = (id, hasDropdown) => {
+    if (!hasDropdown) return;
+    setOpenAccordion((prevId) => (prevId === id ? null : id));
+  };
+
+  const callInstantCategories = async (category, sub_category) => {
+    try {
+      await dispatch(linkListing({ category: category, sub_category: sub_category ? sub_category : "" }));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
   return (
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -146,8 +169,8 @@ const Import = () => {
             </div>
           </div>
           <div className="flex flex-wrap md:h-full w-full flex-col md:flex-row p-6">
-           
-            <div className="flex flex-wrap lg:h-full lg:flex-col w-full lg:w-1/2 lg:pe-4 import-bookmarks-list">
+
+            <div className="flex flex-wrap lg:h-full lg:flex-col w-full lg:pe-4 import-bookmarks-list" style={{ "width": "20%" }}>
               <Dropzone
                 accept={{
                   "text/html": [".html"]
@@ -240,8 +263,8 @@ const Import = () => {
                               >
                                 {!isNaN(uploadedFile?.size)
                                   ? `${parseFloat(
-                                      (uploadedFile?.size / 1024).toFixed(2)
-                                    )}KB`
+                                    (uploadedFile?.size / 1024).toFixed(2)
+                                  )}KB`
                                   : ""}
                               </p>
                             </div>
@@ -289,7 +312,114 @@ const Import = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full lg:w-1/2 lg:ps-4 import-bookmarks-list h-full mt-6 lg:mt-0">
+            <div className="flex flex-wrap lg:h-full lg:flex-col w-full lg:ps-4 lg:pe-4 import-bookmarks-list" style={{ "width": "20%" }}>
+              <ul className="rounded-xl border border-light-blue p-4 min-h-4/6 h-[calc(100%-62px)] xl:h-[calc(100%-60px)] bookmark-sidebar custom-scrollbar overflow-x-hidden overflow-y-auto">
+                {
+                  instantCategories?.length > 0 && instantCategories.map((category, index) => {
+                    let cats = category?.category?.replaceAll(" ", "").toLowerCase();
+                    const hasDropdown = category?.sub_categories?.length > 0;
+                    const isActive = openAccordion === `users-accordion_${cats}`;
+                    return (
+                      <li
+                        key={index}
+                        className={`
+                  ${isActive ? "active" : ""
+                          } hs-accordion-group hs-accordion last:mb-0 relative
+                  `}>
+                        <button
+                          onClick={() => {
+                            callInstantCategories(category?.category, "");
+                            toggleAccordion(
+                              `users-accordion_${cats}`,
+                              hasDropdown
+                            );
+                          }}
+                          type="button"
+                          className={`bg-lighter-blue text-light-black group relative rounded-lg mb-2 py-1.5 px-2.5 flex flex-wrap items-center text-sm w-full focus:outline-none ${isActive ? "" : ""
+                            }`}
+                          aria-expanded={isActive}
+                          aria-controls={`users-accordion-collapse-${category?.id}`}
+                        >
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="group absolute hs-accordion-toggle">
+                            <path d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z" stroke="#2131E5" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" className="circle"></path>
+                            <path d="M8 4.1875V11.8125" stroke="#2131E5" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" className="plus"></path>
+                            <path d="M4.1875 8H11.8125" stroke="#2131E5" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" className="minus"></path>
+                          </svg>
+                          <span className="block pl-6 text-start w-full">{category?.category}</span>
+                        </button>
+                        {hasDropdown && (
+                          <div
+                            id={`users-accordion-collapse-${cats}`}
+                            className={`hs-accordion-content w-full overflow-hidden transition-[height] duration-300 ${isActive ? "block" : "hidden"
+                              }`}
+                            role="region"
+                            aria-labelledby={`users-accordion_${cats}`}
+                          >
+                            <ul className="pt-1 ps-3 space-y-1">
+                              {category?.sub_categories?.map((subCat, subIndex) => {
+                                return (
+                                  <li
+                                    className="hs-accordion-group hs-accordion relative"
+                                    id={`users-accordion-sub-${subIndex}`}
+                                    key={subIndex}
+                                  >
+                                    <button
+                                      onClick={() => {
+                                        callInstantCategories(category?.category, subCat);
+                                      }}
+                                      type="button"
+                                      className={`bg-lighter-blue text-light-black
+                                  group rounded-lg mb-2 py-1.5 px-2.5 flex flex-wrap items-center space-x-2 text-sm w-full focus:outline-none`}
+                                      aria-expanded="true"
+                                      aria-controls="users-accordion-sub-1-collapse-1"
+                                    >
+                                      <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 16 16"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className={`hs-accordion-toggle`}
+                                      >
+                                        <path
+                                          d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
+                                          stroke="#2131E5"
+                                          strokeWidth="2"
+                                          strokeMiterlimit="10"
+                                          strokeLinecap="round"
+                                          className="circle"
+                                        />
+                                        <path
+                                          d="M8 4.1875V11.8125"
+                                          stroke="#2131E5"
+                                          strokeWidth="2"
+                                          strokeMiterlimit="10"
+                                          strokeLinecap="round"
+                                        />
+                                        <path
+                                          d="M4.1875 8H11.8125"
+                                          stroke="#2131E5"
+                                          strokeWidth="2"
+                                          strokeMiterlimit="10"
+                                          strokeLinecap="round"
+                                        />
+                                      </svg>
+                                      <span>{subCat}</span>
+                                    </button>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        )
+                        }
+                      </li>
+                    )
+                  })
+                }
+              </ul>
+            </div>
+            <div className="w-full lg:ps-4 import-bookmarks-list h-full mt-6 lg:mt-0" style={{ "width": "60%" }}>
               <Links />
             </div>
           </div>
