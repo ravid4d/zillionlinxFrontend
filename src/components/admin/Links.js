@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
-  filterInstantLinks,
+  // filterInstantLinks,
   handleLinksPagination,
+  setFilterLinks,
   setSearchQuery
 } from "../../redux/slices/adminSlice";
 import Swal from "sweetalert2";
@@ -19,24 +20,16 @@ const Links = () => {
   const debouncedQuery = useDebounce(searchQuery, 500);
   
   const [selectedBookmarks, setSelectedBookmarks] = useState([]);
-  
-  const [filterBy, setFilterBy] = useState({
-    sort_by: "title",
-    sort_order: "desc"
-  });
+  // const filterLinks = useSelector(state => state.admin.filterLinks);
+   const currentSort = useSelector((state) => state.admin.filterLinks.sort_order);
+   const pageNumber = useSelector((state) => state.admin.filterLinks.page);
+  const newOrder = currentSort === "asc" ? "desc" : "asc";
 
-  const setUsersByFilter = (filter) => {
-    setFilterBy((prev) => ({
-      sort_by: filter?.sort_by,
-      sort_order:
-        prev?.sort_by === filter?.sort_by && prev?.sort_order === "desc"
-          ? "asc"
-          : "desc"
-    }));
-  };
-  useEffect(() => {
-    filterBy && dispatch(filterInstantLinks(filterBy));
-  }, [filterBy]); 
+
+const handleSort = (newSortBy) => {
+  dispatch(setFilterLinks({ sort_by: newSortBy, sort_order: newOrder, page:pageNumber }));
+  dispatch(linkListing());
+};
 
   useEffect(() => {
     dispatch(linkListing({token, isAdmin:true}))
@@ -48,7 +41,8 @@ const Links = () => {
     };
   }, [dispatch]);
 
-  const handlePagination = async (url) => {
+  const handlePagination = async (url, page) => {
+    dispatch(setFilterLinks({page:page}));
     dispatch(handleLinksPagination({ url, token }));
   };
 
@@ -169,7 +163,7 @@ const Links = () => {
                 <span className="loader"></span>
               </div>
             :
-          links && links?.length > 0 ? (            
+            links && links?.length > 0 ? (            
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50 ">
                   <tr>
@@ -195,7 +189,7 @@ const Links = () => {
                   </th>
                     
                   <th scope="col" className="px-6 py-3 text-start">
-                    <div onClick={() => setUsersByFilter({ sort_by: "title" })} className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                    <div onClick={() => handleSort("title")} className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                       <span>
                         Title
                       </span>
@@ -228,7 +222,7 @@ const Links = () => {
                   </th>
 
                   <th scope="col" className="px-6 py-3 text-start">
-                    <div onClick={() => setUsersByFilter({ sort_by: "created_at" })} className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                    <div onClick={() => handleSort("created_at")} className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
                       <span>
                         Created
                       </span>
@@ -291,7 +285,7 @@ const Links = () => {
                       key={index}
                       type="button"
                       disabled={pageNumber?.url === null}
-                      onClick={() => handlePagination(pageNumber?.url)}
+                      onClick={() => handlePagination(pageNumber?.url, pageNumber?.label)}
                       className={`${
                         pageNumber?.active ? "bg-gray-100" : "bg-white"
                       } py-1.5 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50`}

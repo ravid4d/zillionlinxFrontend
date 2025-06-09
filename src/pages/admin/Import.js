@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import parse from "html-react-parser";
 import Links from "../../components/admin/Links";
-import { getInstantCategories, linkListing } from '../../redux/slices/adminSlice';
+import { getInstantCategories, linkListing, setFilterLinks } from '../../redux/slices/adminSlice';
 
 const Import = () => {
   const dispatch = useDispatch();
@@ -124,7 +124,8 @@ const Import = () => {
 
   const callInstantCategories = async (category, sub_category) => {
     try {
-      await dispatch(linkListing({ category: category, sub_category: sub_category ? sub_category : "" }));
+      dispatch(setFilterLinks({ category_id: category, sub_category_id: sub_category ? sub_category : "" }));
+      await dispatch(linkListing());
     } catch (error) {
       console.error(error);
     }
