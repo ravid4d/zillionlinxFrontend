@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
+  filterInstantLinks,
   handleLinksPagination,
   setSearchQuery
 } from "../../redux/slices/adminSlice";
@@ -14,10 +15,28 @@ const Links = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { links, totalLinks, paginationLinks, searchQuery, loading } =
-    useSelector((state) => state.admin);
+  useSelector((state) => state.admin);
   const debouncedQuery = useDebounce(searchQuery, 500);
-
+  
   const [selectedBookmarks, setSelectedBookmarks] = useState([]);
+  
+  const [filterBy, setFilterBy] = useState({
+    sort_by: "title",
+    sort_order: "desc"
+  });
+
+  const setUsersByFilter = (filter) => {
+    setFilterBy((prev) => ({
+      sort_by: filter?.sort_by,
+      sort_order:
+        prev?.sort_by === filter?.sort_by && prev?.sort_order === "desc"
+          ? "asc"
+          : "desc"
+    }));
+  };
+  useEffect(() => {
+    filterBy && dispatch(filterInstantLinks(filterBy));
+  }, [filterBy]); 
 
   useEffect(() => {
     dispatch(linkListing({token, isAdmin:true}))
@@ -173,54 +192,59 @@ const Links = () => {
                         ID
                       </span> */}
                       </label>
-                    </th>
+                  </th>
                     
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 ">
-                          Title
-                        </span>
-                      </div>
-                    </th>
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div onClick={() => setUsersByFilter({ sort_by: "title" })} className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                      <span>
+                        Title
+                      </span>
+                      <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+                    </div>
+                  </th>
 
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 ">
-                          Website Url
-                        </span>
-                      </div>
-                    </th>
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 ">
+                        Website Url
+                      </span>
+                    </div>
+                  </th>
                    
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 ">
-                          Category
-                        </span>
-                      </div>
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 ">
-                          Sub Category
-                        </span>
-                      </div>
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 ">
-                          Created
-                        </span>
-                      </div>
-                    </th>
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 ">
+                        Category
+                      </span>
+                    </div>
+                  </th>
 
-                    <th scope="col" className="px-6 py-3 text-start">
-                      <div className="flex items-center gap-x-2">
-                        <span className="text-xs font-semibold uppercase text-gray-800 ">
-                          Action
-                        </span>
-                      </div>
-                    </th>
-                  </tr>
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 ">
+                        Sub Category
+                      </span>
+                    </div>
+                  </th>
+
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div onClick={() => setUsersByFilter({ sort_by: "created_at" })} className="text-xs font-semibold uppercase text-gray-800 flex flex-wrap items-center gap-1">
+                      <span>
+                        Created
+                      </span>
+                      <svg className="shrink-0 size-3.5 text-gray-800" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+                    </div>
+                  </th>
+
+                  <th scope="col" className="px-6 py-3 text-start">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-xs font-semibold uppercase text-gray-800 ">
+                        Action
+                      </span>
+                    </div>
+                  </th>
+                
+                </tr>
                 </thead>
 
                 <tbody className="divide-y divide-gray-200 ">

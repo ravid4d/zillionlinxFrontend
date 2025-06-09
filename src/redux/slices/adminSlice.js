@@ -13,6 +13,7 @@ const deleteLinkUrl = `${process.env.REACT_APP_API_URL}/api/admin/delete-admin-b
 const mainCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/main/categories`;
 const subCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/sub/categories`;
 const instantCategoriesUrl = `${process.env.REACT_APP_API_URL}/api/admin/instant-linx-category`;
+const filterInstantUrl = `${process.env.REACT_APP_API_URL}/api/admin/listing-admin-bookmark`;
 
 export const deleteCategory = createAsyncThunk(
   "admin/delete-categories",
@@ -401,6 +402,27 @@ export const getInstantCategories = createAsyncThunk(
     }
   }
 );
+export const filterInstantLinks = createAsyncThunk(
+  "admin/filterInstantLinks",
+  async ({sort_by, sort_order}, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      
+      const response = await axiosInstance.get(filterInstantUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params:{
+          sort_by:sort_by,
+          sort_order: sort_order,
+        }
+      });
+      return response.data?.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
 
 const adminSlice = createSlice({
@@ -638,6 +660,24 @@ const adminSlice = createSlice({
         state.paginationLinks = action.payload?.links;
       })
       .addCase(linkListing?.rejected, (state, action)=>{
+        state.loading.linkListing=false;
+        state.error.linkListing = action.payload;
+        state.status = action.payload.status;
+      })
+
+    // Instant Links
+    builder
+      .addCase(filterInstantLinks?.pending, (state, action)=>{
+        state.loading.linkListing=true;
+        state.error.linkListing=null;
+      })
+      .addCase(filterInstantLinks?.fulfilled, (state, action)=>{
+        state.loading.linkListing=false;
+        state.links = action.payload.data;
+        state.totalLinks = action.payload?.total;
+        state.paginationLinks = action.payload?.links;
+      })
+      .addCase(filterInstantLinks?.rejected, (state, action)=>{
         state.loading.linkListing=false;
         state.error.linkListing = action.payload;
         state.status = action.payload.status;
