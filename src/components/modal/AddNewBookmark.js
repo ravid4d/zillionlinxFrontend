@@ -181,6 +181,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       if (value.startsWith("https://")) {
         value = value.replace("https://", ""); // Remove https://
       }
+      else if (value.startsWith("http://")) {
+        value = value.replace("http://", ""); // Remove https://
+      }
       formik.setFieldValue("url", value);
 
       // formik.setFieldValue("url", record?.link);
@@ -224,6 +227,9 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
     let value = e.target.value;
     if (value.startsWith("https://")) {
       value = value.replace("https://", ""); // Remove https://
+    }
+    else if (value.startsWith("http://")) {
+      value = value.replace("http://", ""); // Remove https://
     }
     formik.setFieldValue("url", value);
   };
