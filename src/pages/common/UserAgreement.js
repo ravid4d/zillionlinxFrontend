@@ -14,7 +14,7 @@ const UserAgreement = () => {
           <h1 className="text-2xl mb-4 font-bold">
             User Agreement for ZillionLinX
           </h1>
-          <p className="text-md mb-5">Effective Date: June 1, 2025</p>
+          <p className="text-md mb-5"><span className="font-semibold">Effective Date:</span> June 1, 2025</p>
           <p className="text-md mb-5">
             This User Agreement (Agreement) is entered into by and between you
             (User) and PGL Resources, LLC, a Florida limited liability company

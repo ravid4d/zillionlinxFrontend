@@ -13,8 +13,8 @@ const PrivacyPolicy = () => {
       >
         <div className="flex flex-wrap h-full w-full text-black flex-col">
           <h1 className="text-2xl mb-4 font-bold">Privacy Statement</h1>
-          <p className="text-md mb-1 font-semibold">Effective Date: January 1, 2025</p>
-          <p className="text-md mb-5 font-semibold">Last Updated: March 3, 2025</p>
+          <p className="text-md mb-1"><span className="font-semibold">Effective Date:</span> January 1, 2025</p>
+          <p className="text-md mb-5"><span className="font-semibold">Last Updated:</span> March 3, 2025</p>
           <p className="mb-5 text-md">
             ZillionLinX is operated by <span className="font-semibold">PGL Resources, LLC</span>, a Florida limited
             liability company. Your privacy is important to us. This Privacy
