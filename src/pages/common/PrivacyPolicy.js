@@ -13,15 +13,15 @@ const PrivacyPolicy = () => {
       >
         <div className="flex flex-wrap h-full w-full text-black flex-col">
           <h1 className="text-2xl mb-4 font-bold">Privacy Statement</h1>
-          <p className="text-md mb-1">Effective Date: January 1, 2025</p>
-          <p className="text-md mb-5">Last Updated: March 3, 2025</p>
+          <p className="text-md mb-1 font-semibold">Effective Date: January 1, 2025</p>
+          <p className="text-md mb-5 font-semibold">Last Updated: March 3, 2025</p>
           <p className="mb-5 text-md">
-            ZillionLinX is operated by PGL Resources, LLC, a Florida limited
+            ZillionLinX is operated by <span className="font-semibold">PGL Resources, LLC</span>, a Florida limited
             liability company. Your privacy is important to us. This Privacy
             Statement explains how we collect, use, and protect your information
             when you use our website and bookmarking services.
           </p>
-          <ul className="list-decimal space-y-10 ps-4 text-md">
+          <ul className="list-decimal space-y-6 ps-4 text-md">
             <li className="font-semibold">
               Information We Collect
               <ul className="list-[lower-alpha] ps-4 space-y-6">
@@ -179,10 +179,10 @@ const PrivacyPolicy = () => {
               <h3 className="mt-2 font-normal text-md">ZillionLinX</h3>
               <p className="font-normal text-md">Operated by PGL Resources, LLC</p>
               <p className="text-md font-normal">
-                Email us at{" "}
+                Email: 
                 <a
                   href="mailto:customer_support@zillionlinx.com"
-                  className="hover:text-dark-blue"
+                  className="hover:text-dark-blue ml-1"
                 >
                   customer_support@zillionlinx.com
                 </a>

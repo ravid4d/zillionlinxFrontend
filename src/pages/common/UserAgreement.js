@@ -21,7 +21,7 @@ const UserAgreement = () => {
             (PGL Resources, Company, we, our, or us), which owns and operates
             ZillionLinX (ZillionLinX, Site, or Service).
           </p>
-          <ul className="list-decimal space-y-10 ps-4 text-md">
+          <ul className="list-decimal space-y-6 ps-4 text-md">
             <li className="font-semibold">
               Acceptance of Terms
               <p className="text-md font-normal mt-2">
@@ -227,9 +227,10 @@ const UserAgreement = () => {
                 If you have any questions or concerns regarding this Agreement,
                 please contact us at:
               </p>
+              <span className="font-normal">Email:</span>
               <a
                 href="mailto:customer_support@zillionlinx.com"
-                className="font-normal hover:text-dark-blue"
+                className="font-normal hover:text-dark-blue ml-1"
               >
                 customer_support@zillionlinx.com
               </a>
