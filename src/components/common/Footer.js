@@ -44,7 +44,7 @@ const Footer = ({redirectTo}) => {
       </nav>
       <div className="py-4 bg-dark-blue w-full">
         <div className="max-w-screen-3xl mx-auto text-center text-white">
-          Copyright © 2025 Zillion Linx. All rights reserved.
+          © 2025 PGL Resources, LLC. All rights reserved.
         </div>
       </div>
     </footer>

@@ -374,37 +374,6 @@ const Import = () => {
                                       aria-expanded="true"
                                       aria-controls="users-accordion-sub-1-collapse-1"
                                     >
-                                      <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 16 16"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className={`hs-accordion-toggle`}
-                                      >
-                                        <path
-                                          d="M8.00037 14.9584C11.8434 14.9584 14.9587 11.843 14.9587 8C14.9587 4.157 11.8434 1.04163 8.00037 1.04163C4.15736 1.04163 1.04199 4.157 1.04199 8C1.04199 11.843 4.15736 14.9584 8.00037 14.9584Z"
-                                          stroke="#2131E5"
-                                          strokeWidth="2"
-                                          strokeMiterlimit="10"
-                                          strokeLinecap="round"
-                                          className="circle"
-                                        />
-                                        <path
-                                          d="M8 4.1875V11.8125"
-                                          stroke="#2131E5"
-                                          strokeWidth="2"
-                                          strokeMiterlimit="10"
-                                          strokeLinecap="round"
-                                        />
-                                        <path
-                                          d="M4.1875 8H11.8125"
-                                          stroke="#2131E5"
-                                          strokeWidth="2"
-                                          strokeMiterlimit="10"
-                                          strokeLinecap="round"
-                                        />
-                                      </svg>
                                       <span>{subCat}</span>
                                     </button>
                                   </li>
