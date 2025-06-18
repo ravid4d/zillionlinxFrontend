@@ -100,17 +100,20 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
       console.error("Google login failed:", error);
     }
   });
-
+  const checkTerms = () => {
+    formik.setErrors({...formik.errors, 'terms_condition':"You must accept the terms and conditions"});
+  }
+  
   return (
     <div
-      id="register"
-      className={`hs-overlay [--overlay-backdrop:static] ${
-        openModal?.register ? "open opened" : "hidden"
-      } size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`}
-      role="dialog"
-      tabIndex="-1"
-      aria-labelledby="register-label"
-      data-hs-overlay-keyboard="false"
+    id="register"
+    className={`hs-overlay [--overlay-backdrop:static] ${
+      openModal?.register ? "open opened" : "hidden"
+    } size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none`}
+    role="dialog"
+    tabIndex="-1"
+    aria-labelledby="register-label"
+    data-hs-overlay-keyboard="false"
     >
       <div className="hs-overlay-animation-target hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-xl xl:max-w-[600px] md:w-full m-6 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
         <div className="flex flex-col bg-pattern bg-no-repeat bg-cover bg-center border shadow-sm rounded-[30px] pointer-events-auto w-full relative">
@@ -309,8 +312,8 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                       </span>
                     </label>
                   </div>
-                  {formik.touched.terms_condition &&
-                  formik.errors.terms_condition ? (
+                  {(formik.touched.terms_condition &&
+                  formik.errors.terms_condition) || formik.errors.terms_condition ? (
                     <div className="text-red-500 text-sm mt-1">
                       {formik.errors.terms_condition}
                     </div>
@@ -333,8 +336,15 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={googleLogin}
-                  className="mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+                  onClick={()=>{
+                    if(formik.values.terms_condition) {
+                      googleLogin();
+                    }
+                    else {
+                      checkTerms();
+                    }
+                  }}
+                  className={`mt-2 w-full py-1.5 px-5 h-12 transition-all inline-flex justify-center items-center gap-x-2 text-lg font-medium rounded-xl border border-dark-blue bg-transparent uppercase text-dark-blue hover:bg-dark-blue hover:text-light-blue focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none`}
                 >
                   <svg
                     className="w-4 h-auto"
@@ -360,7 +370,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                       fill="#EB4335"
                     ></path>
                   </svg>
-                  Sign up with Google
+                  Sign up with Google 
                 </button>
               </form>
             </div>
