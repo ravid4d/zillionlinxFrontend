@@ -109,3 +109,6 @@ svg.selected-cat path {
   background-repeat: no-repeat;
   background-color: #ffffff;
 }
+.password-mask {
+  -webkit-text-security: disc;
+}
