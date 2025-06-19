@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import useBrowser from '../../hooks/useBrowser';
+import { useState } from "react";
+// import useBrowser from '../../hooks/useBrowser';
 const PasswordField = ({
   label,
+  autoComplete="current-password",
   type,
   id,
   need_icon,
@@ -12,30 +13,31 @@ const PasswordField = ({
   setFieldValue,
   setFieldValueOnBlur
 }) => {
-  const browser = useBrowser();
   const [showPassword, setShowPassword] = useState(false);
-  const isWebkitBrowser = browser === "Chrome" || browser === "Safari" || browser === "Edge";
-  const inputType = isWebkitBrowser && !showPassword ? "text" : showPassword ? "text" : "password";
-  const inputStyle = isWebkitBrowser && !showPassword ? { WebkitTextSecurity: "disc" } : {};
+  // const browser = useBrowser();
+  // const isWebkitBrowser = browser === "Chrome" || browser === "Safari" || browser === "Edge";
+  // const inputType = isWebkitBrowser && !showPassword ? "text" : showPassword ? "text" : "password";
+  // const inputStyle = isWebkitBrowser && !showPassword ? { WebkitTextSecurity: "disc" } : {};
   return (
     <>
       <label htmlFor={id} className="block text-base text-light-black mb-3">
         {label}
       </label>
       <div className="relative">
+        {/* <input type="password" name="password" id="password" /> */}
         <input
-        style={inputStyle}
-          type={inputType}
+        type={showPassword ? "text" : "password"}
           tabIndex="0"
           id={id}
           name={name}
-          className={`py-3 px-4 ${!showPassword ? 'password-mask' : ''} ${iconPlacement === "left" ? "ps-11" : "pe-11"
+          className={`py-3 px-4 ${iconPlacement === "left" ? "ps-11" : "pe-11"
             } h-12 block bg-transparent w-full border-dark-blue rounded-lg text-md focus:border-blue-500 focus:ring-blue-500`}
           placeholder={placeholder}
           value={fieldValue}
           onChange={setFieldValue}
           onBlur={setFieldValueOnBlur}
-          autoComplete="off"
+          // autoFocus=""
+         {...(type === "password" && { autoComplete: autoComplete })}
         />
         {
           // id !== 'registerConfirmPassword' ?

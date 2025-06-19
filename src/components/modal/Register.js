@@ -153,12 +153,12 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
               </button>
             </div>
             <div className="max-w-[400px] mx-auto">
-              <form autoComplete="off" onSubmit={formik.handleSubmit}>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="mb-5">
                   <Textfield
                     id="first_name"
                     name="first_name"
-                    // autoFocus={false}
+                    autoFocus={false}
                     icon="title"
                     fieldValue={formik.values.first_name}
                     setFieldValue={formik.handleChange}
@@ -218,6 +218,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                     showPassword={showPassword}
                     name="password"
                     label="Password"
+                    autoComplete={'new-password'}
                     type="password"
                     placeholder=""
                     iconPlacement="right"
@@ -237,6 +238,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                     name="password_confirmation"
                     label="Confirm Password"
                     type="password"
+                    autoComplete={'new-password'}
                     placeholder=""
                     iconPlacement="right"
                     fieldValue={formik.values.password_confirmation}
