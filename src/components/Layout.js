@@ -23,6 +23,7 @@ const Layout = () => {
   const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedSubCategory, setSelectedSubCategory] = useState({});
   const navigate = useNavigate();
+  const [cookieAccepted, setCookieAccepted] = useState(false);
 
   useEffect(() => {
     if (token && id?.categoryId) {
@@ -181,6 +182,7 @@ const Layout = () => {
           setUrlToBookmark={setUrlToBookmark}
           setId={setId}
           redirectTo={redirectTo}
+          cookieAccepted={cookieAccepted}
         />
         <div
           className={`w-full content-area ${
@@ -208,7 +210,7 @@ const Layout = () => {
             }}
           />
         </div>
-        <Footer redirectTo={redirectTo} />
+        <Footer redirectTo={redirectTo} onConsentChange={setCookieAccepted}  />
       </div>
     </div>
   );

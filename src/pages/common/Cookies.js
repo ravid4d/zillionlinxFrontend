@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { getCookie, setCookie } from "../../cookieUtils";
-import { over } from "lodash";
 
-const Cookies = () => {
+const Cookies = ({onConsentChange }) => {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const consent = getCookie("cookieConsent");
-    if (!consent) {
-      setVisible(true); // show if cookie not set or expired
+     if (consent === "accepted") {
+      onConsentChange(true); // tell parent cookie is accepted
+      setVisible(false);
+    } else {
+      onConsentChange(false); // not accepted yet
+      setVisible(true);
     }
   }, []);
   const acceptCookies = () => {
     setCookie("cookieConsent", "accepted", 30); // store for 30 days
+     onConsentChange(true); 
     setVisible(false);
   };
 
   const rejectCookies = () => {
     setCookie("cookieConsent", "rejected", 30); // store for 30 days
+     onConsentChange(false);
     setVisible(false);
-    window.location.href = "/";
   };
 
   if (!visible) return null;

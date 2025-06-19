@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../../redux/slices/userSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useCookie } from "../../hooks/useCookie";
 
 const Header = ({
   setWhichModalOpen,
@@ -13,7 +14,8 @@ const Header = ({
   id,
   setId,
   openModal,
-  redirectTo
+  redirectTo,
+  cookieAccepted
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +24,7 @@ const Header = ({
   const { user } = useSelector((state) => state.user);
   const [toggleSettingsDropdown, setToggleSettingsDropdown] = useState(false);
   const menuRef = useRef(null);
-
+  
   const handleUserLogout = async () => {
     try {
       await dispatch(handleLogout())
@@ -106,11 +108,6 @@ const Header = ({
             className="flex flex-wrap items-center font-semibold text-xl text-black focus:outline-none focus:opacity-80 max-w-72 h-14 xl:h-16 cursor-pointer"
             aria-label="Brand"
           >
-            {/* <img
-              src="/logo.svg"
-              alt=""
-              className="max-w-full max-h-full block"
-            /> */}
             <picture>
               <source
                 srcSet="/app-icon.svg"
@@ -338,7 +335,8 @@ const Header = ({
                 ) : (
                   <>
                     <button
-                      className="btn light-btn"
+                    disabled={!cookieAccepted}
+                      className={`btn light-btn ${!cookieAccepted ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}
                       onClick={() => setWhichModalOpen("login")}
                     >
                       Log in
@@ -350,7 +348,8 @@ const Header = ({
                       About
                     </button>
                     <button
-                      className="btn dark-btn"
+                      disabled={!cookieAccepted}
+                      className={`btn dark-btn ${!cookieAccepted ? 'opacity-50 pointer-events-none' : 'opacity-100' }`}
                       onClick={() => setWhichModalOpen("register")}
                     >
                       Sign up

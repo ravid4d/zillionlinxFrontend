@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import badgeData from "../../json/badges.json";
-// import { useDispatch, useSelector } from "react-redux";
-// import { removeTopLink } from "../../redux/slices/bookmarkSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Cookies from "./Cookies";
 
 const Home = () => {
   const [badges, setBadges] = useState();
-  // const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
-  // const { token } = useSelector((state) => state.auth);
-  // const { categories } = useSelector((state) => state.category);
-  // const { bookmarks } = useSelector((state) => state.bookmark);
 
   useEffect(() => {
     setBadges(badgeData);
@@ -30,33 +22,6 @@ const Home = () => {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [loginMessage]);
-
-  // useEffect(() => {
-  //   if (bookmarks && bookmarks?.length > 0) {
-  //     const rmTopLinks = async () => {
-  //       bookmarks &&
-  //         bookmarks?.length > 0 &&
-  //         bookmarks?.map((bookmark) => {
-  //           let topLinkId = bookmark?.id;
-  //           dispatch(removeTopLink({ token, topLinkId }));
-  //           return false;
-  //         });
-  //     };
-  //     rmTopLinks();
-  //   }
-  //   if (categories && categories?.length > 0) {
-  //     const rmBookmarks = async () => {
-  //       categories &&
-  //         categories?.length > 0 &&
-  //         categories?.map((category) => {
-  //           let topLinkId = category?.id;
-  //           dispatch(removeTopLink({ token, topLinkId }));
-  //           return false;
-  //         });
-  //     };
-  //     rmBookmarks();
-  //   }
-  // }, [categories, bookmarks, dispatch, token]);
 
   return (
     <>
@@ -175,7 +140,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Cookies />
+     
     </>
   );
 };
