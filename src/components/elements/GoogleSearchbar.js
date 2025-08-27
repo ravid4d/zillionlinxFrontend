@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import * as YUP from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const GoogleSearchbar = ({googleRef}) => {
+const GoogleSearchbar = ({googleRef, listingType}) => {
   const navigate = useNavigate();
   const location = useLocation();
  
@@ -27,30 +27,45 @@ useEffect(()=>{
   handleBlur();
 },[googleRef?.current?.value]);
 
-  const googleFormik = useFormik({
-    initialValues: {
-      search: new URLSearchParams(location.search).get("query") || "" // Preserve query param on reload
-    },
-    validationSchema: YUP.object({
-      search: YUP.string().required("Search query is required")
-    }),
-    onSubmit: async (values) => {
-      let formData = new FormData();
-      formData.append("search", values?.search);
+const googleFormik = useFormik({
+  initialValues: {
+    search: new URLSearchParams(location.search).get("query") || "" // Preserve query param on reload
+  },
+  validationSchema: YUP.object({
+    search: YUP.string().required("Search query is required")
+  }),
+  onSubmit: async (values) => {
+    let formData = new FormData();
+    formData.append("search", values?.search);
 
-      if (!values.search.trim()) return; // Prevent empty search
+    if (!values.search.trim()) return; // Prevent empty search
 
-      // Update URL with query params
-      const queryParam = `?query=${encodeURIComponent(values.search)}`;
+    // Update URL with query params
+    const queryParam = `?query=${encodeURIComponent(values.search)}#gsc.tab=0&gsc.q=${encodeURIComponent(values.search)}&gsc.sort=`;
+    console.log(queryParam, 'aa');
+    // http://localhost:3000/result?query=baby#gsc.tab=0&gsc.q=hi%20dear%20meaning%20in%20hindi&gsc.sort=
 
-      if (location.pathname !== "/result") {
-        navigate(`/result${queryParam}`); // Redirect to /result with query param
-      } else {
-        navigate(`/result${queryParam}`, { replace: true }); // Only update query param in URL
-      }
+    if (location.pathname !== "/result") {
+      navigate(`/result${queryParam}`); // Redirect to /result with query param
+    } else {
+      navigate(`/result${queryParam}`, { replace: true }); // Only update query param in URL
     }
-  });
+  }
+});
+ 
   return (
+    <>
+    {
+      listingType === 'link' ? (
+      <div className={`google-search-wrap flex items-start justify-end gap-4 mb-4 relative ${
+        location.pathname === "/bookmarks"
+          ? "max-w-full xl:w-[calc(100%-375px)]"
+          : "w-full md:w-[calc(50%-25px)]"
+      } `}> 
+     <div className="gcse-searchbox" data-gname="storesearch"></div>
+     </div>)
+     :
+    (
     <form
       onSubmit={googleFormik.handleSubmit}
       autoComplete="off"
@@ -60,17 +75,12 @@ useEffect(()=>{
           : "w-full md:w-[calc(50%-25px)]"
       } `}
     >
-      {/* <span className="absolute left-3 top-0 bottom-0 my-auto flex items-center">
-                <img src="/google-searchbar-icon.svg" alt="" />
-            </span> */}
-
       <div className="flex flex-wrap items-start flex-col">
       <div className="px-3 bg-white border border-gray-200">
         <input
           type="text"
           value={googleFormik.values?.search}
           onChange={googleFormik.handleChange}
-          // placeholder='Search the web'
           id="searchTitle"
           name="search"
           autoComplete="off"
@@ -80,7 +90,7 @@ useEffect(()=>{
           className="google-search py-1 px-0 block w-full border-0 focus:z-10 focus:border-0 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none placeholder:text-lg placeholder:text-light-black/48"
         />
       </div>
-      <label className="px-2 pt-1 text-xs font-medium text-light-black/75 italic">Search the web</label>
+      {/* <label className="px-2 pt-1 text-xs font-medium text-light-black/75 italic">Search the web</label> */}
       </div>
       <button
         type="subimit"
@@ -102,7 +112,9 @@ useEffect(()=>{
           <path d="m21 21-4.3-4.3"></path>
         </svg>
       </button>
-    </form>
+    </form>)
+}
+</>
   );
 };
 

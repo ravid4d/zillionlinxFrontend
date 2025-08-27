@@ -38,8 +38,8 @@ const Bookmark = ({
     }
   };
   const doNotClick = [
-    "https://zillionlinx.com/bookmark-tips3.html",
-    "https://zillionlinx.com/Instant-LinX-Help3.html"
+    `${process.env.REACT_APP_API_URL}/bookmark-tips3.html`,
+    `${process.env.REACT_APP_API_URL}/Instant-LinX-Help3.html`
   ];
 
   return (
@@ -84,7 +84,7 @@ const Bookmark = ({
           <div className="relative w-full block">
             <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
               <img
-                src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
+                src={`${process.env.REACT_APP_API_URL}/storage/app/public/${item?.icon_path}`}
                 alt=""
                 className="w-full rounded-lg"
               />
@@ -98,7 +98,7 @@ const Bookmark = ({
           >
             <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
               <img
-                src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
+                src={`${process.env.REACT_APP_API_URL}/storage/app/public/${item?.icon_path}`}
                 alt=""
                 className="w-full rounded-lg"
               />

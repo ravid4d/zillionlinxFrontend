@@ -21,7 +21,8 @@ const GoogleCustomSearch = () => {
     walmartStaticLink,
     aliexpressStaticLink,
     etsyStaticLink,
-    neweggStaticLink
+    neweggStaticLink,
+    listingType
   } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -68,6 +69,12 @@ const GoogleCustomSearch = () => {
     setContextMenu(null); // Close context menu
     setWhichModalOpen("newBookmark"); // Show second modal
   };
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://cse.google.com/cse.js?cx=96b337026d2404c75";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
@@ -78,7 +85,14 @@ const GoogleCustomSearch = () => {
               <div className="bg-white rounded-xl p-3 mb-4 w-full md:w-[calc(50%-25px)]">
                 Hint: Right Click on any URL / Title below to Bookmark that Link
               </div>
-              <GoogleSearchbar googleRef={googleRef} />
+              {/* <div className={`google-search-wrap flex items-start justify-end gap-4 mb-4 relative  ${
+        location.pathname === "/bookmarks"
+          ? "max-w-full xl:w-[calc(100%-375px)]"
+          : "w-full md:w-[calc(50%-25px)]"
+      } `}> */}
+                {/* <div className="gcse-searchbox" data-gname="storesearch"></div>
+             </div> */}
+              <GoogleSearchbar googleRef={googleRef} listingType="link" />
             </div>
             <div className="rounded-2xl lg:h-[calc(100%-64px)] flex flex-wrap">
               {noContent ? (
@@ -95,41 +109,43 @@ const GoogleCustomSearch = () => {
                         <p>Google Custom Search</p>
                       </div>
                       <div className="w-full rounded-xl border border-light-blue p-6 overflow-auto custom-scrollbar h-[calc(100%-75px)] max-h-96 lg:max-h-full">
+                        <div className="gcse-searchresults" data-gname="storesearch"></div>
                         {loading?.googleSearch ? (
                           <span className="loader"></span>
                         ) : (
-                          mainContent &&
-                          mainContent?.length > 0 &&
-                          mainContent?.map((result, index) => {
-                            return (
-                              <div className="mb-4 last:mb-0" key={index}>
-                                <Link
-                                  to={result?.link}
-                                  className={`block google_result google_result_${index}`}
-                                  target="_blank"
-                                  onContextMenu={(e) =>
-                                    handleRightClick(e, result)
-                                  }
-                                >
-                                  {result?.thumbnail ? (
-                                    <img
-                                      src={result?.thumbnail}
-                                      alt={result?.title}
-                                    />
-                                  ) : null}
-                                  <div className="text-dark-blue text-md text-ellipsis overflow-hidden text-nowrap">
-                                    {result?.title}
-                                  </div>
-                                </Link>
-                                <p className="text-[13px] text-light-black">
-                                  {result?.snippet}
-                                </p>
-                                <span className="block text-[13px] text-[#009933]">
-                                  {result?.breadcrumb}
-                                </span>
-                              </div>
-                            );
-                          })
+                          <></>
+                          // mainContent &&
+                          // mainContent?.length > 0 &&
+                          // mainContent?.map((result, index) => {
+                          //   return (
+                          //     <div className="mb-4 last:mb-0" key={index}>
+                          //       <Link
+                          //         to={result?.link}
+                          //         className={`block google_result google_result_${index}`}
+                          //         target="_blank"
+                          //         onContextMenu={(e) =>
+                          //           handleRightClick(e, result)
+                          //         }
+                          //       >
+                          //         {result?.thumbnail ? (
+                          //           <img
+                          //             src={result?.thumbnail}
+                          //             alt={result?.title}
+                          //           />
+                          //         ) : null}
+                          //         <div className="text-dark-blue text-md text-ellipsis overflow-hidden text-nowrap">
+                          //           {result?.title}
+                          //         </div>
+                          //       </Link>
+                          //       <p className="text-[13px] text-light-black">
+                          //         {result?.snippet}
+                          //       </p>
+                          //       <span className="block text-[13px] text-[#009933]">
+                          //         {result?.breadcrumb}
+                          //       </span>
+                          //     </div>
+                          //   );
+                          // })
                         )}
                         {contextMenu && (
                           <BookmarkGoogleResultContext

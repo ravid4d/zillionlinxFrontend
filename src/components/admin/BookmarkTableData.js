@@ -39,7 +39,7 @@ const BookmarkTableData = ({
           >
             {bookmark?.icon_path ? (
               <img
-                src={`${process.env.REACT_APP_API_URL}/storage/${bookmark?.icon_path}`}
+                src={`${process.env.REACT_APP_API_URL}/storage/app/public/${bookmark?.icon_path}`}
                 alt=""
                 width="50"
                 height="50"

@@ -112,3 +112,12 @@ svg.selected-cat path {
 .password-mask {
   -webkit-text-security: disc;
 }
+.google-search-wrap > div {
+  width: 50%;
+}
+.google-search-wrapper > div {
+  width: 70%;
+}
+.gsc-search-button-v2 {
+  padding: 9px 27px!important;
+}

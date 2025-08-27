@@ -335,7 +335,12 @@ const handleDropToCategory = async(data) => {
     );
   }
 };
-
+   useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://cse.google.com/cse.js?cx=96b337026d2404c75";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 xl:pb-5 h-full">
@@ -378,7 +383,7 @@ const handleDropToCategory = async(data) => {
                     setUrlToBookmark={setUrlToBookmark}
                   />
                 </div>
-                <GoogleSearchbar  googleRef={googleRef} />
+                <GoogleSearchbar googleRef={googleRef} listingType={'links'} />                 
               </div>
             ) : (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
@@ -394,6 +399,7 @@ const handleDropToCategory = async(data) => {
             )}
 
             <div className={`rounded-2xl bg-white md:h-[calc(100%-66px)]`}>
+              {/* <div className="gcse-searchresults" data-gname="storesearch"></div> */}
               <p className="flex flex-wrap flex-col md:flex-row md:items-center gap-x-4 text-lg md:text-xl xl:text-[28px] text-dark-blue capitalize mb-5 ps-6">
                 {pageHeading}
                 {pageHeading === "Top Links" ? (
