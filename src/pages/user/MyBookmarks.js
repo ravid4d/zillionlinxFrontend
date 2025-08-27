@@ -336,6 +336,7 @@ const handleDropToCategory = async(data) => {
   }
 };
    useEffect(() => {
+    // let cx = process.env.REACT_APP_GOOGLE_SEARCH_CX;
     const script = document.createElement("script");
     script.src = "https://cse.google.com/cse.js?cx=96b337026d2404c75";
     script.async = true;
@@ -383,7 +384,7 @@ const handleDropToCategory = async(data) => {
                     setUrlToBookmark={setUrlToBookmark}
                   />
                 </div>
-                <GoogleSearchbar googleRef={googleRef} listingType={'links'} />                 
+                <GoogleSearchbar googleRef={googleRef} />                 
               </div>
             ) : (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">

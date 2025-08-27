@@ -70,7 +70,9 @@ const GoogleCustomSearch = () => {
     setWhichModalOpen("newBookmark"); // Show second modal
   };
   useEffect(() => {
+    // let cx = process.env.REACT_APP_GOOGLE_SEARCH_CX;
     const script = document.createElement("script");
+    // Need to add cx static because it opens the results in modal
     script.src = "https://cse.google.com/cse.js?cx=96b337026d2404c75";
     script.async = true;
     document.body.appendChild(script);

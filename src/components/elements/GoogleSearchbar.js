@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import * as YUP from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const GoogleSearchbar = ({googleRef, listingType}) => {
+const GoogleSearchbar = ({googleRef}) => {
   const navigate = useNavigate();
   const location = useLocation();
  
@@ -42,7 +42,7 @@ const googleFormik = useFormik({
 
     // Update URL with query params
     const queryParam = `?query=${encodeURIComponent(values.search)}#gsc.tab=0&gsc.q=${encodeURIComponent(values.search)}&gsc.sort=`;
-    console.log(queryParam, 'aa');
+    // console.log(queryParam, 'aa');
     // http://localhost:3000/result?query=baby#gsc.tab=0&gsc.q=hi%20dear%20meaning%20in%20hindi&gsc.sort=
 
     if (location.pathname !== "/result") {
@@ -55,15 +55,12 @@ const googleFormik = useFormik({
  
   return (
     <>
+    {console.log(location.pathname, 'pathname is')}
     {
-      listingType === 'link' ? (
-      <div className={`google-search-wrap flex items-start justify-end gap-4 mb-4 relative ${
-        location.pathname === "/bookmarks"
-          ? "max-w-full xl:w-[calc(100%-375px)]"
-          : "w-full md:w-[calc(50%-25px)]"
-      } `}> 
-     <div className="gcse-searchbox" data-gname="storesearch"></div>
-     </div>)
+      location.pathname === "/result" ? (
+      <div className={`google-search-wrap flex items-start justify-end gap-4 mb-4 relative w-full md:w-[calc(50%-25px)]`}> 
+      <div className="gcse-searchbox" data-gname="storesearch"></div>
+      </div>)
      :
     (
     <form
