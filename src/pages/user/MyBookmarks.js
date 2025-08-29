@@ -87,6 +87,7 @@ const MyBookmarks = () => {
   };
 
   const handleRightClick = (event, record) => {
+    // console.log(record, 'record');
     event.preventDefault();
     setContextMenu({
       x: event.clientX,

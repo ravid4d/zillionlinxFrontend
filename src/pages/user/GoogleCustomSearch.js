@@ -43,6 +43,17 @@ const GoogleCustomSearch = () => {
         setNoContent(true);
       } else {
         setNoContent(false);
+        let googleResultWrapper = document.querySelector(".gsc-expansionArea");
+        let googleResults = googleResultWrapper.querySelectorAll(".gsc-webResult");
+        googleResults.forEach(result=>{
+          let title = result.querySelector("a.gs-title").innerText;
+          let link = result.querySelector("a.gs-title").getAttribute('href');
+          console.log(link, 'link');
+          // let link = result.querySelector(".gsc-webResult-url").innerText;
+          let record = {title, link};
+          result.addEventListener("contextmenu", (event) => handleRightClick(event, record));
+        })
+    // console.log(googleResults, 'googleResults');
       }
     });
   }, [query, dispatch, token]);
@@ -64,6 +75,7 @@ const GoogleCustomSearch = () => {
 
   const handleOptionClick = (option) => {
     contextMenu.record = { ...contextMenu.record, type: option };
+    console.log(contextMenu, 'contextMenu')
     setUrlToBookmark(contextMenu);
     // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
     setContextMenu(null); // Close context menu
