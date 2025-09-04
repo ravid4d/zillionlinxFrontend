@@ -44,11 +44,11 @@ const GoogleCustomSearch = () => {
       } else {
         setNoContent(false);
         let googleResultWrapper = document.querySelector(".gsc-expansionArea");
-        let googleResults = googleResultWrapper.querySelectorAll(".gsc-webResult");
-        googleResults.forEach(result=>{
+        let googleResults = googleResultWrapper?.querySelectorAll(".gsc-webResult");
+        googleResults?.forEach(result=>{
           let title = result.querySelector("a.gs-title").innerText;
           let link = result.querySelector("a.gs-title").getAttribute('href');
-          console.log(link, 'link');
+          // console.log(link, 'link');
           // let link = result.querySelector(".gsc-webResult-url").innerText;
           let record = {title, link};
           result.addEventListener("contextmenu", (event) => handleRightClick(event, record));
@@ -75,7 +75,7 @@ const GoogleCustomSearch = () => {
 
   const handleOptionClick = (option) => {
     contextMenu.record = { ...contextMenu.record, type: option };
-    console.log(contextMenu, 'contextMenu')
+    // console.log(contextMenu, 'contextMenu')
     setUrlToBookmark(contextMenu);
     // setSelectedRecord({ ...contextMenu.record, type: option }); // Save record with type
     setContextMenu(null); // Close context menu
@@ -95,8 +95,8 @@ const GoogleCustomSearch = () => {
       <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 h-full">
         <div className="flex flex-wrap lg:space-x-8 h-full">
           <div className="bookmark-content-wrappers w-full h-full">
-            <div className="flex flex-wrap flex-col md:flex-row md:items-start gap-x-4 justify-between">
-              <div className="bg-white rounded-xl p-3 mb-4 w-full md:w-[calc(50%-25px)]">
+            <div className="flex flex-wrap md:items-start gap-x-4 justify-between">
+              <div className="bg-white rounded-xl p-3 mb-4 w-full lg:w-[calc(50%-25px)]">
                 Hint: Right Click on any URL / Title below to Bookmark that Link
               </div>
               {/* <div className={`google-search-wrap flex items-start justify-end gap-4 mb-4 relative  ${

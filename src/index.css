@@ -113,11 +113,22 @@ svg.selected-cat path {
   -webkit-text-security: disc;
 }
 .google-search-wrap > div {
-  width: 50%;
+  width: 280px;
+}
+.google-search-wrap > div > form  {margin-bottom: 0!important;}
+.gsc-input-box {padding: 0!important; border-radius: 0!important; height: 34px;}
+.gsc-search-button.gsc-search-button-v2 {
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  gap:10px;
+  border: 2px solid #3079ed;
+  background-color: #4d90fe;
+  padding: 7px 27px!important;
 }
 .google-search-wrapper > div {
   width: 70%;
 }
-.gsc-search-button-v2 {
-  padding: 9px 27px!important;
+table.gsc-search-box td {
+  padding: 0 5px;
 }

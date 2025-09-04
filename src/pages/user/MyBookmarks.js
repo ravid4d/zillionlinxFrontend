@@ -379,7 +379,7 @@ const handleDropToCategory = async(data) => {
           <div className="bookmark-content-wrapper h-full">
             {listingType !== "link" ? (
               <div className="flex flex-wrap md:items-center justify-between flex-col md:flex-row">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                   <AddNewBookmarkField
                     setWhichModalOpen={setWhichModalOpen}
                     setUrlToBookmark={setUrlToBookmark}
