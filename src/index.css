@@ -119,6 +119,7 @@ svg.selected-cat path {
 .gsc-input-box {padding: 0!important; border-radius: 0!important; height: 34px;}
 .gsc-search-button.gsc-search-button-v2 {
   border-radius: 0;
+  height: 34px;
   display: flex;
   align-items: center;
   gap:10px;
@@ -130,5 +131,5 @@ svg.selected-cat path {
   width: 70%;
 }
 table.gsc-search-box td {
-  padding: 0 5px;
+  padding: 0 3px!important;
 }
