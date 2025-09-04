@@ -38,8 +38,8 @@ const Bookmark = ({
     }
   };
   const doNotClick = [
-    `${process.env.REACT_APP_API_URL}/bookmark-tips3.html`,
-    `${process.env.REACT_APP_API_URL}/Instant-LinX-Help3.html`
+    `https://zillionlinx.com/bookmark-tips3.html`,
+    `https://zillionlinx.com/Instant-LinX-Help3.html`
   ];
 
   return (

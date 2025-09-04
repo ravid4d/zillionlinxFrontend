@@ -133,3 +133,7 @@ svg.selected-cat path {
 table.gsc-search-box td {
   padding: 0 3px!important;
 }
+.gsst_b {
+  height: 34px;
+  line-height: 40px;
+}
