@@ -29,6 +29,41 @@ const GoogleCustomSearch = () => {
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("query");
 
+
+ useEffect(() => {
+    const onContextMenu = (e) => {
+      // Find the result element (Google renders results with this class)
+      const resultEl = e.target.closest(".gsc-webResult");
+      const container = document.querySelector(".gsc-expansionArea");
+
+      // If click wasn't inside a result, ignore
+      if (!resultEl || !container || !container.contains(resultEl)) return;
+
+      // Extract title + link
+      const linkEl = resultEl.querySelector("a.gs-title");
+      const title = linkEl?.innerText?.trim() ?? "";
+      const link =
+        linkEl?.getAttribute("data-ctorig") || // original link if present
+        linkEl?.getAttribute("href") ||
+        "";
+
+      // Prevent browser default context menu
+      e.preventDefault();
+
+      // Call your handler
+      handleRightClick(e, { title, link });
+    };
+
+    // Attach global event listener (capture phase helps if GCS stops bubbling)
+    document.addEventListener("contextmenu", onContextMenu, true);
+
+    // Cleanup on unmount
+    return () => {
+      document.removeEventListener("contextmenu", onContextMenu, true);
+    };
+  }, []);
+  
+
   useEffect(() => {
     if (!query) {
       setNoContent(true);
@@ -43,17 +78,14 @@ const GoogleCustomSearch = () => {
         setNoContent(true);
       } else {
         setNoContent(false);
-        let googleResultWrapper = document.querySelector(".gsc-expansionArea");
-        let googleResults = googleResultWrapper?.querySelectorAll(".gsc-webResult");
-        googleResults?.forEach(result=>{
-          let title = result.querySelector("a.gs-title").innerText;
-          let link = result.querySelector("a.gs-title").getAttribute('href');
-          // console.log(link, 'link');
-          // let link = result.querySelector(".gsc-webResult-url").innerText;
-          let record = {title, link};
-          result.addEventListener("contextmenu", (event) => handleRightClick(event, record));
-        })
-    // console.log(googleResults, 'googleResults');
+        // let googleResultWrapper = document.querySelector(".gsc-expansionArea");
+        // let googleResults = googleResultWrapper?.querySelectorAll(".gsc-webResult");
+        // googleResults?.forEach(result=>{
+        //   let title = result.querySelector("a.gs-title").innerText;
+        //   let link = result.querySelector("a.gs-title").getAttribute('href');
+        //   let record = {title, link};
+        //   result.addEventListener("contextmenu", (event) => handleRightClick(event, record));
+        // });
       }
     });
   }, [query, dispatch, token]);
