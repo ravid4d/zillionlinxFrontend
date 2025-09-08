@@ -229,10 +229,10 @@ const UserAgreement = () => {
               </p>
               <span className="font-normal">Email:</span>
               <a
-                href="mailto:customer_support@zillionlinx.com"
+                href="mailto:support@zillionlinx.com"
                 className="font-normal hover:text-dark-blue ml-1"
               >
-                customer_support@zillionlinx.com
+                support@zillionlinx.com
               </a>
             </li>
           </ul>

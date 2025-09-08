@@ -181,10 +181,10 @@ const PrivacyPolicy = () => {
               <p className="text-md font-normal">
                 Email: 
                 <a
-                  href="mailto:customer_support@zillionlinx.com"
+                  href="mailto:support@zillionlinx.com"
                   className="hover:text-dark-blue ml-1"
                 >
-                  customer_support@zillionlinx.com
+                  support@zillionlinx.com
                 </a>
               </p>
             </li>

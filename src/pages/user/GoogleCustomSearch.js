@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import GoogleSearchbar from "../../components/elements/GoogleSearchbar";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { Link, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { googleSearch } from "../../redux/slices/bookmarkSlice";
 import BookmarkGoogleResultContext from "../../components/bookmark/BookmarkGoogleResultContext";
@@ -28,7 +28,7 @@ const GoogleCustomSearch = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("query");
-
+ const navigate = useNavigate();
 
  useEffect(() => {
     const onContextMenu = (e) => {
@@ -64,6 +64,43 @@ const GoogleCustomSearch = () => {
   }, []);
   
 
+useEffect(() => {
+  const updateResultLinks = (root = document) => {
+    const links = root.querySelectorAll("a.gs-title");
+    links.forEach((link) => {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+    });
+  };
+
+  // Run once initially (in case results are already there)
+  updateResultLinks(document);
+
+  // Watch for dynamically added links
+  const observer = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      m.addedNodes.forEach((node) => {
+        if (node instanceof HTMLElement) {
+          // Check if the new node is a link or contains links
+          if (node.matches("a.gs-title")) {
+            updateResultLinks(node.parentNode || node);
+          } else if (node.querySelector && node.querySelector("a.gs-title")) {
+            updateResultLinks(node);
+          }
+        }
+      });
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  return () => observer.disconnect();
+}, []);
+
+
   useEffect(() => {
     if (!query) {
       setNoContent(true);
@@ -77,7 +114,7 @@ const GoogleCustomSearch = () => {
       if (!result.payload || result.payload?.length === 0) {
         setNoContent(true);
       } else {
-        setNoContent(false);
+        setNoContent(false); 
         // let googleResultWrapper = document.querySelector(".gsc-expansionArea");
         // let googleResults = googleResultWrapper?.querySelectorAll(".gsc-webResult");
         // googleResults?.forEach(result=>{
@@ -89,6 +126,137 @@ const GoogleCustomSearch = () => {
       }
     });
   }, [query, dispatch, token]);
+
+useEffect(() => {
+    let observer = null;
+    const attached = new Set(); // keep track of attached elements to avoid dupes
+
+    const updateUrlFromInput = (inputEl) => {
+      const val = (inputEl?.value || "").trim();
+      if (!val) return;
+
+      const url = new URL(window.location.href);
+
+      // update ?query param
+      url.searchParams.set("query", val);
+
+      // update Google hash fragment to keep parity with GCS UI
+      // We set the hash without the leading '#', URL.hash needs the '#',
+      // but URL.hash property will add '#' automatically when set to a string,
+      // so set url.hash = '#...'
+      url.hash = `#gsc.tab=0&gsc.q=${encodeURIComponent(val)}&gsc.sort=`;
+
+      // replace state without navigation
+      // navigate(url.pathname + url.search + url.hash, { replace: true });
+      window.history.replaceState({}, "", url.toString());
+
+      document.querySelector("a.gs-title").setAttribute("target", "_blank");
+      document.querySelector("a.gs-title").setAttribute("rel", "noopener noreferrer");
+
+    };
+
+    const onInputKeyDown = (ev) => {
+      // capture Enter pressing inside the input — this runs before many other handlers when capture=true
+      if (ev.key === "Enter") {
+        const input = ev.target.closest ? ev.target.closest("input.gsc-input") : document.querySelector("input.gsc-input");
+        // use a tiny timeout so Google can process its own handlers if needed; but usually not required
+        // keep it small (0ms) to let event loop cycle
+        setTimeout(() => updateUrlFromInput(input), 0);
+      }
+    };
+
+    const onInputEvent = (ev) => {
+      // live update when user types (optional)
+      const input = ev.target.closest ? ev.target.closest("input.gsc-input") : document.querySelector("input.gsc-input");
+      // update but don't require non-empty; you can decide to clear param when empty
+      setTimeout(() => updateUrlFromInput(input), 0);
+    };
+
+    const onFormSubmit = (ev) => {
+      // form submit (Enter or clicking button that submits form)
+      const form = ev.target.closest ? ev.target.closest("form.gsc-search-box-tools") : document.querySelector("form.gsc-search-box-tools");
+      const input = form?.querySelector("input.gsc-input");
+      // do update after a micro-delay
+      setTimeout(() => updateUrlFromInput(input), 0);
+    };
+
+    const onButtonClick = (ev) => {
+      const input = document.querySelector("input.gsc-input");
+      setTimeout(() => updateUrlFromInput(input), 0);
+    };
+
+    const attachHandlers = (root = document) => {
+      // find elements
+      const input = root.querySelector ? root.querySelector("input.gsc-input") : document.querySelector("input.gsc-input");
+      const form = root.querySelector ? root.querySelector("form.gsc-search-box-tools") : document.querySelector("form.gsc-search-box-tools");
+      const btn = root.querySelector ? root.querySelector(".gsc-search-button-v2") : document.querySelector(".gsc-search-button-v2");
+
+      if (input && !attached.has(input)) {
+        input.addEventListener("keydown", onInputKeyDown, true); // capture phase to catch Enter early
+        input.addEventListener("input", onInputEvent, false);
+        input.addEventListener("change", onInputEvent, false);
+        attached.add(input);
+      }
+
+      if (form && !attached.has(form)) {
+        form.addEventListener("submit", onFormSubmit, true);
+        attached.add(form);
+      }
+
+      if (btn && !attached.has(btn)) {
+        btn.addEventListener("click", onButtonClick, true);
+        attached.add(btn);
+      }
+    };
+
+    // If elements already exist when effect runs, attach immediately
+    attachHandlers(document);
+
+    // Observe DOM for late-inserted GCS elements (when gcse.js renders them async)
+    observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        // check added nodes quickly for relevant selectors
+        if (m.addedNodes && m.addedNodes.length) {
+          m.addedNodes.forEach((node) => {
+            // if node is an element, try to attach using it as root
+            if (node instanceof HTMLElement) {
+              // If whole wrapper was inserted (common), attach from that node
+              if (node.matches && (node.matches(".gsc-search-box-tools") || node.matches(".gsc-search-box") || node.matches(".gsc-expansionArea") || node.querySelector("input.gsc-input"))) {
+                attachHandlers(node);
+              } else {
+                // maybe deeper nodes contain the elements
+                attachHandlers(node);
+              }
+            }
+          });
+        }
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // cleanup
+    return () => {
+      // disconnect observer
+      if (observer) observer.disconnect();
+
+      // remove event listeners we attached
+      attached.forEach((el) => {
+        try {
+          el.removeEventListener("keydown", onInputKeyDown, true);
+          el.removeEventListener("input", onInputEvent, false);
+          el.removeEventListener("change", onInputEvent, false);
+          el.removeEventListener("submit", onFormSubmit, true);
+          el.removeEventListener("click", onButtonClick, true);
+        } catch (err) {
+          // ignore
+        }
+      });
+      attached.clear();
+    };
+  }, []);
+
+
 
   useEffect(() => {
     if (googleResults?.length > 0) {
@@ -215,7 +383,7 @@ const GoogleCustomSearch = () => {
                           />
                           <p>Images</p>
                         </div>
-                        <div className="bg-white rounded-xl border border-light-blue p-4 overflow-auto custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
+                        <div className="bg-white rounded-xl border border-light-blue p-4 custom-scrollbar overflow-auto custom-scrollbar h-[calc(100%-72px)]">
                           <ul className="grid grid-cols-1 gap-4">
                             {loading?.googleSearch ? (
                               <span className="loader"></span>
