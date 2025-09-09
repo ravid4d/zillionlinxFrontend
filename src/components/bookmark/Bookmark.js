@@ -83,16 +83,12 @@ const Bookmark = ({
         </span>
         {doNotClick?.includes(item?.website_url) ? (
           <div className="relative w-full block">
-            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top flex flex-wrap items-center justify-center">
-            {
-              bookmarkIdToRegenerateThumbnail!==null && item?.bookmark_id == bookmarkIdToRegenerateThumbnail ? 
-              <div className="loader"></div>: 
+            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top flex flex-wrap items-center justify-center">          
               <img
               src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
               alt=""
               className="w-full rounded-lg"
               />
-            }
             </div>
           </div>
         ) : (
