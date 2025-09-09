@@ -15,6 +15,7 @@ const Bookmark = ({
   categoryId,
   subCategoryId,
   searchResults,
+  bookmarkIdToRegenerateThumbnail,
   setId
 }) => {
   const { token } = useSelector((state) => state.auth);
@@ -56,7 +57,7 @@ const Bookmark = ({
         >
           <label
             htmlFor={`pinBookmark_${item?.id}`}
-            className="flex h-full w-full cursor-pointer rounded-lg text-sm flex flex-wrap items-center justify-center"
+            className="h-full w-full cursor-pointer rounded-lg text-sm flex flex-wrap items-center justify-center"
           >
             <input
               type="checkbox"
@@ -82,12 +83,16 @@ const Bookmark = ({
         </span>
         {doNotClick?.includes(item?.website_url) ? (
           <div className="relative w-full block">
-            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
+            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top flex flex-wrap items-center justify-center">
+            {
+              bookmarkIdToRegenerateThumbnail!==null && item?.bookmark_id == bookmarkIdToRegenerateThumbnail ? 
+              <div className="loader"></div>: 
               <img
-                src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
-                alt=""
-                className="w-full rounded-lg"
+              src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
+              alt=""
+              className="w-full rounded-lg"
               />
+            }
             </div>
           </div>
         ) : (
@@ -96,12 +101,16 @@ const Bookmark = ({
             to={item?.website_url}
             className="relative w-full block"
           >
-            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top">
+            <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top flex flex-wrap items-center justify-center">
+             {
+              bookmarkIdToRegenerateThumbnail !==null && item?.bookmark_id == bookmarkIdToRegenerateThumbnail ? 
+              <div className="loader"></div>: 
               <img
                 src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}
                 alt=""
                 className="w-full rounded-lg"
               />
+             }
             </div>
           </Link>
         )}

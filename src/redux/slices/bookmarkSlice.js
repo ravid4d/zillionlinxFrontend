@@ -94,7 +94,7 @@ export const addNewBookmark = createAsyncThunk(
           category_id: values?.category_id,
           sub_category_id: values?.sub_category_id,
           add_to: values?.add_to,
-          sub_category_name: values?.sub_category_name
+          sub_category_name: values?.sub_category_name || "",
         },
         {
           headers: {

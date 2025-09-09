@@ -1,30 +1,53 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import {
+  addNewBookmark,
+} from "../../redux/slices/bookmarkSlice";
 
-const AddRemoveBookmarkContext = ({ contextMenu, setContextMenu, handleOptionClick, handleRemoveItem }) => {
-  const {isTopLink} = useSelector(state=>state.bookmark);
+const AddRemoveBookmarkContext = ({ contextMenu, setContextMenu, handleOptionClick, setBookmarkIdToRegenerateThumbnail,handleRemoveItem }) => {
+  const { isTopLink } = useSelector(state => state.bookmark);
+  const { token } = useSelector((state) => state.auth);
   const menuRef = useRef(null);
+  const dispatch = useDispatch();
+  const controllerRef = useRef(null);
 
-useEffect(() => {
-  function handleClickOutside(event) {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setContextMenu(null); 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setContextMenu(null);
+      }
     }
-  }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setContextMenu]);
 
-  document.addEventListener("mousedown", handleClickOutside);
-  
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
+  const handleAddNewBookmark = async (values) => {
+    controllerRef.current = new AbortController();
+    values = { ...values, url: values?.website_url, regenerate:true };
+    setContextMenu(null);
+     setBookmarkIdToRegenerateThumbnail(values?.bookmark_id);
+    const result = await dispatch(
+      addNewBookmark({ values, token, controller: controllerRef?.current })
+    );
+    if (addNewBookmark.fulfilled.match(result)) {
+      toast.success(result.payload.message || "Thumbnail regenerated successfully!");
+      setBookmarkIdToRegenerateThumbnail(null);
+    } else {
+      toast.error(result.payload?.message || "Thumbnail regeneration failed!");
+    }
   };
-}, [setContextMenu]);
+
+
   return (
     <div
       style={{
         position: "fixed",
         top: contextMenu.y,
         left: contextMenu.x,
-        "zIndex":"99"
+        "zIndex": "99"
       }}
       ref={menuRef}
     >
@@ -35,7 +58,7 @@ useEffect(() => {
           aria-orientation="vertical"
         >
           <div className="p-1 space-y-0.5 max-w-[300px]">
-          {contextMenu?.record?.add_to === "top_link" && isTopLink && (
+            {contextMenu?.record?.add_to === "top_link" && isTopLink && (
               <button
                 type="button"
                 onClick={() => handleOptionClick('remove')}
@@ -62,32 +85,9 @@ useEffect(() => {
                 </span>
               </button>
             )
-          }
-          <button
-                type="button"
-                onClick={() => handleRemoveItem(contextMenu?.record?.id)}
-                className="w-full flex items-center text-start gap-x-3 py-1.5 px-3 rounded-lg text-[16px] text-red-600 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 "
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="size-4 shrink-0"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18 18 6M6 6l12 12"
-                  />
-                </svg>
-                <span className="w-[calc(100%-20px)]">
-                  Delete Bookmark
-                </span>
-              </button>
-           
-            {contextMenu?.record?.add_to === "bookmark" && !isTopLink &&(
+            }
+
+            {contextMenu?.record?.add_to === "bookmark" && !isTopLink && (
               <button
                 type="button"
                 onClick={() => handleOptionClick('add')}
@@ -110,6 +110,43 @@ useEffect(() => {
                 Add to Top Links
               </button>
             )}
+
+            <button
+              type="button"
+              onClick={() => handleAddNewBookmark(contextMenu?.record)}
+              className="w-full flex items-center text-start gap-x-3 py-1.5 px-3 rounded-lg text-[16px] text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-4 shrink-0">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+              <span className="w-[calc(100%-20px)]">
+                Refresh Thumbnail
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRemoveItem(contextMenu?.record?.id)}
+              className="w-full flex items-center text-start gap-x-3 py-1.5 px-3 rounded-lg text-[16px] text-red-600 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="size-4 shrink-0"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+              <span className="w-[calc(100%-20px)]">
+                Delete Bookmark
+              </span>
+            </button>
           </div>
         </div>
       </div>

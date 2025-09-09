@@ -64,6 +64,7 @@ const MyBookmarks = () => {
   const [selectedCat, setSelectedCat] = useState("" | null);
   const hasFetchedRef = useRef(false);
   const googleRef = useRef(null);
+  const [bookmarkIdToRegenerateThumbnail, setBookmarkIdToRegenerateThumbnail] = useState(null);
   
   const loginMessage = location?.state?.loginMessage
     ? location?.state?.loginMessage
@@ -142,7 +143,7 @@ const MyBookmarks = () => {
       dispatch(callTopLinks());
       await dispatch(fetchAllTopLinks(token));
     };
-    if (token && (bookmark_addto === "top_link" || bookmark_addto === "")) {
+    if (token && ((bookmark_addto === "top_link"  && bookmarkIdToRegenerateThumbnail===null) || (bookmark_addto === "" && bookmarkIdToRegenerateThumbnail===null))) {
       fetchData();
     }
   }, [dispatch, token, bookmark_addto]);
@@ -240,10 +241,11 @@ const MyBookmarks = () => {
   };
 
   useEffect(() => {
-    if (bookmark_addto === "top_link") {
+    if (bookmark_addto === "top_link" && bookmarkIdToRegenerateThumbnail===null) {
+      // console.log(bookmarkIdToRegenerateThumbnail, 'top links')
       dispatch(fetchAllTopLinks(token));
       dispatch(setPageHeading("Top Links"));
-    } else if (bookmark_addto === "bookmark") {
+    } else if (bookmark_addto === "bookmark" && bookmarkIdToRegenerateThumbnail===null) {
       let categoryId = bookmark_category;
       let subCategoryId = bookmark_subcategory ? bookmark_subcategory : "";
       const category = categories.find((cat) => cat.id === bookmark_category);
@@ -322,27 +324,30 @@ const MyBookmarks = () => {
     return grouped;
   };
 
-const handleDropToCategory = async(data) => {
-  try {
-    let result = await dispatch(moveBookmarkToCategory(data));
-    dispatch(fetchAllTopLinks(token));
-    if (result.payload.message) {
-      toast.success(result?.payload?.message);
+  const handleDropToCategory = async(data) => {
+    try {
+      let result = await dispatch(moveBookmarkToCategory(data));
+      dispatch(fetchAllTopLinks(token));
+      if (result.payload.message) {
+        toast.success(result?.payload?.message);
+      }
+    } catch (error) {
+      console.log(error, "Error while changing bookmark category");
+      toast.error(
+        error.message || "Failed to changing bookmark category"
+      );
     }
-  } catch (error) {
-    console.log(error, "Error while changing bookmark category");
-    toast.error(
-      error.message || "Failed to changing bookmark category"
-    );
-  }
-};
-   useEffect(() => {
+  };
+
+  useEffect(() => {
     // let cx = process.env.REACT_APP_GOOGLE_SEARCH_CX;
     const script = document.createElement("script");
     script.src = "https://cse.google.com/cse.js?cx=96b337026d2404c75";
     script.async = true;
     document.body.appendChild(script);
   }, []);
+
+
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 xl:px-2 h-full">
       <div className="bg-white sm:rounded-tl-[20px] rounded-bl-[20px] rounded-br-[20px] p-4 xl:p-8 xl:pb-5 h-full">
@@ -413,9 +418,12 @@ const handleDropToCategory = async(data) => {
               </p>
 
               <div className={`rounded-xl border border-light-blue p-6 h-[calc(100%-75px)] ${listingType === "link" && links && links?.length > 0 ? '' : 'overflow-auto custom-scrollbar'}`}>
-                {loading?.fetchCategoryWiseBookmarks ? (
-                  <span className="loader"></span>
-                ) : listingType === "link" && links && links?.length > 0 ? (
+                {
+                loading?.fetchCategoryWiseBookmarks ? (
+                  'hola'
+                  // <span className="loader"></span>
+                ) :
+                 listingType === "link" && links && links?.length > 0 ? (
                   <div className="flex flex-wrap h-full">
                     <aside className="w-2/5 border-e border-light-blue h-full pe-6 sticky top-0">
                       <ul>
@@ -493,6 +501,7 @@ const handleDropToCategory = async(data) => {
                             <Bookmark
                               item={bookmark}
                               handleRemoveItem={handleRemoveItem}
+                              bookmarkIdToRegenerateThumbnail={bookmarkIdToRegenerateThumbnail}
                               categoryId={id?.categoryId}
                               subCategoryId={id?.subCategoryId}
                               setId={setId}
@@ -509,6 +518,8 @@ const handleDropToCategory = async(data) => {
                         handleRemoveItem={handleRemoveItem}
                         contextMenu={contextMenu}
                         setContextMenu={setContextMenu}
+                        setBookmarkIdToRegenerateThumbnail={setBookmarkIdToRegenerateThumbnail}
+                        // loading={loading?.addNewBookmark}
                         handleOptionClick={handleOptionClick}
                       />
                     )}
