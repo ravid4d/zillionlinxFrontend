@@ -420,8 +420,7 @@ const MyBookmarks = () => {
               <div className={`rounded-xl border border-light-blue p-6 h-[calc(100%-75px)] ${listingType === "link" && links && links?.length > 0 ? '' : 'overflow-auto custom-scrollbar'}`}>
                 {
                 loading?.fetchCategoryWiseBookmarks ? (
-                  'hola'
-                  // <span className="loader"></span>
+                  <span className="loader"></span>
                 ) :
                  listingType === "link" && links && links?.length > 0 ? (
                   <div className="flex flex-wrap h-full">
