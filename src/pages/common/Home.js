@@ -39,11 +39,11 @@ const Home = () => {
               Search the Internet and get real answers.
             </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 mx-auto max-w-3xl gap-6 p-6 lg:p-0 items-center mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 mx-auto max-w-md md:max-w-xl 2xl:max-w-3xl gap-6 p-6 lg:p-0 items-center mb-10">
               {/* Second Column (Single Large Image) */}
               <div className="lg:row-span-2">
                 <img
-                  src="/homepage.png"
+                  src="/homepage.jpg"
                   className="shadow-home-bookmark border border-dark-blue/30 rounded-xl w-full"
                   alt="Middle Large"
                 />

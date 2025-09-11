@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as YUP from "yup";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser, updateUserCountry } from "../../redux/slices/userSlice";
+import { updateAdminImage, updateProfileImage, updateUser, updateUserCountry } from "../../redux/slices/userSlice";
 import axios from "axios";
 import Dropdown from "../elements/Dropdown";
 
@@ -13,6 +13,8 @@ const UpdateAdmin = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { user, loading, error } = useSelector((state) => state.user);
+  const [file, setFile] = useState(null);
+
   const formik = useFormik({
     initialValues: {
       first_name: user?.first_name || "",
@@ -30,7 +32,6 @@ const UpdateAdmin = () => {
       email: YUP.string()
         .email("Invalid email format")
         .required("Email is required"),
-
       country: YUP.string().required("Please select a country")
     }),
     onSubmit: async (values) => {
@@ -53,6 +54,27 @@ const UpdateAdmin = () => {
     };
     getCountryList();
   }, []);
+
+  const updateAdminProfileImage = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+
+      let formData = new FormData();
+      formData.append("profile_image", selectedFile);
+
+      try {
+        let result = await dispatch(updateAdminImage(formData)).unwrap();
+        toast.success(result.message || "Profile image updated successfully!");
+        setFile(result.profile_image_url)
+        dispatch(updateProfileImage(result.profile_image_url))
+        console.log(result, 'result');
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+
+    }
+  }
   return (
     <div className="w-full lg:ps-64">
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -67,6 +89,14 @@ const UpdateAdmin = () => {
                   Update basic your information.
                 </p>
               </div>
+            </div>
+            <div className="flex flex-wrap flex-col pt-6 px-6 rounded-md bg-white shadow-admin w-full">
+              <img className="inline-block size-16 rounded-full ring-2 ring-white dark:ring-neutral-900" src={`${user?.profile_image}`} alt="Avatar" />
+              <label className="block text-base text-light-black mb-3">
+                Profile photo
+              </label>
+              <label htmlFor="file-input" className="sr-only">Choose file</label>
+              <input onChange={(e) => updateAdminProfileImage(e)} type="file" accept="image/*" name="profile_image" id="profile_image" className="block w-full border border-dark-blue shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4" />
             </div>
             <form
               onSubmit={formik.handleSubmit}
@@ -153,11 +183,10 @@ const UpdateAdmin = () => {
               <button
                 disabled={loading?.updateUser}
                 type="submit"
-                className={`btn dark-btn w-full justify-center h-12 ${
-                  loading?.updateUser
+                className={`btn dark-btn w-full justify-center h-12 ${loading?.updateUser
                     ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"
                     : ""
-                }`}
+                  }`}
               >
                 {loading?.updateUser ? (
                   <span className="loader"></span>

@@ -4,6 +4,7 @@ const allUsersUrl = `${process.env.REACT_APP_API_URL}/api/admin/users`;
 const updateUserUrl = `${process.env.REACT_APP_API_URL}/api/admin/user/update/`;
 const updateFrontUserUrl = `${process.env.REACT_APP_API_URL}/api/user/update/`;
 const updateAdminPasswordUrl = `${process.env.REACT_APP_API_URL}/api/admin/change-password`;
+const updateAdminImageUrl = `${process.env.REACT_APP_API_URL}/api/admin/profile/image`;
 const updateUserPasswordUrl = `${process.env.REACT_APP_API_URL}/api/change-password`;
 
 export const getAllUsers = createAsyncThunk(
@@ -12,7 +13,7 @@ export const getAllUsers = createAsyncThunk(
     try {
       let token = getState().auth.token;
       let searchQuery = getState().admin?.searchQuery;
-  
+
       let response = await axiosInstance.get(
         allUsersUrl,
         {
@@ -77,7 +78,7 @@ export const updateUser = createAsyncThunk(
           }
         }
       );
-      
+
       return response?.data;
     } catch (error) {
       return rejectWithValue({
@@ -85,6 +86,38 @@ export const updateUser = createAsyncThunk(
         message:
           error?.response?.data?.message ||
           "Error While getting the users via pagination."
+      });
+    }
+  }
+);
+
+export const updateAdminImage = createAsyncThunk(
+  "users/updateAdminImage",
+  async (formData, { getState, rejectWithValue }) => {
+    console.log(formData, 'values');
+    try {
+      let token = getState().auth.token;
+      for (let [key, val] of formData.entries()) {
+        console.log(key, val); // should log profile_image and the File
+      }
+      let response = await axiosInstance.post(
+        `${updateAdminImageUrl}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          }
+        }
+      );
+
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error?.response?.status,
+        message:
+          error?.response?.data?.message ||
+          "Error While updating the admin image."
       });
     }
   }
@@ -190,8 +223,8 @@ const userSlice = createSlice({
     totalUsers: undefined,
     user: {},
     pagination: [],
-    loading:{},
-    error:{},
+    loading: {},
+    error: {},
     userLoading: false,
     userError: null
   },
@@ -201,6 +234,12 @@ const userSlice = createSlice({
     },
     clearUser: (state) => {
       state.user = null;
+    },
+    updateProfileImage: (state, action) => {
+      if (state.user) {
+        state.user.profile_image = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
     }
   },
   extraReducers: (builder) => {
@@ -306,5 +345,5 @@ const userSlice = createSlice({
   }
 });
 
-export const {setUser, clearUser, updateUserCountry } = userSlice.actions;
+export const { setUser, clearUser, updateUserCountry, updateProfileImage } = userSlice.actions;
 export default userSlice.reducer;
