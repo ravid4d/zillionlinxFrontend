@@ -207,10 +207,14 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
       selectedSubCategoryId === undefined
     ) {
       setShowNewSubCategory(true);
+      formik.setFieldError(
+        "sub_category_name",
+        "Sub Category Name is required"
+      );
     } else {
       setShowNewSubCategory(undefined);
     }
-  }, [selectedCategoryId, selectedSubCategoryId]);
+  }, [selectedCategoryId, selectedSubCategoryId, formik]);
   
   useEffect(() => {
     if (showNewSubCategory === "remove") {
@@ -554,6 +558,12 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
               <span className="capitalize"> + New Sub Category</span>
               </button>
               </div> */}
+                {
+                  formik.errors.sub_category_name &&
+                  <div className="text-red-500 text-sm mt-1">
+                    {formik.errors.sub_category_name}
+                  </div>
+                  }
                   <div className="mb-5">
                     <label
                       htmlFor="add_to"
@@ -607,7 +617,7 @@ const AddNewBookmark = ({ urlToBookmark, openModal, closeAllModals, id }) => {
                   </div>
                   <button
                     type="submit"
-                    disabled={loading?.addNewBookmark}
+                    disabled={loading?.addNewBookmark || selectedSubCategoryId === undefined}
                     className={`btn dark-btn w-full justify-center h-12 ${
                       loading?.addNewBookmark
                         ? "disabled:bg-light-blue disabled:text-dark-blue disabled:pointer-events-none"

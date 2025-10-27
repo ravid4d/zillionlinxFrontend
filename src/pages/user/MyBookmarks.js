@@ -64,7 +64,7 @@ const MyBookmarks = () => {
   const [selectedCat, setSelectedCat] = useState("" | null);
   const hasFetchedRef = useRef(false);
   const googleRef = useRef(null);
-  const [bookmarkIdToRegenerateThumbnail, setBookmarkIdToRegenerateThumbnail] = useState(null);
+  const [bookmarkIdToRegenerateThumbnail, setBookmarkIdToRegenerateThumbnail] = useState([]);
   
   const loginMessage = location?.state?.loginMessage
     ? location?.state?.loginMessage

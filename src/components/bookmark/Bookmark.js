@@ -99,7 +99,8 @@ const Bookmark = ({
           >
             <div className="w-full aspect-[16/9] overflow-hidden object-cover object-top flex flex-wrap items-center justify-center">
              {
-              bookmarkIdToRegenerateThumbnail !==null && item?.bookmark_id == bookmarkIdToRegenerateThumbnail ? 
+              // bookmarkIdToRegenerateThumbnail !== null && item?.bookmark_id == bookmarkIdToRegenerateThumbnail ? 
+              bookmarkIdToRegenerateThumbnail.includes(item?.bookmark_id) ?
               <div className="loader"></div>: 
               <img
                 src={`${process.env.REACT_APP_API_URL}/storage/${item?.icon_path}`}

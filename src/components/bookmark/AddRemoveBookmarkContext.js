@@ -28,16 +28,26 @@ const AddRemoveBookmarkContext = ({ contextMenu, setContextMenu, handleOptionCli
     controllerRef.current = new AbortController();
     values = { ...values, url: values?.website_url, regenerate:true };
     setContextMenu(null);
-     setBookmarkIdToRegenerateThumbnail(values?.bookmark_id);
-    const result = await dispatch(
-      addNewBookmark({ values, token, controller: controllerRef?.current })
-    );
-    if (addNewBookmark.fulfilled.match(result)) {
-      toast.success(result.payload.message || "Thumbnail regenerated successfully!");
-      setBookmarkIdToRegenerateThumbnail(null);
-    } else {
-      toast.error(result.payload?.message || "Thumbnail regeneration failed!");
-    }
+    //  setBookmarkIdToRegenerateThumbnail(values?.bookmark_id);
+     setBookmarkIdToRegenerateThumbnail(prev=>[...prev, values?.bookmark_id]);
+     try {
+       const result = await dispatch(
+         addNewBookmark({ values, token, controller: controllerRef?.current })
+       );
+        // setBookmarkIdToRegenerateThumbnail(prev => prev.filter(id => id !== values?.bookmark_id));      
+        if (addNewBookmark.fulfilled.match(result)) {
+          toast.success(result.payload.message || "Thumbnail regenerated successfully!");
+          // setBookmarkIdToRegenerateThumbnail(null);
+          // setBookmarkIdToRegenerateThumbnail([]);
+        } else {
+          toast.error(result.payload?.message || "Thumbnail regeneration failed!");
+        }
+      } catch (error) {
+       
+      }
+      finally {
+        setBookmarkIdToRegenerateThumbnail(prev => prev.filter(id => id !== values?.bookmark_id));
+      }
   };
 
   const doNotClick = [

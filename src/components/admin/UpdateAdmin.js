@@ -91,7 +91,7 @@ const UpdateAdmin = () => {
               </div>
             </div>
             <div className="flex flex-wrap flex-col pt-6 px-6 rounded-md bg-white shadow-admin w-full">
-              <img className="inline-block size-16 rounded-full ring-2 ring-white dark:ring-neutral-900" src={`${user?.profile_image}`} alt="Avatar" />
+              <img className="inline-block size-16 rounded-full ring-2 ring-white dark:ring-neutral-900 mb-4" src={`${user?.profile_image}`} alt="Avatar" />
               <label className="block text-base text-light-black mb-3">
                 Profile photo
               </label>
