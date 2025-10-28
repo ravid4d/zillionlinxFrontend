@@ -143,7 +143,7 @@ const MyBookmarks = () => {
       dispatch(callTopLinks());
       await dispatch(fetchAllTopLinks(token));
     };
-    if (token && ((bookmark_addto === "top_link"  && bookmarkIdToRegenerateThumbnail===null) || (bookmark_addto === "" && bookmarkIdToRegenerateThumbnail===null))) {
+    if (token && ((bookmark_addto === "top_link"  && bookmarkIdToRegenerateThumbnail===null) || (bookmark_addto === "" && bookmarkIdToRegenerateThumbnail.length===0))) {
       fetchData();
     }
   }, [dispatch, token, bookmark_addto]);
