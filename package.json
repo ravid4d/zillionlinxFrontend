@@ -1,5 +1,5 @@
 {
-  "homepage": "/",
+  "homepage": "/zillionlinx",
   "name": "zillion",
   "version": "0.1.0",
   "private": true,
@@ -41,11 +41,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "set \"PUBLIC_URL=/zillionlinx\" && react-scripts build",
     "test": "react-scripts test",
     "builds": "serve -s build -l 4000",
     "eject": "react-scripts eject"
   },
+  
   "eslintConfig": {
     "extends": [
       "react-app",
