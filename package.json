@@ -1,5 +1,5 @@
 {
-  "homepage": "/zillionlinx",
+  "homepage": "/",
   "name": "zillion",
   "version": "0.1.0",
   "private": true,
@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "set \"PUBLIC_URL=/zillionlinx\" && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "builds": "serve -s build -l 4000",
     "eject": "react-scripts eject"
