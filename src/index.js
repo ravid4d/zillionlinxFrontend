@@ -16,7 +16,7 @@ root.render(
     // <React.StrictMode>
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <BrowserRouter future={{ v7_relativeSplatPath: true }}>
+                <BrowserRouter basename="/zillionlinx" future={{ v7_relativeSplatPath: true }}>
                     <GoogleOAuthProvider clientId={clientId}>
                         <App />
                     </GoogleOAuthProvider>
