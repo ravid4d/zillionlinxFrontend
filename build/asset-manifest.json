@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/frontend/static/css/main.ffd1b6de.css",
-    "main.js": "/frontend/static/js/main.cac1c324.js",
-    "static/js/488.0ec8eb59.chunk.js": "/frontend/static/js/488.0ec8eb59.chunk.js",
-    "static/media/background.svg": "/frontend/static/media/background.0732417ecffc2f445b8d.svg",
-    "index.html": "/frontend/index.html",
-    "main.ffd1b6de.css.map": "/frontend/static/css/main.ffd1b6de.css.map",
-    "main.cac1c324.js.map": "/frontend/static/js/main.cac1c324.js.map",
-    "488.0ec8eb59.chunk.js.map": "/frontend/static/js/488.0ec8eb59.chunk.js.map"
+    "main.css": "/zillionlinx/static/css/main.d976bdf8.css",
+    "main.js": "/zillionlinx/static/js/main.792da9fe.js",
+    "static/js/488.0ec8eb59.chunk.js": "/zillionlinx/static/js/488.0ec8eb59.chunk.js",
+    "static/media/background.svg": "/zillionlinx/static/media/background.0732417ecffc2f445b8d.svg",
+    "index.html": "/zillionlinx/index.html",
+    "main.d976bdf8.css.map": "/zillionlinx/static/css/main.d976bdf8.css.map",
+    "main.792da9fe.js.map": "/zillionlinx/static/js/main.792da9fe.js.map",
+    "488.0ec8eb59.chunk.js.map": "/zillionlinx/static/js/488.0ec8eb59.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ffd1b6de.css",
-    "static/js/main.cac1c324.js"
+    "static/css/main.d976bdf8.css",
+    "static/js/main.792da9fe.js"
   ]
 }
