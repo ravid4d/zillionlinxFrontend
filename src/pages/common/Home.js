@@ -22,6 +22,7 @@ const Home = () => {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [loginMessage]);
+  
 
   return (
     <>
