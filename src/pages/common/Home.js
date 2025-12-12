@@ -77,7 +77,7 @@ const Home = () => {
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-4">
             <div className="col-span-3 lg:col-start-2 lg:col-end-6 lg:pe-10 items">
               <img
-                src="/l-t-placeholder.jpg"
+                src="/zillionlinx/l-t-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Large"
               />
