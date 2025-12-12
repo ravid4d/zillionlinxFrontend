@@ -283,7 +283,7 @@ const Login = ({ openModal, setWhichModalOpen, closeAllModals }) => {
                     aria-label="Toggle navigation"
                     data-hs-overlay="#hs-header-base-offcanvas"
                   >
-                  <img src="/zillionlinx/google-login.png" alt="" width={200} height={46} />
+                  <img src="/google-login.png" alt="" width={200} height={46} />
                     {/* <svg
                       width="24"
                       height="24"

@@ -110,12 +110,12 @@ const Header = ({
           >
             <picture>
               <source
-                srcSet="/zillionlinx/app-icon.svg"
+                srcSet="/app-icon.svg"
                 media="(max-width: 640px)"
                 className="max-w-full max-h-[60px] block"
               />
               <img
-                src="/zillionlinx/logo.png"
+                src="/logo.png"
                 alt="Logo"
                 className="max-w-full max-h-[60px] block"
               />
