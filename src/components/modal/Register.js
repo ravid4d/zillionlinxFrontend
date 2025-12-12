@@ -349,7 +349,7 @@ const Register = ({ openModal, closeAllModals, setWhichModalOpen }) => {
                   className={`mt-5 mx-auto relative flex justify-center items-center text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none`}
                 >
                   
-                  <img src="/google-signup.png" alt="" width={200} height={46} />
+                  <img src="/zillionlinx/google-signup.png" alt="" width={200} height={46} />
                 </button>
               </form>
             </div>

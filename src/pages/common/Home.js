@@ -43,14 +43,14 @@ const Home = () => {
               {/* Second Column (Single Large Image) */}
               <div className="lg:row-span-2">
                 <img
-                  src="/homepage.jpg"
+                  src="/zillionlinx/homepage.jpg"
                   className="shadow-home-bookmark border border-dark-blue/30 rounded-xl w-full"
                   alt="Middle Large"
                 />
               </div>
               <div className="lg:row-span-2">
                 <img
-                  src="/bookmark-1.jpg"
+                  src="/zillionlinx/bookmark-1.jpg"
                   className="shadow-home-bookmark border border-dark-blue/30 rounded-xl w-full"
                   alt="Middle Large"
                 />
@@ -87,14 +87,14 @@ const Home = () => {
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-6 3xl:gap-10">
             <div className="lg:col-span-2">
               <img
-                src="/l-c-placeholder.jpg"
+                src="/zillionlinx/l-c-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 1"
               />
             </div>
             <div className="lg:col-span-3">
               <img
-                src="/l-b-placeholder.jpg"
+                src="/zillionlinx/l-b-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 2"
               />
@@ -105,7 +105,7 @@ const Home = () => {
         {/* Second Column (Single Large Image) */}
         <div className="lg:row-span-2">
           <img
-            src="/center-placeholder.jpg"
+            src="/zillionlinx/center-placeholder.jpg"
             className="shadow-home-bookmark border border-dark-blue/30 rounded-xl lg:rounded-[20px] w-full"
             alt="Middle Large"
           />
@@ -116,14 +116,14 @@ const Home = () => {
           <div className="lg:row-span-1 grid grid-cols-1 lg:grid-cols-5 gap-6 3xl:gap-10 lg:items-end items-center">
             <div className="lg:col-span-3">
               <img
-                src="/r-t-placeholder.jpg"
+                src="/zillionlinx/r-t-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 2"
               />
             </div>
             <div className="lg:col-span-2">
               <img
-                src="/r-c-placeholder.jpg"
+                src="/zillionlinx/r-c-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Small 1"
               />
@@ -132,7 +132,7 @@ const Home = () => {
           <div className="lg:row-span-1 grid lg:grid-cols-5 gap-4">
             <div className="col-start-1 col-end-5 lg:ps-10">
               <img
-                src="/r-b-placeholder.jpg"
+                src="/zillionlinx/r-b-placeholder.jpg"
                 className="shadow-home-bookmark w-full border border-dark-blue/30 rounded-xl lg:rounded-[20px]"
                 alt="Large"
               />
