@@ -34,7 +34,7 @@ const Home = () => {
             </h1>
 
             <p className="text-[18px] text-gray-600 max-w-xl mx-auto mb-16 mt-10">
-              Online Bookmarks, Online Favorites. Store and organize your
+              Test Online Bookmarks, Online Favorites. Store and organize your
               Bookmarks in one place. Access your Bookmarks from every computer.
               Search the Internet and get real answers.
             </p>
