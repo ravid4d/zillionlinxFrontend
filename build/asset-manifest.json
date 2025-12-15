@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/zillionlinx/static/css/main.b54fb388.css",
-    "main.js": "/zillionlinx/static/js/main.45621606.js",
+    "main.js": "/zillionlinx/static/js/main.86bef74d.js",
     "static/js/488.0ec8eb59.chunk.js": "/zillionlinx/static/js/488.0ec8eb59.chunk.js",
     "static/media/background.svg": "/zillionlinx/static/media/background.0732417ecffc2f445b8d.svg",
     "index.html": "/zillionlinx/index.html",
     "main.b54fb388.css.map": "/zillionlinx/static/css/main.b54fb388.css.map",
-    "main.45621606.js.map": "/zillionlinx/static/js/main.45621606.js.map",
+    "main.86bef74d.js.map": "/zillionlinx/static/js/main.86bef74d.js.map",
     "488.0ec8eb59.chunk.js.map": "/zillionlinx/static/js/488.0ec8eb59.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b54fb388.css",
-    "static/js/main.45621606.js"
+    "static/js/main.86bef74d.js"
   ]
 }
