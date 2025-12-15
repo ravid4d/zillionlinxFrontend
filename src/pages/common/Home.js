@@ -23,7 +23,6 @@ const Home = () => {
     }
   }, [loginMessage]);
   
-
   return (
     <>
       <div className="relative overflow-hidden max-w-screen-3xl mx-auto">
